@@ -17,6 +17,10 @@ Ext.define('Imobile.model.Menu', {
             {
                 name: 'icon',
                 type: 'string'
+            },
+            {
+                name: 'action',
+                type: 'string'
             }
         ]
     }

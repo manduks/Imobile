@@ -15,11 +15,11 @@
     <file path="$PROJECT_DIR$/.sencha/app/slice-impl.xml" changelist="a434bba7-5b07-4303-b82e-99dda9d78e4a" time="1394575263356" ignored="false" />
     <file path="$PROJECT_DIR$/touch/build.xml" changelist="a434bba7-5b07-4303-b82e-99dda9d78e4a" time="1394575263356" ignored="false" />
     <file path="$PROJECT_DIR$/.sencha/app/init-impl.xml" changelist="a434bba7-5b07-4303-b82e-99dda9d78e4a" time="1394575263356" ignored="false" />
-    <file path="/Main.js" changelist="a434bba7-5b07-4303-b82e-99dda9d78e4a" time="1394589713146" ignored="false" />
+    <file path="/Main.js" changelist="a434bba7-5b07-4303-b82e-99dda9d78e4a" time="1394590472691" ignored="false" />
     <file path="/LoginForm.js" changelist="a434bba7-5b07-4303-b82e-99dda9d78e4a" time="1394582030128" ignored="false" />
     <file path="/menu.js" changelist="a434bba7-5b07-4303-b82e-99dda9d78e4a" time="1394588927307" ignored="false" />
     <file path="/app.js" changelist="a434bba7-5b07-4303-b82e-99dda9d78e4a" time="1394584447507" ignored="false" />
-    <file path="/Menu.js" changelist="a434bba7-5b07-4303-b82e-99dda9d78e4a" time="1394589040172" ignored="false" />
+    <file path="/Menu.js" changelist="a434bba7-5b07-4303-b82e-99dda9d78e4a" time="1394590169825" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,20 +42,8 @@
       <file leaf-file-name="Main.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/view/phone/Main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="25" selection-start="340" selection-end="340" vertical-scroll-proportion="0.0">
+            <state line="18" column="3" selection-start="387" selection-end="387" vertical-scroll-proportion="0.0">
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Menu.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/view/menu/Menu.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="16" selection-start="85" selection-end="89" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1394589214000" expanded="true" signature="814:841" placeholder="..." />
-                <marker date="1394589214000" expanded="true" signature="879:895" placeholder="..." />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -63,16 +51,25 @@
       <file leaf-file-name="Main.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/controller/Main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="0" selection-start="574" selection-end="574" vertical-scroll-proportion="0.45403588">
+            <state line="27" column="39" selection-start="623" selection-end="629" vertical-scroll-proportion="0.45403588">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/view/Main.js">
+      <file leaf-file-name="Menu.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/store/Menu.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="22" selection-start="56" selection-end="56" vertical-scroll-proportion="0.0">
+            <state line="15" column="5" selection-start="860" selection-end="860" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Menu.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/model/Menu.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="21" column="29" selection-start="452" selection-end="452" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -103,13 +100,13 @@
         <option value="$PROJECT_DIR$/app/controller/tablet/Main.js" />
         <option value="$PROJECT_DIR$/app/view/tablet/Main.js" />
         <option value="$PROJECT_DIR$/app/form/login/LoginForm.js" />
-        <option value="$PROJECT_DIR$/app/model/Menu.js" />
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/app/view/menu/menu.js" />
-        <option value="$PROJECT_DIR$/app/store/Menu.js" />
-        <option value="$PROJECT_DIR$/app/view/phone/Main.js" />
         <option value="$PROJECT_DIR$/app/view/Main.js" />
         <option value="$PROJECT_DIR$/app/view/menu/Menu.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/Main.js" />
+        <option value="$PROJECT_DIR$/app/store/Menu.js" />
+        <option value="$PROJECT_DIR$/app/model/Menu.js" />
         <option value="$PROJECT_DIR$/app/controller/Main.js" />
       </list>
     </option>
@@ -573,58 +570,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/profile/Tablet.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="3" selection-start="362" selection-end="362" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/profile/Phone.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="19" selection-start="12" selection-end="19" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controller/phone/Main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="133" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/form/login/LoginForm.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="57" selection-start="1277" selection-end="1277" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/controller/Readme.md">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controller/tablet/Main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="19" selection-start="12" selection-end="19" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/tablet/Main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="3" selection-start="139" selection-end="139" vertical-scroll-proportion="0.10356732">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/store/Menu.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="62" selection-start="710" selection-end="710" vertical-scroll-proportion="0.21860987">
           <folding />
         </state>
       </provider>
@@ -638,40 +586,89 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/Menu.js">
+    <entry file="file://$PROJECT_DIR$/app/view/tablet/Main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="29" selection-start="272" selection-end="272" vertical-scroll-proportion="0.21860987">
+        <state line="6" column="3" selection-start="139" selection-end="139" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/view/Main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="22" selection-start="56" selection-end="56" vertical-scroll-proportion="0.0">
+        <state line="1" column="22" selection-start="56" selection-end="56" vertical-scroll-proportion="0.01726122">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/profile/Tablet.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="3" selection-start="362" selection-end="362" vertical-scroll-proportion="0.29344073">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/profile/Phone.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="19" selection-start="12" selection-end="19" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/view/menu/Menu.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="16" selection-start="85" selection-end="89" vertical-scroll-proportion="0.0">
+        <state line="2" column="16" selection-start="85" selection-end="89" vertical-scroll-proportion="0.033632286">
           <folding>
-            <marker date="1394589214000" expanded="true" signature="814:841" placeholder="..." />
-            <marker date="1394589214000" expanded="true" signature="879:895" placeholder="..." />
+            <marker date="1394589214000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1394589214000" expanded="true" signature="-1:-1" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/form/login/LoginForm.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="57" selection-start="1277" selection-end="1277" vertical-scroll-proportion="0.6558296">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controller/tablet/Main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="19" selection-start="12" selection-end="19" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controller/phone/Main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="133" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/view/phone/Main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="25" selection-start="340" selection-end="340" vertical-scroll-proportion="0.0">
+        <state line="18" column="3" selection-start="387" selection-end="387" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/model/Menu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="29" selection-start="452" selection-end="452" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/store/Menu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="5" selection-start="860" selection-end="860" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/controller/Main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="0" selection-start="574" selection-end="574" vertical-scroll-proportion="0.45403588">
+        <state line="27" column="39" selection-start="623" selection-end="629" vertical-scroll-proportion="0.45403588">
           <folding />
         </state>
       </provider>

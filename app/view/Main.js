@@ -4,6 +4,7 @@ Ext.define('Imobile.view.Main', {
     requires: [
         'Imobile.form.login.LoginForm',
         'Imobile.view.menu.Menu',
-        'Ext.TitleBar'
+        'Ext.TitleBar',
+        'Imobile.view.clientes.ClientesList'
     ]
 });

@@ -747,11 +747,14 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.controller.phone.Main": [],
   "Imobile.controller.tablet.Main": [],
   "Imobile.form.login.LoginForm": [],
+  "Imobile.model.Cliente": [],
   "Imobile.model.Menu": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
+  "Imobile.store.Clientes": [],
   "Imobile.store.Menu": [],
   "Imobile.view.Main": [],
+  "Imobile.view.clientes.ClientesList": [],
   "Imobile.view.menu.Menu": [],
   "Imobile.view.menu.MenuList": [],
   "Imobile.view.phone.Main": [],
@@ -1705,12 +1708,17 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.form.login.LoginForm": [
     "widget.loginform"
   ],
+  "Imobile.model.Cliente": [],
   "Imobile.model.Menu": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
+  "Imobile.store.Clientes": [],
   "Imobile.store.Menu": [],
   "Imobile.view.Main": [
     "widget.main"
+  ],
+  "Imobile.view.clientes.ClientesList": [
+    "widget.clienteslist"
   ],
   "Imobile.view.menu.Menu": [
     "widget.menu"

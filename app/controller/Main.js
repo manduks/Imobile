@@ -22,16 +22,6 @@ Ext.define('Imobile.controller.Main',{
         this.getMain().setActiveItem(1);
     },
 
-    onSelectMenu: function(t, record, eOpts){
-        var me = this,
-            view = me.getMenu(),
-            option = record.get('action');
-
-        view.push({
-            xtype: 'container',
-            html: option
-        });
-
-    }
+    onSelectMenu: Ext.emptyFn
 
 });

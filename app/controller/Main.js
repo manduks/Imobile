@@ -13,7 +13,7 @@ Ext.define('Imobile.controller.Main',{
                 logged: 'onLoginUser'
             },
             'menu dataview':{
-                select: 'onSelectMenu'
+                itemtap: 'onSelectMenu'
             }
         }
     },

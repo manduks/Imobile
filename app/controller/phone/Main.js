@@ -3,13 +3,13 @@ Ext.define('Imobile.controller.phone.Main', {
     config: {
         control: {}
     },
-    onSelectMenu: function(t, record, eOpts) {
+    onSelectMenu: function(view, index, target, record, eOpts) {
         var me = this,
             view = me.getMenu(),
             option = record.get('action');
         switch (option) {
             case 'prospectos':
-            	view.push({
+                view.push({
                     xtype: 'clienteslist'
                 });
                 break;

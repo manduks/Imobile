@@ -8,14 +8,14 @@ Ext.define('Imobile.store.Clientes', {
      requires:['Imobile.model.Cliente'],
 
     config: {
-         model:'Imobile.model.Menu',
+         model:'Imobile.model.Cliente',
          autoLoad:true,
          data:[
- 			{id:1,name:'Pedro López López'},
- 			{id:2,name:'Pablo López López'},
- 			{id:3,name:'Jose López López'},
- 			{id:4,name:'Ramiro López López'},
- 			{id:5,name:'Roberto López López'},
+ 			{code:'C0077',name:'Pedro López López'},
+ 			{code:'C0069',name:'Pablo López López'},
+ 			{code:'C0071',name:'Jose López López'},
+ 			{code:'C0156',name:'Ramiro López López'},
+ 			{code:'C0141',name:'Roberto López López'},
          ]
     }
 });

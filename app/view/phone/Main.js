@@ -9,7 +9,7 @@ Ext.define('Imobile.view.phone.Main',{
     extend:'Imobile.view.Main',
     config: {
         layout:'card',
-        activeItem:1,
+        activeItem:0,
         items: [{
             xtype:'loginform'
         },{

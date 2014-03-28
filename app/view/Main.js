@@ -5,6 +5,7 @@ Ext.define('Imobile.view.Main', {
         'Imobile.form.login.LoginForm',
         'Imobile.view.menu.Menu',
         'Ext.TitleBar',
-        'Imobile.view.clientes.ClientesList'
+        'Imobile.view.clientes.ClientesList',
+        'Imobile.view.productos.ProductosList'
     ]
 });

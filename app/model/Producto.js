@@ -3,14 +3,14 @@
  * @extends Ext.data.Model
  * El modelo del cliente
  */
-Ext.define('Imobile.model.Cliente', {
+Ext.define('Imobile.model.Producto', {
     extend: 'Ext.data.Model',
     config: {
         fields: [{
             name: 'code',
-            type: 'string'
+            type: 'int'
         }, {
-            name: 'name',
+            name: 'description',
             type: 'string'
         }]
     }

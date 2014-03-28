@@ -3,17 +3,17 @@
  * @extends Ext.dataview.List
  * Esta es la lista para listar clientes de la cartera
  */
-Ext.define('Imobile.view.clientes.ClientesList', {
+Ext.define('Imobile.view.productos.ProductosList', {
     extend: 'Ext.dataview.List',
-    xtype: 'clienteslist',
+    xtype: 'productoslist',
     requires: ['Ext.field.Search', 'Ext.plugin.ListPaging', 'Ext.SegmentedButton'],
     config: {
         indexBar: true,
         pinHeaders: false,
-        itemTpl: ['<div class="imobile-cliente-tpl">', '<p>{code}</p>', '<span style="color: cadetblue;"><b>{name}</b></span>', '</div>'].join(''),
-        store: 'Clientes',
+        itemTpl: ['<div class="imobile-cliente-tpl">', '<p>{code}</p>', '<span><b>{description}</b></span> </br>', '<span style="color: red;">Selected Quantity: <b>0</b></span>', '</div>'].join(''),
+        store: 'Productos',
         useSimpleItems: true,
-        emptyText: '<div style="margin-top: 20px; text-align: center">No hay clientes con esos datos</div>',
+        emptyText: '<div style="margin-top: 20px; text-align: center">No hay productos con esos datos</div>',
         disableSelection: true,
         onItemDisclosure: function (record, listItem, index, e) {
             this.fireEvent("tap", record, listItem, index, e);
@@ -24,7 +24,7 @@ Ext.define('Imobile.view.clientes.ClientesList', {
             layout:'fit',
             items: [{
                 xtype: 'searchfield',
-                placeHolder: ' Buscar cliente...'
+                placeHolder: ' Buscar producto...'
             }]
         }, {
             xtype: 'toolbar',
@@ -36,9 +36,9 @@ Ext.define('Imobile.view.clientes.ClientesList', {
                 items: [{
                     text: 'Code'
                 }, {
-                    text: 'Name'
+                    text: 'Description'
                 }, {
-                    text: 'Phone No.'
+                    text: 'UPC Code'
                 }]
             },{
                 xtype: 'spacer'

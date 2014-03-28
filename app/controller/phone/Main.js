@@ -13,6 +13,14 @@ Ext.define('Imobile.controller.phone.Main', {
                     xtype: 'clienteslist'
                 });
                 break;
+            case 'venta':
+                view.push({
+                    xtype: 'productoslist'
+                });
+                break;
+            case 'salir':
+                me.getMain().setActiveItem(0);
+                break;
             default:
                 view.push({
                     xtype: 'container',

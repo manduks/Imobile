@@ -18,7 +18,7 @@ Ext.define('Imobile.view.menu.MenuList', {
 	        		'<div class="menu-list-image"><img src="resources/images/{icon}"/></div>',
 	        		'<h2>{name}</h2>',
 	        	'</div>',
-	        '</tpl>',
+	        '</tpl>'
         	//'<div style="clear:both"></div>'
         ].join('')
     }

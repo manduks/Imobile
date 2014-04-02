@@ -24,7 +24,7 @@ Ext.define('Imobile.controller.phone.Main', {
             default:
                 view.push({
                     xtype: 'container',
-                    html: option
+                    html: 'Ali'
                 });
                 break;
         }

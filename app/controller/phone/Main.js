@@ -8,6 +8,13 @@ Ext.define('Imobile.controller.phone.Main', {
             view = me.getMenu(),
             option = record.get('action');
         switch (option) {
+            case 'sistema':
+                view.push({
+                    xtype:'container',
+                    html: 'configuración del sistema'                    
+                });
+                break;
+
             case 'prospectos':
                 view.push({
                     xtype: 'clienteslist'

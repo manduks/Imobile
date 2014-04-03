@@ -4,14 +4,15 @@ Ext.define('Imobile.controller.phone.Main', {
         control: {}
     },
     onSelectMenu: function(view, index, target, record, eOpts) {
+        console.log(record);
         var me = this,
             view = me.getMenu(),
             option = record.get('action');
         switch (option) {
             case 'sistema':
                 view.push({
-                    xtype:'container',
-                    html: 'configuración del sistema'                    
+                    xtype:'configuracionlist',
+//                    html: 'Configuremos la aplicacion'
                 });
                 break;
 

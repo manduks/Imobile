@@ -6,6 +6,7 @@ Ext.define('Imobile.view.Main', {
         'Imobile.view.menu.Menu',
         'Ext.TitleBar',
         'Imobile.view.clientes.ClientesList',
-        'Imobile.view.productos.ProductosList'
+        'Imobile.view.productos.ProductosList',
+        'Imobile.view.configuracion.ConfiguracionList'
     ]
 });

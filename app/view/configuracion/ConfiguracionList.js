@@ -19,12 +19,12 @@ Ext.define('Imobile.view.configuracion.ConfiguracionList', {
         //     this.fireEvent("tap", record, listItem, index, e);
         // },
         fullscreen: true,        
-        itemTpl: '{title}',
+        itemTpl: '<i class="{icon}"> </i>{title}',
         data: [
-            { title: 'Server Settings' },
-            { title: 'Configuration' },
-            { title: 'Sync Settings' },
-            { title: 'Synchronize' }
+            { title: 'Server Settings', action: 'servidor', icon: 'icon-cog-alt'},
+            { title: 'Configuration', action: 'configuracion', icon: 'icon-wrench'},
+            { title: 'Sync Settings', action: 'sincConfig', icon: 'icon-arrows-cw'},
+            { title: 'Synchronize', action: 'sincronizacion', icon: 'icon-doc-text'}
         ]
         // plugins: [{
         //     xclass: 'Ext.plugin.ListPaging',

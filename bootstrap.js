@@ -749,15 +749,19 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.form.login.LoginForm": [],
   "Imobile.model.Cliente": [],
   "Imobile.model.Menu": [],
+  "Imobile.model.Producto": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
   "Imobile.store.Clientes": [],
   "Imobile.store.Menu": [],
+  "Imobile.store.Productos": [],
   "Imobile.view.Main": [],
   "Imobile.view.clientes.ClientesList": [],
+  "Imobile.view.configuracion.ConfiguracionList": [],
   "Imobile.view.menu.Menu": [],
   "Imobile.view.menu.MenuList": [],
   "Imobile.view.phone.Main": [],
+  "Imobile.view.productos.ProductosList": [],
   "Imobile.view.tablet.Main": []
 });
 Ext.ClassManager.addNameAliasMappings({
@@ -1710,15 +1714,20 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.model.Cliente": [],
   "Imobile.model.Menu": [],
+  "Imobile.model.Producto": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
   "Imobile.store.Clientes": [],
   "Imobile.store.Menu": [],
+  "Imobile.store.Productos": [],
   "Imobile.view.Main": [
     "widget.main"
   ],
   "Imobile.view.clientes.ClientesList": [
     "widget.clienteslist"
+  ],
+  "Imobile.view.configuracion.ConfiguracionList": [
+    "widget.configuracionlist"
   ],
   "Imobile.view.menu.Menu": [
     "widget.menu"
@@ -1727,5 +1736,8 @@ Ext.ClassManager.addNameAliasMappings({
     "widget.menulist"
   ],
   "Imobile.view.phone.Main": [],
+  "Imobile.view.productos.ProductosList": [
+    "widget.productoslist"
+  ],
   "Imobile.view.tablet.Main": []
 });

@@ -12,6 +12,12 @@ Ext.define('Imobile.model.Producto', {
         }, {
             name: 'description',
             type: 'string'
-        }]
+        },{
+            name: 'favorite',
+            type: 'boolean'
+        }],
+        proxy: {
+            type: "sql"
+        }
     }
 });

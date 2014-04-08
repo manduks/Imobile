@@ -9,12 +9,6 @@ Ext.define('Imobile.store.Productos', {
 
     config: {
         model:'Imobile.model.Producto',
-        autoLoad:true,
-        data:[
-            {code:100101,description:'Mens Stripe Polo'},
-            {code:100102,description:'Mens Solid Polo'},
-            {code:100103,description:'Mens Ralp Laurent Suit'},
-            {code:100103,description:'Men`s Levis Jean'}
-        ]
+        autoLoad:true // Para que se cargue el store algunos datos
     }
 });

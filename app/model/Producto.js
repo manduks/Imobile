@@ -7,6 +7,9 @@ Ext.define('Imobile.model.Producto', {
     extend: 'Ext.data.Model',
     config: {
         fields: [{
+            name: 'id',
+            type: 'int'
+        },{
             name: 'code',
             type: 'int'
         }, {
@@ -16,6 +19,7 @@ Ext.define('Imobile.model.Producto', {
             name: 'favorite',
             type: 'boolean'
         }],
+
         proxy: {
             type: "sql"
         }

@@ -15,11 +15,10 @@ Ext.define('Imobile.store.Favoritos', {
          	type: 'sql'
          },
     //      data:[
- 			// {code:'C0077',name:'Pedro López López'},
- 			// {code:'C0069',name:'Pablo López López'},
- 			// {code:'C0071',name:'Jose López López'},
- 			// {code:'C0156',name:'Ramiro López López'},
- 			// {code:'C0141',name:'Roberto López López'},
+			{code:100101,description:'Mens Stripe Polo'},
+            {code:100102,description:'Mens Solid Polo'},
+            {code:100103,description:'Mens Ralp Laurent Suit'},
+            {code:100103,description:'Men`s Levis Jean'}
     //      ]
     }
     

@@ -9,7 +9,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 tap:'listarFavoritos'
             },
             'seleccionadorprofav productoslist':{
-                itemtap:'onAgregarAFavoritos'
+                itemtap:'cambiaStatusFavoritos'
             }
         }
     },
@@ -21,9 +21,10 @@ Ext.define('Imobile.controller.phone.Main', {
         switch (option) {
             case 'favoritos':
                 view.push({
-                    xtype: 'seleccionadorprofav',
+                    xtype: 'seleccionadorprofav',                    
                     //html:'Favoritos'
                 });
+                me.lista(true);
                 break;
             case 'sistema':
                 view.push({
@@ -55,37 +56,53 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     listarFavoritos:function(segmentedButton){        
-
-        this.filtrar("SELECT * FROM PRODUCTO WHERE favorite = 'true'", 'Productos');
+        
+        this.lista(true); // Me lista aquellos cuyo valor favorite es true
     },
 
     listarProductos: function (segmentedButton){
-        
-      this.filtrar("SELECT * FROM PRODUCTO WHERE favorite = 'false'", 'Productos');
+              
+      this.lista(false); // Me lista aquellos cuyo valor favorite es false
     },
 
-    onAgregarAFavoritos: function ( list, index, target, record, e, eOpts ){
-        record.set('favorite',true);
-        //"UPDATE PRODUCTO SET favorite = 'false' WHERE favorite = 'false'", 'Productos'
-        list.getStore().sync(); // Hacer un UPDATE para esta cosa
-        console.log(record);
+    cambiaStatusFavoritos: function ( list, index, target, record, e, eOpts ){       
+        var ind = record.get('id');
+
+        if(record.get('favorite') === false){
+            this.actualiza(true, ind);  // Si favorite es false, lo hacemos true
+        } else {
+            this.actualiza(false, ind); // Si favorite es true, lo hacemos false
+        }
+        //list.getStore().sync(); // Hacer un UPDATE para esta cosa
+        //console.log(record);
     },
 
-    filtrar: function (query, storeName){
+    lista: function (esFavorito){
+        this.hazTransaccion("SELECT * FROM PRODUCTO WHERE favorite = '" + esFavorito + "'" ,'Productos', true);
+    },
+
+    actualiza: function(esFavorito, ind){                
+        this.hazTransaccion("UPDATE PRODUCTO SET favorite = '" + esFavorito + "' WHERE id = " + ind + "",
+            'Productos', false);
+    },
+
+    hazTransaccion: function (query, storeName, add){
         var me = this;
         var store = Ext.getStore(storeName);
 
         db = store.getModel().getProxy().getDatabaseObject();
-
-        store.removeAll();
+        
         db.transaction(function(tx) {
             tx.executeSql(query, [], function(tx, results) {
-                var len = results.rows.length,
+                if(add){
+                    store.removeAll();
+                    var len = results.rows.length,
                     i;
-                for (i = 0; i < len; i++) {
-                    store.add(results.rows.item(i));
+                    for (i = 0; i < len; i++) {
+                        store.add(results.rows.item(i));
+                    }
                 }
             }, null);
         });
-    }
+    },    
 });

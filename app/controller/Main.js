@@ -30,15 +30,15 @@ Ext.define('Imobile.controller.Main',{
         var c = store.getCount();
         //alert(c);
 
-        if(c <= 0){
-            for(var i = 0; i < 5; i++){
-                store.add({
-                    code: i, 
-                    description: 'descripcion' + i,
-                    favorite: false
-                })
-            }
-            store.sync();            
-        }
+        // if(c <= 0){
+        //     for(var i = 0; i < 5; i++){
+        //         store.add({
+        //             code: i, 
+        //             description: 'descripcion' + i,
+        //             favorite: false
+        //         })
+        //     }
+        //     store.sync();            
+        // }
     }
 });

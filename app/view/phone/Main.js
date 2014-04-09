@@ -11,7 +11,24 @@ Ext.define('Imobile.view.phone.Main',{
         layout:'card',
         activeItem:0,
         items: [{
-            xtype:'loginform'
+            xtype: 'container',
+            baseCls: 'login-background',
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
+            defaults: {
+                flex: 1
+            },
+            items: [{
+                xtype: 'container'
+            }, {
+                xtype: 'loginform',
+                baseCls: '',
+                flex: 2
+            }, {
+                xtype: 'container'
+            }]
         },{
             xtype: 'menu'
         }]

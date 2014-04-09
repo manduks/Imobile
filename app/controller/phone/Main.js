@@ -29,6 +29,26 @@ Ext.define('Imobile.controller.phone.Main', {
             case 'salir':
                 me.getMain().setActiveItem(0);
                 break;
+            case 'sincronizacion':
+               view.push({
+                    xtype:'sincronizarcontainer'
+               });
+                break;
+            case 'servidor':
+               view.push({
+                    xtype:'servidorcontainer'
+               });
+                break;
+            case 'inicializacion':
+               view.push({
+                    xtype:'initializecontainer'
+               });
+                break;
+            case 'configuracion':
+               view.push({
+                    xtype:'configuracioncontainer'
+               });
+                break;
             default:
                 view.push({
                     xtype: 'container',

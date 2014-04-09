@@ -17,7 +17,8 @@ Ext.Loader.addClassPathMappings({
   "Ext.device.sqlite.SQLResultSetRowList": "touch/src/device/sqlite/Sencha.js",
   "Ext.device.sqlite.SQLTransaction": "touch/src/device/sqlite/Sencha.js",
   "Ext.draw.engine.SvgContext.Gradient": "touch/src/draw/engine/SvgContext.js",
-  "Imobile": "app"
+  "Imobile": "app",
+  "Imobile.view.configuraion.SincronizarContainer": "app/view/configuracion/SincronizarContainer.js"
 });
 Ext.ClassManager.addNameAlternateMappings({
   "Ext.AbstractComponent": [],
@@ -758,6 +759,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.view.Main": [],
   "Imobile.view.clientes.ClientesList": [],
   "Imobile.view.configuracion.ConfiguracionList": [],
+  "Imobile.view.configuraion.SincronizarContainer": [],
   "Imobile.view.menu.Menu": [],
   "Imobile.view.menu.MenuList": [],
   "Imobile.view.phone.Main": [],
@@ -1728,6 +1730,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.view.configuracion.ConfiguracionList": [
     "widget.configuracionlist"
+  ],
+  "Imobile.view.configuraion.SincronizarContainer": [
+    "widget.sincronizarcontainer"
   ],
   "Imobile.view.menu.Menu": [
     "widget.menu"

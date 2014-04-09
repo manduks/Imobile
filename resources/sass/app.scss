@@ -12,3 +12,54 @@
 
 // Examples of using the icon mixin:
 // @include icon('user');
+// 
+.login-background{
+	background-image:url('../images/bg4.jpg');
+	background-size: cover;
+}
+.imobile-version{
+	font-size: 18px;
+	color:#FFF;
+	text-align: center;
+}
+
+
+.imobile-sincronization-info{
+	//text-align: center;
+	font-size: 12px;
+	line-height: 16px;
+	color: #444;
+	text-shadow: rgba(255, 255, 255, 0.3) 0 1px 0;
+	padding: 10px;
+	width: 90%;
+	margin: 0 auto;
+}
+.imobile-sincronization-info-last{
+	text-align: center;
+	font-size: 12px;
+	line-height: 16px;
+	color: #444;
+	text-shadow: rgba(255, 255, 255, 0.3) 0 1px 0;
+	padding: 10px;
+	width: 90%;
+	margin: 0 auto;
+}
+.imobile-status-sincronization{
+	.pending{
+		h2{
+			text-align: center;
+		}
+		ul{
+			li{
+				font-size: 80%;
+				padding: 5px;
+				//border-bottom:1px #CCC dashed;
+				color: #444;
+				text-shadow: rgba(255, 255, 255, 0.3) 0 1px 0;
+				b{
+					float: right;
+				}
+			}
+		}
+	}
+}

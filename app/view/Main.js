@@ -7,6 +7,10 @@ Ext.define('Imobile.view.Main', {
         'Ext.TitleBar',
         'Imobile.view.clientes.ClientesList',
         'Imobile.view.productos.ProductosList',
-        'Imobile.view.configuracion.ConfiguracionList'
+        'Imobile.view.configuracion.ConfiguracionList',
+        'Imobile.view.configuracion.SincronizarContainer',
+        'Imobile.view.configuracion.ServidorContainer',
+        'Imobile.view.configuracion.InitializeContainer',
+        'Imobile.view.configuracion.ConfiguracionContainer'
     ]
 });

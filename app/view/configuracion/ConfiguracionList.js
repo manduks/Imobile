@@ -1,7 +1,7 @@
 /**
  * @class Imobile.view.configuracion.ConfiguracionList
  * @extends Ext.dataview.List
- * Esta es la lista para listar clientes de la cartera
+ * Esta es la lista para mostrar las opciones de configuración
  */
 Ext.define('Imobile.view.configuracion.ConfiguracionList', {
     extend: 'Ext.dataview.List',
@@ -21,10 +21,10 @@ Ext.define('Imobile.view.configuracion.ConfiguracionList', {
         fullscreen: true,        
         itemTpl: '<i class="{icon}"> </i>{title}',
         data: [
-            { title: 'Server Settings', action: 'servidor', icon: 'icon-cog-alt'},
-            { title: 'Configuration', action: 'configuracion', icon: 'icon-wrench'},
-            { title: 'Sync Settings', action: 'sincConfig', icon: 'icon-arrows-cw'},
-            { title: 'Synchronize', action: 'sincronizacion', icon: 'icon-doc-text'}
+            { title: 'Conectividad del Servidor', action: 'servidor', icon: 'icon-cloud'},
+            { title: 'Inicialización del dispositivo', action: 'inicializacion', icon: 'icon-mobile'},
+            { title: 'Sincronización', action: 'sincronizacion', icon: 'icon-arrows-cw'},
+            { title: 'Configuraciones', action: 'configuracion', icon: 'icon-cog-alt'}
         ]
         // plugins: [{
         //     xclass: 'Ext.plugin.ListPaging',

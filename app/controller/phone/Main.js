@@ -70,8 +70,11 @@ Ext.define('Imobile.controller.phone.Main', {
 
         if(record.get('favorite') === false){
             this.actualiza(true, ind);  // Si favorite es false, lo hacemos true
+            this.lista(false);
+
         } else {
             this.actualiza(false, ind); // Si favorite es true, lo hacemos false
+            this.lista(true);
         }
         //list.getStore().sync(); // Hacer un UPDATE para esta cosa
         //console.log(record);

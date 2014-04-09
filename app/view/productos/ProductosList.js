@@ -25,7 +25,7 @@ Ext.define('Imobile.view.productos.ProductosList', {
             items: [{
                 xtype: 'searchfield',
                 placeHolder: ' Buscar producto...'
-            }]            
+            }]
         // }, {
         //     xtype: 'toolbar',
         //     docked: 'top',

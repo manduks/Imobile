@@ -21,11 +21,18 @@ Ext.define('Imobile.view.productos.ProductosList', {
         items: [{
             xtype: 'toolbar',
             docked: 'top',
-            layout:'fit',
+            layout:'hbox',
             items: [{
                 xtype: 'searchfield',
                 itemId: 'busca',
-                placeHolder: ' Buscar producto...'
+                placeHolder: ' Buscar producto...',
+                flex: 4
+            }, {
+                xtype: 'button',                
+                iconCls: 'add',
+                itemId: 'agregar',
+                flex: 1
+                //text: 'Agregar +'
             }]
         // }, {
         //     xtype: 'toolbar',

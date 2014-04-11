@@ -14,7 +14,16 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'productoslist #busca':{
                 keyup:'busca'
-            }
+            },
+            'agregarproductosform #agregar':{
+                tap: 'agregaProductos'
+            },
+            'agregarproductosform #cancelar':{
+                tap: 'onCancelar'
+            },
+            'productoslist #agregar':{
+                tap: 'onAgregar'
+            }            
         }
     },
 
@@ -46,9 +55,11 @@ Ext.define('Imobile.controller.phone.Main', {
                 break;
             case 'venta':
                 view.push({
-                    xtype: 'productoslist'
+                    xtype: 'productoslist'                    
+                    //xtype:'agregarproductosform'
                 });
                 this.esFavorito=false;
+                me.muestraProductos();
                 break;
             case 'salir':
                 me.getMain().setActiveItem(0);
@@ -60,6 +71,44 @@ Ext.define('Imobile.controller.phone.Main', {
             //     });
             //     break;
         }
+    },
+
+    onCancelar:function (){
+        var me = this,
+            view = me.getMenu();
+        view.pop();
+    },
+
+    onAgregar: function (btn){
+        var me = this,
+            view = me.getMenu();
+        view.push({
+            xtype: 'agregarproductosform'
+        });
+    },
+
+    agregaProductos: function(btn){
+        var form, values, codigo, descripcion, query;
+
+        form = btn.up('agregarproductosform');
+        values = form.getValues();
+        console.log(form);
+        //alert(values.code);
+        codigo = values.code;
+        descripcion = values.descripcion;
+
+        if (descripcion == "" || codigo == null){
+            alert('Todos los campos deben estar llenos');
+        } else {
+            query = "INSERT INTO PRODUCTO (code, description, favorite) VALUES (" + codigo + ", '" + descripcion + "', 'false')";
+            //alert(query);
+            this.hazTransaccion(query, 'Productos', true);
+        }
+    },
+
+    muestraProductos: function (){
+        var query = "SELECT * FROM PRODUCTO";
+        this.hazTransaccion(query,'Productos', true);
     },
 
     busca: function(searchField){

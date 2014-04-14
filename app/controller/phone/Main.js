@@ -23,7 +23,10 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'productoslist #agregar':{
                 tap: 'onAgregar'
-            }            
+            },
+            'productoslist' :{
+                itemswipe:'eliminaProducto'
+            }
         }
     },
 
@@ -95,15 +98,34 @@ Ext.define('Imobile.controller.phone.Main', {
         console.log(form);
         //alert(values.code);
         codigo = values.code;
-        descripcion = values.descripcion;
+        descripcion = values.description;
 
         if (descripcion == "" || codigo == null){
-            alert('Todos los campos deben estar llenos');
+            //alert('Todos los campos deben estar llenos');
+            this.mandaMensaje("Campos inválidos o vacíos", "Verifique que el valor de los campos sea correcto o que no estén vacíos");
         } else {
             query = "INSERT INTO PRODUCTO (code, description, favorite) VALUES (" + codigo + ", '" + descripcion + "', 'false')";
             //alert(query);
             this.hazTransaccion(query, 'Productos', true);
+            this.mandaMensaje('Producto agregado', 'El producto fue agregado exitosamente');
+            this.muestraProductos();
+            form.reset();
         }
+    },
+
+    eliminaProducto: function(list, index, target, record){
+        var me = this;
+        Ext.Msg.confirm("Eliminar producto", "Se va a eliminar el producto, ¿está seguro?", function (e){
+            //alert('entre');
+            //console.log(e);
+            if(e == 'yes'){
+                var ind = record.get('id');
+                var query = "DELETE FROM PRODUCTO WHERE id = " + ind + "";
+                //alert(query);
+                me.hazTransaccion(query,'Productos', true);
+                me.muestraProductos();
+            }
+        }); 
     },
 
     muestraProductos: function (){
@@ -177,5 +199,9 @@ Ext.define('Imobile.controller.phone.Main', {
                 }
             }, null);
         });
-    },    
+    },
+
+    mandaMensaje:function(titulo,mensaje){
+        Ext.Msg.alert(titulo, mensaje);
+    }
 });

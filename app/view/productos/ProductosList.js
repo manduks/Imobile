@@ -6,7 +6,7 @@
 Ext.define('Imobile.view.productos.ProductosList', {
     extend: 'Ext.dataview.List',
     xtype: 'productoslist',
-    requires: ['Ext.field.Search', 'Ext.plugin.ListPaging'],
+    requires: ['Ext.field.Search', 'Ext.plugin.ListPaging', 'Ext.MessageBox'],
     config: {
         indexBar: true,
         pinHeaders: false,

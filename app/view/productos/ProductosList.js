@@ -6,7 +6,7 @@
 Ext.define('Imobile.view.productos.ProductosList', {
     extend: 'Ext.dataview.List',
     xtype: 'productoslist',
-    requires: ['Ext.field.Search', 'Ext.plugin.ListPaging'],
+    requires: ['Ext.field.Search', 'Ext.plugin.ListPaging', 'Ext.MessageBox'],
     config: {
         indexBar: true,
         pinHeaders: false,
@@ -21,11 +21,19 @@ Ext.define('Imobile.view.productos.ProductosList', {
         items: [{
             xtype: 'toolbar',
             docked: 'top',
-            layout:'fit',
+            layout:'hbox',
             items: [{
                 xtype: 'searchfield',
-                placeHolder: ' Buscar producto...'
-            }]            
+                itemId: 'busca',
+                placeHolder: ' Buscar producto...',
+                flex: 4
+            }, {
+                xtype: 'button',                
+                iconCls: 'add',
+                itemId: 'agregar',
+                flex: 1
+                //text: 'Agregar +'
+            }]
         // }, {
         //     xtype: 'toolbar',
         //     docked: 'top',

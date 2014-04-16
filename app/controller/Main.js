@@ -6,7 +6,8 @@ Ext.define('Imobile.controller.Main',{
             main:{
                 selector:'main'
             },
-            menu: 'menu'
+            menu: 'menu', 
+            mas: 'productoslist #agregar'
         },
         control:{
             'loginform':{

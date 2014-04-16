@@ -22,8 +22,8 @@ Ext.define('Imobile.view.clientes.OpcionClienteList', {
         }],
         itemTpl: '{title}',
         data:[
-            {title: 'Orden de venta'},
-            {title: 'Visualizar transacciones'}
-        ],
+            {title: 'Orden de venta', action: 'orden'},
+            {title: 'Visualizar transacciones', action: 'visualizar'}
+        ]
     }
 });

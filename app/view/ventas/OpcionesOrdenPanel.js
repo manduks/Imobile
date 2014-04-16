@@ -7,7 +7,6 @@
  */
 Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
     extend: 'Ext.tab.Panel',
-    requires: [],
     xtype: 'opcionesorden',
     config: {
         fullscreen: true,

@@ -33,6 +33,9 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'menu clienteslist': {
                 itemtap: 'alSelecionarCliente'
+            },
+            'opcionclientelist': {
+                itemtap: 'onOpcionesOrden'
             }
         }
     },
@@ -252,5 +255,21 @@ Ext.define('Imobile.controller.phone.Main', {
             viewOrden = me.getOpcionesOrden();
 
         viewOrden.setActiveItem(2);
+    },
+
+    onOpcionesOrden: function (t, index, target, record, e) {
+        var me = this,
+            view = me.getMenu(),
+            opcion = record.get('action');
+
+
+        switch (opcion) {
+            case 'orden':
+                view.push({
+                    xtype: 'opcionesorden'
+                });
+                me.listarProductos();
+                break;
+        }
     }
 });

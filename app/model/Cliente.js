@@ -12,6 +12,10 @@ Ext.define('Imobile.model.Cliente', {
         }, {
             name: 'name',
             type: 'string'
-        }]
+        }],
+        
+        proxy: {
+            type: "sql"
+        }
     }
 });

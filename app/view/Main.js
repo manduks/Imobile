@@ -16,6 +16,7 @@ Ext.define('Imobile.view.Main', {
         'Imobile.form.productos.AgregarProductosForm',
         'Imobile.view.ventas.PartidaContainer',
         'Imobile.view.ventas.OpcionesOrdenPanel',
-        'Imobile.form.clientes.ClienteForm'
+        'Imobile.form.clientes.ClienteForm',
+        'Imobile.view.clientes.OpcionClienteList'
     ]
 });

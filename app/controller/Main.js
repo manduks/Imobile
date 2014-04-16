@@ -30,7 +30,6 @@ Ext.define('Imobile.controller.Main',{
         var me = this;
         var store = Ext.getStore(storeName);
 
-         console.log(store);
         db = store.getModel().getProxy().getDatabaseObject();
         
         db.transaction(function(tx) {

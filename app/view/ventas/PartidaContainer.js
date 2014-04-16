@@ -13,7 +13,7 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
             directionLock: true
         },
         layout: 'card',
-        activeItem:0,
+        activeItem: 0,
         items: [{
             xtype: 'toolbar',
             docked: 'top',
@@ -25,14 +25,14 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
                     text: 'Orden',
                     itemId: 'listarOrden',
                     pressed: true,
-                    handler:function (btn) {
-                    	btn.up('partidacontainer').setActiveItem(0);
+                    handler: function(btn) {
+                        btn.up('partidacontainer').setActiveItem(0);
                     }
                 }, {
                     text: 'Cliente',
                     itemId: 'mostrarCliente',
-                    handler:function (btn) {
-                    	btn.up('partidacontainer').setActiveItem(1);
+                    handler: function(btn) {
+                        btn.up('partidacontainer').setActiveItem(1);
                     }
                 }]
             }, {
@@ -40,10 +40,21 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
             }]
         }, {
             xtype: 'productoslist',
-            //html:'Lista de productos'
-        },{
-        	xtype:'component',
-        	html:'datos del cliente'
+            items: [{
+                docked: 'bottom',
+                xtype: 'toolbar',
+                items: [{
+                    xtype: 'spacer'
+                }, {
+                    xtype: 'button',
+                    text:'Agregar Orden'
+                }, {
+                    xtype: 'spacer'
+                }]
+            }]
+        }, {
+            xtype: 'component',
+            html: 'datos del cliente'
         }]
     }
 });

@@ -30,6 +30,7 @@ Ext.define('Imobile.controller.Main',{
         var me = this;
         var store = Ext.getStore(storeName);
 
+         console.log(store);
         db = store.getModel().getProxy().getDatabaseObject();
         
         db.transaction(function(tx) {
@@ -65,7 +66,7 @@ Ext.define('Imobile.controller.Main',{
        for(var i = 0; i < 5; i++){
             query = "INSERT INTO CLIENTE (code, name) VALUES ('C00" + i + "', '" + "Pablito" + i + "')";
             this.hazTransaccion(query, 'Clientes', true);
-        }            
+        }
 
         // var store = Ext.getStore('Productos');
         // store.load();

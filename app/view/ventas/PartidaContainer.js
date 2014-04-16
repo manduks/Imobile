@@ -39,7 +39,8 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
                 xtype: 'spacer'
             }]
         }, {
-            xtype: 'productoslist',
+            xtype: 'ordenlist',
+            layout: 'fit',
             items: [{
                 docked: 'bottom',
                 xtype: 'toolbar',

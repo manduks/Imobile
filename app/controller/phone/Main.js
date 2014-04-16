@@ -144,11 +144,12 @@ Ext.define('Imobile.controller.phone.Main', {
             //alert('Todos los campos deben estar llenos');
             this.mandaMensaje("Campos inválidos o vacíos", "Verifique que el valor de los campos sea correcto o que no estén vacíos");
         } else {
-            query = "INSERT INTO PRODUCTO (code, description, favorite) VALUES (" + codigo + ", '" + descripcion + "', 'false')";
-            //alert(query);
-            this.hazTransaccion(query, 'Productos', true);
+            query = "INSERT INTO ORDEN (code, description) VALUES (" + codigo + ", '" + descripcion + "')";
+            alert(query);
+            this.hazTransaccion(query, 'Ordenes', true);
             //this.mandaMensaje('Producto agregado', 'El producto fue agregado exitosamente');
-            this.muestraProductos();
+            //this.muestraProductos();
+            this.muestralistaOrden();
             view.setActiveItem(3);
             form.reset();
         }
@@ -177,6 +178,11 @@ Ext.define('Imobile.controller.phone.Main', {
     muestraClientes: function () {
         var query = "SELECT * FROM CLIENTE";
         this.hazTransaccion(query, 'Clientes', true);
+    },
+
+    muestralistaOrden: function(){
+        var query = "SELECT * FROM ORDEN";
+        this.hazTransaccion(query, 'Orden', true);
     },
 
     busca: function (searchField) {

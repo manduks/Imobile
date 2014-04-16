@@ -18,13 +18,15 @@ Ext.application({
     ],
 
     models:[
-        'Menu'
+        'Menu',
+        'Orden'
     ],
 
     stores: [
         'Menu',
         'Clientes',
-        'Productos'
+        'Productos',
+        'Ordenes'
     ],
 
     views: [

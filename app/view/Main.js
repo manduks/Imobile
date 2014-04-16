@@ -11,6 +11,7 @@ Ext.define('Imobile.view.Main', {
         'Imobile.view.configuracion.SincronizarContainer',
         'Imobile.view.configuracion.ServidorContainer',
         'Imobile.view.configuracion.InitializeContainer',
-        'Imobile.view.configuracion.ConfiguracionContainer'
+        'Imobile.view.configuracion.ConfiguracionContainer',
+        'Imobile.view.favoritos.SeleccionadorProFav'
     ]
 });

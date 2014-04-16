@@ -11,6 +11,7 @@ Ext.define('Imobile.store.Menu',{
             {name: 'Informes', icon: 'graph.png', action: 'informes'},
             {name: 'Configuración',   icon: 'settings.png', action: 'sistema'},
             {name: 'Prospectos',   icon: 'man.png', action: 'prospectos'},
+            {name: 'Favoritos',   icon: 'target.png', action: 'favoritos'},
             {name: 'Salir',   icon: 'browser.png', action: 'salir'}
         ]
     }

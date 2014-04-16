@@ -46,7 +46,7 @@ Ext.define('Imobile.view.configuracion.ConfiguracionContainer', {
                     value : 'es'
                 },{
                     text:'Inglés',
-                    value : 'es'
+                    value : 'en'
                 },{
                     text:'Portugués',
                     value : 'pes'
@@ -61,6 +61,7 @@ Ext.define('Imobile.view.configuracion.ConfiguracionContainer', {
         }, {
             xtype: 'fieldset',
             padding: 10,
+            docked:'bottom',
             items: [{
                 xtype: 'button',
                 itemId: 'guardar',

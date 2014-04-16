@@ -1,11 +1,11 @@
 /**
- * @class Imobile.view.clientes.ClientesList
+ * @class Imobile.view.favoritos.FavoritosList
  * @extends Ext.dataview.List
- * Esta es la lista para listar clientes de la cartera
+ * Esta es la lista para listar favoritos
  */
-Ext.define('Imobile.view.productos.ProductosList', {
+Ext.define('Imobile.view.favoritos.FavoritosList', {
     extend: 'Ext.dataview.List',
-    xtype: 'productoslist',
+    xtype: 'favoritoslist',
     requires: ['Ext.field.Search', 'Ext.plugin.ListPaging'],
     config: {
         indexBar: true,
@@ -24,7 +24,7 @@ Ext.define('Imobile.view.productos.ProductosList', {
             layout:'fit',
             items: [{
                 xtype: 'searchfield',
-                placeHolder: ' Buscar producto...'
+                placeHolder: ' Buscar favorito...'
             }]            
         // }, {
         //     xtype: 'toolbar',

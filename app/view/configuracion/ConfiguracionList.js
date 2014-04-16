@@ -24,7 +24,7 @@ Ext.define('Imobile.view.configuracion.ConfiguracionList', {
             { title: 'Conectividad del Servidor', action: 'servidor', icon: 'icon-cloud'},
             { title: 'Inicialización del dispositivo', action: 'inicializacion', icon: 'icon-mobile'},
             { title: 'Sincronización', action: 'sincronizacion', icon: 'icon-arrows-cw'},
-            { title: 'Configuraciones', action: 'configuracion', icon: 'icon-cog-alt'}
+            { title: 'Configuración', action: 'configuracion', icon: 'icon-cog-alt'}
         ]
         // plugins: [{
         //     xclass: 'Ext.plugin.ListPaging',

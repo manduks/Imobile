@@ -25,7 +25,8 @@ Ext.define('Imobile.controller.phone.Main', {
                 tap: 'onAgregar'
             },
             'productoslist' :{
-                itemswipe:'eliminaProducto'
+                itemswipe:'eliminaProducto',
+                itemtap: 'onAgregarProducto'
             },
             'menu clienteslist':{
                 itemtap:'alSelecionarCliente'
@@ -108,8 +109,8 @@ Ext.define('Imobile.controller.phone.Main', {
 
     onCancelar:function (){
         var me = this,
-            view = me.getMenu();
-        view.pop();
+            view = me.getOpcionesOrden();
+        view.setActiveItem(0);
     },
 
     onAgregar: function (btn){
@@ -121,7 +122,9 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     agregaProductos: function(btn){
-        var form, values, codigo, descripcion, query;
+        var form, values, codigo, descripcion, query,
+            me = this,
+            view = me.getOpcionesOrden();
 
         form = btn.up('agregarproductosform');
         values = form.getValues();
@@ -137,8 +140,9 @@ Ext.define('Imobile.controller.phone.Main', {
             query = "INSERT INTO PRODUCTO (code, description, favorite) VALUES (" + codigo + ", '" + descripcion + "', 'false')";
             //alert(query);
             this.hazTransaccion(query, 'Productos', true);
-            this.mandaMensaje('Producto agregado', 'El producto fue agregado exitosamente');
+            //this.mandaMensaje('Producto agregado', 'El producto fue agregado exitosamente');
             this.muestraProductos();
+            view.setActiveItem(3);
             form.reset();
         }
     },
@@ -242,7 +246,15 @@ Ext.define('Imobile.controller.phone.Main', {
 
 
         view.push({
-            xtype:'partidacontainer'
+            xtype:'opcionesorden'
         });
+    },
+
+    onAgregarProducto:function(){
+        var me=this,
+            viewOrden = me.getOpcionesOrden();
+
+        viewOrden.setActiveItem(2);
+
     }
 });

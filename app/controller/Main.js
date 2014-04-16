@@ -46,7 +46,7 @@ Ext.define('Imobile.controller.Main',{
         });
     },   
 
-    launch:function(){
+    launch:function(){        
 
     //Borramos datos de productos y clientes
         var query = "DELETE FROM PRODUCTO";
@@ -58,14 +58,18 @@ Ext.define('Imobile.controller.Main',{
         //Ingresamos datos de productos y clientes
         
         for(var i = 0; i < 5; i++){
-            query = "INSERT INTO PRODUCTO (code, description, favorite) VALUES (" + i + ", '" + "Producto" + i + "', 'false')";
+            query = "INSERT INTO PRODUCTO (code, description, cantidad, precio, moneda, descuento, precioConDescuento, " +
+                "totalDeImpuesto, importe, almacen, existencia, favorite) VALUES (" + i + ", '" + "Producto" + i + "'," + 
+                (i + 2) + "," + (i+28.45) + "," + " 'pesos', " + (i +1 * .1) + "," + 23.25 + "," + 1.16 + "," + 5.25 + ", 'almacen', " + i + ", 'false')";
+//            query = "INSERT INTO PRODUCTO (code, description, cantidad) VALUES (" + i + ", '" + "Producto" + i + "'," + (i +2) + ")";
+            //alert(query);
             this.hazTransaccion(query, 'Productos', true);
-        }
+        }        
 
        for(var i = 0; i < 5; i++){
             query = "INSERT INTO CLIENTE (code, name) VALUES ('C00" + i + "', '" + "Pablito" + i + "')";
             this.hazTransaccion(query, 'Clientes', true);
-        }            
+        }
 
         // var store = Ext.getStore('Productos');
         // store.load();

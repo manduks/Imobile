@@ -25,7 +25,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 tap: 'onAgregar'
             },
             'productoslist': {
-                itemswipe: 'eliminaProducto',
+                //itemswipe: 'eliminaProducto',
                 itemtap: 'onAgregarProducto'
             },
             'clienteslist #busca': {
@@ -268,7 +268,9 @@ Ext.define('Imobile.controller.phone.Main', {
                 view.push({
                     xtype: 'opcionesorden'
                 });
-                me.listarProductos();
+/*                Ext.getStore('Productos').add({code:123, description:'descripcion', cantidad: 1});
+                Ext.getStore('Productos').sync();
+*/                me.muestraProductos();
                 break;
         }
     }

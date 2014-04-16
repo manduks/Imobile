@@ -15,7 +15,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                 title:'Agregar Productos',
                 instructions: 'Ingrese los datos',
                 defaults:{
-                    required:true,
+                    //required:true,
                     clearIcon:true,
                     autoCapitalize:true,
                     labelWidth: '45%'
@@ -31,6 +31,43 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         name:'description',
                         label:'Descripción',
                         placeHolder:'ingresa la descripción',
+                    },{
+                        xtype:'numberfield',
+                        name:'cantidad',
+                        label:'Cantidad',
+                        placeHolder:'ingresa la cantidad', 
+                    },{
+                        xtype:'numberfield',
+                        name:'precio',
+                        label:'Precio'
+                    },{
+                        xtype:'numberfield',
+                        name:'moneda',
+                        label:'Moneda'
+                    },{
+                        xtype:'numberfield',
+                        name:'descuento',
+                        label:'Descuento'
+                    },{
+                        xtype:'numberfield',
+                        name:'precioConDescuento',
+                        label:'Precio con Descuento'
+                    },{
+                        xtype:'numberfield',
+                        name:'totalDeImpuesto',
+                        label:'Total de impuesto'
+                    },{
+                        xtype:'numberfield',
+                        name:'importe',
+                        label:'Importe' 
+                    },{
+                        xtype:'numberfield',
+                        name:'almacen',
+                        label:'Almacen'  
+                    },{
+                        xtype:'numberfield',
+                        name:'existencia',
+                        label:'Existencia' 
                     }
                 ]
             }, {        

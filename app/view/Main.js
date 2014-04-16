@@ -13,6 +13,7 @@ Ext.define('Imobile.view.Main', {
         'Imobile.view.configuracion.InitializeContainer',
         'Imobile.view.configuracion.ConfiguracionContainer',
         'Imobile.view.favoritos.SeleccionadorProFav',
-        'Imobile.form.productos.AgregarProductosForm'
+        'Imobile.form.productos.AgregarProductosForm',
+        'Imobile.view.ventas.PartidaContainer'
     ]
 });

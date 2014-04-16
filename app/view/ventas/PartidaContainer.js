@@ -4,7 +4,7 @@
  * Description
  */
 Ext.define('Imobile.view.ventas.PartidaContainer', {
-    extend: 'Ext.Contianer',
+    extend: 'Ext.Container',
     requires: [],
     xtype: 'partidacontainer',
     config: {
@@ -24,10 +24,16 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
                 items: [{
                     text: 'Orden',
                     itemId: 'listarOrden',
-                    pressed: true
+                    pressed: true,
+                    handler:function (btn) {
+                    	btn.up('partidacontainer').setActiveItem(0);
+                    }
                 }, {
                     text: 'Cliente',
-                    itemId: 'mostrarCliente'
+                    itemId: 'mostrarCliente',
+                    handler:function (btn) {
+                    	btn.up('partidacontainer').setActiveItem(1);
+                    }
                 }]
             }, {
                 xtype: 'spacer'

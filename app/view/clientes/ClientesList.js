@@ -26,23 +26,6 @@ Ext.define('Imobile.view.clientes.ClientesList', {
                 xtype: 'searchfield',
                 placeHolder: ' Buscar cliente...'
             }]
-        }, {
-            xtype: 'toolbar',
-            docked: 'top',
-            items: [{
-                xtype: 'spacer'
-            },{
-                xtype: 'segmentedbutton',
-                items: [{
-                    text: 'Code'
-                }, {
-                    text: 'Name'
-                }, {
-                    text: 'Phone No.'
-                }]
-            },{
-                xtype: 'spacer'
-            }]
         }],
         plugins: [{
             xclass: 'Ext.plugin.ListPaging',

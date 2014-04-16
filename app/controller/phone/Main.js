@@ -26,6 +26,9 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'productoslist' :{
                 itemswipe:'eliminaProducto'
+            },
+            'menu clienteslist':{
+                itemtap:'alSelecionarCliente'
             }
         }
     },
@@ -58,7 +61,8 @@ Ext.define('Imobile.controller.phone.Main', {
                 break;
             case 'venta':
                 view.push({
-                    xtype: 'productoslist'                    
+                    //xtype: 'productoslist'                  
+                    xtype: 'clienteslist'                  
                     //xtype:'agregarproductosform'
                 });
                 this.esFavorito=false;
@@ -229,5 +233,16 @@ Ext.define('Imobile.controller.phone.Main', {
 
     mandaMensaje:function(titulo,mensaje){
         Ext.Msg.alert(titulo, mensaje);
+    },
+
+    alSelecionarCliente: function (view, index, target, record, eOpts) {
+        var me = this,
+            view = me.getMenu(),
+            option = record.get('action');
+
+
+        view.push({
+            xtype:'partidacontainer'
+        });
     }
 });

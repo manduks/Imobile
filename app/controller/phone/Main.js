@@ -27,6 +27,9 @@ Ext.define('Imobile.controller.phone.Main', {
             'productoslist' :{
                 itemswipe:'eliminaProducto'
             },
+              'clienteslist #busca':{
+                keyup: 'buscaCliente'
+            },
             'menu clienteslist':{
                 itemtap:'alSelecionarCliente'
             }
@@ -34,7 +37,7 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     onSelectMenu: function(view, index, target, record, eOpts) {
-        console.log(record);
+        //console.log(record);
         var me = this,
             view = me.getMenu(),
             option = record.get('action');
@@ -58,15 +61,16 @@ Ext.define('Imobile.controller.phone.Main', {
                 view.push({
                     xtype: 'clienteslist'
                 });
+                me.muestraClientes();
                 break;
             case 'venta':
                 view.push({
                     //xtype: 'productoslist'                  
                     xtype: 'clienteslist'                  
-                    //xtype:'agregarproductosform'
+                    //xtype:'agregarproductosform'                    
                 });
                 this.esFavorito=false;
-                me.muestraProductos();
+                me.muestraClientes();                
                 break;
             case 'salir':
                 me.getMain().setActiveItem(0);
@@ -125,7 +129,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
         form = btn.up('agregarproductosform');
         values = form.getValues();
-        console.log(form);
+        //console.log(form);
         //alert(values.code);
         codigo = values.code;
         descripcion = values.description;
@@ -163,6 +167,11 @@ Ext.define('Imobile.controller.phone.Main', {
         this.hazTransaccion(query,'Productos', true);
     },
 
+    muestraClientes: function (){
+        var query = "SELECT * FROM CLIENTE";
+        this.hazTransaccion(query,'Clientes', true);
+    },    
+
     busca: function(searchField){
         var campo = searchField.getValue();
         if(this.esFavorito){
@@ -172,6 +181,13 @@ Ext.define('Imobile.controller.phone.Main', {
         }
         //alert(query);
         this.hazTransaccion(query ,'Productos', true);
+    },
+
+    buscaCliente:function(searchField){
+        var campo = searchField.getValue();            
+        var query = "SELECT * FROM CLIENTE WHERE code like '%" + campo + "%' OR name like '%" + campo + "%'" ;
+        //alert(query);
+        this.hazTransaccion(query ,'Clientes', true);
     },    
 
 //// Controlador de Favoritos ////
@@ -211,26 +227,6 @@ Ext.define('Imobile.controller.phone.Main', {
             'Productos', false);
     },
 
-    hazTransaccion: function (query, storeName, add){
-        var me = this;
-        var store = Ext.getStore(storeName);
-
-        db = store.getModel().getProxy().getDatabaseObject();
-        
-        db.transaction(function(tx) {
-            tx.executeSql(query, [], function(tx, results) {
-                if(add){
-                    store.removeAll();
-                    var len = results.rows.length,
-                    i;
-                    for (i = 0; i < len; i++) {
-                        store.add(results.rows.item(i));
-                    }
-                }
-            }, null);
-        });
-    },
-
     mandaMensaje:function(titulo,mensaje){
         Ext.Msg.alert(titulo, mensaje);
     },
@@ -238,11 +234,12 @@ Ext.define('Imobile.controller.phone.Main', {
     alSelecionarCliente: function (view, index, target, record, eOpts) {
         var me = this,
             view = me.getMenu(),
-            option = record.get('action');
+            option = record.get('action');        
 
 
         view.push({
-            xtype:'partidacontainer'
+            xtype: 'opcionclientelist'
         });
+        me.getOpcionCliente().down('toolbar').setTitle(record.get('code') + ' ' + record.get('name'));
     }
 });

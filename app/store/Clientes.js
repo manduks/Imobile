@@ -10,12 +10,12 @@ Ext.define('Imobile.store.Clientes', {
     config: {
          model:'Imobile.model.Cliente',
          autoLoad:true,
-         data:[
- 			{code:'C0077',name:'Pedro López López'},
- 			{code:'C0069',name:'Pablo López López'},
- 			{code:'C0071',name:'Jose López López'},
- 			{code:'C0156',name:'Ramiro López López'},
- 			{code:'C0141',name:'Roberto López López'},
-         ]
+    //      data:[
+ 			// {code:'C0077',name:'Pedro López López'},
+ 			// {code:'C0069',name:'Pablo López López'},
+ 			// {code:'C0071',name:'Jose López López'},
+ 			// {code:'C0156',name:'Ramiro López López'},
+ 			// {code:'C0141',name:'Roberto López López'},
+    //      ]
     }
 });

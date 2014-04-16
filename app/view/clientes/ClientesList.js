@@ -24,6 +24,7 @@ Ext.define('Imobile.view.clientes.ClientesList', {
             layout:'fit',
             items: [{
                 xtype: 'searchfield',
+                itemId: 'busca',
                 placeHolder: ' Buscar cliente...'
             }]
         }],

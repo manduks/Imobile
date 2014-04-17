@@ -7,6 +7,9 @@ Ext.define('Imobile.model.Cliente', {
     extend: 'Ext.data.Model',
     config: {
         fields: [{
+            name: 'id',
+            type: 'int'
+        },{
             name: 'code',
             type: 'string'
         }, {

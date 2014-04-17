@@ -1,6 +1,7 @@
 Ext.define('Imobile.controller.phone.Main', {
     extend: 'Imobile.controller.Main',
     esFavorito: undefined,
+    idCliente: undefined,
     config: {
         control: {
             'seleccionadorprofav #listarProductos': {
@@ -129,7 +130,8 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     agregaProductos: function (btn) {
-        var form, values, codigo, descripcion, query,
+        var form, values, codigo, descripcion, cantidad, precio, moneda, descuento, precioConDescuento, totalDeImpuesto,query,
+            importe, almacen, existencia,
             me = this,
             view = me.getOpcionesOrden();
 
@@ -139,15 +141,28 @@ Ext.define('Imobile.controller.phone.Main', {
         //alert(values.code);
         codigo = values.code;
         descripcion = values.description;
+        cantidad = values.cantidad;
+        precio = values.precio;
+        moneda = values.moneda;
+        descuento = values.descuento;
+        precioConDescuento = values.precioConDescuento;
+        totalDeImpuesto = values.totalDeImpuesto;
+        importe = values.importe;
+        almacen = values.almacen;
+        existencia = values.existencia;
+
 
         if (descripcion == "" || codigo == null) {
             //alert('Todos los campos deben estar llenos');
             this.mandaMensaje("Campos inválidos o vacíos", "Verifique que el valor de los campos sea correcto o que no estén vacíos");
         } else {
-            query = "INSERT INTO ORDEN (code, description) VALUES (" + codigo + ", '" + descripcion + "')";
-            alert(query);
+             query = "INSERT INTO ORDEN (clienteId, code, description, cantidad, precio, moneda, descuento, precioConDescuento, " +
+                "totalDeImpuesto, importe, almacen, existencia) VALUES (" + this.idCliente + "," + codigo + ", '" + descripcion + "'," + 
+                cantidad + "," + precio + ", '" + moneda + "', " + descuento + "," + precioConDescuento + "," + 
+                totalDeImpuesto + "," + importe + ",'" + almacen + "', " + existencia + ")";
+            //alert(query);
             this.hazTransaccion(query, 'Ordenes', true);
-            //this.mandaMensaje('Producto agregado', 'El producto fue agregado exitosamente');
+            this.mandaMensaje('Producto agregado', 'El producto fue agregado exitosamente');
             //this.muestraProductos();
             this.muestralistaOrden();
             view.setActiveItem(3);
@@ -181,8 +196,9 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     muestralistaOrden: function(){
-        var query = "SELECT * FROM ORDEN";
-        this.hazTransaccion(query, 'Orden', true);
+        var query = "SELECT * FROM ORDEN WHERE clienteId = " + this.idCliente + "";
+        //alert(query);
+        this.hazTransaccion(query, 'Ordenes', true);
     },
 
     busca: function (searchField) {
@@ -253,14 +269,32 @@ Ext.define('Imobile.controller.phone.Main', {
         view.push({
             xtype: 'opcionclientelist'
         });
+        this.idCliente = record.get('id');
+        this.muestralistaOrden();
         me.getOpcionCliente().down('toolbar').setTitle(record.get('code') + ' ' + record.get('name'));
     },
 
-    onAgregarProducto: function () {
+    onAgregarProducto: function (list, index, target, record) {
+        //console.log(record);
         var me = this,
             viewOrden = me.getOpcionesOrden();
 
         viewOrden.setActiveItem(2);
+        //viewOrden.getActiveItem().code.setValue(record.get('code'));
+        //viewOrden.down('agregarproductosform').getValues().code.setValue(record.get('code'));
+        viewOrden.getActiveItem().setValues({
+            code: record.get('code'),
+            description: record.get('description'),
+            cantidad: record.get('cantidad'),
+            precio: record.get('precio'),
+            moneda: record.get('moneda'),
+            descuento: record.get('descuento'),
+            precioConDescuento: record.get('precioConDescuento'),
+            totalDeImpuesto: record.get('totalDeImpuesto'),
+            importe: record.get('importe'),
+            almacen: record.get('almacen'),
+            existencia: record.get('existencia')
+        });
     },
 
     onOpcionesOrden: function (t, index, target, record, e) {

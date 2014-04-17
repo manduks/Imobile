@@ -48,19 +48,22 @@ Ext.define('Imobile.controller.Main',{
 
     launch:function(){        
 
-    //Borramos datos de productos y clientes
+    //Borramos datos de productos, clientes y órdenes
         var query = "DELETE FROM PRODUCTO";
         this.hazTransaccion(query, 'Productos', true);
 
         query = "DELETE FROM CLIENTE";
         this.hazTransaccion(query, 'Clientes', true);
 
+        query = "DELETE FROM ORDEN";
+        this.hazTransaccion(query, 'Ordenes', true);
+
         //Ingresamos datos de productos y clientes
         
         for(var i = 0; i < 5; i++){
             query = "INSERT INTO PRODUCTO (code, description, cantidad, precio, moneda, descuento, precioConDescuento, " +
                 "totalDeImpuesto, importe, almacen, existencia, favorite) VALUES (" + i + ", '" + "Producto" + i + "'," + 
-                (i + 2) + "," + (i+28.45) + "," + " 'pesos', " + (i +1 * .1) + "," + 23.25 + "," + 1.16 + "," + 5.25 + ", 'almacen', " + i + ", 'false')";
+                1 + "," + (i+28.45) + "," + " 'pesos', " + (i +1 * .1) + "," + 23.25 + "," + 1.16 + "," + 5.25 + ", 'almacén', " + (i+10) + ", 'false')";
 //            query = "INSERT INTO PRODUCTO (code, description, cantidad) VALUES (" + i + ", '" + "Producto" + i + "'," + (i +2) + ")";
             //alert(query);
             this.hazTransaccion(query, 'Productos', true);
@@ -71,20 +74,19 @@ Ext.define('Imobile.controller.Main',{
             this.hazTransaccion(query, 'Clientes', true);
         }
 
-        // var store = Ext.getStore('Productos');
-        // store.load();
-        // var c = store.getCount();
-        // //alert(c);
+        var store = Ext.getStore('Ordenes');
+        store.load();
+        var c = store.getCount();
+        //alert(c);
 
-        // if(c <= 0){
-        //     for(var i = 0; i < 5; i++){
-        //         store.add({
-        //             code: i, 
-        //             description: 'descripcion' + i,
-        //             favorite: false
-        //         })
-        //     }
-        //     store.sync();            
-        // }
+/*        if(c <= 0){
+            for(var i = 0; i < 5; i++){
+                store.add({
+                    code: i, 
+                    description: 'descripcion' + i                    
+                })
+            }
+            store.sync();            
+        }*/
     }
 });

@@ -8,7 +8,7 @@ Ext.define('Imobile.model.Producto', {
     config: {
         fields: [{
             name: 'id',
-            type: 'int'
+            type: 'int'            
         },{
             name: 'code',
             type: 'int'

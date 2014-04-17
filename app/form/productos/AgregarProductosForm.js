@@ -4,7 +4,8 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
 	requires:[
 		'Ext.form.FieldSet',
 		'Ext.field.Text',
-		'Ext.field.Number'
+		'Ext.field.Number',
+        'Ext.field.Spinner'
 	],
 	config:{
 		//padding:'15 15 15 15',
@@ -16,6 +17,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                 instructions: 'Ingrese los datos',
                 defaults:{
                     //required:true,
+                    disabled: true,
                     clearIcon:true,
                     autoCapitalize:true,
                     labelWidth: '45%'
@@ -25,23 +27,27 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         xtype:'numberfield',
                         name:'code',
                         label: 'Código',
-                        placeHolder:'ingresa el código',
+                        itemId: 'codepro'
+                        //value: 12345
                     },{
                         xtype:'textfield',
                         name:'description',
                         label:'Descripción',
-                        placeHolder:'ingresa la descripción',
+                        disabled: false
                     },{
-                        xtype:'numberfield',
+                        xtype:'spinnerfield',
                         name:'cantidad',
                         label:'Cantidad',
-                        placeHolder:'ingresa la cantidad', 
+                        disabled: false,
+                        minValue: 1,
+                        //maxValue: 100,
+                        stepValue: 1,                        
                     },{
                         xtype:'numberfield',
                         name:'precio',
                         label:'Precio'
                     },{
-                        xtype:'numberfield',
+                        xtype:'textfield',
                         name:'moneda',
                         label:'Moneda'
                     },{
@@ -61,7 +67,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         name:'importe',
                         label:'Importe' 
                     },{
-                        xtype:'numberfield',
+                        xtype:'textfield',
                         name:'almacen',
                         label:'Almacen'  
                     },{

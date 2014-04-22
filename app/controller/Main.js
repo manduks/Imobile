@@ -60,7 +60,7 @@ Ext.define('Imobile.controller.Main',{
 
         //Ingresamos datos de productos y clientes
         
-        for(var i = 0; i < 5; i++){
+        for(var i = 0; i < 10; i++){
             query = "INSERT INTO PRODUCTO (code, description, cantidad, precio, moneda, descuento, precioConDescuento, " +
                 "totalDeImpuesto, importe, almacen, existencia, favorite) VALUES (" + i + ", '" + "Producto" + i + "'," + 
                 1 + "," + (i+28.45) + "," + " 'pesos', " + (i +1 * .1) + "," + 23.25 + "," + 1.16 + "," + 5.25 + ", 'almacén', " + (i+10) + ", 'false')";

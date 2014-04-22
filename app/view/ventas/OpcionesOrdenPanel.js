@@ -20,7 +20,8 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
             {
                 title: 'Productos',
                 iconCls: 'team',
-                xtype: 'productoslist'
+                //xtype: 'productoslist'
+                xtype:'productosview'
             },
             {
                 title: 'Cliente',

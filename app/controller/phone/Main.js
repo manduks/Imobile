@@ -70,9 +70,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 break;
             case 'venta':
                 view.push({
-                    //xtype: 'productoslist'                  
-                    xtype: 'clienteslist'
-                    //xtype:'agregarproductosform'                    
+                    xtype: 'clienteslist'                    
                 });
                 this.esFavorito = false;
                 me.muestraClientes();

@@ -17,8 +17,7 @@ Ext.Loader.addClassPathMappings({
   "Ext.device.sqlite.SQLResultSetRowList": "touch/src/device/sqlite/Sencha.js",
   "Ext.device.sqlite.SQLTransaction": "touch/src/device/sqlite/Sencha.js",
   "Ext.draw.engine.SvgContext.Gradient": "touch/src/draw/engine/SvgContext.js",
-  "Imobile": "app",
-  "Imobile.view.configuraion.SincronizarContainer": "app/view/configuracion/SincronizarContainer.js"
+  "Imobile": "app"
 });
 Ext.ClassManager.addNameAlternateMappings({
   "Ext.AbstractComponent": [],
@@ -747,24 +746,37 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.controller.Main": [],
   "Imobile.controller.phone.Main": [],
   "Imobile.controller.tablet.Main": [],
+  "Imobile.form.clientes.ClienteForm": [],
   "Imobile.form.login.LoginForm": [],
+  "Imobile.form.productos.AgregarProductosForm": [],
   "Imobile.model.Cliente": [],
   "Imobile.model.Menu": [],
+  "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
   "Imobile.store.Clientes": [],
   "Imobile.store.Menu": [],
+  "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
   "Imobile.view.Main": [],
   "Imobile.view.clientes.ClientesList": [],
+  "Imobile.view.clientes.OpcionClienteList": [],
+  "Imobile.view.configuracion.ConfiguracionContainer": [],
   "Imobile.view.configuracion.ConfiguracionList": [],
-  "Imobile.view.configuraion.SincronizarContainer": [],
+  "Imobile.view.configuracion.InitializeContainer": [],
+  "Imobile.view.configuracion.ServidorContainer": [],
+  "Imobile.view.configuracion.SincronizarContainer": [],
+  "Imobile.view.favoritos.SeleccionadorProFav": [],
   "Imobile.view.menu.Menu": [],
   "Imobile.view.menu.MenuList": [],
   "Imobile.view.phone.Main": [],
   "Imobile.view.productos.ProductosList": [],
-  "Imobile.view.tablet.Main": []
+  "Imobile.view.productos.ProductosView": [],
+  "Imobile.view.tablet.Main": [],
+  "Imobile.view.ventas.OpcionesOrdenPanel": [],
+  "Imobile.view.ventas.OrdenList": [],
+  "Imobile.view.ventas.PartidaContainer": []
 });
 Ext.ClassManager.addNameAliasMappings({
   "Ext.AbstractComponent": [],
@@ -1711,16 +1723,24 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.controller.Main": [],
   "Imobile.controller.phone.Main": [],
   "Imobile.controller.tablet.Main": [],
+  "Imobile.form.clientes.ClienteForm": [
+    "widget.clienteForm"
+  ],
   "Imobile.form.login.LoginForm": [
     "widget.loginform"
   ],
+  "Imobile.form.productos.AgregarProductosForm": [
+    "widget.agregarproductosform"
+  ],
   "Imobile.model.Cliente": [],
   "Imobile.model.Menu": [],
+  "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
   "Imobile.store.Clientes": [],
   "Imobile.store.Menu": [],
+  "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
   "Imobile.view.Main": [
     "widget.main"
@@ -1728,11 +1748,26 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.view.clientes.ClientesList": [
     "widget.clienteslist"
   ],
+  "Imobile.view.clientes.OpcionClienteList": [
+    "widget.opcionclientelist"
+  ],
+  "Imobile.view.configuracion.ConfiguracionContainer": [
+    "widget.configuracioncontainer"
+  ],
   "Imobile.view.configuracion.ConfiguracionList": [
     "widget.configuracionlist"
   ],
-  "Imobile.view.configuraion.SincronizarContainer": [
+  "Imobile.view.configuracion.InitializeContainer": [
+    "widget.initializecontainer"
+  ],
+  "Imobile.view.configuracion.ServidorContainer": [
+    "widget.servidorcontainer"
+  ],
+  "Imobile.view.configuracion.SincronizarContainer": [
     "widget.sincronizarcontainer"
+  ],
+  "Imobile.view.favoritos.SeleccionadorProFav": [
+    "widget.seleccionadorprofav"
   ],
   "Imobile.view.menu.Menu": [
     "widget.menu"
@@ -1744,5 +1779,17 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.view.productos.ProductosList": [
     "widget.productoslist"
   ],
-  "Imobile.view.tablet.Main": []
+  "Imobile.view.productos.ProductosView": [
+    "widget.productosview"
+  ],
+  "Imobile.view.tablet.Main": [],
+  "Imobile.view.ventas.OpcionesOrdenPanel": [
+    "widget.opcionesorden"
+  ],
+  "Imobile.view.ventas.OrdenList": [
+    "widget.ordenlist"
+  ],
+  "Imobile.view.ventas.PartidaContainer": [
+    "widget.partidacontainer"
+  ]
 });

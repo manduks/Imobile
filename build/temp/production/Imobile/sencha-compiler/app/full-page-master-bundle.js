@@ -1,2 +1,2 @@
 // @tag full-page
-// @require /Users/manduks/Proyectos/Sencha/Imobile/app.js
+// @require C:\Users\desarrollo02\Documents\GitHub\Imobile\app.js

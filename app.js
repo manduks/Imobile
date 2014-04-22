@@ -18,8 +18,7 @@ Ext.application({
     ],
 
     models:[
-        'Menu',
-        'Orden'
+        'Menu'
     ],
 
     stores: [

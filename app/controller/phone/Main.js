@@ -135,21 +135,19 @@ Ext.define('Imobile.controller.phone.Main', {
 
         form = btn.up('agregarproductosform');
         values = form.getValues();
-        //console.log(form);
-        //alert(values.code);
         codigo = values.code;
         descripcion = values.description;
 
         if (descripcion == "" || codigo == null) {
             //alert('Todos los campos deben estar llenos');
-            this.mandaMensaje("Campos inválidos o vacíos", "Verifique que el valor de los campos sea correcto o que no estén vacíos");
+            me.mandaMensaje("Campos inválidos o vacíos", "Verifique que el valor de los campos sea correcto o que no estén vacíos");
         } else {
             query = "INSERT INTO ORDEN (code, description) VALUES (" + codigo + ", '" + descripcion + "')";
-            alert(query);
-            this.hazTransaccion(query, 'Ordenes', true);
-            //this.mandaMensaje('Producto agregado', 'El producto fue agregado exitosamente');
-            //this.muestraProductos();
-            this.muestralistaOrden();
+            //alert(query);
+            me.hazTransaccion(query, 'Ordenes', true);
+            //Ext.getStore('Ordenes').add({code:codigo, description:descripcion})
+            //Ext.getStore('Ordenes').sync();
+            me.muestralistaOrden();
             view.setActiveItem(3);
             form.reset();
         }
@@ -182,7 +180,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
     muestralistaOrden: function(){
         var query = "SELECT * FROM ORDEN";
-        this.hazTransaccion(query, 'Orden', true);
+        this.hazTransaccion(query, 'Ordenes', true);
     },
 
     busca: function (searchField) {

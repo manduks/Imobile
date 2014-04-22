@@ -44,6 +44,8 @@ Ext.define('Imobile.controller.Main',{
                 }
             }, null);
         });
+
+        store.sync()
     },   
 
     launch:function(){

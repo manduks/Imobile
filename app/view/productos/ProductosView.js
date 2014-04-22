@@ -12,8 +12,8 @@ Ext.define('Imobile.view.productos.ProductosView', {
         cls: 'dataview-inline',
         itemTpl: [
             '<tpl for=".">',
-                '<div class="menu-list">',
-                    '<div class="menu-list-image">{description}</div>',
+                '<div class="product-list">',
+                    '{description}',
                     //'<h2>{name}</h2>',
                 '</div>',
             '</tpl>'
@@ -31,31 +31,14 @@ Ext.define('Imobile.view.productos.ProductosView', {
             docked: 'top',
             layout:'fit',
             title: 'Agregar Producto',
-            items: [{
+            /*items: [{
                 xtype: 'button',
                 //iconCls: 'add',
                 itemId: 'cancelar',
                 //flex: 1
                 text: 'cancelar',
                 right: '0%'
-            }]
-        // }, {
-        //     xtype: 'toolbar',
-        //     docked: 'top',
-        //     items: [{
-        //         xtype: 'spacer'
-        //     },{
-        //         xtype: 'segmentedbutton',
-        //         items: [{
-        //             text: 'Code'
-        //         }, {
-        //             text: 'Description'
-        //         }, {
-        //             text: 'UPC Code'
-        //         }]
-        //     },{
-        //         xtype: 'spacer'
-        //     }]
+            }]*/
          }],
     }
 });

@@ -8,7 +8,7 @@ Ext.define('Imobile.model.Producto', {
     config: {
         fields: [{
             name: 'id',
-            type: 'int'
+            type: 'int'            
         },{
             name: 'code',
             type: 'int'
@@ -16,9 +16,36 @@ Ext.define('Imobile.model.Producto', {
             name: 'description',
             type: 'string'
         },{
+            name: 'cantidad',
+            type: 'int'
+        },{
+            name: 'precio',
+            type: 'double'
+        },{
+            name: 'moneda',
+            type: 'string'
+        },{
+            name: 'descuento',
+            type: 'double'
+        },{
+            name: 'precioConDescuento',
+            type: 'double'
+        },{
+            name: 'totalDeImpuesto',
+            type: 'double'
+        },{
+            name: 'importe',
+            type: 'double'
+        },{
+            name: 'almacen',
+            type: 'string'
+        },{
+            name: 'existencia',
+            type: 'int'
+        },{
             name: 'favorite',
             type: 'boolean',
-            defaultValue: false            
+            defaultValue: false
         }],
 
         proxy: {

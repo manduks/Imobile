@@ -5,7 +5,6 @@
  */
 Ext.define('Imobile.view.clientes.OpcionClienteList', {
     extend: 'Ext.dataview.List',
-    texto: undefined,
     xtype: 'opcionclientelist',    
     config: {
         onItemDisclosure: function (record, listItem, index, e) {

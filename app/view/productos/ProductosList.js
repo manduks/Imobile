@@ -28,7 +28,7 @@ Ext.define('Imobile.view.productos.ProductosList', {
                 placeHolder: ' Buscar producto...',
                 flex: 4
             }, {
-                xtype: 'button',                
+                xtype: 'button',
                 iconCls: 'add',
                 itemId: 'agregar',
                 flex: 1

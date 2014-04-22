@@ -4,7 +4,8 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
 	requires:[
 		'Ext.form.FieldSet',
 		'Ext.field.Text',
-		'Ext.field.Number'
+		'Ext.field.Number',
+        'Ext.field.Spinner'
 	],
 	config:{
 		//padding:'15 15 15 15',
@@ -15,7 +16,8 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                 title:'Agregar Productos',
                 instructions: 'Ingrese los datos',
                 defaults:{
-                    required:true,
+                    //required:true,
+                    disabled: true,
                     clearIcon:true,
                     autoCapitalize:true,
                     labelWidth: '45%'
@@ -25,12 +27,53 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         xtype:'numberfield',
                         name:'code',
                         label: 'Código',
-                        placeHolder:'ingresa el código',
+                        itemId: 'codepro'
+                        //value: 12345
                     },{
                         xtype:'textfield',
                         name:'description',
                         label:'Descripción',
-                        placeHolder:'ingresa la descripción',
+                        disabled: false
+                    },{
+                        xtype:'spinnerfield',
+                        name:'cantidad',
+                        label:'Cantidad',
+                        disabled: false,
+                        minValue: 1,
+                        //maxValue: 100,
+                        stepValue: 1,                        
+                    },{
+                        xtype:'numberfield',
+                        name:'precio',
+                        label:'Precio'
+                    },{
+                        xtype:'textfield',
+                        name:'moneda',
+                        label:'Moneda'
+                    },{
+                        xtype:'numberfield',
+                        name:'descuento',
+                        label:'Descuento'
+                    },{
+                        xtype:'numberfield',
+                        name:'precioConDescuento',
+                        label:'Precio con Descuento'
+                    },{
+                        xtype:'numberfield',
+                        name:'totalDeImpuesto',
+                        label:'Total de impuesto'
+                    },{
+                        xtype:'numberfield',
+                        name:'importe',
+                        label:'Importe' 
+                    },{
+                        xtype:'textfield',
+                        name:'almacen',
+                        label:'Almacen'  
+                    },{
+                        xtype:'numberfield',
+                        name:'existencia',
+                        label:'Existencia' 
                     }
                 ]
             }, {        

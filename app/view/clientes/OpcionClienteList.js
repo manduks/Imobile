@@ -10,7 +10,7 @@ Ext.define('Imobile.view.clientes.OpcionClienteList', {
         onItemDisclosure: function (record, listItem, index, e) {
             this.fireEvent("tap", record, listItem, index, e);            
         },        
-        items: [{
+/*        items: [{
             xtype: 'toolbar',
             docked: 'top',
             layout:'fit',
@@ -18,7 +18,7 @@ Ext.define('Imobile.view.clientes.OpcionClienteList', {
             // items: [{
             //     text: 'Código y nombre del Cliente' 
             // }]
-        }],
+        }],*/        
         itemTpl: '{title}',
         data:[
             {title: 'Orden de venta', action: 'orden'},

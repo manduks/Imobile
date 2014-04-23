@@ -261,6 +261,7 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this,
             view = me.getMenu(),
             option = record.get('action');
+            bar = me.getMenu().getNavigationBar();
 
 
         view.push({
@@ -268,7 +269,10 @@ Ext.define('Imobile.controller.phone.Main', {
         });
         this.idCliente = record.get('id');
         this.muestralistaOrden();
-        me.getOpcionCliente().down('toolbar').setTitle(record.get('code') + ' ' + record.get('name'));
+        bar.titleComponent.setTitle(record.get('code') + ' ' + record.get('name'));
+        //bar        text: 'Cheto',//record.get('code') + ' ' + record.get('name'),
+        //console.log(me.getOpcionCliente());
+        //me.getOpcionCliente().setTitle(record.get('code') + ' ' + record.get('name'));        
     },
 
     onAgregarProducto: function (list, index, target, record) {

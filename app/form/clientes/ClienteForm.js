@@ -29,49 +29,49 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                 items: [
                     {
                         xtype: 'textfield',
-                        name: 'addres1',
-                        label: 'Dirección 1',
-                        placeHolder: 'Ingresa tu Dirección'
+                        name: 'calle',
+                        label: 'Calle',
+                        placeHolder: 'Ingresa tu calle y número'
                     },
                     {
                         xtype: 'textfield',
-                        name: 'addres2',
-                        label: 'Dirección 2',
-                        placeHolder: 'Ingresa tu Dirección'
+                        name: 'colonia',
+                        label: 'Colonia',
+                        placeHolder: 'Ingresa tu colonia'
                     },
                     {
                         xtype: 'textfield',
-                        name: 'addres3',
-                        label: 'Dirección 3',
-                        placeHolder: 'Ingresa tu Dirección'
+                        name: 'delegacion',
+                        label: 'Municipio',
+                        placeHolder: 'Ingresa tu municipio'
+                    },
+                    {
+                        xtype: 'textfield',
+                        name: 'cp',
+                        label: 'Código Postal',
+                        placeHolder: 'Ingresa tu C.P.'
                     },
                     {
                         xtype: 'textfield',
                         name: 'ciudad',
                         label: 'Ciudad',
-                        placeHolder: 'Ingresa tu Ciudad'
-                    },
-                    {
-                        xtype: 'textfield',
-                        name: 'cp',
-                        label: 'C.P.',
-                        placeHolder: 'Ingresa tu C.P.'
-                    },
-                    {
-                        xtype: 'textfield',
-                        name: 'pais',
-                        label: 'Pais',
-                        placeHolder: 'Ingresa tu Pais'
+                        placeHolder: 'Ingresa tu ciudad'
                     },
                     {
                         xtype: 'textfield',
                         name: 'estado',
                         label: 'Estado',
-                        placeHolder: 'Ingresa tu Estado'
+                        placeHolder: 'Ingresa tu estado'
+                    },
+                    {
+                        xtype: 'textfield',
+                        name: 'pais',
+                        label: 'País',
+                        placeHolder: 'Ingresa tu país'
                     }
                 ]
             },
-            {
+/*            {
                 xtype: 'fieldset',
                 itemId: 'datosCompra',
                 title: 'Datos de Compra',
@@ -96,7 +96,7 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                         placeHolder: 'Ingresa tu Dirección'
                     }
                 ]
-            },
+            },*/
             {
                 xtype: 'container',
                 defaults: {

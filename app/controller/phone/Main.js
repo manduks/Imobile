@@ -37,6 +37,9 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'opcionclientelist': {
                 itemtap: 'onOpcionesOrden'
+            },
+            'seleccionadorprofav toolbar segmentedbutton':{
+                toogle: 'mostrarActivo'
             }
         }
     },
@@ -113,6 +116,16 @@ Ext.define('Imobile.controller.phone.Main', {
         }
     },
 
+    mostrarActivo: function(container, button, pressed){
+        var me = this;
+
+        if(button.getText() == 'Favoritos' && pressed){
+            me.getSeleccionadorProFav().setItems({xtype: 'productosview'});
+        } else {
+            me.getSeleccionadorProFav().setItems({xtype: 'productoslist'});
+        }
+    },
+
     onCancelar: function () {
         var me = this,
             view = me.getOpcionesOrden();
@@ -158,7 +171,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 cantidad + "," + precio + ", '" + moneda + "', " + descuento + "," + precioConDescuento + "," + 
                 totalDeImpuesto + "," + importe + ",'" + almacen + "', " + existencia + ")";
             //alert(query);
-            this.hazTransaccion(query, 'Ordenes', true);
+            this.hazTransaccion(query, 'Ordenes', false);
             this.mandaMensaje('Producto agregado', 'El producto fue agregado exitosamente');
             //this.muestraProductos();
             this.muestralistaOrden();
@@ -176,7 +189,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 var ind = record.get('id');
                 var query = "DELETE FROM PRODUCTO WHERE id = " + ind + "";
                 //alert(query);
-                me.hazTransaccion(query, 'Productos', true);
+                me.hazTransaccion(query, 'Productos', false);
                 me.muestraProductos();
             }
         });
@@ -226,7 +239,7 @@ Ext.define('Imobile.controller.phone.Main', {
     listarProductos: function (segmentedButton) {
 
         this.lista(false); // Me lista aquellos cuyo valor favorite es false
-        this.esFavorito = false;
+        this.esFavorito = false;        
     },
 
     cambiaStatusFavoritos: function (list, index, target, record, e, eOpts) {

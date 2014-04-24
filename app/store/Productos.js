@@ -9,6 +9,6 @@ Ext.define('Imobile.store.Productos', {
 
     config: {
         model:'Imobile.model.Producto',
-        autoLoad:true // Para que se cargue el store algunos datos
+        autoLoad: true // Para que se cargue el store algunos datos
     }
 });

@@ -24,7 +24,7 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                     required: true,
                     clearIcon: true,
                     autoCapitalize: true,
-                    labelWidth: '45%'
+                    labelWidth: '45%',                    
                 },
                 items: [
                     {
@@ -68,7 +68,7 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                         name: 'pais',
                         label: 'País',
                         placeHolder: 'Ingresa tu país'
-                    }
+                    },                    
                 ]
             },
 /*            {
@@ -108,6 +108,11 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                     type: 'hbox'
                 },
                 items: [
+                    {
+                        xtype: 'spacer',
+                        docked: 'top',
+                        padding: 5
+                    },
                     {
                         itemId: 'agregar',
                         text: 'Agregar',

@@ -9,7 +9,7 @@ Ext.define('Imobile.store.Clientes', {
 
     config: {
          model:'Imobile.model.Cliente',
-         autoLoad:true,
+         autoLoad: true
     //      data:[
  			// {code:'C0077',name:'Pedro López López'},
  			// {code:'C0069',name:'Pablo López López'},

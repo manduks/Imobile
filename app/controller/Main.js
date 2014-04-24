@@ -8,7 +8,8 @@ Ext.define('Imobile.controller.Main',{
             },
             menu: 'menu',
             opcionesOrden: 'opcionesorden',
-            opcionCliente: 'opcionclientelist'
+            opcionCliente: 'opcionclientelist',
+            seleccionadorProFav: 'seleccionadorprofav'
         },
         control:{
             'loginform':{

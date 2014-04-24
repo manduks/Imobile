@@ -27,30 +27,7 @@ Ext.define('Imobile.view.productos.ProductosList', {
                 itemId: 'busca',
                 placeHolder: ' Buscar producto...',
                 flex: 4
-            }, {
-                xtype: 'button',
-                iconCls: 'add',
-                itemId: 'agregar',
-                flex: 1
-                //text: 'Agregar +'
             }]
-        // }, {
-        //     xtype: 'toolbar',
-        //     docked: 'top',
-        //     items: [{
-        //         xtype: 'spacer'
-        //     },{
-        //         xtype: 'segmentedbutton',
-        //         items: [{
-        //             text: 'Code'
-        //         }, {
-        //             text: 'Description'
-        //         }, {
-        //             text: 'UPC Code'
-        //         }]
-        //     },{
-        //         xtype: 'spacer'
-        //     }]
          }],
         plugins: [{
             xclass: 'Ext.plugin.ListPaging',

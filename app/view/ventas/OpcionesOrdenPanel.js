@@ -20,8 +20,7 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
             {
                 title: 'Productos',
                 iconCls: 'team',
-                //xtype: 'productoslist'
-                xtype:'productosview'
+                xtype: 'seleccionadorprofav'
             },
             {
                 title: 'Cliente',
@@ -29,14 +28,14 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
                 xtype: 'clienteForm'
             },
             {
-                title: 'Producto',
-                iconCls: 'bookmarks',
-                xtype: 'agregarproductosform'
-            },
-            {
                 title: 'Ordenar',
                 iconCls: 'settings',
                 xtype: 'partidacontainer'
+            },
+            {
+                title: 'Eliminar',
+                iconCls: 'remove',
+                itemId: 'eliminar'
             }
         ]
     }

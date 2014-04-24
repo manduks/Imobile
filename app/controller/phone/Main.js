@@ -37,6 +37,15 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'opcionclientelist': {
                 itemtap: 'onOpcionesOrden'
+            },
+            'seleccionadorprofav toolbar segmentedbutton': {
+                toggle: 'mostrarActivo'
+            },
+            'productosview': {
+                itemtap: 'onTapFavorito'
+            },
+            'opcionesorden #eliminar': {
+                activate: 'onEliminarOrden'
             }
         }
     },
@@ -70,7 +79,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 break;
             case 'venta':
                 view.push({
-                    xtype: 'clienteslist'                    
+                    xtype: 'clienteslist'
                 });
                 this.esFavorito = false;
                 me.muestraClientes();
@@ -128,9 +137,10 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     agregaProductos: function (btn) {
-        var form, values, codigo, descripcion, cantidad, precio, moneda, descuento, precioConDescuento, totalDeImpuesto,query,
+        var form, values, codigo, descripcion, cantidad, precio, moneda, descuento, precioConDescuento, totalDeImpuesto, query,
             importe, almacen, existencia,
             me = this,
+            menu = me.getMenu(),
             view = me.getOpcionesOrden();
 
         form = btn.up('agregarproductosform');
@@ -149,33 +159,30 @@ Ext.define('Imobile.controller.phone.Main', {
 
 
         if (descripcion == "" || codigo == null) {
-            //alert('Todos los campos deben estar llenos');
             me.mandaMensaje("Campos inválidos o vacíos", "Verifique que el valor de los campos sea correcto o que no estén vacíos");
         } else {
 
-             query = "INSERT INTO ORDEN (clienteId, code, description, cantidad, precio, moneda, descuento, precioConDescuento, " +
-                "totalDeImpuesto, importe, almacen, existencia) VALUES (" + this.idCliente + "," + codigo + ", '" + descripcion + "'," + 
-                cantidad + "," + precio + ", '" + moneda + "', " + descuento + "," + precioConDescuento + "," + 
+            query = "INSERT INTO ORDEN (clienteId, code, description, cantidad, precio, moneda, descuento, precioConDescuento, " +
+                "totalDeImpuesto, importe, almacen, existencia) VALUES (" + this.idCliente + "," + codigo + ", '" + descripcion + "'," +
+                cantidad + "," + precio + ", '" + moneda + "', " + descuento + "," + precioConDescuento + "," +
                 totalDeImpuesto + "," + importe + ",'" + almacen + "', " + existencia + ")";
             //alert(query);
             this.hazTransaccion(query, 'Ordenes', true);
             this.mandaMensaje('Producto agregado', 'El producto fue agregado exitosamente');
-            //this.muestraProductos();
-            this.muestralistaOrden();
-            view.setActiveItem(3);
-            form.reset();
+            menu.pop();
+            menu.getNavigationBar().getBackButton().hide();
+            view.setActiveItem(2);
+            Ext.getStore('Ordenes').load();
         }
     },
 
     eliminaProducto: function (list, index, target, record) {
         var me = this;
         Ext.Msg.confirm("Eliminar producto", "Se va a eliminar el producto, ¿está seguro?", function (e) {
-            //alert('entre');
-            //console.log(e);
+
             if (e == 'yes') {
                 var ind = record.get('id');
                 var query = "DELETE FROM PRODUCTO WHERE id = " + ind + "";
-                //alert(query);
                 me.hazTransaccion(query, 'Productos', true);
                 me.muestraProductos();
             }
@@ -184,18 +191,19 @@ Ext.define('Imobile.controller.phone.Main', {
 
     muestraProductos: function () {
         var query = "SELECT * FROM PRODUCTO";
-        this.hazTransaccion(query, 'Productos', true);
+        this.hazTransaccion(query, 'Productos', false);
     },
 
     muestraClientes: function () {
         var query = "SELECT * FROM CLIENTE";
-        this.hazTransaccion(query, 'Clientes', true);
+        this.hazTransaccion(query, 'Clientes', false);
+        Ext.getStore('Clientes').load();
     },
 
-    muestralistaOrden: function(){
+    muestralistaOrden: function () {
         var query = "SELECT * FROM ORDEN WHERE clienteId = " + this.idCliente + "";
         //alert(query);
-        this.hazTransaccion(query, 'Ordenes', true);
+        this.hazTransaccion(query, 'Ordenes', false);
     },
 
     busca: function (searchField) {
@@ -206,14 +214,14 @@ Ext.define('Imobile.controller.phone.Main', {
             var query = "SELECT * FROM PRODUCTO WHERE code like '%" + campo + "%' OR description like '%" + campo + "%'";
         }
         //alert(query);
-        this.hazTransaccion(query, 'Productos', true);
+        this.hazTransaccion(query, 'Productos', false);
     },
 
     buscaCliente: function (searchField) {
         var campo = searchField.getValue();
         var query = "SELECT * FROM CLIENTE WHERE code like '%" + campo + "%' OR name like '%" + campo + "%'";
         //alert(query);
-        this.hazTransaccion(query, 'Clientes', true);
+        this.hazTransaccion(query, 'Clientes', false);
     },
 
 //// Controlador de Favoritos ////
@@ -240,12 +248,10 @@ Ext.define('Imobile.controller.phone.Main', {
             this.actualiza(false, ind); // Si favorite es true, lo hacemos false
             this.lista(true);
         }
-        //list.getStore().sync(); // Hacer un UPDATE para esta cosa
-        //console.log(record);
     },
 
     lista: function (esFavorito) {
-        this.hazTransaccion("SELECT * FROM PRODUCTO WHERE favorite = '" + esFavorito + "'", 'Productos', true);
+        this.hazTransaccion("SELECT * FROM PRODUCTO WHERE favorite = '" + esFavorito + "'", 'Productos', false);
     },
 
     actualiza: function (esFavorito, ind) {
@@ -260,26 +266,29 @@ Ext.define('Imobile.controller.phone.Main', {
     alSelecionarCliente: function (view, index, target, record, eOpts) {
         var me = this,
             view = me.getMenu(),
-            option = record.get('action');
-
+            code = record.get('code'),
+            name = record.get('name');
 
         view.push({
-            xtype: 'opcionclientelist'
+            xtype: 'opcionclientelist',
+            title: code +' '+ name
         });
-        this.idCliente = record.get('id');
-        this.muestralistaOrden();
-        me.getOpcionCliente().down('toolbar').setTitle(record.get('code') + ' ' + record.get('name'));
+
+        me.idCliente = record.get('id');
+        me.muestralistaOrden();
     },
 
     onAgregarProducto: function (list, index, target, record) {
         //console.log(record);
         var me = this,
+            view = me.getMenu(),
             viewOrden = me.getOpcionesOrden();
 
-        viewOrden.setActiveItem(2);
-        //viewOrden.getActiveItem().code.setValue(record.get('code'));
-        //viewOrden.down('agregarproductosform').getValues().code.setValue(record.get('code'));
-        viewOrden.getActiveItem().setValues({
+        view.push({
+           xtype: 'agregarproductosform'
+        });
+
+        view.getActiveItem().setValues({
             code: record.get('code'),
             description: record.get('description'),
             cantidad: record.get('cantidad'),
@@ -299,16 +308,62 @@ Ext.define('Imobile.controller.phone.Main', {
             view = me.getMenu(),
             opcion = record.get('action');
 
-
         switch (opcion) {
             case 'orden':
                 view.push({
-                    xtype: 'opcionesorden'
+                    xtype: 'opcionesorden',
+                    title: view.getActiveItem().title
                 });
-/*                Ext.getStore('Productos').add({code:123, description:'descripcion', cantidad: 1});
-                Ext.getStore('Productos').sync();
-*/                me.muestraProductos();
+                me.muestraProductos();
+                view.getNavigationBar().getBackButton().hide();
+                Ext.getStore('Productos').load();
                 break;
         }
+    },
+
+    mostrarActivo: function (container, button, pressed) {
+        var me = this;
+
+        if (button.getText() == 'Favoritos' && pressed) {
+            me.getSeleccionadorProFav().setItems({xtype: 'productosview'});
+            Ext.getStore('Productos').load();
+            //me.muestraProductos();
+        } else {
+            me.getSeleccionadorProFav().setItems({xtype: 'productoslist'});
+            Ext.getStore('Productos').load();
+            //me.muestraProductos();
+        }
+    },
+
+    onTapFavorito: function ( t, index, target, record, e, es) {
+        var me = this,
+            view = me.getMenu(),
+            viewOrden = me.getOpcionesOrden();
+
+        view.push({
+            xtype: 'agregarproductosform'
+        });
+
+        view.getActiveItem().setValues({
+            code: record.get('code'),
+            description: record.get('description'),
+            cantidad: record.get('cantidad'),
+            precio: record.get('precio'),
+            moneda: record.get('moneda'),
+            descuento: record.get('descuento'),
+            precioConDescuento: record.get('precioConDescuento'),
+            totalDeImpuesto: record.get('totalDeImpuesto'),
+            importe: record.get('importe'),
+            almacen: record.get('almacen'),
+            existencia: record.get('existencia')
+        });
+    },
+
+    onEliminarOrden: function (){
+        var me = this,
+            view = me.getMenu();
+
+        view.pop();
     }
+
 });

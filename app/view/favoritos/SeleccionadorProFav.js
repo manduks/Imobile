@@ -20,17 +20,17 @@ Ext.define('Imobile.view.favoritos.SeleccionadorProFav', {
  				xtype:'segmentedbutton',
  				items:[{
  					text:'Productos',
- 					itemId: 'listarProductos', 					
+ 					itemId: 'listarProductos',
+                    pressed: true
  					},{
  					text:'Favoritos',
- 					itemId: 'listarFavoritos',
- 					pressed: true
+ 					itemId: 'listarFavoritos'
  				}]
  			},{
  				xtype:'spacer'
  			}]
  		},{ 			
-	       xtype:'productoslist',	       
+	       xtype:'productoslist'
 	       //html:'Lista de productos'
  		}]
  	}

@@ -123,26 +123,40 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     agregaDireccion: function(btn){
-        var query, me, form, fiscal, calle, colonia, municipio, cp, ciudad, estado, pais, view, direcciones;
+        var query, me, form, fiscal, calle, colonia, municipio, cp, ciudad, estado, pais, view, direcciones, entrega;
         me = this;        
         form = btn.up('clienteForm');
         values = form.getValues();        
         direcciones = me.getDirecciones();
         fiscal = direcciones.down('#fiscal').getChecked();
+        entrega = direcciones.down('#entrega').getChecked();
         calle = values.calle;
         colonia = values.colonia;
         municipio = values.municipio;
         cp = values.cp;
         ciudad = values.ciudad;
         estado = values.estado;
-        pais = values.pais;        
-        
-        query = "INSERT INTO DIRECCION (idCliente, fiscal, calle, colonia, municipio, cp, ciudad, estado, pais) VALUES (" + 
-                this.idCliente + ", '" + fiscal + "', '" + calle + "', '" + 
+        pais = values.pais;
+
+        if(fiscal){
+            query = "INSERT INTO DIRECCIONFISCAL (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais) VALUES (" + 
+                this.idCliente + ", '" + calle + "', '" + 
                 colonia + "', '" + municipio + "', " +cp + ", '" + ciudad + "', '" + estado + "', '" + 
                 pais + "')";
 
-        this.hazTransaccion(query, 'Direcciones', false);
+            this.hazTransaccion(query, 'DireccionesFiscales', false);
+        }        
+
+        if (entrega){ 
+            query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais) VALUES (" + 
+                this.idCliente + ", '" + calle + "', '" + 
+                colonia + "', '" + municipio + "', " +cp + ", '" + ciudad + "', '" + estado + "', '" + 
+                pais + "')";
+
+            this.hazTransaccion(query, 'Direcciones', false);
+        }            
+
+        
 
         view = me.getMenu();        
 
@@ -152,8 +166,11 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     muestraDirecciones: function(){        
-        var query = "SELECT * FROM DIRECCION WHERE fiscal = 'false'";
+        var query = "SELECT * FROM DIRECCION";
         this.hazTransaccion(query, 'Direcciones', true);
+
+        var query = "SELECT * FROM DIRECCIONFISCAL";
+        this.hazTransaccion(query, 'DireccionesFiscales', true);        
 
     },
 

@@ -68,6 +68,10 @@ Ext.define('Imobile.controller.Main',{
         query = "DELETE FROM DIRECCION";
         this.hazTransaccion(query, 'Direcciones', false);
 
+
+        query = "DELETE FROM DIRECCIONFISCAL";
+        this.hazTransaccion(query, 'DireccionesFiscales', false);
+
         //Ingresamos datos de productos y clientes
         
         for(var i = 0; i < 10; i++) {
@@ -83,8 +87,14 @@ Ext.define('Imobile.controller.Main',{
             this.hazTransaccion(query, 'Clientes', false);
         }
 
-/*        Ext.getStore('Ordenes').add({code:'e123', description:'descripcion'});
-        Ext.getStore('Ordenes').sync();*/
+/*        Ext.getStore('DireccionesFiscales').add({code:'e123', description:'descripcion'});
+        Ext.getStore('DireccionesFiscales').sync();
+
+        Ext.getStore('Ordenes').add({code:'e123', description:'descripcion'});
+        Ext.getStore('Ordenes').sync();
+
+        Ext.getStore('Direcciones').add({code:'e123', description:'descripcion'});
+        Ext.getStore('Direcciones').sync();*/
 
 /*        var store = Ext.getStore('Clientes');
         store.load();

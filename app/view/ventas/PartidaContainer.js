@@ -48,7 +48,8 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
                     xtype: 'spacer'
                 }, {
                     xtype: 'button',
-                    text:'Agregar Orden'
+                    text:'Agregar Orden',
+                    itemId: 'agregarOrden'
                 }, {
                     xtype: 'spacer'
                 }]

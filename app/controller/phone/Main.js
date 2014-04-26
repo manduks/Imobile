@@ -40,6 +40,12 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'seleccionadorprofav toolbar segmentedbutton':{
                 toogle: 'mostrarActivo'
+            },
+            'partidacontainer #agregarOrden':{
+                tap: 'agregaOrden'
+            },
+            'clienteForm #agregar':{
+                tap: 'agregaDireccion'
             }
         }
     },
@@ -67,7 +73,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
             case 'prospectos':
                 view.push({
-                    xtype: 'clienteslist'
+                    xtype: 'clienteslist'                    
                 });
                 me.muestraClientes();
                 break;
@@ -98,7 +104,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 break;
             case 'configuracion':
                 view.push({
-                    xtype: 'configuracioncontainer'
+                    xtype: 'configuracioncontainer'                    
                 });
                 break;
             // default:
@@ -114,6 +120,51 @@ Ext.define('Imobile.controller.phone.Main', {
             //     });
             //     break;
         }
+    },
+
+    agregaDireccion: function(btn){
+        var query, me, form, fiscal, calle, colonia, municipio, cp, ciudad, estado, pais, view, direcciones;
+        me = this;        
+        form = btn.up('clienteForm');
+        values = form.getValues();        
+        direcciones = me.getDirecciones();
+        fiscal = direcciones.down('#fiscal').getChecked();
+        calle = values.calle;
+        colonia = values.colonia;
+        municipio = values.municipio;
+        cp = values.cp;
+        ciudad = values.ciudad;
+        estado = values.estado;
+        pais = values.pais;        
+        
+        query = "INSERT INTO DIRECCION (idCliente, fiscal, calle, colonia, municipio, cp, ciudad, estado, pais) VALUES (" + 
+                this.idCliente + ", '" + fiscal + "', '" + calle + "', '" + 
+                colonia + "', '" + municipio + "', " +cp + ", '" + ciudad + "', '" + estado + "', '" + 
+                pais + "')";
+
+        this.hazTransaccion(query, 'Direcciones', false);
+
+        view = me.getMenu();        
+
+         view.pop();
+
+        me.muestraDirecciones();        
+    },
+
+    muestraDirecciones: function(){        
+        var query = "SELECT * FROM DIRECCION WHERE fiscal = 'false'";
+        this.hazTransaccion(query, 'Direcciones', true);
+
+    },
+
+    agregaOrden: function(button){
+         var me = this,
+         view = me.getMenu();
+      
+         view.push({
+            xtype: 'direccionescontainer'
+        });
+         me.muestraDirecciones();
     },
 
     mostrarActivo: function(container, button, pressed){

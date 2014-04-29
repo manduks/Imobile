@@ -47,21 +47,19 @@ Ext.define('Imobile.controller.Main',{
                 console.log(arguments);
             });
         });
-
-        store.sync()
-    },   
+    },
 
     launch:function(){        
 
     //Borramos datos de productos, clientes y órdenes
         var query = "DELETE FROM PRODUCTO";
-        this.hazTransaccion(query, 'Productos', true);
+        this.hazTransaccion(query, 'Productos', false);
 
         query = "DELETE FROM CLIENTE";
-        this.hazTransaccion(query, 'Clientes', true);
+        this.hazTransaccion(query, 'Clientes', false);
 
         query = "DELETE FROM ORDEN";
-        this.hazTransaccion(query, 'Ordenes', true);
+        this.hazTransaccion(query, 'Ordenes', false);
 
         //Ingresamos datos de productos y clientes
         
@@ -71,18 +69,18 @@ Ext.define('Imobile.controller.Main',{
                 1 + "," + (i+28.45) + "," + " 'pesos', " + (i +1 * .1) + "," + 23.25 + "," + 1.16 + "," + 5.25 + ", 'almacén', " + (i+10) + ", 'false')";
 //            query = "INSERT INTO PRODUCTO (code, description, cantidad) VALUES (" + i + ", '" + "Producto" + i + "'," + (i +2) + ")";
             //alert(query);
-            this.hazTransaccion(query, 'Productos', true);
+            this.hazTransaccion(query, 'Productos', false);
 
         }
 
        for(var i = 0; i < 5; i++){
             query = "INSERT INTO CLIENTE (code, name) VALUES ('C00" + i + "', '" + "Pablito" + i + "')";
-            this.hazTransaccion(query, 'Clientes', true);
+            this.hazTransaccion(query, 'Clientes', false);
         }
 
-        var store = Ext.getStore('Ordenes');
+/*        var store = Ext.getStore('Ordenes');
         store.load();
-        var c = store.getCount();
+        var c = store.getCount();*/
         //alert(c);
 
 /*        if(c <= 0){

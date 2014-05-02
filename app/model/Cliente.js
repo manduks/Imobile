@@ -15,6 +15,24 @@ Ext.define('Imobile.model.Cliente', {
         }, {
             name: 'name',
             type: 'string'
+        },{
+            name: 'idFiscal',
+            type: 'string'
+        },{
+            name: 'telefono',
+            type: 'string'
+        },{
+            name: 'mail',
+            type: 'string'
+        },{
+            name: 'precios',
+            type: 'string'
+        },{
+            name: 'condicionCredito',
+            type: 'string'
+        },{
+            name: 'saldo',
+            type: 'double'
         }],
         
         proxy: {

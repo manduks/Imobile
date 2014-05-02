@@ -22,9 +22,6 @@ Ext.define('Imobile.controller.phone.Main', {
             'agregarproductosform #cancelar': {
                 tap: 'onCancelar'
             },
-            'productoslist #agregar': {
-                tap: 'onAgregar'
-            },
             'productoslist': {
                 //itemswipe: 'eliminaProducto',
                 itemtap: 'onAgregarProducto'
@@ -175,13 +172,13 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     agregaOrden: function(button){
-         var me = this,
+         /*var me = this,
          view = me.getMenu();
       
          view.push({
             xtype: 'direccionescontainer'
         });
-         me.muestraDirecciones();
+         me.muestraDirecciones();*/
     },
 
     mostrarActivo: function(container, button, pressed){
@@ -212,7 +209,7 @@ Ext.define('Imobile.controller.phone.Main', {
         var form, values, codigo, descripcion, cantidad, precio, moneda, descuento, precioConDescuento, totalDeImpuesto,query,
             importe, almacen, existencia,
             me = this,
-            view = me.getOpcionesOrden();
+            view = me.getMenu();
 
         form = btn.up('agregarproductosform');
         values = form.getValues();
@@ -240,11 +237,13 @@ Ext.define('Imobile.controller.phone.Main', {
                 totalDeImpuesto + "," + importe + ",'" + almacen + "', " + existencia + ")";
             //alert(query);
             this.hazTransaccion(query, 'Ordenes', false);
-            this.mandaMensaje('Producto agregado', 'El producto fue agregado exitosamente');
+            //this.mandaMensaje('Producto agregado', 'El producto fue agregado exitosamente');
             //this.muestraProductos();
             this.muestralistaOrden();
+            view.pop();
+            view = me.getOpcionesOrden();
             view.setActiveItem(3);
-            form.reset();
+            //form.reset();
         }
     },
 
@@ -259,7 +258,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 //alert(query);
                 me.hazTransaccion(query, 'Productos', false);
                 me.muestraProductos();
-            }
+            } 
         });
     },
 
@@ -359,12 +358,18 @@ Ext.define('Imobile.controller.phone.Main', {
     onAgregarProducto: function (list, index, target, record) {
         //console.log(record);
         var me = this,
-            viewOrden = me.getOpcionesOrden();
+            //viewOrden = me.getOpcionesOrden();
+            view = me.getMenu();
 
-        viewOrden.setActiveItem(2);
+        //viewOrden.setActiveItem(2);
+
+        view.push({
+            xtype: 'agregarproductosform'
+        });
+
         //viewOrden.getActiveItem().code.setValue(record.get('code'));
         //viewOrden.down('agregarproductosform').getValues().code.setValue(record.get('code'));
-        viewOrden.getActiveItem().setValues({
+        view.getActiveItem().setValues({
             code: record.get('code'),
             description: record.get('description'),
             cantidad: record.get('cantidad'),

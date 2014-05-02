@@ -26,13 +26,14 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
             {
                 title: 'Cliente',
                 iconCls: 'user',
-                xtype: 'clienteForm'
+                xtype: 'clientecontainer'
             },
             {
-                title: 'Producto',
+                title: 'Editar Pedido',
                 iconCls: 'bookmarks',
-                xtype: 'agregarproductosform'
+                xtype: 'editarpedidoform'
             },
+
             {
                 title: 'Ordenar',
                 iconCls: 'settings',

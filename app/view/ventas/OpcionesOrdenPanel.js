@@ -29,7 +29,7 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
             {
                 title: 'Cliente',
                 iconCls: 'user',
-                xtype: 'direccionescontainer'
+                xtype: 'clientecontainer'
             },
             {
                 title: 'Editar Pedido',

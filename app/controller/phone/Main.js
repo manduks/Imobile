@@ -60,6 +60,9 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'opcionesorden #addOrden': {
                 activate: 'onAddOrden'
+            },
+            'opcionesorden':{
+                activeitemchange: 'cambiaItem'
             }
         }
     },
@@ -133,6 +136,18 @@ Ext.define('Imobile.controller.phone.Main', {
             //         html: 'Voy a modificar esta linea'
             //     });
             //     break;
+        }
+    },
+
+    cambiaItem:function(tabPanel, value, oldValue){
+        if(value.title == 'Cliente'){
+            var query = "SELECT * FROM CLIENTE WHERE id = " + this.idCliente + "";
+            form = value.down('clienteform');
+            this.hazTransaccion(query, 'Clientes', true, form);
+            setTimeout(function(){
+                datos = Ext.getStore('Clientes').getAt(0).data;                            
+                form.setValues(datos);
+            }, 500)
         }
     },
 
@@ -367,6 +382,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
     onAgregarProducto: function (list, index, target, record) {
         //console.log(record);
+        alert(3234234);
         var me = this,
             view = me.getMain().getActiveItem(),
             viewOrden = me.getOpcionesOrden();

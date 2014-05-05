@@ -215,11 +215,14 @@ Ext.define('Imobile.controller.phone.Main', {
 
     mostrarListaProductos: function(container, button, pressed){
         var me = this;
+            query = "SELECT * FROM PRODUCTO";
+            me.hazTransaccion(query, 'Productos', true);
             me.getProductosOrden().setItems({xtype: 'productoslist'});
     },
 
     mostrarPanelProductos: function(container, button, pressed){
         var me = this;
+        me.listarFavoritos();
         me.getProductosOrden().setItems({xtype: 'productosview'});
     },
 
@@ -381,8 +384,7 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     onAgregarProducto: function (list, index, target, record) {
-        //console.log(record);
-        alert(3234234);
+        //console.log(record);        
         var me = this,
             view = me.getMain().getActiveItem(),
             viewOrden = me.getOpcionesOrden();
@@ -461,6 +463,8 @@ Ext.define('Imobile.controller.phone.Main', {
     onAgregarPartida: function (){
         var me = this,
             view = me.getMain().getActiveItem();
+
+        me.muestraProductos();
 
         view.push({
            xtype: 'productosorden'

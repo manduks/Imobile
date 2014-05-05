@@ -14,17 +14,11 @@ Ext.define('Imobile.view.ventas.ClienteContainer', {
         },
         layout: 'vbox',
         items: [{
-            xtype: 'clienteform',
-            flex: 6            
-        },{
-            xtype: 'direccionescontainer',
-            flex: 1.5
-        },{
             xtype: 'container',
             flex: 1,
+            padding: '0 0 0 200',
                 defaults: {
-                    xtype: 'button',
-                    margin: 5,
+                    xtype: 'button',                    
                     flex: 1
                 },
                 layout: {
@@ -42,6 +36,12 @@ Ext.define('Imobile.view.ventas.ClienteContainer', {
                         ui: 'confirm'
                     }
                 ]
-            }]
+            },{
+            xtype: 'clienteform',
+            flex: 6            
+        },{
+            xtype: 'direccionescontainer',
+            flex: 1.5
+        }]
     }
 });

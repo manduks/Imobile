@@ -29,12 +29,12 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                 items: [
                     {
                         xtype: 'textfield',
-                        name: 'codigo',
+                        name: 'code',
                         label: 'Código'
                     },
                     {
                         xtype: 'textfield',
-                        name: 'nombre',
+                        name: 'name',
                         label: 'nombre'
                     },
                     {
@@ -54,7 +54,7 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                     },
                     {
                         xtype: 'textfield',
-                        name: 'listaPrecios',
+                        name: 'precios',
                         label: 'Lista de Precios'                        
                     },
                     {

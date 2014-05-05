@@ -29,7 +29,7 @@ Ext.define('Imobile.controller.Main',{
 
     onSelectMenu: Ext.emptyFn,
 
-     hazTransaccion: function (query, storeName, add){
+     hazTransaccion: function (query, storeName, add, form){
         var me = this;
         var store = Ext.getStore(storeName);
 
@@ -44,7 +44,7 @@ Ext.define('Imobile.controller.Main',{
                     for (i = 0; i < len; i++) {
                         store.add(results.rows.item(i));
                     }
-                }
+                }                
             }, null,function(){
                 console.log(arguments);
             });
@@ -72,38 +72,41 @@ Ext.define('Imobile.controller.Main',{
         this.hazTransaccion(query, 'DireccionesFiscales', false); */
 
         //Ingresamos datos de productos y clientes
+
+        if (false){
         
-/*        for(var i = 0; i < 10; i++) {
-            query = "INSERT INTO PRODUCTO (code, description, cantidad, precio, moneda, descuento, precioConDescuento, " +
-                "totalDeImpuesto, importe, almacen, existencia, favorite) VALUES (" + i + ", '" + "Producto" + i + "'," +
-                1 + "," + (i+28.45) + "," + " 'pesos', " + (i +1 * .1) + "," + 23.25 + "," + 1.16 + "," + 5.25 + ", 'almacén', " + (i+10) + ", 'false')";
-            this.hazTransaccion(query, 'Productos', false);
+            for(var i = 0; i < 10; i++) {
+                query = "INSERT INTO PRODUCTO (code, description, cantidad, precio, moneda, descuento, precioConDescuento, " +
+                    "totalDeImpuesto, importe, almacen, existencia, favorite) VALUES (" + i + ", '" + "Producto" + i + "'," +
+                    1 + "," + (i+28.45) + "," + " 'pesos', " + (i +1 * .1) + "," + 23.25 + "," + 1.16 + "," + 5.25 + ", 'almacén', " + (i+10) + ", 'false')";
+                this.hazTransaccion(query, 'Productos', false);
 
+            }
+
+           for(var i = 0; i < 5; i++){
+                query = "INSERT INTO CLIENTE (code, name, idFiscal, telefono, mail, precios, condicionCredito, saldo)" +
+                " VALUES ('C00" + i + "', '" + "Pablito" + i + "', 'Fiscal00" + i + "', '5658111" + i + "', 'correo@mail.com'," +
+                "'precios', 'condicion de crédito', 123.54)";
+                this.hazTransaccion(query, 'Clientes', false);
+                //alert(query);
+            }
+
+            for(var i = 0; i < 3; i++){
+                query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +
+                " VALUES ('" + 1 + "', '" + "Madero " + i + "', 'Presidentes " + i + "', 'Tlalpan', 12345," +
+                "'Mexico', 'DF', 'Mexico')";
+                this.hazTransaccion(query, 'Direcciones', false);
+                //alert(query);
+            } 
+
+            for(var i = 0; i < 3; i++){
+                query = "INSERT INTO DIRECCIONFISCAL (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +
+                " VALUES ('" + 1 + "', '" + "Veracruz " + i + "', 'Verde Ayala " + i + "', 'Milpa Alta', 12345," +
+                "'Mexico', 'DF', 'Mexico')";
+                this.hazTransaccion(query, 'DireccionesFiscales', false);
+                //alert(query);
         }
-
-       for(var i = 0; i < 5; i++){
-            query = "INSERT INTO CLIENTE (code, name, idFiscal, telefono, mail, precios, condicionCredito, saldo)" +
-            " VALUES ('C00" + i + "', '" + "Pablito" + i + "', 'Fiscal00" + i + "', '5658111" + i + "', 'correo@mail.com'," +
-            "'precios', 'condicion de crédito', 123.54)";
-            this.hazTransaccion(query, 'Clientes', false);
-            //alert(query);
-        }
-
-        for(var i = 0; i < 3; i++){
-            query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +
-            " VALUES ('" + 1 + "', '" + "Madero " + i + "', 'Presidentes " + i + "', 'Tlalpan', 12345," +
-            "'Mexico', 'DF', 'Mexico')";
-            this.hazTransaccion(query, 'Direcciones', false);
-            //alert(query);
-        } 
-
-        for(var i = 0; i < 3; i++){
-            query = "INSERT INTO DIRECCIONFISCAL (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +
-            " VALUES ('" + 1 + "', '" + "Veracruz " + i + "', 'Verde Ayala " + i + "', 'Milpa Alta', 12345," +
-            "'Mexico', 'DF', 'Mexico')";
-            this.hazTransaccion(query, 'DireccionesFiscales', false);
-            //alert(query);
-        } */
+    }
 
         // Ext.getStore('DireccionesFiscales').add({code:'e123', description:'descripcion'});
         // Ext.getStore('DireccionesFiscales').sync();

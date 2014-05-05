@@ -1,11 +1,11 @@
-Ext.define('Imobile.form.productos.AgregarProductosForm', {
+Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
 	extend: 'Ext.form.Panel',
-	xtype: 'agregarproductosform',
+	xtype: 'editarpedidoform',
 	requires:[
 		'Ext.form.FieldSet',
 		'Ext.field.Text',
 		'Ext.field.Number',
-        'Ext.field.Spinner'
+        //'Ext.field.Spinner'
 	],
 	config:{
 		//padding:'15 15 15 15',
@@ -13,7 +13,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
             {
                 xtype:'fieldset',
                 itemId:'datos',
-                title:'Agregar Productos',
+                title:'Editar Pedido',
                 instructions: 'Ingrese los datos',
                 defaults:{
                     //required:true,
@@ -25,55 +25,47 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                 items:[
                     {
                         xtype:'numberfield',
-                        name:'code',
-                        label: 'Código',
+                        name:'codeClient',
+                        label: 'Código de Cliente',
                         itemId: 'codepro'
                         //value: 12345
                     },{
                         xtype:'textfield',
-                        name:'description',
-                        label:'Descripción',
-                        disabled: false
+                        name:'nombreCliente',
+                        label:'Nombre de Cliente',                        
                     },{
                         xtype:'numberfield',
-                        name:'cantidad',
-                        label:'Cantidad',
-                        //disabled: false,
-                        minValue: 1
-                        //maxValue: 100,
-                        //stepValue: .1
-                    },{
-                        xtype:'numberfield',
-                        name:'precio',
-                        label:'Precio'
+                        name:'limite',
+                        label:'Límite de Crédito',                        
                     },{
                         xtype:'textfield',
-                        name:'moneda',
-                        label:'Moneda'
+                        name:'condicion',
+                        label:'Condición de Crédito'
+                    },{
+                        xtype:'numberfield',
+                        name:'saldo',
+                        label:'Saldo'
+                    },{
+                        xtype:'numberfield',
+                        name:'listaPrecios',
+                        label:'Lista de Precios'
+                    },{
+                        xtype:'textfield',
+                        name:'vendedor',
+                        label:'Vendedor'
                     },{
                         xtype:'numberfield',
                         name:'descuento',
                         label:'Descuento'
                     },{
-                        xtype:'numberfield',
-                        name:'precioConDescuento',
-                        label:'Precio con Descuento'
-                    },{
-                        xtype:'numberfield',
-                        name:'totalDeImpuesto',
-                        label:'Total de impuesto'
-                    },{
-                        xtype:'numberfield',
-                        name:'importe',
-                        label:'Importe' 
+                        xtype:'textfield',
+                        name:'moneda',
+                        label:'moneda',
+                        disabled: false
                     },{
                         xtype:'textfield',
-                        name:'almacen',
-                        label:'Almacen'  
-                    },{
-                        xtype:'numberfield',
-                        name:'existencia',
-                        label:'Existencia' 
+                        name:'tipoCambio',
+                        label:'Tipo de Cambio'  
                     }
                 ]
             }, {        
@@ -88,22 +80,16 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                 },
                 items:[
                     {                        
-                        itemId:'agregar',
-                        text:'Agregar',
+                        itemId:'guardar',
+                        text:'Guardar',
                         ui: 'confirm'
                         //ui:'btn-login-ui',
                         // handler:function(btn){
                         //     var form = btn.up('formpanel');
                         //     form.fireEvent('logged', form);
                         // }
-                    }/*, {
-                       	itemId: 'cancelar',
-                    	text: 'Cancelar',
-                    	ui: 'decline'
-                    }*/
-
+                    }
                 ]
-
             }
         ]
 	}

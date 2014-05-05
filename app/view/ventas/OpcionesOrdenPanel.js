@@ -32,10 +32,11 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
                 xtype: 'direccionescontainer'
             },
             {
-                title: 'Agregar Orden',
-                iconCls: 'plus',
-                itemId: 'addOrden'
+                title: 'Editar Pedido',
+                iconCls: 'bookmarks',
+                xtype: 'editarpedidoform'
             },
+
             {
                 title: 'Eliminar Orden',
                 iconCls: 'remove',

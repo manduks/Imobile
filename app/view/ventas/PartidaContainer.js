@@ -15,30 +15,6 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
         layout: 'card',
         activeItem: 0,
         items: [{
-            xtype: 'toolbar',
-            docked: 'top',
-            items: [{
-                xtype: 'spacer'
-            }, {
-                xtype: 'segmentedbutton',
-                items: [{
-                    text: 'Orden',
-                    itemId: 'listarOrden',
-                    pressed: true,
-                    handler: function(btn) {
-                        btn.up('partidacontainer').setActiveItem(0);
-                    }
-                }, {
-                    text: 'Cliente',
-                    itemId: 'mostrarCliente',
-                    handler: function(btn) {
-                        btn.up('partidacontainer').setActiveItem(1);
-                    }
-                }]
-            }, {
-                xtype: 'spacer'
-            }]
-        }, {
             xtype: 'ordenlist'/*,
             layout: 'fit',
             items: [{
@@ -54,9 +30,6 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
                     xtype: 'spacer'
                 }]
             }]*/
-        }, {
-            xtype: 'component',
-            html: 'datos del cliente'
         }]
     }
 });

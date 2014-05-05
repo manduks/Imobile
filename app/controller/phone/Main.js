@@ -25,10 +25,6 @@ Ext.define('Imobile.controller.phone.Main', {
             'productoslist #agregar': {
                 tap: 'onAgregar'
             },
-            /*'productoslist': {
-                //itemswipe: 'eliminaProducto',
-                itemtap: 'onAgregarProducto'
-            },*/
             'clienteslist #busca': {
                 keyup: 'buscaCliente'
             },
@@ -193,13 +189,13 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     agregaOrden: function(button){
-         var me = this,
+         /*var me = this,
          view = me.getMenu();
       
          view.push({
             xtype: 'direccionescontainer'
         });
-         me.muestraDirecciones();
+         me.muestraDirecciones();*/
     },
 
     mostrarListaProductos: function(container, button, pressed){
@@ -278,7 +274,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 me.hazTransaccion(query, 'Productos', false);
 
                 me.muestraProductos();
-            }
+            } 
         });
     },
 
@@ -378,7 +374,6 @@ Ext.define('Imobile.controller.phone.Main', {
         view.push({
            xtype: 'agregarproductosform'
         });
-
         view.getActiveItem().setValues({
             code: record.get('code'),
             description: record.get('description'),

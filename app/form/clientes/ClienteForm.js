@@ -7,21 +7,21 @@
  */
 Ext.define('Imobile.form.clientes.ClienteForm', {
     extend: 'Ext.form.Panel',
-    xtype: 'clienteForm',
+    xtype: 'clienteform',
     requires: [
         'Ext.form.FieldSet',
         'Ext.field.Text',
         'Ext.field.Number'
     ],
-    config: {
-        //padding:'15 15 15 15',
+    config: {        
+        //padding:'0 0 15 0',
         items: [
             {
                 xtype: 'fieldset',
                 itemId: 'datosCliente',
                 title: 'Datos de Cliente',
                 defaults: {
-                    required: true,
+                    disabled: true,
                     clearIcon: true,
                     autoCapitalize: true,
                     labelWidth: '45%',                    
@@ -29,103 +29,45 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                 items: [
                     {
                         xtype: 'textfield',
-                        name: 'calle',
-                        label: 'Calle',
-                        placeHolder: 'Ingresa tu calle y número'
+                        name: 'codigo',
+                        label: 'Código'
                     },
                     {
                         xtype: 'textfield',
-                        name: 'colonia',
-                        label: 'Colonia',
-                        placeHolder: 'Ingresa tu colonia'
+                        name: 'nombre',
+                        label: 'nombre'
                     },
                     {
                         xtype: 'textfield',
-                        name: 'municipio',
-                        label: 'Municipio',
-                        placeHolder: 'Ingresa tu municipio'
+                        name: 'idFiscal',
+                        label: 'ID Fiscal'
+                    },
+                    {
+                        xtype: 'numberfield',
+                        name: 'telefono',
+                        label: 'Teléfono'
+                    },
+                    {
+                        xtype: 'emailfield',
+                        name: 'mail',
+                        label: 'Ciudad'
                     },
                     {
                         xtype: 'textfield',
-                        name: 'cp',
-                        label: 'Código Postal',
-                        placeHolder: 'Ingresa tu C.P.'
+                        name: 'listaPrecios',
+                        label: 'Lista de Precios'                        
                     },
                     {
                         xtype: 'textfield',
-                        name: 'ciudad',
-                        label: 'Ciudad',
-                        placeHolder: 'Ingresa tu ciudad'
+                        name: 'condicionCredito',
+                        label: 'Crédito'                        
                     },
                     {
-                        xtype: 'textfield',
-                        name: 'estado',
-                        label: 'Estado',
-                        placeHolder: 'Ingresa tu estado'
-                    },
-                    {
-                        xtype: 'textfield',
-                        name: 'pais',
-                        label: 'País',
-                        placeHolder: 'Ingresa tu país'
-                    },                    
+                        xtype: 'numberfield',
+                        name: 'saldo',
+                        label: 'Saldo'
+                    }                    
                 ]
-            },
-/*            {
-                xtype: 'fieldset',
-                itemId: 'datosCompra',
-                title: 'Datos de Compra',
-                instructions: 'Ingrese los datos',
-                defaults: {
-                    required: true,
-                    clearIcon: true,
-                    autoCapitalize: true,
-                    labelWidth: '45%'
-                },
-                items: [
-                    {
-                        xtype: 'textfield',
-                        name: 'addres1',
-                        label: 'Dirección 1',
-                        placeHolder: 'Ingresa tu Dirección'
-                    },
-                    {
-                        xtype: 'textfield',
-                        name: 'addres2',
-                        label: 'Dirección 2',
-                        placeHolder: 'Ingresa tu Dirección'
-                    }
-                ]
-            },*/
-            {
-                xtype: 'container',
-                defaults: {
-                    xtype: 'button',
-                    margin: 5,
-                    flex: 1
-                },
-                layout: {
-                    type: 'hbox'
-                },
-                items: [
-                    {
-                        xtype: 'spacer',
-                        docked: 'top',
-                        padding: 5
-                    },
-                    {
-                        itemId: 'agregar',
-                        text: 'Agregar',
-                        ui: 'confirm'
-                    },
-                    {
-                        itemId: 'cancelar',
-                        text: 'Cancelar',
-                        ui: 'decline'
-                    }
-
-                ]
-
             }
         ]
     }

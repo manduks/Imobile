@@ -27,6 +27,9 @@ Ext.define('Imobile.view.Main', {
         'Imobile.view.ventas.DireccionEntregaContainer',
         'Imobile.view.ventas.DireccionFiscalContainer',
         'Imobile.view.productos.ProductosOrden',
-        'Ext.data.JsonP'
+        'Ext.data.JsonP',
+        'Imobile.form.pedidos.EditarPedidoForm',
+        'Imobile.view.ventas.DireccionesList',
+        'Imobile.view.ventas.ClienteContainer'
     ]
 });

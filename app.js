@@ -25,7 +25,9 @@ Ext.application({
         'Menu',
         'Clientes',
         'Productos',
-        'Ordenes'
+        'Ordenes',
+        'Direcciones',
+        'DireccionesFiscales'
     ],
 
     views: [

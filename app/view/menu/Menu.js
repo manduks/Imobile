@@ -10,7 +10,7 @@ Ext.define('Imobile.view.menu.Menu', {
                 {
                     xtype: 'button',
                     align: 'right',
-                    text: 'Imobile',                    
+                    text: 'Imobile'
                 },
                 {
                     text:'',

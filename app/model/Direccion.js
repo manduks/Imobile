@@ -10,12 +10,12 @@ Ext.define('Imobile.model.Direccion', {
             name: 'id',
             type: 'int'
         },{
-            name 'idCliente'
+            name: 'idCliente',
             type: 'int'
-        },{
+        }/*,{
             name: 'fiscal',
             type: 'boolean'
-        },{
+        }*/,{
             name: 'calle',
             type: 'string'
         }, {

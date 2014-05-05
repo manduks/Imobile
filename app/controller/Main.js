@@ -9,7 +9,10 @@ Ext.define('Imobile.controller.Main',{
             menu: 'menu',
             opcionesOrden: 'opcionesorden',
             opcionCliente: 'opcionclientelist',
-            seleccionadorProFav: 'seleccionadorprofav'
+            seleccionadorProFav: 'seleccionadorprofav',
+            direcciones: 'direccionescontainer',
+            productosOrden: 'productosorden'
+
         },
         control:{
             'loginform':{
@@ -17,12 +20,28 @@ Ext.define('Imobile.controller.Main',{
             },
             'menu dataview':{
                 itemtap: 'onSelectMenu'
+            },
+            'main navigationview #agregarProductos':{
+                tap: 'onAgregarPartida'
+            },
+            'main navigationview':{
+                pop: 'onPopNavigationOrden'
             }
         }
     },
 
     onLoginUser:function(form,token){
         this.getMain().setActiveItem(1);
+
+        // Make the JsonP request
+        Ext.data.JsonP.request({
+            url: 'http://192.168.15.8:88/login/COK1_CL_UsuarioiMobile/Login/1/004/001/12345',
+            callbackKey: 'callback',
+            success: function(result, request) {
+                console.log(result);
+            }
+        });
+
     },
 
     onSelectMenu: Ext.emptyFn,
@@ -49,9 +68,9 @@ Ext.define('Imobile.controller.Main',{
         });
     },
 
-    launch:function(){        
+    launch:function(){
 
-    //Borramos datos de productos, clientes y órdenes
+    //Borramos datos de productos, clientes, órdenes y direcciones
         var query = "DELETE FROM PRODUCTO";
         this.hazTransaccion(query, 'Productos', false);
 
@@ -61,14 +80,19 @@ Ext.define('Imobile.controller.Main',{
         query = "DELETE FROM ORDEN";
         this.hazTransaccion(query, 'Ordenes', false);
 
+        query = "DELETE FROM DIRECCION";
+        this.hazTransaccion(query, 'Direcciones', false);
+
+
+        query = "DELETE FROM DIRECCIONFISCAL";
+        this.hazTransaccion(query, 'DireccionesFiscales', false);
+
         //Ingresamos datos de productos y clientes
         
-        for(var i = 0; i < 10; i++){
+        for(var i = 0; i < 10; i++) {
             query = "INSERT INTO PRODUCTO (code, description, cantidad, precio, moneda, descuento, precioConDescuento, " +
-                "totalDeImpuesto, importe, almacen, existencia, favorite) VALUES (" + i + ", '" + "Producto" + i + "'," + 
+                "totalDeImpuesto, importe, almacen, existencia, favorite) VALUES (" + i + ", '" + "Producto" + i + "'," +
                 1 + "," + (i+28.45) + "," + " 'pesos', " + (i +1 * .1) + "," + 23.25 + "," + 1.16 + "," + 5.25 + ", 'almacén', " + (i+10) + ", 'false')";
-//            query = "INSERT INTO PRODUCTO (code, description, cantidad) VALUES (" + i + ", '" + "Producto" + i + "'," + (i +2) + ")";
-            //alert(query);
             this.hazTransaccion(query, 'Productos', false);
 
         }
@@ -78,7 +102,16 @@ Ext.define('Imobile.controller.Main',{
             this.hazTransaccion(query, 'Clientes', false);
         }
 
-/*        var store = Ext.getStore('Ordenes');
+/*        Ext.getStore('DireccionesFiscales').add({code:'e123', description:'descripcion'});
+        Ext.getStore('DireccionesFiscales').sync();
+
+        Ext.getStore('Ordenes').add({code:'e123', description:'descripcion'});
+        Ext.getStore('Ordenes').sync();
+
+        Ext.getStore('Direcciones').add({code:'e123', description:'descripcion'});
+        Ext.getStore('Direcciones').sync();*/
+
+/*        var store = Ext.getStore('Clientes');
         store.load();
         var c = store.getCount();*/
         //alert(c);
@@ -90,7 +123,7 @@ Ext.define('Imobile.controller.Main',{
                     description: 'descripcion' + i                    
                 })
             }
-            store.sync();            
+            store.sync();
         }*/
     }
 });

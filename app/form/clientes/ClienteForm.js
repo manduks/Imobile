@@ -41,7 +41,7 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                     },
                     {
                         xtype: 'textfield',
-                        name: 'delegacion',
+                        name: 'municipio',
                         label: 'Municipio',
                         placeHolder: 'Ingresa tu municipio'
                     },

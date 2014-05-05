@@ -35,13 +35,13 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         label:'Descripción',
                         disabled: false
                     },{
-                        xtype:'spinnerfield',
+                        xtype:'numberfield',
                         name:'cantidad',
                         label:'Cantidad',
-                        disabled: false,
-                        minValue: 1,
+                        //disabled: false,
+                        minValue: 1
                         //maxValue: 100,
-                        stepValue: 1,                        
+                        //stepValue: .1
                     },{
                         xtype:'numberfield',
                         name:'precio',

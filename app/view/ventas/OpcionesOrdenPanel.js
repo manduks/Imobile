@@ -15,25 +15,29 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
         defaults: {
             styleHtmlContent: true
         },
-
         items: [
-            {
-                title: 'Productos',
-                iconCls: 'team',
-                xtype: 'seleccionadorprofav'
-            },
-            {
-                title: 'Cliente',
-                iconCls: 'user',
-                xtype: 'clienteForm'
-            },
             {
                 title: 'Ordenar',
                 iconCls: 'settings',
                 xtype: 'partidacontainer'
+            }/*,
+            {
+                title: 'Productos',
+                iconCls: 'team',
+                xtype: 'seleccionadorprofav'
+            }*/,
+            {
+                title: 'Cliente',
+                iconCls: 'user',
+                xtype: 'direccionescontainer'
             },
             {
-                title: 'Eliminar',
+                title: 'Agregar Orden',
+                iconCls: 'plus',
+                itemId: 'addOrden'
+            },
+            {
+                title: 'Eliminar Orden',
                 iconCls: 'remove',
                 itemId: 'eliminar'
             }

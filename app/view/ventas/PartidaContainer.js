@@ -39,7 +39,7 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
                 xtype: 'spacer'
             }]
         }, {
-            xtype: 'ordenlist',
+            xtype: 'ordenlist'/*,
             layout: 'fit',
             items: [{
                 docked: 'bottom',
@@ -48,11 +48,12 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
                     xtype: 'spacer'
                 }, {
                     xtype: 'button',
-                    text:'Agregar Orden'
+                    text:'Agregar Orden',
+                    itemId: 'agregarOrden'
                 }, {
                     xtype: 'spacer'
                 }]
-            }]
+            }]*/
         }, {
             xtype: 'component',
             html: 'datos del cliente'

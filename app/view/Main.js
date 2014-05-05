@@ -20,6 +20,13 @@ Ext.define('Imobile.view.Main', {
         'Imobile.view.clientes.OpcionClienteList',
         'Imobile.view.ventas.OrdenList',
         'Imobile.view.productos.ProductosView',
-        'Imobile.view.ventas.OrdenContainer'
+        'Imobile.view.ventas.OrdenContainer',
+        'Imobile.view.ventas.DireccionEntregaList',
+        'Imobile.view.ventas.DireccionFiscalList',
+        'Imobile.view.ventas.DireccionesContainer',
+        'Imobile.view.ventas.DireccionEntregaContainer',
+        'Imobile.view.ventas.DireccionFiscalContainer',
+        'Imobile.view.productos.ProductosOrden',
+        'Ext.data.JsonP'
     ]
 });

@@ -30,6 +30,7 @@ Ext.define('Imobile.view.Main', {
         'Ext.data.JsonP',
         'Imobile.form.pedidos.EditarPedidoForm',
         'Imobile.view.ventas.DireccionesList',
-        'Imobile.view.ventas.ClienteContainer'
+        'Imobile.view.ventas.ClienteContainer',
+        'Imobile.view.ventas.TplDirecciones'
     ]
 });

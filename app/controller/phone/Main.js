@@ -63,6 +63,9 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'opcionesorden':{
                 activeitemchange: 'cambiaItem'
+            },
+            'direccioneslist': {
+                itemtap: 'muestraDirecciones'
             }
         }
     },
@@ -194,12 +197,22 @@ Ext.define('Imobile.controller.phone.Main', {
         me.muestraDirecciones();        
     },
 
-    muestraDirecciones: function(){        
-        var query = "SELECT * FROM DIRECCION";
-        this.hazTransaccion(query, 'Direcciones', true);
+    muestraDirecciones: function(){
+        //alert("Entre a direcciones");
+        var me = this,
+            query = "SELECT * FROM DIRECCION WHERE idCliente = " + me.idCliente;
+            
+            view = me.getMain().getActiveItem();
+            me.hazTransaccion(query, 'Direcciones', true);
 
-        var query = "SELECT * FROM DIRECCIONFISCAL";
-        this.hazTransaccion(query, 'DireccionesFiscales', true);        
+        view.push({
+           xtype: 'tpldirecciones'
+        });
+
+        view.getNavigationBar().down('#agregarProductos').hide()
+
+/*        var query = "SELECT * FROM DIRECCIONFISCAL";
+        this.hazTransaccion(query, 'DireccionesFiscales', true);*/
 
     },
 

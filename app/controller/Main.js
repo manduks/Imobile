@@ -11,7 +11,8 @@ Ext.define('Imobile.controller.Main',{
             opcionCliente: 'opcionclientelist',
             seleccionadorProFav: 'seleccionadorprofav',
             direcciones: 'direccionescontainer',
-            productosOrden: 'productosorden'
+            productosOrden: 'productosorden',
+            productosView: 'productosview'
 
         },
         control:{
@@ -68,8 +69,15 @@ Ext.define('Imobile.controller.Main',{
         });
     },
 
-    launch:function(){
+    aleatorio: function (inferior,superior){ 
+        numPosibilidades = superior - inferior 
+        aleat = Math.random() * numPosibilidades 
+        aleat = Math.floor(aleat) 
+        return parseInt(inferior) + aleat 
+    },
 
+    launch:function(){
+        alert(this.aleatorio(0,10));
     //Borramos datos de productos, clientes, órdenes y direcciones
 /*      var query = "DELETE FROM PRODUCTO";
         this.hazTransaccion(query, 'Productos', false);

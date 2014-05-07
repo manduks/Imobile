@@ -619,17 +619,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.layout.wrapper.BoxDock": [],
   "Ext.layout.wrapper.Dock": [],
   "Ext.layout.wrapper.Inner": [],
-  "Ext.log.Base": [],
-  "Ext.log.Logger": [],
-  "Ext.log.filter.Filter": [],
-  "Ext.log.filter.Priority": [],
-  "Ext.log.formatter.Default": [],
-  "Ext.log.formatter.Formatter": [],
-  "Ext.log.formatter.Identity": [],
-  "Ext.log.writer.Console": [],
-  "Ext.log.writer.DocumentTitle": [],
-  "Ext.log.writer.Remote": [],
-  "Ext.log.writer.Writer": [],
   "Ext.mixin.Bindable": [],
   "Ext.mixin.Filterable": [],
   "Ext.mixin.Mixin": [],
@@ -759,14 +748,18 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.controller.tablet.Main": [],
   "Imobile.form.clientes.ClienteForm": [],
   "Imobile.form.login.LoginForm": [],
+  "Imobile.form.pedidos.EditarPedidoForm": [],
   "Imobile.form.productos.AgregarProductosForm": [],
   "Imobile.model.Cliente": [],
+  "Imobile.model.Direccion": [],
   "Imobile.model.Menu": [],
   "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
   "Imobile.store.Clientes": [],
+  "Imobile.store.Direcciones": [],
+  "Imobile.store.DireccionesFiscales": [],
   "Imobile.store.Menu": [],
   "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
@@ -783,11 +776,21 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.view.menu.MenuList": [],
   "Imobile.view.phone.Main": [],
   "Imobile.view.productos.ProductosList": [],
+  "Imobile.view.productos.ProductosOrden": [],
   "Imobile.view.productos.ProductosView": [],
   "Imobile.view.tablet.Main": [],
+  "Imobile.view.ventas.ClienteContainer": [],
+  "Imobile.view.ventas.DireccionEntregaContainer": [],
+  "Imobile.view.ventas.DireccionEntregaList": [],
+  "Imobile.view.ventas.DireccionFiscalContainer": [],
+  "Imobile.view.ventas.DireccionFiscalList": [],
+  "Imobile.view.ventas.DireccionesContainer": [],
+  "Imobile.view.ventas.DireccionesList": [],
   "Imobile.view.ventas.OpcionesOrdenPanel": [],
+  "Imobile.view.ventas.OrdenContainer": [],
   "Imobile.view.ventas.OrdenList": [],
-  "Imobile.view.ventas.PartidaContainer": []
+  "Imobile.view.ventas.PartidaContainer": [],
+  "Imobile.view.ventas.TplDirecciones": []
 });
 Ext.ClassManager.addNameAliasMappings({
   "Ext.AbstractComponent": [],
@@ -1591,17 +1594,6 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.layout.wrapper.BoxDock": [],
   "Ext.layout.wrapper.Dock": [],
   "Ext.layout.wrapper.Inner": [],
-  "Ext.log.Base": [],
-  "Ext.log.Logger": [],
-  "Ext.log.filter.Filter": [],
-  "Ext.log.filter.Priority": [],
-  "Ext.log.formatter.Default": [],
-  "Ext.log.formatter.Formatter": [],
-  "Ext.log.formatter.Identity": [],
-  "Ext.log.writer.Console": [],
-  "Ext.log.writer.DocumentTitle": [],
-  "Ext.log.writer.Remote": [],
-  "Ext.log.writer.Writer": [],
   "Ext.mixin.Bindable": [],
   "Ext.mixin.Filterable": [],
   "Ext.mixin.Mixin": [],
@@ -1746,21 +1738,27 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.controller.phone.Main": [],
   "Imobile.controller.tablet.Main": [],
   "Imobile.form.clientes.ClienteForm": [
-    "widget.clienteForm"
+    "widget.clienteform"
   ],
   "Imobile.form.login.LoginForm": [
     "widget.loginform"
+  ],
+  "Imobile.form.pedidos.EditarPedidoForm": [
+    "widget.editarpedidoform"
   ],
   "Imobile.form.productos.AgregarProductosForm": [
     "widget.agregarproductosform"
   ],
   "Imobile.model.Cliente": [],
+  "Imobile.model.Direccion": [],
   "Imobile.model.Menu": [],
   "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
   "Imobile.store.Clientes": [],
+  "Imobile.store.Direcciones": [],
+  "Imobile.store.DireccionesFiscales": [],
   "Imobile.store.Menu": [],
   "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
@@ -1801,17 +1799,47 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.view.productos.ProductosList": [
     "widget.productoslist"
   ],
+  "Imobile.view.productos.ProductosOrden": [
+    "widget.productosorden"
+  ],
   "Imobile.view.productos.ProductosView": [
     "widget.productosview"
   ],
   "Imobile.view.tablet.Main": [],
+  "Imobile.view.ventas.ClienteContainer": [
+    "widget.clientecontainer"
+  ],
+  "Imobile.view.ventas.DireccionEntregaContainer": [
+    "widget.direccionentregacontainer"
+  ],
+  "Imobile.view.ventas.DireccionEntregaList": [
+    "widget.direccionentregalist"
+  ],
+  "Imobile.view.ventas.DireccionFiscalContainer": [
+    "widget.direccionfiscalcontainer"
+  ],
+  "Imobile.view.ventas.DireccionFiscalList": [
+    "widget.direccionfiscallist"
+  ],
+  "Imobile.view.ventas.DireccionesContainer": [
+    "widget.direccionescontainer"
+  ],
+  "Imobile.view.ventas.DireccionesList": [
+    "widget.direccioneslist"
+  ],
   "Imobile.view.ventas.OpcionesOrdenPanel": [
     "widget.opcionesorden"
+  ],
+  "Imobile.view.ventas.OrdenContainer": [
+    "widget.ordencontainer"
   ],
   "Imobile.view.ventas.OrdenList": [
     "widget.ordenlist"
   ],
   "Imobile.view.ventas.PartidaContainer": [
     "widget.partidacontainer"
+  ],
+  "Imobile.view.ventas.TplDirecciones": [
+    "widget.tpldirecciones"
   ]
 });

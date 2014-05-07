@@ -66,6 +66,9 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'direccioneslist': {
                 itemtap: 'muestraDirecciones'
+            },
+            'ordenlist':{
+                itemswipe: 'eliminaPartida'
             }
         }
     },
@@ -142,6 +145,18 @@ Ext.define('Imobile.controller.phone.Main', {
         }
     },
 
+    eliminaPartida: function (list, index, target, record){                
+        var me = this;
+        Ext.Msg.confirm("Eliminar producto de la orden", "Se va a eliminar el producto de la orden, ¿está seguro?", function (e) {
+
+            if (e == 'yes') {
+                var query = "DELETE FROM ORDEN WHERE id = " + record.get('id') + "";
+                me.hazTransaccion(query, 'Ordenes', false);
+                me.muestralistaOrden();
+            } 
+        });
+    },
+
     cambiaItem:function(tabPanel, value, oldValue){
         if(value.title == 'Cliente'){
             var query = "SELECT * FROM CLIENTE WHERE id = " + this.idCliente + "";
@@ -152,6 +167,10 @@ Ext.define('Imobile.controller.phone.Main', {
                 form.setValues(datos);
             }, 500)
         }
+
+        /*if(value.title == 'Eliminar Orden'){
+            tabPanel.setActiveItem(0);
+        }*/
     },
 
     agregaDireccion: function(btn){
@@ -207,7 +226,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
         view.push({
            xtype: 'tpldirecciones'
-        });
+        })
 
         view.getNavigationBar().down('#agregarProductos').hide()
 
@@ -237,6 +256,14 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this;
         me.listarFavoritos();
         me.getProductosOrden().setItems({xtype: 'productosview'});
+        console.log(me.getProductosView());
+
+        setTimeout(function(){
+            var elements = me.getProductosView().getViewItems();
+        Ext.Array.each(elements, function(name, index, countriesItSelf){
+               console.log(name.setAttribute("style", "background-color: blue;"));
+        });
+            }, 1000)
     },
 
     onCancelar: function () {
@@ -467,10 +494,20 @@ Ext.define('Imobile.controller.phone.Main', {
         });
     },
 
-    onEliminarOrden: function (){
-        var me = this;
+    onEliminarOrden: function (newActiveItem, tabPanel){
+        var me = this;         
 
-        me.getMain().setActiveItem(1);
+        Ext.Msg.confirm("Eliminar orden", "Se va a eliminar la orden, todos los productos agregados se perderán ¿está seguro?", function (e) {
+
+            if (e == 'yes') {
+                var query = "DELETE FROM ORDEN WHERE clienteId = " + me.idCliente + "";
+                me.hazTransaccion(query, 'Ordenes', false);
+                me.muestralistaOrden();
+                me.getMain().setActiveItem(1);
+            } else{
+                tabPanel.setActiveItem(0);
+            }
+        });
     },
 
     onAgregarPartida: function (){

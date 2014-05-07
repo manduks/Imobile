@@ -40,7 +40,7 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
             {
                 title: 'Eliminar Orden',
                 iconCls: 'remove',
-                itemId: 'eliminar'
+                itemId: 'eliminar'                
             }
         ]
     }

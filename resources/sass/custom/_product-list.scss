@@ -1,9 +1,10 @@
 .product-list{
 	width:80px;
 	height: 80px;
-	float:left;
+	float:center;
 	display:inline-block;
-	border:2px solid red;
+	border-radius:10px; /* solid blue ; */
+/*	background-color: red; */
 /*	padding:3em;*/
 	text-align:center;
 	margin: .2em;

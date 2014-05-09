@@ -11,7 +11,9 @@ Ext.define('Imobile.controller.Main',{
             opcionCliente: 'opcionclientelist',
             seleccionadorProFav: 'seleccionadorprofav',
             direcciones: 'direccionescontainer',
-            productosOrden: 'productosorden'
+            productosOrden: 'productosorden',
+            productosView: 'productosview',
+            navigationOrden: 'navigationorden'
 
         },
         control:{
@@ -24,7 +26,7 @@ Ext.define('Imobile.controller.Main',{
             'main navigationview #agregarProductos':{
                 tap: 'onAgregarPartida'
             },
-            'main navigationview':{
+            'navigationorden':{
                 pop: 'onPopNavigationOrden'
             }
         }
@@ -68,8 +70,14 @@ Ext.define('Imobile.controller.Main',{
         });
     },
 
-    launch:function(){
+    aleatorio: function (inferior,superior){ 
+        numPosibilidades = superior - inferior 
+        aleat = Math.random() * numPosibilidades 
+        aleat = Math.floor(aleat) 
+        return parseInt(inferior) + aleat 
+    },
 
+    launch:function(){
     //Borramos datos de productos, clientes, órdenes y direcciones
 /*      var query = "DELETE FROM PRODUCTO";
         this.hazTransaccion(query, 'Productos', false);
@@ -98,15 +106,15 @@ Ext.define('Imobile.controller.Main',{
 
             }*/
 
-           for(var i = 0; i < 5; i++){
+           /*for(var i = 0; i < 5; i++){
                 query = "INSERT INTO CLIENTE (code, name, idFiscal, telefono, mail, precios, condicionCredito, saldo)" +
                 " VALUES ('C00" + i + "', '" + "Pablito" + i + "', 'Fiscal00" + i + "', '5658111" + i + "', 'correo@mail.com'," +
                 "'precios', 'condicion de crédito', 123.54)";
                 this.hazTransaccion(query, 'Clientes', false);
                 //alert(query);
-            }
+            }*/
 
-            /*for(var i = 0; i < 3; i++){
+            for(var i = 0; i < 3; i++){
                 query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +
                 " VALUES ('" + 1 + "', '" + "Madero " + i + "', 'Presidentes " + i + "', 'Tlalpan', 12345," +
                 "'Mexico', 'DF', 'Mexico')";
@@ -114,7 +122,7 @@ Ext.define('Imobile.controller.Main',{
                 //alert(query);
             } 
 
-            for(var i = 0; i < 3; i++){
+            /*for(var i = 0; i < 3; i++){
                 query = "INSERT INTO DIRECCIONFISCAL (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +
                 " VALUES ('" + 1 + "', '" + "Veracruz " + i + "', 'Verde Ayala " + i + "', 'Milpa Alta', 12345," +
                 "'Mexico', 'DF', 'Mexico')";
@@ -127,12 +135,12 @@ Ext.define('Imobile.controller.Main',{
         Ext.getStore('DireccionesFiscales').sync();
 
         Ext.getStore('Ordenes').add({code:'e123', description:'descripcion'});
-        Ext.getStore('Ordenes').sync();
+        Ext.getStore('Ordenes').sync();*/
 
-        Ext.getStore('Direcciones').add({code:'e123', description:'descripcion'});
+        /*Ext.getStore('Direcciones').add({code:'e123', description:'descripcion'});
         Ext.getStore('Direcciones').sync();
 
-        Ext.getStore('Clientes').add({code:'e123', description:'descripcion'});
+        /*Ext.getStore('Clientes').add({code:'e123', description:'descripcion'});
         Ext.getStore('Clientes').sync();
 
         Ext.getStore('Productos').add({code:'e123', description:'descripcion'});

@@ -15,7 +15,12 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
         layout: 'card',
         activeItem: 0,
         items: [{
-            xtype: 'ordenlist'/*,
+            style:{
+                background: 'gray'
+            },
+            xtype: 'ordenlist',
+            flex: 5/*,
+
             layout: 'fit',
             items: [{
                 docked: 'bottom',
@@ -30,6 +35,10 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
                     xtype: 'spacer'
                 }]
             }]*/
+        },{
+            xtype: 'container',
+            flex: 1,
+            html: 'kjhksfhkj'
         }]
     }
 });

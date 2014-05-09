@@ -9,6 +9,7 @@ Ext.define('Imobile.view.productos.ProductosOrden', {
     requires: ['Ext.Toolbar','Ext.SegmentedButton'],
     config: {
         layout: 'fit',
+        itemId: 'principal',
         items:[{
             xtype:'toolbar',
             docked: 'top',

@@ -40,10 +40,10 @@ Ext.define('Imobile.controller.phone.Main', {
             'opcionesorden #eliminar': {
                 activate: 'onEliminarOrden'
             },
-            'productosorden #listaProductos':{
+            'productosorden #listaProductos': {
                 tap: 'mostrarListaProductos'
             },
-            'productosorden #panelProductos':{
+            'productosorden #panelProductos': {
                 tap: 'mostrarPanelProductos'
             },
             'productosorden productoslist': {
@@ -52,17 +52,23 @@ Ext.define('Imobile.controller.phone.Main', {
             'productosorden productosview': {
                 itemtap: 'onAgregarProducto'
             },
-            'partidacontainer #agregarOrden':{
+            'partidacontainer #agregarOrden': {
                 tap: 'agregaOrden'
             },
-            'clienteForm #agregar':{
+            'clienteForm #agregar': {
                 tap: 'agregaDireccion'
             },
             'opcionesorden #addOrden': {
                 activate: 'onAddOrden'
             },
-            'opcionesorden':{
+            'opcionesorden': {
                 activeitemchange: 'cambiaItem'
+            },
+            'direccioneslist': {
+                itemtap: 'muestraDirecciones'
+            },
+            'ordenlist': {
+                itemswipe: 'eliminaPartida'
             }
         }
     },
@@ -90,7 +96,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
             case 'prospectos':
                 view.push({
-                    xtype: 'clienteslist'                    
+                    xtype: 'clienteslist'
                 });
                 me.muestraClientes();
                 break;
@@ -121,7 +127,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 break;
             case 'configuracion':
                 view.push({
-                    xtype: 'configuracioncontainer'                    
+                    xtype: 'configuracioncontainer'
                 });
                 break;
             // default:
@@ -139,23 +145,46 @@ Ext.define('Imobile.controller.phone.Main', {
         }
     },
 
-    cambiaItem:function(tabPanel, value, oldValue){
-        if(value.title == 'Cliente'){
+    eliminaPartida: function (list, index, target, record) {
+        var me = this;
+        Ext.Msg.confirm("Eliminar producto de la orden", "Se va a eliminar el producto de la orden, ¿está seguro?", function (e) {
+
+            if (e == 'yes') {
+                var query = "DELETE FROM ORDEN WHERE id = " + record.get('id') + "";
+                me.hazTransaccion(query, 'Ordenes', false);
+                me.muestralistaOrden();
+            }
+        });
+    },
+
+    cambiaItem: function (tabPanel, value, oldValue) {
+        var me=this,
+            view = me.getMain().getActiveItem();
+
+        console.log(view);
+        view.getNavigationBar().down('#agregarProductos').show();
+
+
+        if (value.title == 'Cliente') {
             var query = "SELECT * FROM CLIENTE WHERE id = " + this.idCliente + "";
             form = value.down('clienteform');
             this.hazTransaccion(query, 'Clientes', true, form);
-            setTimeout(function(){
-                datos = Ext.getStore('Clientes').getAt(0).data;                            
+            setTimeout(function () {
+                datos = Ext.getStore('Clientes').getAt(0).data;
                 form.setValues(datos);
             }, 500)
         }
+
+        /*if(value.title == 'Eliminar Orden'){
+         tabPanel.setActiveItem(0);
+         }*/
     },
 
-    agregaDireccion: function(btn){
+    agregaDireccion: function (btn) {
         var query, me, form, fiscal, calle, colonia, municipio, cp, ciudad, estado, pais, view, direcciones, entrega;
-        me = this;        
+        me = this;
         form = btn.up('clienteForm');
-        values = form.getValues();        
+        values = form.getValues();
         direcciones = me.getDirecciones();
         fiscal = direcciones.down('#fiscal').getChecked();
         entrega = direcciones.down('#entrega').getChecked();
@@ -167,60 +196,80 @@ Ext.define('Imobile.controller.phone.Main', {
         estado = values.estado;
         pais = values.pais;
 
-        if(fiscal){
-            query = "INSERT INTO DIRECCIONFISCAL (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais) VALUES (" + 
-                this.idCliente + ", '" + calle + "', '" + 
-                colonia + "', '" + municipio + "', " +cp + ", '" + ciudad + "', '" + estado + "', '" + 
+        if (fiscal) {
+            query = "INSERT INTO DIRECCIONFISCAL (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais) VALUES (" +
+                this.idCliente + ", '" + calle + "', '" +
+                colonia + "', '" + municipio + "', " + cp + ", '" + ciudad + "', '" + estado + "', '" +
                 pais + "')";
 
             this.hazTransaccion(query, 'DireccionesFiscales', false);
-        }        
+        }
 
-        if (entrega){ 
-            query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais) VALUES (" + 
-                this.idCliente + ", '" + calle + "', '" + 
-                colonia + "', '" + municipio + "', " +cp + ", '" + ciudad + "', '" + estado + "', '" + 
+        if (entrega) {
+            query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais) VALUES (" +
+                this.idCliente + ", '" + calle + "', '" +
+                colonia + "', '" + municipio + "', " + cp + ", '" + ciudad + "', '" + estado + "', '" +
                 pais + "')";
 
             this.hazTransaccion(query, 'Direcciones', false);
-        }            
+        }
 
-        
 
-        view = me.getMenu();        
+        view = me.getMenu();
 
-         view.pop();
+        view.pop();
 
-        me.muestraDirecciones();        
+        me.muestraDirecciones();
     },
 
-    muestraDirecciones: function(){        
-        var query = "SELECT * FROM DIRECCION";
-        this.hazTransaccion(query, 'Direcciones', true);
+    muestraDirecciones: function () {
+        //alert("Entre a direcciones");
+        var me = this,
+            query = "SELECT * FROM DIRECCION WHERE idCliente = " + me.idCliente;
 
-        var query = "SELECT * FROM DIRECCIONFISCAL";
-        this.hazTransaccion(query, 'DireccionesFiscales', true);        
+        var view = me.getMain().getActiveItem();
+        me.hazTransaccion(query, 'Direcciones', true);
+
+        view.push({
+            xtype: 'tpldirecciones'
+        })
+
+        view.getNavigationBar().down('#agregarProductos').hide()
+
+        /*        var query = "SELECT * FROM DIRECCIONFISCAL";
+         this.hazTransaccion(query, 'DireccionesFiscales', true);*/
 
     },
 
-    agregaOrden: function(button){
-         /*var me = this,
+    agregaOrden: function (button) {
+        /*var me = this,
          view = me.getMenu();
-      
+
          view.push({
-            xtype: 'direccionescontainer'
-        });
+         xtype: 'direccionescontainer'
+         });
          me.muestraDirecciones();*/
     },
 
-    mostrarListaProductos: function(container, button, pressed){
+    mostrarListaProductos: function (container, button, pressed) {
         var me = this;
-            me.getProductosOrden().setItems({xtype: 'productoslist'});
+        query = "SELECT * FROM PRODUCTO";
+        me.hazTransaccion(query, 'Productos', true);
+        me.getProductosOrden().setItems({xtype: 'productoslist'});
     },
 
-    mostrarPanelProductos: function(container, button, pressed){
+    mostrarPanelProductos: function (container, button, pressed) {
         var me = this;
+        me.listarFavoritos();
         me.getProductosOrden().setItems({xtype: 'productosview'});
+        console.log(me.getProductosView());
+
+        setTimeout(function () {
+            var elements = me.getProductosView().getViewItems();
+            Ext.Array.each(elements, function (name, index, countriesItSelf) {
+                console.log(name.setAttribute("style", "background-color: blue;"));
+            });
+        }, 1000)
     },
 
     onCancelar: function () {
@@ -289,7 +338,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 me.hazTransaccion(query, 'Productos', false);
 
                 me.muestraProductos();
-            } 
+            }
         });
     },
 
@@ -336,7 +385,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
     listarProductos: function (segmentedButton) {
         this.lista(false); // Me lista aquellos cuyo valor favorite es false
-        this.esFavorito = false;        
+        this.esFavorito = false;
     },
 
     cambiaStatusFavoritos: function (list, index, target, record, e, eOpts) {
@@ -373,7 +422,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
         view.push({
             xtype: 'opcionclientelist',
-            title: code +' '+ name
+            title: code + ' ' + name
         });
 
         this.idCliente = record.get('id');
@@ -381,13 +430,12 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     onAgregarProducto: function (list, index, target, record) {
-        //console.log(record);
         var me = this,
             view = me.getMain().getActiveItem(),
             viewOrden = me.getOpcionesOrden();
 
         view.push({
-           xtype: 'agregarproductosform'
+            xtype: 'agregarproductosform'
         });
         view.getActiveItem().setValues({
             code: record.get('code'),
@@ -420,7 +468,7 @@ Ext.define('Imobile.controller.phone.Main', {
         }
     },
 
-    onTapFavorito: function ( t, index, target, record, e, es) {
+    onTapFavorito: function (t, index, target, record, e, es) {
         var me = this,
             view = me.getMenu(),
             viewOrden = me.getOpcionesOrden();
@@ -444,28 +492,44 @@ Ext.define('Imobile.controller.phone.Main', {
         });
     },
 
-    onEliminarOrden: function (){
+    onEliminarOrden: function (newActiveItem, tabPanel) {
         var me = this;
 
-        me.getMain().setActiveItem(1);
+        Ext.Msg.confirm("Eliminar orden", "Se va a eliminar la orden, todos los productos agregados se perderán ¿está seguro?", function (e) {
+
+            if (e == 'yes') {
+                var query = "DELETE FROM ORDEN WHERE clienteId = " + me.idCliente + "";
+                me.hazTransaccion(query, 'Ordenes', false);
+                me.muestralistaOrden();
+                me.getMain().setActiveItem(1);
+            } else {
+                tabPanel.setActiveItem(0);
+            }
+        });
     },
 
-    onAgregarPartida: function (){
+    onAgregarPartida: function () {
         var me = this,
             view = me.getMain().getActiveItem();
 
+        me.muestraProductos();
+
         view.push({
-           xtype: 'productosorden'
+            xtype: 'productosorden'
         });
 
         view.getNavigationBar().down('#agregarProductos').hide()
     },
 
-    onPopNavigationOrden: function (){
+    onPopNavigationOrden: function (t, v, e) {
         var me = this,
             view = me.getMain().getActiveItem();
 
-        view.getNavigationBar().down('#agregarProductos').show()
+        if (v.getItemId() != 'principal') {
+            view.getNavigationBar().down('#agregarProductos').hide()
+        } else {
+            view.getNavigationBar().down('#agregarProductos').show()
+        }
     },
 
     onAddOrden: function () {

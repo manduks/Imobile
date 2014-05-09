@@ -6,7 +6,9 @@
 	border-radius:10px; /* solid blue ; */
 	/*background-color: red;*/
 /*	padding:3em;*/
-	text-align:center;
+	line-height: 80px; /* asignamos un line-height igual a la altura del elemento */
+	vertical-align:middle;
+	text-align:center;	
 	margin: .2em;
 
 /*	.menu-list-image{
@@ -25,6 +27,6 @@
 
 .dataview-inline{
 	width:90%;
-	margin:auto;
-	/*text-align:center;*/
+	margin:auto;	
+	text-align:justify;
 }

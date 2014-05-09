@@ -46,6 +46,9 @@ Ext.define('Imobile.model.Producto', {
             name: 'favorite',
             type: 'boolean',
             defaultValue: false
+        },{
+            name: 'color',
+            type: 'string'
         }],
 
         proxy: {

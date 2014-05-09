@@ -258,12 +258,12 @@ Ext.define('Imobile.controller.phone.Main', {
         me.getProductosOrden().setItems({xtype: 'productosview'});
         console.log(me.getProductosView());
 
-        setTimeout(function(){
+        /*setTimeout(function(){
             var elements = me.getProductosView().getViewItems();
         Ext.Array.each(elements, function(name, index, countriesItSelf){
                console.log(name.setAttribute("style", "background-color: blue;"));
         });
-            }, 1000)
+            }, 1000)*/
     },
 
     onCancelar: function () {

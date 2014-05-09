@@ -9,7 +9,30 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
 	],
 	config:{
 		//padding:'15 15 15 15',
-		items:[
+		items:[{        
+                xtype:'container',
+                padding: '0 0 0 200',              
+                defaults:{
+                    xtype:'button',
+                    style: 'margin: .5em',
+                    flex: 1
+                },
+                layout:{
+                    type:'hbox'
+                },
+                items:[
+                    {                        
+                        itemId:'guardar',
+                        text:'Guardar',
+                        ui: 'confirm'
+                        //ui:'btn-login-ui',
+                        // handler:function(btn){
+                        //     var form = btn.up('formpanel');
+                        //     form.fireEvent('logged', form);
+                        // }
+                    }
+                ]
+            },
             {
                 xtype:'fieldset',
                 itemId:'datos',
@@ -66,28 +89,6 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                         xtype:'textfield',
                         name:'tipoCambio',
                         label:'Tipo de Cambio'  
-                    }
-                ]
-            }, {        
-                xtype:'container',                
-                defaults:{
-                	xtype:'button',
-                	style: 'margin: .5em',
-                	flex: 1
-                },
-                layout:{
-                	type:'hbox'
-                },
-                items:[
-                    {                        
-                        itemId:'guardar',
-                        text:'Guardar',
-                        ui: 'confirm'
-                        //ui:'btn-login-ui',
-                        // handler:function(btn){
-                        //     var form = btn.up('formpanel');
-                        //     form.fireEvent('logged', form);
-                        // }
                     }
                 ]
             }

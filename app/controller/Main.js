@@ -76,8 +76,19 @@ Ext.define('Imobile.controller.Main',{
         return parseInt(inferior) + aleat 
     },
 
+    dame_color_aleatorio: function (){ 
+        hexadecimal = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F") 
+        color_aleatorio = "#"; 
+        for (i=0;i<6;i++){ 
+            posarray = this.aleatorio(0,hexadecimal.length) 
+            color_aleatorio += hexadecimal[posarray] 
+        } 
+        return color_aleatorio 
+    },
+
     launch:function(){
-        alert(this.aleatorio(0,10));
+      // Ext.getStore("Productos").getModel().getProxy().dropTable();
+        //alert(this.aleatorio(0,10));
     //Borramos datos de productos, clientes, órdenes y direcciones
 /*      var query = "DELETE FROM PRODUCTO";
         this.hazTransaccion(query, 'Productos', false);
@@ -96,23 +107,26 @@ Ext.define('Imobile.controller.Main',{
 
         //Ingresamos datos de productos y clientes
 
-        if (false){
+        if (true){
         
-            /*for(var i = 0; i < 10; i++) {
+            for(var i = 0; i < 10; i++) {
+                color = this.dame_color_aleatorio();
                 query = "INSERT INTO PRODUCTO (code, description, cantidad, precio, moneda, descuento, precioConDescuento, " +
-                    "totalDeImpuesto, importe, almacen, existencia, favorite) VALUES (" + i + ", '" + "Producto" + i + "'," +
-                    1 + "," + (i+28.45) + "," + " 'pesos', " + (i +1 * .1) + "," + 23.25 + "," + 1.16 + "," + 5.25 + ", 'almacén', " + (i+10) + ", 'false')";
+                    "totalDeImpuesto, importe, almacen, existencia, favorite, color) VALUES (" + i + ", '" + "Producto" + i + "'," +
+                    1 + "," + (i+28.45) + "," + " 'pesos', " + (i +1 * .1) + "," + 23.25 + "," + 1.16 + "," + 5.25 + ", 'almacén', " + 
+                    (i+10) + ", 'false', '" + color +"')";
                 this.hazTransaccion(query, 'Productos', false);
+                //alert(query);
 
-            }*/
+            }
 
-           for(var i = 0; i < 5; i++){
+           /*for(var i = 0; i < 5; i++){
                 query = "INSERT INTO CLIENTE (code, name, idFiscal, telefono, mail, precios, condicionCredito, saldo)" +
                 " VALUES ('C00" + i + "', '" + "Pablito" + i + "', 'Fiscal00" + i + "', '5658111" + i + "', 'correo@mail.com'," +
                 "'precios', 'condicion de crédito', 123.54)";
                 this.hazTransaccion(query, 'Clientes', false);
                 //alert(query);
-            }
+            }*/
 
             /*for(var i = 0; i < 3; i++){
                 query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +

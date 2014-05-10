@@ -69,6 +69,9 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'ordenlist': {
                 itemswipe: 'eliminaPartida'
+            },
+            'opcionesorden #terminar': {
+
             }
         }
     },
@@ -262,14 +265,6 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this;
         me.listarFavoritos();
         me.getProductosOrden().setItems({xtype: 'productosview'});
-        console.log(me.getProductosView());
-
-        setTimeout(function () {
-            var elements = me.getProductosView().getViewItems();
-            Ext.Array.each(elements, function (name, index, countriesItSelf) {
-                console.log(name.setAttribute("style", "background-color: blue;"));
-            });
-        }, 1000)
     },
 
     onCancelar: function () {

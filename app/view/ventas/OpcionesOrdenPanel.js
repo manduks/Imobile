@@ -28,15 +28,23 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
                 xtype: 'clientecontainer'
             },
             {
-                title: 'Editar Pedido',
+
+                title: 'Editar',
                 iconCls: 'fa fa-pencil-square-o',
                 xtype: 'editarpedidoform'
             },
 
             {
-                title: 'Eliminar Orden',
+                title: 'Eliminar',
                 iconCls: 'fa fa-times',
-                itemId: 'eliminar'                
+                iconCls: 'trash',
+                itemId: 'eliminar'
+            },
+            {
+                title: 'Terminar',
+                iconCls: 'action',
+                itemId: 'terminar'
+
             }
         ]
     }

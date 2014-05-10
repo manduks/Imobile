@@ -24,7 +24,7 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                     disabled: true,
                     clearIcon: true,
                     autoCapitalize: true,
-                    labelWidth: '45%',                    
+                    labelWidth: '45%'
                 },
                 items: [
                     {

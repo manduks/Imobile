@@ -13,35 +13,31 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
         tabBarPosition: 'bottom',
 
         defaults: {
-            styleHtmlContent: true
-
+            styleHtmlContent: true,
+            background: '#000'
         },
         items: [
             {
                 title: 'Ordenar',
                 iconCls: 'settings',
                 xtype: 'partidacontainer'
-            }/*,
-            {
-                title: 'Productos',
-                iconCls: 'team',
-                xtype: 'seleccionadorprofav'
-            }*/,
+            },
             {
                 title: 'Cliente',
                 iconCls: 'user',
                 xtype: 'clientecontainer'
             },
             {
+
                 title: 'Editar',
-                iconCls: 'bookmarks',
+                iconCls: 'fa fa-pencil-square-o',
                 xtype: 'editarpedidoform'
             },
 
             {
                 title: 'Eliminar',
-                iconCls: 'trash',
-                itemId: 'eliminar'                
+                iconCls: 'fa fa-times',                
+                itemId: 'eliminar'
             },
             {
                 title: 'Terminar',

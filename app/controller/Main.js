@@ -12,7 +12,8 @@ Ext.define('Imobile.controller.Main',{
             seleccionadorProFav: 'seleccionadorprofav',
             direcciones: 'direccionescontainer',
             productosOrden: 'productosorden',
-            productosView: 'productosview'
+            productosView: 'productosview',
+            navigationOrden: 'navigationorden'
 
         },
         control:{
@@ -25,7 +26,7 @@ Ext.define('Imobile.controller.Main',{
             'main navigationview #agregarProductos':{
                 tap: 'onAgregarPartida'
             },
-            'main navigationview':{
+            'navigationorden':{
                 pop: 'onPopNavigationOrden'
             }
         }
@@ -36,7 +37,13 @@ Ext.define('Imobile.controller.Main',{
 
         // Make the JsonP request
         Ext.data.JsonP.request({
-            url: 'http://192.168.15.8:88/login/COK1_CL_UsuarioiMobile/Login/1/004/001/12345',
+            url: 'http://192.168.15.8:88/iMobile/COK1_CL_UsuarioiMobile/Login',
+            params:{
+              CodigoUsuario: '1',
+                CodigoSociedad: '001',
+                CodigoDispositivo: '004',
+                Contrasenia: '12345'
+            },
             callbackKey: 'callback',
             success: function(result, request) {
                 console.log(result);
@@ -87,8 +94,44 @@ Ext.define('Imobile.controller.Main',{
     },
 
     launch:function(){
+
        //Ext.getStore("Clientes").getModel().getProxy().dropTable();
         //alert(this.aleatorio(0,10));
+
+        var me = this;
+        Ext.data.JsonP.request({
+            url: 'http://192.168.15.8:88/iMobile/COK1_CL_Socio/ObtenerListaSocios',
+            params:{
+                CodigoUsuario: '1',
+                CodigoSociedad: '001',
+                CodigoDispositivo: '004',
+                Token: "6VVcR7brnB4="
+            },
+            callbackKey: 'callback',
+            success: function(result, request) {
+                Ext.Array.each(result.Data,function(item,record, e){
+                    console.log(item);
+                    Ext.Array.each(item.Direcciones, function(direcciones,record,e){
+                        var calle = direcciones.Calle,
+                            colonia = direcciones.Colonia,
+                            municipio = direcciones.Municipio,
+                            cp = direcciones.CodigoPostal,
+                            ciudad = direcciones.Ciudad,
+                            estado = direcciones.Estado,
+                            pais = direcciones.Pais,
+
+                            query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +
+                                " VALUES ('" + 1 + "', '" + calle + "', '" + colonia + "', '"+municipio+"', '"+cp+"','"+
+                                ciudad+"','"+estado+"','"+pais+"')";
+                        //me.hazTransaccion(query, 'Direcciones', false);
+                    });
+                })
+            }
+        });
+
+
+      //Ext.getStore("Productos").getModel().getProxy().dropTable();
+
     //Borramos datos de productos, clientes, órdenes y direcciones
     /*  var query = "DELETE FROM PRODUCTO";
         this.hazTransaccion(query, 'Productos', false);
@@ -100,8 +143,9 @@ Ext.define('Imobile.controller.Main',{
         this.hazTransaccion(query, 'Ordenes', false);
 
 /*        query = "DELETE FROM DIRECCION";
-        this.hazTransaccion(query, 'Direcciones', false); 
+        this.hazTransaccion(query, 'Direcciones', false);*/
 
+        /*
         var query = "DELETE FROM DIRECCIONFISCAL";
         this.hazTransaccion(query, 'DireccionesFiscales', false); */
 
@@ -128,33 +172,32 @@ Ext.define('Imobile.controller.Main',{
                 //alert(query);
             }*/
 
-       /*     for(var i = 0; i < 3; i++){
-                query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +
+/*                query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +
                 " VALUES ('" + 1 + "', '" + "Madero " + i + "', 'Presidentes " + i + "', 'Tlalpan', 12345," +
                 "'Mexico', 'DF', 'Mexico')";
                 this.hazTransaccion(query, 'Direcciones', false);
                 //alert(query);
             } */
 
-            for(var i = 0; i < 3; i++){
+            /*for(var i = 0; i < 3; i++){
                 query = "INSERT INTO DIRECCIONFISCAL (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +
                 " VALUES ('" + 1 + "', '" + "Veracruz " + i + "', 'Verde Ayala " + i + "', 'Milpa Alta', 12345," +
                 "'Mexico', 'DF', 'Mexico')";
                 this.hazTransaccion(query, 'DireccionesFiscales', false);
                 //alert(query);
-        }
+        }*/
     }
 
         /*Ext.getStore('DireccionesFiscales').add({code:'e123', description:'descripcion'});
         Ext.getStore('DireccionesFiscales').sync();
 
         Ext.getStore('Ordenes').add({code:'e123', description:'descripcion'});
-        Ext.getStore('Ordenes').sync();
+        Ext.getStore('Ordenes').sync();*/
 
-        Ext.getStore('Direcciones').add({code:'e123', description:'descripcion'});
+        /*Ext.getStore('Direcciones').add({code:'e123', description:'descripcion'});
         Ext.getStore('Direcciones').sync();
 
-        Ext.getStore('Clientes').add({code:'e123', description:'descripcion'});
+        /*Ext.getStore('Clientes').add({code:'e123', description:'descripcion'});
         Ext.getStore('Clientes').sync();
 
         Ext.getStore('Productos').add({code:'e123', description:'descripcion'});

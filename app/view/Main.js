@@ -31,6 +31,7 @@ Ext.define('Imobile.view.Main', {
         'Imobile.form.pedidos.EditarPedidoForm',
         'Imobile.view.ventas.DireccionesList',
         'Imobile.view.ventas.ClienteContainer',
-        'Imobile.view.ventas.TplDirecciones'
+        'Imobile.view.ventas.TplDirecciones',
+        'Imobile.view.ventas.NavigationOrden'
     ]
 });

@@ -84,7 +84,10 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                         xtype:'textfield',
                         name:'moneda',
                         label:'moneda',
-                        disabled: false
+                        disabled: false,
+                        itemId: 'moneda',
+                        //tpl: ['<div style="font-size: 30px;float: right;margin-top: -25px;" class="fa fa-check"</div>'].join('')
+                        inputCls: 'fa fa-check'
                     },{
                         xtype:'textfield',
                         name:'tipoCambio',

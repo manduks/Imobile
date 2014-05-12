@@ -10,7 +10,8 @@ Ext.define('Imobile.view.menu.Menu', {
                 {
                     xtype: 'button',
                     align: 'right',
-                    text: 'Imobile'
+                    iconCls: 'fa-circle',
+                    text: 'offline'
                 },
                 {
                     text:'',

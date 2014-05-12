@@ -5,12 +5,17 @@ Ext.define('Imobile.view.menu.Menu', {
         'Imobile.view.menu.MenuList'
     ],
     config: {
-        navigationBar: {
+        navigationBar: {            
             items:[
                 {
                     xtype: 'button',
                     align: 'right',
-                    text: 'Imobile'
+                    iconCls: 'fa-circle',
+                    text: 'offline'
+                },
+                {
+                    text:'',
+                    align: 'center'
                 }
             ]
         },

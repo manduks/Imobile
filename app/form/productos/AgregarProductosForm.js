@@ -11,6 +11,26 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
 		//padding:'15 15 15 15',
 		items:[
             {
+                xtype:'container',
+                padding: '0 0 0 200',
+                defaults:{
+                    xtype:'button',
+                    style: 'margin: .5em',
+                    flex: 1
+                },
+                layout:{
+                    type:'hbox'
+                },
+                items:[
+                    {
+                        itemId:'agregar',
+                        text:'Agregar',
+                        ui: 'confirm'
+                    }
+                ]
+
+            },
+            {
                 xtype:'fieldset',
                 itemId:'datos',
                 title:'Agregar Productos',
@@ -50,7 +70,8 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                     },{
                         xtype:'textfield',
                         name:'moneda',
-                        label:'Moneda'
+                        label:'Moneda',
+                        //itemId: 'moneda'
                     },{
                         xtype:'numberfield',
                         name:'descuento',
@@ -77,34 +98,6 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         label:'Existencia' 
                     }
                 ]
-            }, {        
-                xtype:'container',                
-                defaults:{
-                	xtype:'button',
-                	style: 'margin: .5em',
-                	flex: 1
-                },
-                layout:{
-                	type:'hbox'
-                },
-                items:[
-                    {                        
-                        itemId:'agregar',
-                        text:'Agregar',
-                        ui: 'confirm'
-                        //ui:'btn-login-ui',
-                        // handler:function(btn){
-                        //     var form = btn.up('formpanel');
-                        //     form.fireEvent('logged', form);
-                        // }
-                    }/*, {
-                       	itemId: 'cancelar',
-                    	text: 'Cancelar',
-                    	ui: 'decline'
-                    }*/
-
-                ]
-
             }
         ]
 	}

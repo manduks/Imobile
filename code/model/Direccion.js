@@ -33,10 +33,6 @@ Ext.define('Imobile.model.Direccion', {
         },{
             name: 'pais',
             type: 'string'
-        }],
-
-        proxy: {
-            type: "sql"
-        }
+        }]
     }
 });

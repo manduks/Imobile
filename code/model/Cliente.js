@@ -10,10 +10,10 @@ Ext.define('Imobile.model.Cliente', {
             name: 'id',
             type: 'int'
         },{
-            name: 'code',
+            name: 'CodigoSocio',
             type: 'string'
         }, {
-            name: 'name',
+            name: 'NombreSocio',
             type: 'string'
         },{
             name: 'idFiscal',
@@ -33,10 +33,6 @@ Ext.define('Imobile.model.Cliente', {
         },{
             name: 'saldo',
             type: 'double'
-        }],
-        
-        proxy: {
-            type: "sql"
-        }
+        }]
     }
 });

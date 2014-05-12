@@ -48,10 +48,6 @@ Ext.define('Imobile.model.Orden', {
         },{
             name: 'existencia',
             type: 'int'
-        }],
-
-        proxy: {
-            type: "sql"
-        }
+        }]
     }
 });

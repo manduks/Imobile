@@ -49,10 +49,6 @@ Ext.define('Imobile.model.Producto', {
         },{
             name: 'color',
             type: 'string'
-        }],
-
-        proxy: {
-            type: "sql"
-        }
+        }]
     }
 });

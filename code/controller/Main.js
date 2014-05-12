@@ -36,7 +36,7 @@ Ext.define('Imobile.controller.Main',{
         this.getMain().setActiveItem(1);
 
         // Make the JsonP request
-        Ext.data.JsonP.request({
+        /*Ext.data.JsonP.request({
             url: 'http://192.168.15.8:88/iMobile/COK1_CL_UsuarioiMobile/Login',
             params:{
               CodigoUsuario: '1',
@@ -48,7 +48,7 @@ Ext.define('Imobile.controller.Main',{
             success: function(result, request) {
                 console.log(result);
             }
-        });
+        });*/
 
     },
 
@@ -95,7 +95,7 @@ Ext.define('Imobile.controller.Main',{
 
     launch:function(){
         var me = this;
-        Ext.data.JsonP.request({
+        /*Ext.data.JsonP.request({
             url: 'http://192.168.15.8:88/iMobile/COK1_CL_Socio/ObtenerListaSocios',
             params:{
                 CodigoUsuario: '1',
@@ -123,7 +123,7 @@ Ext.define('Imobile.controller.Main',{
                     });
                 })
             }
-        });
+        });*/
 
 
       //Ext.getStore("Productos").getModel().getProxy().dropTable();
@@ -135,11 +135,11 @@ Ext.define('Imobile.controller.Main',{
         query = "DELETE FROM CLIENTE";
         this.hazTransaccion(query, 'Clientes', false); */
 
-        var query = "DELETE FROM ORDEN";
-        this.hazTransaccion(query, 'Ordenes', false);
+        //var query = "DELETE FROM ORDEN";
+        //this.hazTransaccion(query, 'Ordenes', false);
 
-        query = "DELETE FROM DIRECCION";
-        this.hazTransaccion(query, 'Direcciones', false);
+        //query = "DELETE FROM DIRECCION";
+        //this.hazTransaccion(query, 'Direcciones', false);
 
         /*
         var query = "DELETE FROM DIRECCIONFISCAL";
@@ -147,7 +147,7 @@ Ext.define('Imobile.controller.Main',{
 
         //Ingresamos datos de productos y clientes
 
-        if (false){
+        /*if (false){
         
             for(var i = 0; i < 10; i++) {
                 color = this.dame_color_aleatorio();
@@ -158,7 +158,7 @@ Ext.define('Imobile.controller.Main',{
                 this.hazTransaccion(query, 'Productos', false);
                 //alert(query);
 
-            }
+            }*/
 
            /*for(var i = 0; i < 5; i++){
                 query = "INSERT INTO CLIENTE (code, name, idFiscal, telefono, mail, precios, condicionCredito, saldo)" +
@@ -168,13 +168,13 @@ Ext.define('Imobile.controller.Main',{
                 //alert(query);
             }*/
 
-            for(var i = 0; i < 3; i++){
+            /*for(var i = 0; i < 3; i++){
                 query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +
                 " VALUES ('" + 1 + "', '" + "Madero " + i + "', 'Presidentes " + i + "', 'Tlalpan', 12345," +
                 "'Mexico', 'DF', 'Mexico')";
                 this.hazTransaccion(query, 'Direcciones', false);
                 //alert(query);
-            } 
+            }*/
 
             /*for(var i = 0; i < 3; i++){
                 query = "INSERT INTO DIRECCIONFISCAL (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +
@@ -214,5 +214,5 @@ Ext.define('Imobile.controller.Main',{
             }
             store.sync();
         }*/
-    }
+    //}
 });

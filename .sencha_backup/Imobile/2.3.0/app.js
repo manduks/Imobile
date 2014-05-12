@@ -22,7 +22,12 @@ Ext.application({
     ],
 
     stores: [
-        'Menu'
+        'Menu',
+        'Clientes',
+        'Productos',
+        'Ordenes',
+        'Direcciones',
+        'DireccionesFiscales'
     ],
 
     views: [

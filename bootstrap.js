@@ -786,6 +786,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.view.ventas.DireccionFiscalList": [],
   "Imobile.view.ventas.DireccionesContainer": [],
   "Imobile.view.ventas.DireccionesList": [],
+  "Imobile.view.ventas.NavigationOrden": [],
   "Imobile.view.ventas.OpcionesOrdenPanel": [],
   "Imobile.view.ventas.OrdenContainer": [],
   "Imobile.view.ventas.OrdenList": [],
@@ -1826,6 +1827,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.view.ventas.DireccionesList": [
     "widget.direccioneslist"
+  ],
+  "Imobile.view.ventas.NavigationOrden": [
+    "widget.navigationorden"
   ],
   "Imobile.view.ventas.OpcionesOrdenPanel": [
     "widget.opcionesorden"

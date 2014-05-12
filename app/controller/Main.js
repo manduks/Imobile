@@ -119,7 +119,7 @@ Ext.define('Imobile.controller.Main',{
                             query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais)" +
                                 " VALUES ('" + 1 + "', '" + calle + "', '" + colonia + "', '"+municipio+"', '"+cp+"','"+
                                 ciudad+"','"+estado+"','"+pais+"')";
-                        me.hazTransaccion(query, 'Direcciones', false);
+                        //me.hazTransaccion(query, 'Direcciones', false);
                     });
                 })
             }
@@ -147,7 +147,7 @@ Ext.define('Imobile.controller.Main',{
 
         //Ingresamos datos de productos y clientes
 
-        if (true){
+        if (false){
         
             for(var i = 0; i < 10; i++) {
                 color = this.dame_color_aleatorio();

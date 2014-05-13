@@ -28,7 +28,8 @@ Ext.application({
         'Productos',
         'Ordenes',
         'Direcciones',
-        'DireccionesFiscales'
+        'DireccionesFiscales',
+        'Monedas'
     ],
 
     views: [

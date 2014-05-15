@@ -44,8 +44,8 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                 },
                 items:[
                     {
-                        xtype:'numberfield',
-                        name:'code',
+                        xtype:'textfield',
+                        name:'CodigoArticulo',
                         label: 'Código',
                         itemId: 'codepro'
                         //value: 12345

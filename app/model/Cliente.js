@@ -16,7 +16,7 @@ Ext.define('Imobile.model.Cliente', {
             name: 'NombreSocio',
             type: 'string'
         },{
-            name: 'idFiscal',
+            name: 'RFC',
             type: 'string'
         },{
             name: 'telefono',
@@ -33,6 +33,9 @@ Ext.define('Imobile.model.Cliente', {
         },{
             name: 'saldo',
             type: 'double'
+        },{
+            name: 'Direcciones',
+            type: 'array'
         }]
     }
 });

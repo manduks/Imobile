@@ -192,14 +192,23 @@ Ext.define('Imobile.controller.phone.Main', {
         view.getNavigationBar().down('#agregarProductos').show();
 
 
-        if (value.title == 'Cliente') {
+        if (value.title == 'Cliente') {            
             var query = "SELECT * FROM CLIENTE WHERE id = " + this.idCliente + "";
+            me = this;
             form = value.down('clienteform');
+
             /*this.hazTransaccion(query, 'Clientes', true, form);*/
-            setTimeout(function () {
-                datos = Ext.getStore('Clientes').getAt(0).data;
+            //setTimeout(function () {
+                clientes = Ext.getStore('Clientes');
+                direcciones = Ext.getStore('Direcciones');
+                ind = clientes.find('CodigoSocio', me.idCliente);
+                //alert(ind);
+                datos = clientes.getAt(ind).data;
+                direcciones.removeAll();
+                direcciones.add(datos.Direcciones);
+                //console.log(datos.Direcciones);
                 form.setValues(datos);
-            }, 500)
+            //}, 500)
         }
 
         /*if(value.title == 'Eliminar Orden'){
@@ -249,13 +258,18 @@ Ext.define('Imobile.controller.phone.Main', {
         me.muestraDirecciones();
     },
 
-    muestraDirecciones: function () {
+    muestraDirecciones: function (list, index, target, record) {
         //alert("Entre a direcciones");
         var me = this;
-            //query = "SELECT * FROM DIRECCION WHERE idCliente = " + me.idCliente;
+            view = me.getMain().getActiveItem();
+            direcciones = Ext.getStore('Direcciones');
+            direcciones.clearFilter();            
 
-        var view = me.getMain().getActiveItem();
-        //me.hazTransaccion(query, 'Direcciones', true);
+            if(record.data.action == 'entrega'){
+                direcciones.filter('TipoDireccion', 'B');
+            } else {
+                direcciones.filter('TipoDireccion', 'S');
+            }            
 
         view.push({
             xtype: 'tpldirecciones'
@@ -372,7 +386,7 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     muestraClientes: function () {
-        var query = "SELECT * FROM CLIENTE";
+        //var query = "SELECT * FROM CLIENTE";
         //this.hazTransaccion(query, 'Clientes', true);
         Ext.getStore('Clientes').load();
     },
@@ -417,7 +431,7 @@ Ext.define('Imobile.controller.phone.Main', {
         record.set('favorite', !record.get('favorite'));     //Invertimos el estatus
         console.log(record.get('favorite'));
         
-        console.log(values);
+        //console.log(values);
 
         //this.lista(record.get('favorite')); // Listamos 
 
@@ -454,28 +468,31 @@ Ext.define('Imobile.controller.phone.Main', {
 
     alSelecionarCliente: function (view, index, target, record, eOpts) {
         var me = this,
-            view = me.getMenu(),
-            code = record.get('code'),
-            name = record.get('name');
+            view = me.getMenu(),           
+            name = record.get('NombreSocio');
+
+            me.idCliente = record.get('CodigoSocio'),
 
         view.push({
             xtype: 'opcionclientelist',
-            title: code + ' ' + name
+            title: me.idCliente + ' ' + name
         });
 
-        this.idCliente = record.get('id');
+        //this.idCliente = record.get('id');
         this.muestralistaOrden();
     },
 
     onAgregarProducto: function (list, index, target, record) {
         var me = this,
             view = me.getMain().getActiveItem(),
-            viewOrden = me.getOpcionesOrden();
+            viewOrden = me.getOpcionesOrden();            
+            valores = record.data;            
 
         view.push({
             xtype: 'agregarproductosform'
         });
-        view.getActiveItem().setValues({
+
+        /*view.getActiveItem().setValues({
             code: record.get('code'),
             description: record.get('description'),
             cantidad: record.get('cantidad'),
@@ -487,7 +504,8 @@ Ext.define('Imobile.controller.phone.Main', {
             importe: record.get('importe'),
             almacen: record.get('almacen'),
             existencia: record.get('existencia')
-        });
+        });*/
+        view.getActiveItem().setValues(valores);
     },
 
     onOpcionesOrden: function (t, index, target, record, e) {

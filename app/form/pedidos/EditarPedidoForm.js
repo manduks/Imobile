@@ -47,14 +47,14 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                 },
                 items:[
                     {
-                        xtype:'numberfield',
-                        name:'codeClient',
+                        xtype:'textfield',
+                        name:'CodigoSocio',
                         label: 'Código de Cliente',
                         itemId: 'codepro'
                         //value: 12345
                     },{
                         xtype:'textfield',
-                        name:'nombreCliente',
+                        name:'NombreSocio',
                         label:'Nombre de Cliente',                        
                     },{
                         xtype:'numberfield',
@@ -82,7 +82,7 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                         label:'Descuento'
                     },{
                         xtype:'textfield',
-                        name:'moneda',
+                        name:'NombreMoneda',
                         label:'Moneda',
                         disabled: false,
                         itemId: 'moneda',

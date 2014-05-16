@@ -4,12 +4,12 @@ Ext.define('Imobile.view.ventas.NavigationOrden', {
     config: {
         navigationBar: {
             items:[
-                {
+                /*{
                     xtype: 'button',
                     align: 'right',
                     iconCls: 'fa-circle',
                     text: 'offline'
-                },
+                },*/
                 {
                     xtype: 'button',
                     text:'Agregar',

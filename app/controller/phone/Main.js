@@ -102,8 +102,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 break;
             case 'sistema':
                 view.push({
-                    xtype: 'configuracionlist'
-//                    html: 'Configuremos la aplicacion'
+                    xtype: 'configuracionlist'                    
                 });
                 break;
 
@@ -139,12 +138,12 @@ Ext.define('Imobile.controller.phone.Main', {
                 break;
             case 'inicializacion':
                 view.push({
-                    xtype: 'initializecontainer'
+                    xtype: 'initializecontainer'                    
                 });
                 break;
             case 'configuracion':
                 view.push({
-                    xtype: 'configuracioncontainer'
+                    xtype: 'configuracioncontainer'                   
                 });
                 break;
             // default:

@@ -5,30 +5,24 @@ Ext.define('Imobile.view.menu.Menu', {
         'Imobile.view.menu.MenuList'
     ],
     config: {
-        navigationBar: {            
+        navigationBar: {
             items:[
-                /*{
-                    xtype: 'button',
-                    align: 'right',
-                    iconCls: 'fa-circle',
-                    text: 'offline'
-                },*/
                 {
-                   xtype: 'image',
-                    src: 'resources/images/iMobile.png',
-                    align: 'right',
-                    height: 20 
-                }
-                /*{
-                    text:'',
-                    align: 'center'
-                }*/
-            ]
+                    //xtype: 'container',
+                    //items:[{
+                        xtype: 'button',                    
+                        //src: 'resources/images/iMobile.png',                        
+                        align: 'right',
+                        //height: 20,
+                        //width: 100,
+                        icon: 'resources/images/iMobilei.png'
+                        //iconAlign: 'center'
+                    //}]
+                }]
         },
         items: [
             {
                 xtype: 'menulist'
-
             }
         ]
     }

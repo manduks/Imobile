@@ -5,19 +5,12 @@ Ext.define('Imobile.view.menu.Menu', {
         'Imobile.view.menu.MenuList'
     ],
     config: {
-        navigationBar: {
+        navigationBar: {            
             items:[
                 {
-                    //xtype: 'container',
-                    //items:[{
-                        xtype: 'button',                    
-                        //src: 'resources/images/iMobile.png',                        
-                        align: 'right',
-                        //height: 20,
-                        //width: 100,
-                        icon: 'resources/images/iMobilei.png'
-                        //iconAlign: 'center'
-                    //}]
+                    xtype: 'button',
+                    align: 'right',
+                    icon: 'resources/images/iMobilei.png'                    
                 }]
         },
         items: [

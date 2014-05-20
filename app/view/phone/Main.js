@@ -30,7 +30,7 @@ Ext.define('Imobile.view.phone.Main',{
                 xtype: 'container'
             }]
         },{
-            xtype: 'menu'
+            xtype: 'menu'            
         },{
             xtype: 'navigationorden'
         }]

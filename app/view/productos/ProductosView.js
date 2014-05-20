@@ -9,12 +9,12 @@ Ext.define('Imobile.view.productos.ProductosView', {
 
     config: {
         inline: true,
-        padding: 20,
+        padding: '10 10 10 17',
         cls: 'dataview-inline',
         itemTpl: [
             '<tpl for=".">',
-            '<div class="product-list" style="background-color: {color}">',
-            '{description}',
+            '<div class="product-list" style="background-color: {color}>',
+            '{NombreArticulo}',
             //'<h2>{name}</h2>',
             '</div>',
             '</tpl>'

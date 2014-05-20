@@ -1,2 +1,2 @@
 // @tag full-page
-// @require /Applications/XAMPP/xamppfiles/htdocs/imobile/app.js
+// @require C:\Users\desarrollo02\Documents\GitHub\Imobile\app.js

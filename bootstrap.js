@@ -753,6 +753,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.model.Cliente": [],
   "Imobile.model.Direccion": [],
   "Imobile.model.Menu": [],
+  "Imobile.model.Moneda": [],
   "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
   "Imobile.profile.Phone": [],
@@ -761,6 +762,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.store.Direcciones": [],
   "Imobile.store.DireccionesFiscales": [],
   "Imobile.store.Menu": [],
+  "Imobile.store.Monedas": [],
   "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
   "Imobile.view.Main": [],
@@ -786,6 +788,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.view.ventas.DireccionFiscalList": [],
   "Imobile.view.ventas.DireccionesContainer": [],
   "Imobile.view.ventas.DireccionesList": [],
+  "Imobile.view.ventas.MonedasList": [],
   "Imobile.view.ventas.NavigationOrden": [],
   "Imobile.view.ventas.OpcionesOrdenPanel": [],
   "Imobile.view.ventas.OrdenContainer": [],
@@ -1753,6 +1756,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.model.Cliente": [],
   "Imobile.model.Direccion": [],
   "Imobile.model.Menu": [],
+  "Imobile.model.Moneda": [],
   "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
   "Imobile.profile.Phone": [],
@@ -1761,6 +1765,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.store.Direcciones": [],
   "Imobile.store.DireccionesFiscales": [],
   "Imobile.store.Menu": [],
+  "Imobile.store.Monedas": [],
   "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
   "Imobile.view.Main": [
@@ -1827,6 +1832,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.view.ventas.DireccionesList": [
     "widget.direccioneslist"
+  ],
+  "Imobile.view.ventas.MonedasList": [
+    "widget.monedaslist"
   ],
   "Imobile.view.ventas.NavigationOrden": [
     "widget.navigationorden"

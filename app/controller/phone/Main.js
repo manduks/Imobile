@@ -322,18 +322,24 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     mostrarListaProductos: function (container, button, pressed) {
-        var me = this;
-        query = "SELECT * FROM PRODUCTO";
+        var me = this;        
         Ext.getStore('Productos').clearFilter();
-        Ext.getStore('Productos').load();
-        //me.hazTransaccion(query, 'Productos', true);
+        Ext.getStore('Productos').load();        
         me.getProductosOrden().setItems({xtype: 'productoslist'});
     },
 
     mostrarPanelProductos: function (container, button, pressed) {
-        var me = this;
+        var me = this,
+        productos = Ext.getStore('Productos');
+
         me.listarFavoritos();
         me.getProductosOrden().setItems({xtype: 'productosview'});
+        
+        setTimeout(function () { //Función para esperar algunos milisegundos
+            productos.each(function(item, index, length){
+            item.set('color', me.dameColorAleatorio());
+        })
+        }, 100)
     },
 
     onCancelar: function () {
@@ -454,11 +460,18 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     cambiaStatusFavoritos: function (list, index, target, record, e, eOpts) {
+        var me = this;
         console.log(record.get('favorite'));
         record.set('favorite', !record.get('favorite'));     //Invertimos el estatus
         console.log(record.get('favorite'));
         
         //console.log(values);
+        //Por aqui establecemos el color
+        if(record.get('favorite')){
+            color = me.dameColorAleatorio();
+            record.set('color', color);
+            console.log(color);
+        }
 
         //this.lista(record.get('favorite')); // Listamos 
 
@@ -543,10 +556,10 @@ Ext.define('Imobile.controller.phone.Main', {
         switch (opcion) {
             case 'orden':
 
-                me.getMain().setActiveItem(2);
+                me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal
 
-                me.getMain().getActiveItem().getNavigationBar().setTitle(view.getActiveItem().title);
-                me.getMain().getActiveItem().down('opcionesorden').setActiveItem(0);
+                me.getMain().getActiveItem().getNavigationBar().setTitle(view.getActiveItem().title); //Establecemos el title del menu principal como el mismo del menu de opciones
+                me.getMain().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 break;
         }
     },
@@ -607,9 +620,9 @@ Ext.define('Imobile.controller.phone.Main', {
     onPopNavigationOrden: function (t, v, e) {
         var me = this,
             view = me.getMain().getActiveItem();
-            console.log(v.getItemId());
+            console.log(v.getItemId());            
 
-            if(v.getItemId() == 'ext-agregarproductosform-1'){
+            if(v.getItemId().substring(4, 24) == 'agregarproductosform'){ 
                 view.getNavigationBar().down('#agregarProductos').hide()    
             } else {
                 view.getNavigationBar().down('#agregarProductos').show()

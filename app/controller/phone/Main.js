@@ -337,8 +337,9 @@ Ext.define('Imobile.controller.phone.Main', {
         
         setTimeout(function () { //Función para esperar algunos milisegundos
             productos.each(function(item, index, length){
-            item.set('color', me.dameColorAleatorio());
+            item.set('color', me.dameColorAleatorio());            
         })
+            console.log(productos);
         }, 100)
     },
 

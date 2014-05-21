@@ -18,7 +18,7 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
         },
         items: [
             {
-                title: 'Ordenar',
+                title: 'Orden',
                 iconCls: 'settings',
                 xtype: 'partidacontainer'
             },

@@ -20,5 +20,12 @@ Ext.define('Imobile.store.Productos', {
 
             }
         } // Para que se cargue el store algunos datos
+        /*data: [
+            {CodigoArticulo: 'C0077', NombreArticulo: 'Producto 1', favorite: true},
+            {CodigoArticulo: 'C0069', NombreArticulo: 'Producto 2', favorite: false},
+            {CodigoArticulo: 'C0071', NombreArticulo: 'Producto 3', favorite: true},
+            {CodigoArticulo: 'C0156', NombreArticulo: 'Product 4', favorite: false},
+            {CodigoArticulo: 'C0141', NombreArticulo: 'Producto 5', favorite: true}
+        ]*/
     }
 });

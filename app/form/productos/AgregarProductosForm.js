@@ -87,15 +87,15 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                     },{
                         xtype:'numberfield',
                         name:'importe',
-                        label:'Importe' 
+                        label:'Importe'
                     },{
                         xtype:'textfield',
                         name:'almacen',
-                        label:'Almacen'  
+                        label:'Almacen'
                     },{
                         xtype:'numberfield',
                         name:'existencia',
-                        label:'Existencia' 
+                        label:'Existencia'
                     }
                 ]
             }

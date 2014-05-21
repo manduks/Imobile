@@ -72,7 +72,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 itemswipe: 'eliminaPartida'
             },
             'opcionesorden #terminar': {
-
+                activate: 'onTerminarOrden'
             },
             'editarpedidoform #moneda':{
                 focus: 'muestraMonedas'
@@ -654,5 +654,11 @@ Ext.define('Imobile.controller.phone.Main', {
 
         store.setParams(params);
         store.load();        
+    },
+
+    onTerminarOrden: function () {
+        var me = this;
+
+        me.getMain().setActiveItem(1);
     }
 });

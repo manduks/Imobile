@@ -20,12 +20,12 @@ Ext.define('Imobile.store.Clientes', {
 
             }
         }
-        //      data:[
-        // {code:'C0077',name:'Pedro López López'},
-        // {code:'C0069',name:'Pablo López López'},
-        // {code:'C0071',name:'Jose López López'},
-        // {code:'C0156',name:'Ramiro López López'},
-        // {code:'C0141',name:'Roberto López López'},
-        //      ]
+        /*data: [
+            {CodigoSocio: 'C0077', NombreSocio: 'Pedro López López'},
+            {CodigoSocio: 'C0069', NombreSocio: 'Pablo López López'},
+            {CodigoSocio: 'C0071', NombreSocio: 'Jose López López'},
+            {CodigoSocio: 'C0156', NombreSocio: 'Ramiro López López'},
+            {CodigoSocio: 'C0141', NombreSocio: 'Roberto López López'}
+        ]*/
     }
 });

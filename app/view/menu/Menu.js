@@ -10,7 +10,7 @@ Ext.define('Imobile.view.menu.Menu', {
                 {
                     xtype: 'button',
                     align: 'right',
-                    icon: 'resources/images/iMobilei.png'                    
+                    iconCls: 'logo'
                 }]
         },
         items: [

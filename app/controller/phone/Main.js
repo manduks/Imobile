@@ -364,8 +364,8 @@ Ext.define('Imobile.controller.phone.Main', {
 
         form = btn.up('agregarproductosform');
         values = form.getValues();
-        codigo = values.code;
-        descripcion = values.description;
+        codigo = values.CodigoArticulo;
+        descripcion = values.NombreArticulo;
         cantidad = values.cantidad;
         precio = values.precio;
         moneda = values.moneda;

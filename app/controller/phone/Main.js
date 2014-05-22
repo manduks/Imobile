@@ -206,10 +206,9 @@ Ext.define('Imobile.controller.phone.Main', {
                 /*var query = "DELETE FROM ORDEN WHERE id = " + record.get('id') + "";
                 me.hazTransaccion(query, 'Ordenes', false);
                 */
-                //console.log(record.data);
                 var ind = ordenes.find('CodigoArticulo', record.data.CodigoArticulo);
-                //console.log(ind);
-                ordenes.removeAt(ind);                
+                ordenes.removeAt(ind);
+
             }
         });
     },
@@ -249,48 +248,6 @@ Ext.define('Imobile.controller.phone.Main', {
 
         return datos;
     },
-
-    /*agregaDireccion: function (btn) {
-        var query, me, form, fiscal, calle, colonia, municipio, cp, ciudad, estado, pais, view, direcciones, entrega;
-        me = this;
-        form = btn.up('clienteForm');
-        values = form.getValues();
-        direcciones = me.getDirecciones();
-        //fiscal = direcciones.down('#fiscal').getChecked();
-        //entrega = direcciones.down('#entrega').getChecked();
-        calle = values.calle;
-        colonia = values.colonia;
-        municipio = values.municipio;
-        cp = values.cp;
-        ciudad = values.ciudad;
-        estado = values.estado;
-        pais = values.pais;
-
-        /*if (fiscal) {
-            query = "INSERT INTO DIRECCIONFISCAL (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais) VALUES (" +
-                this.idCliente + ", '" + calle + "', '" +
-                colonia + "', '" + municipio + "', " + cp + ", '" + ciudad + "', '" + estado + "', '" +
-                pais + "')";
-
-            //this.hazTransaccion(query, 'DireccionesFiscales', false);
-        }
-
-        if (entrega) {
-            query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais) VALUES (" +
-                this.idCliente + ", '" + calle + "', '" +
-                colonia + "', '" + municipio + "', " + cp + ", '" + ciudad + "', '" + estado + "', '" +
-                pais + "')";
-
-            //this.hazTransaccion(query, 'Direcciones', false);
-        }
-
-
-        view = me.getMenu();
-
-        view.pop();
-
-        me.muestraDirecciones();
-    }, */
 
     muestraDirecciones: function (list, index, target, record) {
         //alert("Entre a direcciones");
@@ -373,8 +330,8 @@ Ext.define('Imobile.controller.phone.Main', {
         form = btn.up('agregarproductosform');
         values = form.getValues();        
         descripcion = values.NombreArticulo;
-        cantidad = values.cantidad;        
-        ordenes = Ext.getStore('Ordenes');
+        cantidad = values.cantidad;
+        var ordenes = Ext.getStore('Ordenes');
 
         if (Ext.isEmpty(descripcion) || Ext.isEmpty(cantidad)) {
             me.mandaMensaje("Campos inválidos o vacíos", "Verifique que el valor de los campos sea correcto o que no estén vacíos");

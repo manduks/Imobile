@@ -12,14 +12,15 @@ Ext.define('Imobile.store.Productos', {
         autoLoad: true,
         /*proxy: {
             url: 'http://192.168.15.8:88//iMobile/COK1_CL_Articulo/ObtenerListaArticulos',
+>>>>>>> ee77676c624864aca9ee78886279d0d22c10297d
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {
                 type: 'json',
                 rootProperty: 'Data'
 
-            }
-        }, */// Para que se cargue el store algunos datos
+            }*/
+
         data: [
             {CodigoArticulo: 'P0077', NombreArticulo: 'Producto 1', favorite: true, cantidad: 10, precio: 23.5, descuento: 23.5, precioConDescuento: 21, importe: 22, almacen: 22, existencia: 1, moneda: 'pesos', totalDeImpuesto: 100 },
             {CodigoArticulo: 'P0069', NombreArticulo: 'Producto 2', favorite: false, cantidad: 20, precio: 13.5, descuento: 23.5, precioConDescuento: 14, importe: 34, almacen: 22, existencia: 4, moneda: 'pesos', totalDeImpuesto: 140  },

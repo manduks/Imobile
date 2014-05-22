@@ -25,6 +25,7 @@ Ext.define('Imobile.form.login.LoginForm', {
             xtype: 'button',
             text: 'Login',
             ui: 'btn-login-ui',
+            itemId: 'login',
             handler: function(btn) {
                 var form = btn.up('formpanel');
                 form.fireEvent('logged', form);

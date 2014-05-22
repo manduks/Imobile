@@ -4,7 +4,7 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
 	requires:[
 		'Ext.form.FieldSet',
 		'Ext.field.Text',
-		'Ext.field.Number',
+		'Ext.field.Number'
         //'Ext.field.Spinner'
 	],
 	config:{
@@ -47,19 +47,19 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                 },
                 items:[
                     {
-                        xtype:'numberfield',
-                        name:'codeClient',
+                        xtype:'textfield',
+                        name:'CodigoSocio',
                         label: 'Código de Cliente',
                         itemId: 'codepro'
                         //value: 12345
                     },{
                         xtype:'textfield',
-                        name:'nombreCliente',
-                        label:'Nombre de Cliente',                        
+                        name:'NombreSocio',
+                        label:'Nombre de Cliente'
                     },{
                         xtype:'numberfield',
                         name:'limite',
-                        label:'Límite de Crédito',                        
+                        label:'Límite de Crédito'
                     },{
                         xtype:'textfield',
                         name:'condicion',
@@ -69,8 +69,8 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                         name:'saldo',
                         label:'Saldo'
                     },{
-                        xtype:'numberfield',
-                        name:'listaPrecios',
+                        xtype:'textfield',
+                        name:'precios',
                         label:'Lista de Precios'
                     },{
                         xtype:'textfield',
@@ -82,9 +82,12 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                         label:'Descuento'
                     },{
                         xtype:'textfield',
-                        name:'moneda',
-                        label:'moneda',
-                        disabled: false
+                        name:'NombreMoneda',
+                        label:'Moneda',
+                        disabled: false,
+                        itemId: 'moneda',
+                        //tpl: ['<div style="font-size: 30px;float: right;margin-top: -25px;" class="fa fa-check"</div>'].join('')
+                        inputCls: 'fa-check'
                     },{
                         xtype:'textfield',
                         name:'tipoCambio',

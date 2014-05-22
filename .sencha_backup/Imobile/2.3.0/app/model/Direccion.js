@@ -13,30 +13,35 @@ Ext.define('Imobile.model.Direccion', {
             name: 'idCliente',
             type: 'int'
         },{
-            name: 'calle',
+            name: 'Calle',
+            type: 'string'
+        },{
+            name: 'NoExterior',
             type: 'string'
         }, {
-            name: 'colonia',
+            name: 'NoInterior',
             type: 'string'
         },{
-            name: 'municipio',
+            name: 'Colonia',
             type: 'string'
         },{
-            name: 'cp',
-            type: 'int'
-        },{
-            name: 'ciudad',
+            name: 'Municipio',
             type: 'string'
         },{
-            name: 'estado',
+            name: 'CodigoPostal',
             type: 'string'
         },{
-            name: 'pais',
+            name: 'Ciudad',
             type: 'string'
-        }],
-
-        proxy: {
-            type: "sql"
-        }
+        },{
+            name: 'Estado',
+            type: 'string'
+        },{
+            name: 'Pais',
+            type: 'string'
+        },{
+            name: 'TipoDireccion', //La B es la dirección de entrega y S es la dirección fiscal
+            type: 'string'
+        }]
     }
 });

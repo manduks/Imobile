@@ -56,9 +56,9 @@ Ext.define('Imobile.controller.phone.Main', {
             'partidacontainer #agregarOrden': {
                 tap: 'agregaOrden'
             },
-            'clienteForm #agregar': {
+            /*'clienteForm #agregar': {
                 tap: 'agregaDireccion'
-            },
+            },*/
             'opcionesorden #addOrden': {
                 activate: 'onAddOrden'
             },
@@ -207,6 +207,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 */
                 var ind = ordenes.find('CodigoArticulo', record.data.CodigoArticulo);
                 ordenes.removeAt(ind);
+
             }
         });
     },
@@ -215,19 +216,21 @@ Ext.define('Imobile.controller.phone.Main', {
         var me=this,
             view = me.getMain().getActiveItem();
         
-        view.getNavigationBar().down('#agregarProductos').show();        
+        view.getNavigationBar().down('#agregarProductos').show();
+        console.log(value);
 
-        if (value.title == 'Cliente') {                        
+        if (value.xtype == 'clientecontainer') {
             var form = value.down('clienteform'),
-            datos = me.traeCliente(),
-                            
+            datos = me.traeCliente(),                            
             direcciones = Ext.getStore('Direcciones');
+
             direcciones.removeAll();
             direcciones.add(datos.Direcciones);
             form.setValues(datos);
+            console.log(datos);
         }
 
-        if(value.title == 'Editar'){            
+        if(value.xtype == 'editarpedidoform'){            
             value.setValues(me.traeCliente());
         }
 
@@ -245,54 +248,12 @@ Ext.define('Imobile.controller.phone.Main', {
         return datos;
     },
 
-    agregaDireccion: function (btn) {
-        var query, me, form, fiscal, calle, colonia, municipio, cp, ciudad, estado, pais, view, direcciones, entrega, values;
-        me = this,
-        form = btn.up('clienteForm'),
-        values = form.getValues(),
-        direcciones = me.getDirecciones();
-        fiscal = direcciones.down('#fiscal').getChecked();
-        entrega = direcciones.down('#entrega').getChecked();
-        calle = values.calle;
-        colonia = values.colonia;
-        municipio = values.municipio;
-        cp = values.cp;
-        ciudad = values.ciudad;
-        estado = values.estado;
-        pais = values.pais;
-
-        if (fiscal) {
-            query = "INSERT INTO DIRECCIONFISCAL (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais) VALUES (" +
-                this.idCliente + ", '" + calle + "', '" +
-                colonia + "', '" + municipio + "', " + cp + ", '" + ciudad + "', '" + estado + "', '" +
-                pais + "')";
-
-            //this.hazTransaccion(query, 'DireccionesFiscales', false);
-        }
-
-        if (entrega) {
-            query = "INSERT INTO DIRECCION (idCliente, calle, colonia, municipio, cp, ciudad, estado, pais) VALUES (" +
-                this.idCliente + ", '" + calle + "', '" +
-                colonia + "', '" + municipio + "', " + cp + ", '" + ciudad + "', '" + estado + "', '" +
-                pais + "')";
-
-            //this.hazTransaccion(query, 'Direcciones', false);
-        }
-
-
-        view = me.getMenu();
-
-        view.pop();
-
-        me.muestraDirecciones();
-    },
-
     muestraDirecciones: function (list, index, target, record) {
         //alert("Entre a direcciones");
         var me = this,
             view = me.getMain().getActiveItem(),
             direcciones = Ext.getStore('Direcciones');
-            direcciones.clearFilter();            
+            direcciones.clearFilter();
 
             if(record.data.action == 'entrega'){
                 direcciones.filter('TipoDireccion', 'B');
@@ -361,7 +322,7 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     agregaProductos: function (btn) {
-        var form, values, descripcion, cantidad,            
+        var form, values, descripcion, cantidad, ordenes,
             me = this,
             menu = me.getMain().getActiveItem();
 
@@ -390,7 +351,7 @@ Ext.define('Imobile.controller.phone.Main', {
         }
     },
 
-    eliminaProducto: function (list, index, target, record) {
+    /*eliminaProducto: function (list, index, target, record) {
         var me = this;
         Ext.Msg.confirm("Eliminar producto", "Se va a eliminar el producto, ¿está seguro?", function (e) {
 
@@ -402,10 +363,10 @@ Ext.define('Imobile.controller.phone.Main', {
                 me.muestraProductos();
             }
         });
-    },
+    },*/
 
     muestraProductos: function () {
-        var query = "SELECT * FROM PRODUCTO";
+        //var query = "SELECT * FROM PRODUCTO";
         //this.hazTransaccion(query, 'Productos', true);
         Ext.getStore('Productos').load();
     },
@@ -424,19 +385,19 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     busca: function (searchField) {
-        var campo = searchField.getValue();
+        /*var campo = searchField.getValue();
         if (this.esFavorito) {
             var query = "SELECT * FROM PRODUCTO WHERE favorite = 'true' AND (code like '%" + campo + "%' OR description like '%" + campo + "%')";
         } else {
             var query = "SELECT * FROM PRODUCTO WHERE code like '%" + campo + "%' OR description like '%" + campo + "%'";
-        }
+        }*/
         //alert(query);
         //this.hazTransaccion(query, 'Productos', true);
     },
 
     buscaCliente: function (searchField) {
-        var campo = searchField.getValue();
-        var query = "SELECT * FROM CLIENTE WHERE code like '%" + campo + "%' OR name like '%" + campo + "%'";
+        /*var campo = searchField.getValue();
+        var query = "SELECT * FROM CLIENTE WHERE code like '%" + campo + "%' OR name like '%" + campo + "%'";*/
         //alert(query);
         //this.hazTransaccion(query, 'Clientes', true);
     },
@@ -581,7 +542,7 @@ Ext.define('Imobile.controller.phone.Main', {
         Ext.Msg.confirm("Eliminar orden", "Se va a eliminar la orden, todos los productos agregados se perderán ¿está seguro?", function (e) {
 
             if (e == 'yes') {
-                var query = "DELETE FROM ORDEN WHERE clienteId = " + me.idCliente + "";
+                //var query = "DELETE FROM ORDEN WHERE clienteId = " + me.idCliente + "";
                 //me.hazTransaccion(query, 'Ordenes', false);
                 ordenes.removeAll();
                 //me.muestralistaOrden();
@@ -635,7 +596,7 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     ponParametros: function (storeName, cUsuario, cSociedad, cDispositivo, passw, tok){
-        var store = Ext.getStore(storeName);
+        var store = Ext.getStore(storeName),
 
         params = {
                     CodigoUsuario: cUsuario,

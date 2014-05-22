@@ -29,7 +29,7 @@ Ext.define('Imobile.model.Direccion', {
             type: 'string'
         },{
             name: 'CodigoPostal',
-            type: 'int'
+            type: 'string'
         },{
             name: 'Ciudad',
             type: 'string'

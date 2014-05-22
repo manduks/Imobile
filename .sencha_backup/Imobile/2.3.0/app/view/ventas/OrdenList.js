@@ -5,17 +5,21 @@ Ext.define('Imobile.view.ventas.OrdenList', {
     config: {
         itemCls: 'partida',
         itemTpl: ['<div>',
-            '<span style="float: left; padding: 30px 0px 0px 10px;"><i class="fa fa-shopping-cart" style="font-size: 30px;"></i></span><span style="float: left; padding: 0 35px;" class="imobile-cliente-tpl">',
-            '<p>{code}</p>',
-            '<p><b>{description}</b></p>',
+            '<span style="float: left; padding: 15px 0px 0px 10px;"><i class="fa fa-shopping-cart" style="font-size: 30px;"></i></span><span style="float: left; padding: 0 35px;" class="imobile-cliente-tpl">',
+            '<p>{clienteId}</p>',
+            '<p><b>{NombreArticulo}</b></p>',
             '<p style="color: red;">Quantity: <b>{cantidad}</b></p>',
             '</span>',
             '<span>',
             '<p>Precio: {precio}</p>',
             '<p>Disc: {descuento}</p>',
-            '<p><b>Total: {importe}</b></p>',
+            '<p class="total-product"><b>Total: {importe}</b></p>',
             '</span></div>'].join(''),
         store: 'Ordenes',
         emptyText: '<div style="margin-top: 20px; text-align: center">No hay Productos en el Orden</div>'
+    },
+
+    onItemDisclosure: function (record, listItem, index, e) {
+            this.fireEvent("tap", record, listItem, index, e); 
     }
 });

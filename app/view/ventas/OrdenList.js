@@ -13,7 +13,7 @@ Ext.define('Imobile.view.ventas.OrdenList', {
             '<span>',
             '<p>Precio: {precio}</p>',
             '<p>Disc: {descuento}</p>',
-            '<p><b>Total: {importe}</b></p>',
+            '<p class="total-product"><b>Total: {importe}</b></p>',
             '</span></div>'].join(''),
         store: 'Ordenes',
         emptyText: '<div style="margin-top: 20px; text-align: center">No hay Productos en el Orden</div>'

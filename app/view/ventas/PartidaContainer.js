@@ -36,9 +36,8 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
                 }]
             }]*/
         },{
-            xtype: 'container',
-            flex: 1,
-            html: 'kjhksfhkj'
+            xtype: 'ordencontainer',
+            flex: 1
         }]
     }
 });

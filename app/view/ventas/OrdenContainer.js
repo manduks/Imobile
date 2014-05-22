@@ -3,6 +3,9 @@ Ext.define('Imobile.view.ventas.OrdenContainer', {
     xtype: 'ordencontainer',
     config: {
         layout: 'hbox',
+        style:{
+            background: 'white'
+        },
         items: [{
             xtype: 'container',
             html: 'Descuento',

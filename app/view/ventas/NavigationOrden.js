@@ -7,9 +7,7 @@ Ext.define('Imobile.view.ventas.NavigationOrden', {
                 {
                     xtype: 'button',
                     align: 'right',
-                    //iconCls: 'fa-circle',
-                    icon: 'resources/images/iMobilei.png'
-                    //text: 'offline'
+                    iconCls: 'logo'                    
                 },
                 {
                     xtype: 'button',

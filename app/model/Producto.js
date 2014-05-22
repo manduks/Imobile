@@ -41,7 +41,7 @@ Ext.define('Imobile.model.Producto', {
             type: 'string'
         },{
             name: 'existencia',
-            type: 'int'
+            type: 'float'
         },{
             name: 'favorite',
             type: 'boolean',

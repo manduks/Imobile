@@ -69,8 +69,8 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                         name:'saldo',
                         label:'Saldo'
                     },{
-                        xtype:'numberfield',
-                        name:'listaPrecios',
+                        xtype:'textfield',
+                        name:'precios',
                         label:'Lista de Precios'
                     },{
                         xtype:'textfield',

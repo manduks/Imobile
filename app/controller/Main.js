@@ -32,7 +32,8 @@ Ext.define('Imobile.controller.Main',{
         }
     },
 
-    onLoginUser:function(form,token){
+    //onLoginUser:function(form,token){
+    onLoginUser:function(){
         this.getMain().setActiveItem(1);
 
         // Make the JsonP request
@@ -56,7 +57,7 @@ Ext.define('Imobile.controller.Main',{
 
      hazTransaccion: function (query, storeName, add, form){
         var me = this;
-        var store = Ext.getStore(storeName);
+        var store = Ext.getStore(storeName),
 
         db = store.getModel().getProxy().getDatabaseObject();
         
@@ -77,15 +78,18 @@ Ext.define('Imobile.controller.Main',{
     },
 
     aleatorio: function (inferior,superior){ 
-        numPosibilidades = superior - inferior 
-        aleat = Math.random() * numPosibilidades 
-        aleat = Math.floor(aleat) 
-        return parseInt(inferior) + aleat 
+        var numPosibilidades = superior - inferior,
+        aleat = Math.random() * numPosibilidades, 
+        aleat = Math.floor(aleat);
+
+        return parseInt(inferior) + aleat;
     },
 
     dameColorAleatorio: function (){ 
-        hexadecimal = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F") 
-        color_aleatorio = "#"; 
+        var hexadecimal = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"),
+        color_aleatorio = "#",
+        posarray;
+
         for (i=0;i<6;i++){ 
             posarray = this.aleatorio(0,hexadecimal.length) 
             color_aleatorio += hexadecimal[posarray] 

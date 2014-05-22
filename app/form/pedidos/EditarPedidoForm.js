@@ -4,7 +4,7 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
 	requires:[
 		'Ext.form.FieldSet',
 		'Ext.field.Text',
-		'Ext.field.Number',
+		'Ext.field.Number'
         //'Ext.field.Spinner'
 	],
 	config:{
@@ -55,11 +55,11 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                     },{
                         xtype:'textfield',
                         name:'NombreSocio',
-                        label:'Nombre de Cliente',                        
+                        label:'Nombre de Cliente'
                     },{
                         xtype:'numberfield',
                         name:'limite',
-                        label:'Límite de Crédito',                        
+                        label:'Límite de Crédito'
                     },{
                         xtype:'textfield',
                         name:'condicion',

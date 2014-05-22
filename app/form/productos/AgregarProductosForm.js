@@ -70,7 +70,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                     },{
                         xtype:'textfield',
                         name:'moneda',
-                        label:'Moneda',
+                        label:'Moneda'
                         //itemId: 'moneda'
                     },{
                         xtype:'numberfield',

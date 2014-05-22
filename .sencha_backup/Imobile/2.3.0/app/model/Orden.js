@@ -14,12 +14,12 @@ Ext.define('Imobile.model.Orden', {
             type: 'int'
         },{
             name: 'clienteId',
-            type: 'int'
+            type: 'string'
         },{
-            name: 'code',
-            type: 'int'
+            name: 'CodigoArticulo',
+            type: 'string'
         }, {
-            name: 'description',
+            name: 'NombreArticulo',
             type: 'string'
         },{
             name: 'cantidad',
@@ -47,11 +47,7 @@ Ext.define('Imobile.model.Orden', {
             type: 'string'
         },{
             name: 'existencia',
-            type: 'int'
-        }],
-
-        proxy: {
-            type: "sql"
-        }
+            type: 'float'
+        }]
     }
 });

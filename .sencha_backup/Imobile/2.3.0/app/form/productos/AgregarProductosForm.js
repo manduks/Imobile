@@ -24,7 +24,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                 items:[
                     {
                         itemId:'agregar',
-                        text:'Agregar',
+                        text:'Guardar',
                         ui: 'confirm'
                     }
                 ]
@@ -44,14 +44,14 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                 },
                 items:[
                     {
-                        xtype:'numberfield',
-                        name:'code',
+                        xtype:'textfield',
+                        name:'CodigoArticulo',
                         label: 'Código',
                         itemId: 'codepro'
                         //value: 12345
                     },{
                         xtype:'textfield',
-                        name:'description',
+                        name:'NombreArticulo',
                         label:'Descripción',
                         disabled: false
                     },{
@@ -71,6 +71,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         xtype:'textfield',
                         name:'moneda',
                         label:'Moneda'
+                        //itemId: 'moneda'
                     },{
                         xtype:'numberfield',
                         name:'descuento',
@@ -86,15 +87,15 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                     },{
                         xtype:'numberfield',
                         name:'importe',
-                        label:'Importe' 
+                        label:'Importe'
                     },{
                         xtype:'textfield',
                         name:'almacen',
-                        label:'Almacen'  
+                        label:'Almacen'
                     },{
                         xtype:'numberfield',
                         name:'existencia',
-                        label:'Existencia' 
+                        label:'Existencia'
                     }
                 ]
             }

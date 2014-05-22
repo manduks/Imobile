@@ -14,7 +14,8 @@ Ext.application({
     name: 'Imobile',
 
     requires: [
-        'Ext.MessageBox'
+        'Ext.MessageBox',
+        'Ext.data.proxy.JsonP'
     ],
 
     models:[
@@ -27,7 +28,8 @@ Ext.application({
         'Productos',
         'Ordenes',
         'Direcciones',
-        'DireccionesFiscales'
+        'DireccionesFiscales',
+        'Monedas'
     ],
 
     views: [

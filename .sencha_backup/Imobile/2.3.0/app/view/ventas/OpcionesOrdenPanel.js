@@ -18,7 +18,7 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
         },
         items: [
             {
-                title: 'Ordenar',
+                title: 'Orden',
                 iconCls: 'settings',
                 xtype: 'partidacontainer'
             },
@@ -36,8 +36,7 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
 
             {
                 title: 'Eliminar',
-                iconCls: 'fa fa-times',
-                iconCls: 'trash',
+                iconCls: 'fa fa-times',                
                 itemId: 'eliminar'
             },
             {

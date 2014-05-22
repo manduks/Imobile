@@ -10,10 +10,10 @@ Ext.define('Imobile.model.Producto', {
             name: 'id',
             type: 'int'            
         },{
-            name: 'code',
-            type: 'int'
+            name: 'CodigoArticulo',
+            type: 'string'
         }, {
-            name: 'description',
+            name: 'NombreArticulo',
             type: 'string'
         },{
             name: 'cantidad',
@@ -41,18 +41,15 @@ Ext.define('Imobile.model.Producto', {
             type: 'string'
         },{
             name: 'existencia',
-            type: 'int'
+            type: 'float'
         },{
             name: 'favorite',
             type: 'boolean',
-            defaultValue: false
+            defaultValue: true
         },{
             name: 'color',
             type: 'string'
-        }],
-
-        proxy: {
-            type: "sql"
-        }
+            //defaultValue: 'blue'
+        }]
     }
 });

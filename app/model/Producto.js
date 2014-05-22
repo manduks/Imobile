@@ -48,7 +48,7 @@ Ext.define('Imobile.model.Producto', {
             defaultValue: true
         },{
             name: 'color',
-            type: 'string',
+            type: 'string'
             //defaultValue: 'blue'
         }]
     }

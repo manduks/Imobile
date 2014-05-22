@@ -77370,7 +77370,7 @@ Ext.define('Imobile.view.ventas.OrdenList', {
         itemCls: 'partida',
         itemTpl: ['<div>',
             '<span style="float: left; padding: 15px 0px 0px 10px;"><i class="fa fa-shopping-cart" style="font-size: 30px;"></i></span><span style="float: left; padding: 0 35px;" class="imobile-cliente-tpl">',
-            '<p>{clienteId}</p>',
+            '<p>{CodigoArticulo}</p>',
             '<p><b>{NombreArticulo}</b></p>',
             '<p style="color: red;">Quantity: <b>{cantidad}</b></p>',
             '</span>',
@@ -78235,6 +78235,7 @@ Ext.define('Imobile.controller.phone.Main', {
     esFavorito: undefined,
     idCliente: undefined,
     entrega: undefined,
+    titulo: undefined,
     config: {
         control: {
             'seleccionadorprofav #listarProductos': {
@@ -78615,6 +78616,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
             if(ind == -1){                
                 ordenes.add(values);
+
             } else {
                 var datosProducto = ordenes.getAt(ind);
                 datosProducto.set('cantidad', cantidad);
@@ -78741,10 +78743,11 @@ Ext.define('Imobile.controller.phone.Main', {
             name = record.get('NombreSocio');
 
             me.idCliente = record.get('CodigoSocio'),
+            me.titulo = me.idCliente + ' ' + name;
 
         view.push({
             xtype: 'opcionclientelist',
-            title: me.idCliente + ' ' + name
+            title: me.titulo
         });
 
         //this.idCliente = record.get('id');
@@ -78777,9 +78780,9 @@ Ext.define('Imobile.controller.phone.Main', {
         switch (opcion) {
             case 'orden':
 
-                me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal
-
-                me.getMain().getActiveItem().getNavigationBar().setTitle(view.getActiveItem().title); //Establecemos el title del menu principal como el mismo del menu de opciones
+                me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
+                console.log(me.titulo);
+                me.getMain().getActiveItem().getNavigationBar().setTitle(me.titulo); //Establecemos el title del menu principal como el mismo del menu de opciones
                 me.getMain().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 //console.log(me.getMain().getActiveItem().down('opcionesorden').getActiveItem());
                 break;
@@ -79083,11 +79086,11 @@ Ext.define('Imobile.store.Productos', {
             }
         }, */// Para que se cargue el store algunos datos
         data: [
-            {CodigoArticulo: 'C0077', NombreArticulo: 'Producto 1', favorite: true, cantidad: 10, precio: 23.5, descuento: 23.5, precioConDescuento: 21, importe: 22, almacen: 22, existencia: 1, moneda: 'pesos', totalDeImpuesto: 100 },
-            {CodigoArticulo: 'C0069', NombreArticulo: 'Producto 2', favorite: false, cantidad: 20, precio: 13.5, descuento: 23.5, precioConDescuento: 14, importe: 34, almacen: 22, existencia: 4, moneda: 'pesos', totalDeImpuesto: 140  },
-            {CodigoArticulo: 'C0071', NombreArticulo: 'Producto 3', favorite: true, cantidad: 30, precio: 13.5, descuento: 23.5, precioConDescuento: 12, importe: 56, almacen: 22, existencia: 7, moneda: 'pesos', totalDeImpuesto: 12  },
-            {CodigoArticulo: 'C0156', NombreArticulo: 'Product 4', favorite: false, cantidad: 40, precio: 11.87, descuento: 23.5, precioConDescuento: 13, importe: 67, almacen: 22, existencia: 8, moneda: 'pesos', totalDeImpuesto: 12  },
-            {CodigoArticulo: 'C0141', NombreArticulo: 'Producto 5', favorite: true, cantidad: 50, precio: 17.7, descuento: 23.5, precioConDescuento: 15, importe: 78, almacen: 22, existencia: 10, moneda: 'pesos', totalDeImpuesto: 23  }
+            {CodigoArticulo: 'P0077', NombreArticulo: 'Producto 1', favorite: true, cantidad: 10, precio: 23.5, descuento: 23.5, precioConDescuento: 21, importe: 22, almacen: 22, existencia: 1, moneda: 'pesos', totalDeImpuesto: 100 },
+            {CodigoArticulo: 'P0069', NombreArticulo: 'Producto 2', favorite: false, cantidad: 20, precio: 13.5, descuento: 23.5, precioConDescuento: 14, importe: 34, almacen: 22, existencia: 4, moneda: 'pesos', totalDeImpuesto: 140  },
+            {CodigoArticulo: 'P0071', NombreArticulo: 'Producto 3', favorite: true, cantidad: 30, precio: 13.5, descuento: 23.5, precioConDescuento: 12, importe: 56, almacen: 22, existencia: 7, moneda: 'pesos', totalDeImpuesto: 12  },
+            {CodigoArticulo: 'P0156', NombreArticulo: 'Product 4', favorite: false, cantidad: 40, precio: 11.87, descuento: 23.5, precioConDescuento: 13, importe: 67, almacen: 22, existencia: 8, moneda: 'pesos', totalDeImpuesto: 12  },
+            {CodigoArticulo: 'P0141', NombreArticulo: 'Producto 5', favorite: true, cantidad: 50, precio: 17.7, descuento: 23.5, precioConDescuento: 15, importe: 78, almacen: 22, existencia: 10, moneda: 'pesos', totalDeImpuesto: 23  }
         ]
     }
 });
@@ -79107,7 +79110,7 @@ Ext.define('Imobile.model.Orden', {
             name: 'id',
             type: 'int'
         },{
-            name: 'clienteId',
+            name: 'CodigoSocio',
             type: 'string'
         },{
             name: 'CodigoArticulo',

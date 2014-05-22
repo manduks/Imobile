@@ -3,6 +3,7 @@ Ext.define('Imobile.controller.phone.Main', {
     esFavorito: undefined,
     idCliente: undefined,
     entrega: undefined,
+    titulo: undefined,
     config: {
         control: {
             'seleccionadorprofav #listarProductos': {
@@ -383,6 +384,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
             if(ind == -1){                
                 ordenes.add(values);
+
             } else {
                 var datosProducto = ordenes.getAt(ind);
                 datosProducto.set('cantidad', cantidad);
@@ -509,10 +511,11 @@ Ext.define('Imobile.controller.phone.Main', {
             name = record.get('NombreSocio');
 
             me.idCliente = record.get('CodigoSocio'),
+            me.titulo = me.idCliente + ' ' + name;
 
         view.push({
             xtype: 'opcionclientelist',
-            title: me.idCliente + ' ' + name
+            title: me.titulo
         });
 
         //this.idCliente = record.get('id');
@@ -545,9 +548,8 @@ Ext.define('Imobile.controller.phone.Main', {
         switch (opcion) {
             case 'orden':
 
-                me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal
-
-                me.getMain().getActiveItem().getNavigationBar().setTitle(view.getActiveItem().title); //Establecemos el title del menu principal como el mismo del menu de opciones
+                me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal navigationorden                
+                me.getMain().getActiveItem().getNavigationBar().setTitle(me.titulo); //Establecemos el title del menu principal como el mismo del menu de opciones
                 me.getMain().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 //console.log(me.getMain().getActiveItem().down('opcionesorden').getActiveItem());
                 break;

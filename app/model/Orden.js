@@ -13,7 +13,7 @@ Ext.define('Imobile.model.Orden', {
             name: 'id',
             type: 'int'
         },{
-            name: 'clienteId',
+            name: 'CodigoSocio',
             type: 'string'
         },{
             name: 'CodigoArticulo',

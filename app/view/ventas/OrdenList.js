@@ -7,7 +7,7 @@ Ext.define('Imobile.view.ventas.OrdenList', {
         itemTpl: ['<div>',
             '<span style="float: left; padding: 15px 0px 0px 10px;"><i class="fa fa-shopping-cart" style="font-size: 30px;"></i></span><span style="float: left; padding: 0 35px;" class="imobile-cliente-tpl">',
             '<p>{clienteId}</p>',
-            '<p><b>{description}</b></p>',
+            '<p><b>{NombreArticulo}</b></p>',
             '<p style="color: red;">Quantity: <b>{cantidad}</b></p>',
             '</span>',
             '<span>',
@@ -17,5 +17,9 @@ Ext.define('Imobile.view.ventas.OrdenList', {
             '</span></div>'].join(''),
         store: 'Ordenes',
         emptyText: '<div style="margin-top: 20px; text-align: center">No hay Productos en el Orden</div>'
+    },
+
+    onItemDisclosure: function (record, listItem, index, e) {
+            this.fireEvent("tap", record, listItem, index, e); 
     }
 });

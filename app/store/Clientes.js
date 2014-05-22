@@ -10,7 +10,7 @@ Ext.define('Imobile.store.Clientes', {
     config: {
         model: 'Imobile.model.Cliente',
         autoLoad: true,
-        /*proxy: {
+        proxy: {
             url: 'http://192.168.15.8:88/iMobile/COK1_CL_Socio/ObtenerListaSocios',
             type: 'jsonp',
             callbackKey: 'callback',
@@ -19,13 +19,6 @@ Ext.define('Imobile.store.Clientes', {
                 rootProperty: 'Data'
 
             }
-        }*/
-        data: [
-            {CodigoSocio: 'C0077', NombreSocio: 'Pedro López López'},
-            {CodigoSocio: 'C0069', NombreSocio: 'Pablo López López'},
-            {CodigoSocio: 'C0071', NombreSocio: 'Jose López López'},
-            {CodigoSocio: 'C0156', NombreSocio: 'Ramiro López López'},
-            {CodigoSocio: 'C0141', NombreSocio: 'Roberto López López'}
-        ]
+        }
     }
 });

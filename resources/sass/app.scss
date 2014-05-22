@@ -13,8 +13,8 @@
 
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../sass/stylesheets/fonts/pictos/fontawesome-webfont.eot?v=4.0.3');
-  src: url('../sass/stylesheets/fonts/pictos/fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), url('../sass/stylesheets/fonts/pictos/fontawesome-webfont.woff?v=4.0.3') format('woff'), url('../sass/stylesheets/fonts/pictos/fontawesome-webfont.ttf?v=4.0.3') format('truetype'), url('../sass/stylesheets/fonts/pictos/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
+  src: url('../font/fontawesome-webfont.eot?v=4.0.3');
+  src: url('../font/fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), url('../font/fontawesome-webfont.woff?v=4.0.3') format('woff'), url('../font/fontawesome-webfont.ttf?v=4.0.3') format('truetype'), url('../font/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -1418,7 +1418,7 @@
 }
 
 .logo{
-  background-image: url(http://localhost/imobile/resources/images/iMobilei.png);
+  background-image: url(../images/iMobilei.png);
   width: 6.5em;
   height: 1.5em;
 }

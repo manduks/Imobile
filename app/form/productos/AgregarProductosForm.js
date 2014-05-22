@@ -24,7 +24,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                 items:[
                     {
                         itemId:'agregar',
-                        text:'Agregar',
+                        text:'Guardar',
                         ui: 'confirm'
                     }
                 ]
@@ -51,7 +51,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         //value: 12345
                     },{
                         xtype:'textfield',
-                        name:'description',
+                        name:'NombreArticulo',
                         label:'Descripción',
                         disabled: false
                     },{

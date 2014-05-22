@@ -19,7 +19,7 @@ Ext.define('Imobile.store.Productos', {
                 rootProperty: 'Data'
 
             }
-        }, // Para que se cargue el store algunos datos*/
+        }, */// Para que se cargue el store algunos datos
         data: [
             {CodigoArticulo: 'C0077', NombreArticulo: 'Producto 1', favorite: true, cantidad: 10, precio: 23.5, descuento: 23.5, precioConDescuento: 21, importe: 22, almacen: 22, existencia: 1, moneda: 'pesos', totalDeImpuesto: 100 },
             {CodigoArticulo: 'C0069', NombreArticulo: 'Producto 2', favorite: false, cantidad: 20, precio: 13.5, descuento: 23.5, precioConDescuento: 14, importe: 34, almacen: 22, existencia: 4, moneda: 'pesos', totalDeImpuesto: 140  },

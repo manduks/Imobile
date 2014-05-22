@@ -34,22 +34,6 @@ Ext.define('Imobile.controller.Main',{
 
     onLoginUser:function(form,token){
         this.getMain().setActiveItem(1);
-
-        // Make the JsonP request
-        /*Ext.data.JsonP.request({
-            url: 'http://192.168.15.8:88/iMobile/COK1_CL_UsuarioiMobile/Login',
-            params:{
-              CodigoUsuario: '1',
-                CodigoSociedad: '001',
-                CodigoDispositivo: '004',
-                Contrasenia: '12345'
-            },
-            callbackKey: 'callback',
-            success: function(result, request) {
-                console.log(result);
-            }
-        });*/
-
     },
 
     onSelectMenu: Ext.emptyFn,
@@ -94,7 +78,6 @@ Ext.define('Imobile.controller.Main',{
     },
 
     launch:function(){
-         
     }
          
 });

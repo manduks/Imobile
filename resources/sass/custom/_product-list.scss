@@ -7,11 +7,11 @@
 	/*background-color: red;*/
 	/*padding:3em;*/
 	/*line-height: 80px; /*asignamos un line-height igual a la altura del elemento */
-	text-align:center;	
+	text-align:center;
 	margin: .2em;
-	/*display: table;*/
-	vertical-align:middle;
-/*	display: table-cell;*/
+	/*display: inline;*/
+	/*vertical-align:middle;*/
+	/*display: table-cell;*/
 	font-size: 60%;
 
 /*	.menu-list-image{
@@ -28,8 +28,22 @@
 	}*/
 }
 
+.product-list:before, .container{
+	display: inline-block; 
+ 	vertical-align: middle; 
+}
+
+.product-list:before{
+	content: ''; 
+  	display: inline-block; 
+  	/*width: 0; */
+  	height: 100%; 
+  	vertical-align: middle; 
+}
+
 .dataview-inline{
 	width:90%;
 	margin:auto;	
-	text-align:justify;	
+	text-align:justify;
+	vertical-align:middle;
 }

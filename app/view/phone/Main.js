@@ -1,4 +1,4 @@
-    /**
+/**
  * @class Imobile.view.phone.Main
  * @extends Imobile.view.Main
  * La vista principal de nuestra version de telefono

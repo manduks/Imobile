@@ -27,7 +27,7 @@ Ext.define('Imobile.view.clientes.ClientesList', {
                 itemId: 'busca',
                 placeHolder: ' Buscar cliente...'
             }]
-        }],
+        }], 
         plugins: [{
             xclass: 'Ext.plugin.ListPaging',
             autoPaging: true

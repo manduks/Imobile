@@ -78411,7 +78411,6 @@ Ext.define('Imobile.controller.phone.Main', {
             view = me.getMain().getActiveItem();
         
         view.getNavigationBar().down('#agregarProductos').show();
-        console.log(value);
 
         if (value.xtype == 'clientecontainer') {
             var form = value.down('clienteform'),
@@ -78421,7 +78420,6 @@ Ext.define('Imobile.controller.phone.Main', {
             direcciones.removeAll();
             direcciones.add(datos.Direcciones);
             form.setValues(datos);
-            console.log(datos);
         }
 
         if(value.xtype == 'editarpedidoform'){            
@@ -78610,16 +78608,13 @@ Ext.define('Imobile.controller.phone.Main', {
 
     cambiaStatusFavoritos: function (list, index, target, record, e, eOpts) {
         var me = this;
-        console.log(record.get('favorite'));
         record.set('favorite', !record.get('favorite'));     //Invertimos el estatus
-        console.log(record.get('favorite'));
-        
+
         //console.log(values);
         //Por aqui establecemos el color
         if(record.get('favorite')){
             var color = me.dameColorAleatorio();
             record.set('color', color);
-            console.log(color);
         }
 
         //this.lista(record.get('favorite')); // Listamos 
@@ -79299,5 +79294,5 @@ Ext.application({
 });
 
 // @tag full-page
-// @require C:\Users\desarrollo02\Documents\GitHub\Imobile\app.js
+// @require /Applications/XAMPP/xamppfiles/htdocs/imobile/app.js
 

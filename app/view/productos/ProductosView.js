@@ -14,13 +14,14 @@ Ext.define('Imobile.view.productos.ProductosView', {
         itemTpl: [
             '<tpl for=".">',
             '<div class="product-list" style="background-color: {color}">',
-            '<div class="container"> ',
-                '{NombreArticulo}',
+                '<span class= "ovalo"></span>',
+                '<div class="container"> ',
+                    '{NombreArticulo}',
                 //'<h2>{name}</h2>',
                 '</div>',
             '</div>',
-            '</tpl>'
-            //'<div style="clear:both"></div>'
+            '</tpl>',
+            '<div style="clear:both"></div>'
         ].join(''),
         //itemTpl: '<div class="img" style="background"></div>',
         //useSimpleItems: true,

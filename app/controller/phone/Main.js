@@ -36,9 +36,9 @@ Ext.define('Imobile.controller.phone.Main', {
             'opcionclientelist': {
                 itemtap: 'onOpcionesOrden'
             },
-            'productosview': {
+            /*'productosview': {
                 itemtap: 'onTapFavorito'
-            },
+            },*/
             'opcionesorden #eliminar': {
                 activate: 'onEliminarOrden'
             },
@@ -218,20 +218,20 @@ Ext.define('Imobile.controller.phone.Main', {
             view = me.getMain().getActiveItem();
         
         view.getNavigationBar().down('#agregarProductos').show();
-        console.log(value);
+        //console.log(value.xtype);
 
         if (value.xtype == 'clientecontainer') {
             var form = value.down('clienteform'),
-            datos = me.traeCliente(),                            
+            datos = me.traeCliente(),
             direcciones = Ext.getStore('Direcciones');
 
             direcciones.removeAll();
             direcciones.add(datos.Direcciones);
             form.setValues(datos);
-            console.log(datos);
+            //console.log(datos);
         }
 
-        if(value.xtype == 'editarpedidoform'){            
+        if(value.xtype == 'editarpedidoform'){
             value.setValues(me.traeCliente());
         }
 
@@ -417,16 +417,16 @@ Ext.define('Imobile.controller.phone.Main', {
 
     cambiaStatusFavoritos: function (list, index, target, record, e, eOpts) {
         var me = this;
-        console.log(record.get('favorite'));
+        //console.log(record.get('favorite'));
         record.set('favorite', !record.get('favorite'));     //Invertimos el estatus
-        console.log(record.get('favorite'));
+        //console.log(record.get('favorite'));
         
         //console.log(values);
         //Por aqui establecemos el color
         if(record.get('favorite')){
             var color = me.dameColorAleatorio();
             record.set('color', color);
-            console.log(color);
+            //console.log(color);
         }
 
         //this.lista(record.get('favorite')); // Listamos 
@@ -483,7 +483,7 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this,
             view = me.getMain().getActiveItem(),
             viewOrden = me.getOpcionesOrden(),
-            valores = record.data; 
+            valores = record.data;            
 
         view.push({
             xtype: 'agregarproductosform'
@@ -514,9 +514,11 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     onTapFavorito: function (t, index, target, record, e, es) {
-        var me = this,
+        /*var me = this,
             view = me.getMenu(),
             viewOrden = me.getOpcionesOrden();
+
+            alert('onTapFavorito');
 
         view.push({
             xtype: 'agregarproductosform'
@@ -534,7 +536,7 @@ Ext.define('Imobile.controller.phone.Main', {
             importe: record.get('importe'),
             almacen: record.get('almacen'),
             existencia: record.get('existencia')
-        });
+        });*/
     },
 
     onEliminarOrden: function (newActiveItem, tabPanel) {
@@ -570,7 +572,8 @@ Ext.define('Imobile.controller.phone.Main', {
 
     onPopNavigationOrden: function (t, v, e) {
         var me = this,
-            view = me.getMain().getActiveItem();
+            view = me.getMain().getActiveItem(),
+            itemActivo = t.getActiveItem().getActiveItem();
             //console.log(view.getActiveItem().isXType('ordenlist'));
             //console.log(t.getActiveItem().getActiveItem().xtype);            
 
@@ -578,11 +581,11 @@ Ext.define('Imobile.controller.phone.Main', {
                 view.getNavigationBar().down('#agregarProductos').hide()
             } else {
                 view.getNavigationBar().down('#agregarProductos').show()
-            }*/
+            }*/            
 
-            if(t.getActiveItem().getActiveItem().isXType('partidacontainer')){
+/*            if(itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')){
                 view.getNavigationBar().down('#agregarProductos').show();
-            }
+            }*/
 
 /*        if (v.getItemId() != 'principal') {
             view.getNavigationBar().down('#agregarProductos').hide()

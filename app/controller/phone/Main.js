@@ -121,8 +121,8 @@ Ext.define('Imobile.controller.phone.Main', {
                 me.muestraClientes();
                 break;
             case 'venta': 
-            case 'cobranza':
-                me.ponParametros('Clientes', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, me.Contrasenia, me.Token);
+            case 'cobranza':                
+                me.ponParametros('Clientes', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, "", me.Token);
 
                 view.push({
                     xtype: 'clienteslist',
@@ -180,8 +180,8 @@ Ext.define('Imobile.controller.phone.Main', {
     muestraMonedas: function (){
          var me = this,            
             view = me.getMain().getActiveItem();        
-
-        me.ponParametros('Monedas', '1', '001', '004', '12345', "6VVcR7brnB4=");
+        
+        me.ponParametros('Monedas', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, "", me.Token);
                
         view.push({
             xtype: 'monedaslist'
@@ -196,10 +196,7 @@ Ext.define('Imobile.controller.phone.Main', {
             ordenes = Ext.getStore('Ordenes');
         Ext.Msg.confirm("Eliminar producto de la orden", "Se va a eliminar el producto de la orden, ¿está seguro?", function (e) {
 
-            if (e == 'yes') {
-                /*var query = "DELETE FROM ORDEN WHERE id = " + record.get('id') + "";
-                me.hazTransaccion(query, 'Ordenes', false);
-                */
+            if (e == 'yes') {               
                 var ind = ordenes.find('CodigoArticulo', record.data.CodigoArticulo);
                 ordenes.removeAt(ind);
 
@@ -560,7 +557,9 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this,
             view = me.getMain().getActiveItem();
 
-        me.ponParametros('Productos', '1', '001', '004', '12345', "6VVcR7brnB4=");
+        //me.ponParametros('Productos', '1', '001', '004', '12345', "6VVcR7brnB4=");
+        //me.ponParametros('Productos', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, me.Contrasenia, me.Token);
+        me.ponParametros('Productos', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, "", me.Token);
 
         view.push({
             xtype: 'productosorden'

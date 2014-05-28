@@ -1406,11 +1406,19 @@
 
 .partida{
   background-color: white;
-  border-bottom: solid 5px gray;
+  border-bottom: solid 5px gray;  
+}
+
+.factura{
+  background-color: white;
+  /*border-bottom: solid 5px gray;*/
+  font-size: 80%;   
 }
 
 .direc-selected{
-  color: #157efb !important;
+  i{
+    color: #157efb !important;
+  }
 }
 
 .fondo-descuento{

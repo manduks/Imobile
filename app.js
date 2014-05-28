@@ -29,7 +29,8 @@ Ext.application({
         'Ordenes',
         'Direcciones',
         'DireccionesFiscales',
-        'Monedas'
+        'Monedas',
+        'Facturas'
     ],
 
     views: [

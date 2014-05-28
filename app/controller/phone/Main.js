@@ -121,8 +121,8 @@ Ext.define('Imobile.controller.phone.Main', {
                 me.muestraClientes();
                 break;
             case 'venta': 
-            case 'cobranza':            
-                me.ponParametros('Clientes', '1', '001', '004', '12345', "6VVcR7brnB4=");
+            case 'cobranza':
+                me.ponParametros('Clientes', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, me.Contrasenia, me.Token);
 
                 view.push({
                     xtype: 'clienteslist',
@@ -611,7 +611,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 };
 
         store.setParams(params);
-        store.load();        
+        store.load();
     },
 
     onTerminarOrden: function () {

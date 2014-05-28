@@ -33,6 +33,9 @@ Ext.define('Imobile.view.Main', {
         'Imobile.view.ventas.ClienteContainer',
         'Imobile.view.ventas.TplDirecciones',
         'Imobile.view.ventas.NavigationOrden',
-        'Imobile.view.ventas.MonedasList'
+        'Imobile.view.ventas.MonedasList',
+        'Imobile.view.cobranza.CobranzaList',
+        'Imobile.view.cobranza.FacturasList',
+        'Imobile.view.cobranza.FacturasContainer'
     ]
 });

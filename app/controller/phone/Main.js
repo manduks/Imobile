@@ -4,6 +4,7 @@ Ext.define('Imobile.controller.phone.Main', {
     idCliente: undefined,
     entrega: undefined,
     titulo: undefined,
+    opcion: undefined,
     config: {
         control: {
             'seleccionadorprofav #listarProductos': {
@@ -36,9 +37,9 @@ Ext.define('Imobile.controller.phone.Main', {
             'opcionclientelist': {
                 itemtap: 'onOpcionesOrden'
             },
-            'productosview': {
+            /*'productosview': {
                 itemtap: 'onTapFavorito'
-            },
+            },*/
             'opcionesorden #eliminar': {
                 activate: 'onEliminarOrden'
             },
@@ -84,6 +85,9 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'monedaslist':{
                 itemtap: 'seleccionaMoneda'
+            },
+            'cobranzalist':{
+                itemtap: 'muestraFacturasPendientes'
             }
         }
     },
@@ -91,9 +95,11 @@ Ext.define('Imobile.controller.phone.Main', {
     onSelectMenu: function (view, index, target, record, eOpts) {
         //console.log(record);
         var me = this,
-            view = me.getMenu(),
-            option = record.get('action');            
-        switch (option) {
+            view = me.getMenu();
+
+            me.opcion = record.get('action');
+
+        switch (me.opcion) {
             case 'favoritos':
                 view.push({
                     xtype: 'seleccionadorprofav'
@@ -114,14 +120,14 @@ Ext.define('Imobile.controller.phone.Main', {
                 });
                 me.muestraClientes();
                 break;
-            case 'venta':
-                
+            case 'venta': 
+            case 'cobranza':            
                 me.ponParametros('Clientes', '1', '001', '004', '12345', "6VVcR7brnB4=");
 
                 view.push({
-                    xtype: 'clienteslist'
-                });
-
+                    xtype: 'clienteslist',
+                    opcion: me.opcion
+                });                
                 this.esFavorito = false;                
                 //me.muestraClientes();
                 break;
@@ -148,18 +154,6 @@ Ext.define('Imobile.controller.phone.Main', {
                     xtype: 'configuracioncontainer'                   
                 });
                 break;
-            // default:
-            //     view.push({
-            //         xtype: 'container',
-            //         html: 'Voy a modificar esta linea'
-            //     });
-            //     break;
-            // default:
-            //     view.push({
-            //         xtype: 'container',
-            //         html: 'Voy a modificar esta linea'
-            //     });
-            //     break;
         }
     },
 
@@ -221,7 +215,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
         if (value.xtype == 'clientecontainer') {
             var form = value.down('clienteform'),
-            datos = me.traeCliente(),                            
+            datos = me.traeCliente(),
             direcciones = Ext.getStore('Direcciones');
 
             direcciones.removeAll();
@@ -229,7 +223,7 @@ Ext.define('Imobile.controller.phone.Main', {
             form.setValues(datos);
         }
 
-        if(value.xtype == 'editarpedidoform'){            
+        if(value.xtype == 'editarpedidoform'){
             value.setValues(me.traeCliente());
         }
 
@@ -457,18 +451,28 @@ Ext.define('Imobile.controller.phone.Main', {
         Ext.Msg.alert(titulo, mensaje);
     },
 
-    alSelecionarCliente: function (view, index, target, record, eOpts) {
+    alSelecionarCliente: function (list, index, target, record, eOpts) {
         var me = this,
-            view = me.getMenu(),           
+            view = me.getMenu(),
             name = record.get('NombreSocio');
 
-            me.idCliente = record.get('CodigoSocio'),
+            me.idCliente = record.get('CodigoSocio');
             me.titulo = me.idCliente + ' ' + name;
 
-        view.push({
-            xtype: 'opcionclientelist',
-            title: me.titulo
-        });
+            switch(list.opcion){
+                case 'venta':
+                    view.push({
+                        xtype: 'opcionclientelist',
+                        title: me.titulo
+                    });
+                    break;
+                case 'cobranza':
+                    view.push({
+                        xtype: 'cobranzalist',
+                        title: me.titulo
+                    });
+                    break;                    
+            }
 
         //this.idCliente = record.get('id');
         this.muestralistaOrden();
@@ -478,7 +482,7 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this,
             view = me.getMain().getActiveItem(),
             viewOrden = me.getOpcionesOrden(),
-            valores = record.data; 
+            valores = record.data;            
 
         view.push({
             xtype: 'agregarproductosform'
@@ -509,9 +513,11 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     onTapFavorito: function (t, index, target, record, e, es) {
-        var me = this,
+        /*var me = this,
             view = me.getMenu(),
             viewOrden = me.getOpcionesOrden();
+
+            alert('onTapFavorito');
 
         view.push({
             xtype: 'agregarproductosform'
@@ -529,7 +535,7 @@ Ext.define('Imobile.controller.phone.Main', {
             importe: record.get('importe'),
             almacen: record.get('almacen'),
             existencia: record.get('existencia')
-        });
+        });*/
     },
 
     onEliminarOrden: function (newActiveItem, tabPanel) {
@@ -565,7 +571,8 @@ Ext.define('Imobile.controller.phone.Main', {
 
     onPopNavigationOrden: function (t, v, e) {
         var me = this,
-            view = me.getMain().getActiveItem();
+            view = me.getMain().getActiveItem(),
+            itemActivo = t.getActiveItem().getActiveItem();
             //console.log(view.getActiveItem().isXType('ordenlist'));
             //console.log(t.getActiveItem().getActiveItem().xtype);            
 
@@ -573,11 +580,11 @@ Ext.define('Imobile.controller.phone.Main', {
                 view.getNavigationBar().down('#agregarProductos').hide()
             } else {
                 view.getNavigationBar().down('#agregarProductos').show()
-            }*/
+            }*/            
 
-            if(t.getActiveItem().getActiveItem().isXType('partidacontainer')){
+/*            if(itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')){
                 view.getNavigationBar().down('#agregarProductos').show();
-            }
+            }*/
 
 /*        if (v.getItemId() != 'principal') {
             view.getNavigationBar().down('#agregarProductos').hide()
@@ -611,5 +618,14 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this;
 
         me.getMain().setActiveItem(1);
+    },
+
+    muestraFacturasPendientes: function(){
+        var me = this,
+            view = me.getMenu();
+
+            view.push({
+                xtype: 'facturascontainer'
+            });
     }
 });

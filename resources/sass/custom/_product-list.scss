@@ -1,7 +1,7 @@
 .product-list{
 	width:80px;
 	height: 80px;
-	float:center;
+/*	float:center;*/
 	display:inline-block;
 	border-radius:10px; /* solid blue ; */
 	/*background-color: red;*/
@@ -47,3 +47,17 @@
 	text-align:justify;
 	vertical-align:middle;
 }
+
+.ovalo {
+		width: 20px;
+		height: 15px;
+		background: red;
+	/*	margin: 2px;*/
+		/*-moz-border-radius: 10px / 5px;
+		-webkit-border-radius: 10px / 5px;*/
+		border-radius: 5px;
+		float: right;
+		position: absolute;
+		display: inline-block;
+/*	z-index: 10;*/
+	}

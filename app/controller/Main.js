@@ -27,7 +27,8 @@ Ext.define('Imobile.controller.Main',{
                 tap: 'onAgregarPartida'
             },
             'navigationorden':{
-                pop: 'onPopNavigationOrden'
+                //pop: 'onPopNavigationOrden',
+                back: 'onBack'
             }
         }
     },
@@ -59,7 +60,24 @@ Ext.define('Imobile.controller.Main',{
         return color_aleatorio 
     },
 
+    onBack: function (navigationview){
+        var me = this,
+            view = me.getMain().getActiveItem(),
+            itemActivo = navigationview.getActiveItem().getActiveItem();
+
+            console.log(itemActivo.isXType('clientecontainer'));
+
+/*        if(itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')){
+            navigationview.getActiveItem().setActiveItem(0);
+        }*/
+
+                    if(itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')){
+                        navigationview.getActiveItem().setActiveItem(0);
+                view.getNavigationBar().down('#agregarProductos').show();
+            }
+    },
+
     launch:function(){
     }
-         
+
 });

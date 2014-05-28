@@ -752,6 +752,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.form.productos.AgregarProductosForm": [],
   "Imobile.model.Cliente": [],
   "Imobile.model.Direccion": [],
+  "Imobile.model.Factura": [],
   "Imobile.model.Menu": [],
   "Imobile.model.Moneda": [],
   "Imobile.model.Orden": [],
@@ -761,6 +762,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.store.Clientes": [],
   "Imobile.store.Direcciones": [],
   "Imobile.store.DireccionesFiscales": [],
+  "Imobile.store.Facturas": [],
   "Imobile.store.Menu": [],
   "Imobile.store.Monedas": [],
   "Imobile.store.Ordenes": [],
@@ -768,6 +770,9 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.view.Main": [],
   "Imobile.view.clientes.ClientesList": [],
   "Imobile.view.clientes.OpcionClienteList": [],
+  "Imobile.view.cobranza.CobranzaList": [],
+  "Imobile.view.cobranza.FacturasContainer": [],
+  "Imobile.view.cobranza.FacturasList": [],
   "Imobile.view.configuracion.ConfiguracionContainer": [],
   "Imobile.view.configuracion.ConfiguracionList": [],
   "Imobile.view.configuracion.InitializeContainer": [],
@@ -1755,6 +1760,7 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.model.Cliente": [],
   "Imobile.model.Direccion": [],
+  "Imobile.model.Factura": [],
   "Imobile.model.Menu": [],
   "Imobile.model.Moneda": [],
   "Imobile.model.Orden": [],
@@ -1764,6 +1770,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.store.Clientes": [],
   "Imobile.store.Direcciones": [],
   "Imobile.store.DireccionesFiscales": [],
+  "Imobile.store.Facturas": [],
   "Imobile.store.Menu": [],
   "Imobile.store.Monedas": [],
   "Imobile.store.Ordenes": [],
@@ -1776,6 +1783,15 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.view.clientes.OpcionClienteList": [
     "widget.opcionclientelist"
+  ],
+  "Imobile.view.cobranza.CobranzaList": [
+    "widget.cobranzalist"
+  ],
+  "Imobile.view.cobranza.FacturasContainer": [
+    "widget.facturascontainer"
+  ],
+  "Imobile.view.cobranza.FacturasList": [
+    "widget.facturaslist"
   ],
   "Imobile.view.configuracion.ConfiguracionContainer": [
     "widget.configuracioncontainer"

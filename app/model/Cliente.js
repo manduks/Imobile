@@ -19,16 +19,16 @@ Ext.define('Imobile.model.Cliente', {
             name: 'RFC',
             type: 'string'
         },{
-            name: 'telefono',
+            name: 'Telefono',
             type: 'string'
         },{
-            name: 'mail',
+            name: 'Correo',
             type: 'string'
         },{
-            name: 'precios',
+            name: 'ListaPrecios',
             type: 'string'
         },{
-            name: 'condicionCredito',
+            name: 'LimiteCredito',
             type: 'string'
         },{
             name: 'saldo',

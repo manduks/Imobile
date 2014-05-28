@@ -207,17 +207,32 @@ Ext.define('Imobile.controller.phone.Main', {
     cambiaItem: function (tabPanel, value, oldValue) {
         var me=this,
             view = me.getMain().getActiveItem();
-        
+
         view.getNavigationBar().down('#agregarProductos').show();
 
         if (value.xtype == 'clientecontainer') {
-            var form = value.down('clienteform'),
-            datos = me.traeCliente(),
-            direcciones = Ext.getStore('Direcciones');
 
-            direcciones.removeAll();
-            direcciones.add(datos.Direcciones);
-            form.setValues(datos);
+            var store = Ext.getStore('Clientes'),
+
+                params = {
+                    CodigoUsuario: me.CodigoUsuario,
+                    CodigoSociedad: me.CodigoSociedad,
+                    CodigoDispositivo: me.CodigoDispositivo,
+                    Criterio: me.idCliente,
+                    Token: me.Token
+                };
+
+            store.getProxy().setUrl("http://192.168.15.9:88/iMobile/COK1_CL_Socio/ObtenerSocioiMobile");
+            store.setParams(params);
+            store.load({
+                callback: function (record, operation) {
+                    var form = value.down('clienteform'),
+                        direcciones = Ext.getStore('Direcciones');
+
+                    direcciones.setData(record[0].data.Direcciones);
+                    form.setValues(record[0].data);
+                }
+            });
         }
 
         if(value.xtype == 'editarpedidoform'){
@@ -436,7 +451,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
         productos.clearFilter(); //Para limpiar todos los filtros por si tiene alguno el store
         productos.filter('favorite', esFavorito);
-        me.ponParametros('Productos', '1', '001', '004', '12345', "6VVcR7brnB4=");        
+        //me.ponParametros('Productos', '1', '001', '004', '12345', "6VVcR7brnB4=");
     },
 
     actualiza: function (esFavorito, ind) {
@@ -606,7 +621,8 @@ Ext.define('Imobile.controller.phone.Main', {
                     CodigoSociedad: cSociedad,
                     CodigoDispositivo: cDispositivo,
                     Contrasenia: passw,
-                    Token: tok
+                    Token: tok,
+                    Elementos: 10
                 };
 
         store.setParams(params);

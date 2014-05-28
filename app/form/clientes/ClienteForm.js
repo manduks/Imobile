@@ -44,22 +44,22 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                     },
                     {
                         xtype: 'numberfield',
-                        name: 'telefono',
+                        name: 'Telefono',
                         label: 'Teléfono'
                     },
                     {
                         xtype: 'emailfield',
-                        name: 'mail',
+                        name: 'Correo',
                         label: 'Correo'
                     },
                     {
                         xtype: 'textfield',
-                        name: 'precios',
+                        name: 'ListaPrecios',
                         label: 'Lista de Precios'                        
                     },
                     {
                         xtype: 'textfield',
-                        name: 'condicionCredito',
+                        name: 'LimiteCredito',
                         label: 'Crédito'                        
                     },
                     {

@@ -25,9 +25,9 @@ Ext.define('Imobile.controller.phone.Main', {
             'agregarproductosform #cancelar': {
                 tap: 'onCancelar'
             },
-            'productoslist #agregar': {
+/*            'productoslist #agregar': {
                 tap: 'onAgregar'
-            },
+            },*/
             'clienteslist #busca': {
                 keyup: 'buscaCliente'
             },
@@ -211,6 +211,8 @@ Ext.define('Imobile.controller.phone.Main', {
         view.getNavigationBar().down('#agregarProductos').show();
 
         if (value.xtype == 'clientecontainer') {
+
+            //me.ponParametros('Clientes', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, "", me.Token);
 
             var store = Ext.getStore('Clientes'),
 
@@ -493,14 +495,35 @@ Ext.define('Imobile.controller.phone.Main', {
     onAgregarProducto: function (list, index, target, record) {
         var me = this,
             view = me.getMain().getActiveItem(),
-            viewOrden = me.getOpcionesOrden(),
-            valores = record.data;            
+            viewOrden = me.getOpcionesOrden();            
 
         view.push({
             xtype: 'agregarproductosform'
         });
 
-        view.getActiveItem().setValues(valores); //agregarproductoform
+        var store = Ext.getStore('Productos'),
+
+                params = {
+                    CodigoUsuario: me.CodigoUsuario,
+                    CodigoSociedad: me.CodigoSociedad,
+                    CodigoDispositivo: me.CodigoDispositivo,
+                    Criterio: record.data.CodigoArticulo,
+                    Token: me.Token
+                };
+
+            store.getProxy().setUrl("http://192.168.15.9:88/iMobile/COK1_CL_Articulo/ObtenerArticuloiMobile");
+            store.setParams(params);
+            store.load({
+                callback: function (record, operation) {
+                    var valores = record[0].data;
+                    /*var form = value.down('clienteform'),
+                        direcciones = Ext.getStore('Direcciones');
+
+                    direcciones.setData(record[0].data.Direcciones);
+                    form.setValues(record[0].data);*/
+                    view.getActiveItem().setValues(valores); //agregarproductoform
+                }
+            });        
 
         if(list.isXType('ordenlist')){ // Para editar pedido
             view.getActiveItem().down('fieldset').setTitle('Editar producto');

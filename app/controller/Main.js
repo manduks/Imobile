@@ -34,6 +34,9 @@ Ext.define('Imobile.controller.Main', {
             'navigationorden': {
                 //pop: 'onPopNavigationOrden',
                 back: 'onBack'
+            },
+            'menu': {
+                back: 'onBackMenu'
             }
         }
     },
@@ -116,7 +119,20 @@ Ext.define('Imobile.controller.Main', {
         }
     },
 
-    launch: function () {
+    onBackMenu: function(){
+        var me =this,
+            store = Ext.getStore('Clientes'),
+
+            params = {
+                CodigoUsuario: me.CodigoUsuario,
+                CodigoSociedad: me.CodigoSociedad,
+                CodigoDispositivo: me.CodigoDispositivo,
+                Token: me.Token
+            };
+
+        store.getProxy().setUrl("http://192.168.15.9:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile");
+        store.setParams(params);
+        store.load();
     }
 
 });

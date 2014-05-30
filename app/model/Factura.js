@@ -11,7 +11,7 @@ Ext.define('Imobile.model.Factura', {
             type: 'int'
         },{
             name: 'saldo',
-            type: 'string'
+            type: 'float'
         }, {
             name: 'fecha',
             type: 'string'

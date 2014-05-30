@@ -18,7 +18,9 @@ Ext.define('Imobile.controller.Main', {
             direcciones: 'direccionescontainer',
             productosOrden: 'productosorden',
             productosView: 'productosview',
-            navigationOrden: 'navigationorden'
+            navigationOrden: 'navigationorden',
+            totales: 'totalescontainer',
+            listaFacturas: 'facturaslist'
 
         },
         control: {

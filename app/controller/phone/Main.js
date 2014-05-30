@@ -5,6 +5,10 @@ Ext.define('Imobile.controller.phone.Main', {
     entrega: undefined,
     titulo: undefined,
     opcion: undefined,
+    aPagar: 0,
+    pagado: 0,
+    pendiente: 0,
+
     config: {
         control: {
             'seleccionadorprofav #listarProductos': {
@@ -673,24 +677,34 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     aplicaPago: function (){
-        var me = this,
-        view = me.getMenu();
+        var me = this,            
+            view = me.getMenu(),
+            i,
+            total = 0,
+            seleccion = view.getActiveItem().down('facturaslist').getSelection();
+            
+            for (i = 0; i<seleccion.length; i++){
+                total += seleccion[i].data.saldo;
+            }
+
+            me.aPagar = total;            
+            //console.log(me.aPagar);
 
         view.push({
             xtype: 'formasdepagolist',
             title: me.titulo
-        })
+        });        
     },
 
     muestraCobranza: function(list, index, target, record){
         var me = this,
-        view = me.getMenu(),
-        forma = record.get('title');
+            view = me.getMenu(),
+            forma = record.get('title');            
 
         view.push({
             xtype: 'totalapagarcontainer',
             title: me.titulo
-        }),        
+        }),
 
         Ext.Msg.prompt(forma, 'Ingrese el monto a pagar:', function(text, entrada) {
             if(text == 'ok'){
@@ -699,10 +713,30 @@ Ext.define('Imobile.controller.phone.Main', {
                         tipo: forma,
                         monto: entrada
                     })
+                
+                me.pagado = 0;
+                console.log(me.pagado);
+
+                store.each(function (item){
+                    me.pagado += parseFloat(item.get('monto'));
+                });
+
+/*                me.getTotales().down('#pagado').setHtml(me.pagado);
+                me.getTotales().down('#pendiente').setHtml(me.aPagar - me.pagado);*/
+                me.getTotales().down('#pagado').setItems({xtype:'container', html: me.pagado});
+                me.getTotales().down('#pendiente').setItems({xtype:'container', html: me.aPagar - me.pagado});
 
             } else {
                 //view.pop();
             }
         });
+
+        //me.getTotales().down('#aCobrar').setHtml(me.aPagar);
+       me.getTotales().down('#aCobrar').setItems({xtype:'container', html: me.aPagar});
+       me.getTotales().down('#pagado').setItems({xtype:'container', html: me.pagado});
+       me.getTotales().down('#pendiente').setItems({xtype:'container', html: me.aPagar - me.pagado});
+        //me.getTotales().down('container #cobrar').append(me.aPagar);
+        /*me.getTotales().down('#pagado').setHtml(me.pagado);
+        me.getTotales().down('#pendiente').setHtml(me.aPagar - me.pagado);*/
     }
 });

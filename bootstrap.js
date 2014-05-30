@@ -757,6 +757,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.model.Moneda": [],
   "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
+  "Imobile.model.Total": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
   "Imobile.store.Clientes": [],
@@ -767,12 +768,17 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.store.Monedas": [],
   "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
+  "Imobile.store.Totales": [],
   "Imobile.view.Main": [],
   "Imobile.view.clientes.ClientesList": [],
   "Imobile.view.clientes.OpcionClienteList": [],
   "Imobile.view.cobranza.CobranzaList": [],
   "Imobile.view.cobranza.FacturasContainer": [],
   "Imobile.view.cobranza.FacturasList": [],
+  "Imobile.view.cobranza.FormasDePagoList": [],
+  "Imobile.view.cobranza.TotalAPagarContainer": [],
+  "Imobile.view.cobranza.TotalAPagarList": [],
+  "Imobile.view.cobranza.TotalesContainer": [],
   "Imobile.view.configuracion.ConfiguracionContainer": [],
   "Imobile.view.configuracion.ConfiguracionList": [],
   "Imobile.view.configuracion.InitializeContainer": [],
@@ -1765,6 +1771,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.model.Moneda": [],
   "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
+  "Imobile.model.Total": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
   "Imobile.store.Clientes": [],
@@ -1775,6 +1782,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.store.Monedas": [],
   "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
+  "Imobile.store.Totales": [],
   "Imobile.view.Main": [
     "widget.main"
   ],
@@ -1792,6 +1800,18 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.view.cobranza.FacturasList": [
     "widget.facturaslist"
+  ],
+  "Imobile.view.cobranza.FormasDePagoList": [
+    "widget.formasdepagolist"
+  ],
+  "Imobile.view.cobranza.TotalAPagarContainer": [
+    "widget.totalapagarcontainer"
+  ],
+  "Imobile.view.cobranza.TotalAPagarList": [
+    "widget.totalapagarlist"
+  ],
+  "Imobile.view.cobranza.TotalesContainer": [
+    "widget.totalescontainer"
   ],
   "Imobile.view.configuracion.ConfiguracionContainer": [
     "widget.configuracioncontainer"

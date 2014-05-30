@@ -721,22 +721,16 @@ Ext.define('Imobile.controller.phone.Main', {
                     me.pagado += parseFloat(item.get('monto'));
                 });
 
-/*                me.getTotales().down('#pagado').setHtml(me.pagado);
-                me.getTotales().down('#pendiente').setHtml(me.aPagar - me.pagado);*/
                 me.getTotales().down('#pagado').setItems({xtype:'container', html: me.pagado});
                 me.getTotales().down('#pendiente').setItems({xtype:'container', html: me.aPagar - me.pagado});
 
             } else {
-                //view.pop();
+
             }
         });
-
-        //me.getTotales().down('#aCobrar').setHtml(me.aPagar);
        me.getTotales().down('#aCobrar').setItems({xtype:'container', html: me.aPagar});
        me.getTotales().down('#pagado').setItems({xtype:'container', html: me.pagado});
        me.getTotales().down('#pendiente').setItems({xtype:'container', html: me.aPagar - me.pagado});
-        //me.getTotales().down('container #cobrar').append(me.aPagar);
-        /*me.getTotales().down('#pagado').setHtml(me.pagado);
-        me.getTotales().down('#pendiente').setHtml(me.aPagar - me.pagado);*/
+
     }
 });

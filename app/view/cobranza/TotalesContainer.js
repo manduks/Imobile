@@ -16,7 +16,7 @@ Ext.define('Imobile.view.cobranza.TotalesContainer', {
                 'margin-right': '1px',
                 'text-align': 'center',
                 'font-weight':'bold',
-                'vertical-align': 'middle'
+                'vertical-align': 'middle'  
             }
         },{
             xtype: 'container',

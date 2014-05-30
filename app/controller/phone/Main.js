@@ -94,6 +94,9 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'formasdepagolist':{
                 itemtap: 'muestraCobranza'
+            },
+            'transaccionlist':{
+                itemtap: 'onSeleccionarTransaccion'
             }
         }
     },
@@ -546,6 +549,24 @@ Ext.define('Imobile.controller.phone.Main', {
                 me.getMain().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 //console.log(me.getMain().getActiveItem().down('opcionesorden').getActiveItem());
                 break;
+            case 'visualizar':
+                var store = Ext.getStore('Transacciones');
+
+                var params = {
+                    CodigoUsuario: me.CodigoUsuario,
+                    CodigoSociedad: me.CodigoSociedad,
+                    CodigoDispositivo: me.CodigoDispositivo,
+                    Token: me.Token,
+                    CardCode: me.idCliente
+                };
+
+                store.setParams(params);
+                store.load();
+
+                view.push({
+                    xtype: 'transaccionlist'
+                });
+                break;
         }
     },
 
@@ -703,6 +724,15 @@ Ext.define('Imobile.controller.phone.Main', {
             } else {
                 //view.pop();
             }
+        });
+    },
+
+    onSeleccionarTransaccion: function(){
+        var me = this,
+            view = me.getMenu();
+
+        view.push({
+            xtype: 'editarpedidoform'
         });
     }
 });

@@ -1,0 +1,25 @@
+/**
+ * @class Imobile.store.Productos
+ * @extends Ext.data.Store
+ * Este es el store para los productos
+ */
+Ext.define('Imobile.store.Transacciones', {
+    extend: 'Ext.data.Store',
+    requires:['Imobile.model.Transaccion'],
+
+    config: {
+        model:'Imobile.model.Transaccion',
+        autoLoad: true,
+        proxy: {
+            //url: 'http://192.168.15.9:88//iMobile/COK1_CL_Articulo/ObtenerListaArticulosiMobile',
+            url: "http://192.168.15.9:88/iMobile/COK1_CL_Consultas/RegresarOrdenVentaiMobile2",
+            type: 'jsonp',
+            callbackKey: 'callback',
+            reader: {
+                type: 'json',
+                rootProperty: 'Data'
+
+            }
+        }
+    }
+});

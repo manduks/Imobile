@@ -36,6 +36,10 @@ Ext.define('Imobile.view.Main', {
         'Imobile.view.ventas.MonedasList',
         'Imobile.view.cobranza.CobranzaList',
         'Imobile.view.cobranza.FacturasList',
-        'Imobile.view.cobranza.FacturasContainer'
+        'Imobile.view.cobranza.FacturasContainer',
+        'Imobile.view.cobranza.FormasDePagoList',
+        'Imobile.view.cobranza.TotalAPagarContainer',
+        'Imobile.view.cobranza.TotalAPagarList',
+        'Imobile.view.cobranza.TotalesContainer'
     ]
 });

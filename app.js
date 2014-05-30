@@ -30,7 +30,8 @@ Ext.application({
         'Direcciones',
         'DireccionesFiscales',
         'Monedas',
-        'Facturas'
+        'Facturas',
+        'Totales'
     ],
 
     views: [

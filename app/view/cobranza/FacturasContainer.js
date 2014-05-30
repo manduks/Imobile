@@ -20,7 +20,8 @@ Ext.define('Imobile.view.cobranza.FacturasContainer', {
             xtype: 'button',
             text: 'Aplicar pago',
             ui: 'confirm',
-            margin: 10,            
+            itemId: 'aplicarPago',
+            margin: 10
         }]
     }
 });

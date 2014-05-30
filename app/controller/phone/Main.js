@@ -35,7 +35,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 itemtap: 'alSelecionarCliente'
             },
             'opcionclientelist': {
-                itemtap: 'onOpcionesOrden'
+                itemtap: 'onOpcionesCliente'
             },
             /*'productosview': {
                 itemtap: 'onTapFavorito'
@@ -88,6 +88,12 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'cobranzalist':{
                 itemtap: 'muestraFacturasPendientes'
+            },
+            'facturascontainer #aplicarPago':{
+                tap: 'aplicaPago'
+            },
+            'formasdepagolist':{
+                itemtap: 'muestraCobranza'
             }
         }
     },
@@ -523,7 +529,7 @@ Ext.define('Imobile.controller.phone.Main', {
                     form.setValues(record[0].data);*/
                     view.getActiveItem().setValues(valores); //agregarproductoform
                 }
-            });        
+            });
 
         if(list.isXType('ordenlist')){ // Para editar pedido
             view.getActiveItem().down('fieldset').setTitle('Editar producto');
@@ -531,7 +537,7 @@ Ext.define('Imobile.controller.phone.Main', {
         }
     },
 
-    onOpcionesOrden: function (t, index, target, record, e) {
+    onOpcionesCliente: function (t, index, target, record, e) {
         var me = this,
             view = me.getMenu(),
             opcion = record.get('action');
@@ -539,7 +545,7 @@ Ext.define('Imobile.controller.phone.Main', {
         switch (opcion) {
             case 'orden':
 
-                me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal navigationorden                
+                me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
                 me.getMain().getActiveItem().getNavigationBar().setTitle(me.titulo); //Establecemos el title del menu principal como el mismo del menu de opciones
                 me.getMain().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 //console.log(me.getMain().getActiveItem().down('opcionesorden').getActiveItem());
@@ -658,12 +664,49 @@ Ext.define('Imobile.controller.phone.Main', {
         me.getMain().setActiveItem(1);
     },
 
+    //// Control de cobranza
+
     muestraFacturasPendientes: function(){
         var me = this,
             view = me.getMenu();
 
             view.push({
-                xtype: 'facturascontainer'
+                xtype: 'facturascontainer',
+                title: me.titulo
             });
+    },
+
+    aplicaPago: function (){
+        var me = this,
+        view = me.getMenu();
+
+        view.push({
+            xtype: 'formasdepagolist',
+            title: me.titulo
+        })
+    },
+
+    muestraCobranza: function(list, index, target, record){
+        var me = this,
+        view = me.getMenu(),
+        forma = record.get('title');
+
+        view.push({
+            xtype: 'totalapagarcontainer',
+            title: me.titulo
+        }),        
+
+        Ext.Msg.prompt(forma, 'Ingrese el monto a pagar:', function(text, entrada) {
+            if(text == 'ok'){
+                var store = Ext.getStore('Totales');
+                    store.add({
+                        tipo: forma,
+                        monto: entrada
+                    })
+
+            } else {
+                //view.pop();
+            }
+        });
     }
 });

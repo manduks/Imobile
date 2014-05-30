@@ -246,10 +246,6 @@ Ext.define('Imobile.controller.phone.Main', {
         if(value.xtype == 'editarpedidoform'){
             value.setValues(me.traeCliente());
         }
-
-        /*if(value.title == 'Eliminar Orden'){
-         tabPanel.setActiveItem(0);
-         }*/
     },
 
     traeCliente: function (){

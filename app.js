@@ -31,7 +31,8 @@ Ext.application({
         'DireccionesFiscales',
         'Monedas',
         'Facturas',
-        'Totales'
+        'Totales',
+        'Transacciones'
     ],
 
     views: [

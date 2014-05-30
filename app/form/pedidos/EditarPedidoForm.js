@@ -11,7 +11,7 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
 		//padding:'15 15 15 15',
 		items:[{        
                 xtype:'container',
-                padding: '0 0 0 200',              
+                padding: '0 0 0 200',
                 defaults:{
                     xtype:'button',
                     style: 'margin: .5em',

@@ -16,18 +16,13 @@ Ext.define('Imobile.view.cobranza.TotalesContainer', {
                 'margin-right': '1px',
                 'text-align': 'center',
                 'font-weight':'bold',
-                'vertical-align': 'middle'  
+                'vertical-align': 'middle'
             }
         },{
             xtype: 'container',
             html: 'Pagado',
             flex: 1,
             itemId: 'pagado',
-/*            items:[{
-                xtype: 'label',
-                itemId: 'pagado',                
-                //docked: 'bottom'
-            }]*/
             style: {
                 background: 'black',
                 'color': 'green',

@@ -48,7 +48,7 @@ Ext.define('Imobile.controller.Main', {
             values = form.getValues();
 
         Ext.data.JsonP.request({
-            url: "http://192.168.15.9:88/iMobile/COK1_CL_UsuarioiMobile/Login",
+            url: "http://25.15.241.121:88/iMobile/COK1_CL_UsuarioiMobile/Login",
             params: {
                 CodigoUsuario: values.usuario,
                 CodigoSociedad: '001',

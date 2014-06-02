@@ -20,11 +20,8 @@ Ext.define('Imobile.view.productos.ProductosView', {
                 //'<h2>{name}</h2>',
                 '</div>',
             '</div>',
-            '</tpl>',
-            //'<div style="clear:both"></div>'
+            '</tpl>'
         ].join(''),
-        //itemTpl: '<div class="img" style="background"></div>',
-        //useSimpleItems: true,
         emptyText: '<div style="margin-top: 20px; text-align: center">No hay productos con esos datos</div>',
         store: 'Productos',
         onItemDisclosure: function (record, listItem, index, e) {

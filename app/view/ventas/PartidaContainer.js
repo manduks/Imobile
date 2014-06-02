@@ -12,14 +12,14 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
             direction: 'vertical',
             directionLock: true
         },
-        layout: 'card',
-        activeItem: 0,
+        layout: 'vbox',
+        //activeItem: 0,
         items: [{
             style:{
                 background: 'gray'
             },
             xtype: 'ordenlist',
-            flex: 5/*,
+            flex: 7/*,
 
             layout: 'fit',
             items: [{

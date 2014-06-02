@@ -516,7 +516,8 @@ Ext.define('Imobile.controller.phone.Main', {
                 CodigoSociedad: me.CodigoSociedad,
                 CodigoDispositivo: me.CodigoDispositivo,
                 Criterio: record.data.CodigoArticulo,
-                Token: me.Token
+                Token: me.Token,
+                cardCode: me.idCliente
             };
 
         store.getProxy().setUrl("http://192.168.15.9:88/iMobile/COK1_CL_Articulo/ObtenerArticuloiMobile");
@@ -560,7 +561,7 @@ Ext.define('Imobile.controller.phone.Main', {
                     CodigoSociedad: me.CodigoSociedad,
                     CodigoDispositivo: me.CodigoDispositivo,
                     Token: me.Token,
-                    CardCode: me.idCliente
+                    CardCode: 'C00001'
                 };
 
                 store.setParams(params);

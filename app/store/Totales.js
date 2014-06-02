@@ -9,7 +9,7 @@ Ext.define('Imobile.store.Totales', {
 
     config: {
         model: 'Imobile.model.Total',
-        autoLoad: true,
+        autoLoad: true
         /*proxy: {
             url: 'http://192.168.15.8:88/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasMobile',
             type: 'jsonp',
@@ -19,6 +19,6 @@ Ext.define('Imobile.store.Totales', {
                 rootProperty: 'Data'
 
             }
-        }*/       
+        }*/
     }
 });

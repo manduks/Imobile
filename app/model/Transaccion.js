@@ -6,18 +6,23 @@
 Ext.define('Imobile.model.Transaccion', {
     extend: 'Ext.data.Model',
     config: {
-        fields: [{
-            name: 'id',
-            type: 'int'
-        },{
-            name: 'CodigoArticulo',
-            type: 'string'
-        }, {
-            name: 'NombreArticulo',
-            type: 'string'
-        },{
-            name: 'cantidad',
-            type: 'int'
-        }]
+        fields: [
+            {
+                name: 'Folio',
+                type: 'string'
+            },
+            {
+                name: 'CodigoCliente',
+                type: 'string'
+            },
+            {
+                name: 'NombreCliente',
+                type: 'string'
+            },
+            {
+                name: 'TipoTransaccion',
+                type: 'int'
+            }
+        ]
     }
 });

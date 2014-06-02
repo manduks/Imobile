@@ -10,8 +10,8 @@ Ext.define('Imobile.store.Monedas', {
     config: {
         model: 'Imobile.model.Moneda',
         autoLoad: true,
-        /*proxy: {
-            url: 'http://192.168.15.8:88/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasMobile',
+        proxy: {
+            url: 'http://25.15.241.121:88/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasiMobile',
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {
@@ -19,13 +19,13 @@ Ext.define('Imobile.store.Monedas', {
                 rootProperty: 'Data'
 
             }
-        }*/
-        data: [
+        }
+        /*data: [
             {CodigoMoneda: '$', NombreMoneda: 'Peso Mexicano'},
             {CodigoMoneda: 'USD', NombreMoneda: 'Dólar Americano'},
             {CodigoMoneda: 'JPN', NombreMoneda: 'Yen Japonés'},
             {CodigoMoneda: '€', NombreMoneda: 'Euro'},
             {CodigoMoneda: 'Q', NombreMoneda: 'Quetzal Guatemalteco'}
-        ]
+        ]*/
     }
 });

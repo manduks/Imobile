@@ -23,11 +23,6 @@ Ext.define('Imobile.view.cobranza.TotalesContainer', {
             html: 'Pagado',
             flex: 1,
             itemId: 'pagado',
-/*            items:[{
-                xtype: 'label',
-                itemId: 'pagado',                
-                //docked: 'bottom'
-            }]*/
             style: {
                 background: 'black',
                 'color': 'green',

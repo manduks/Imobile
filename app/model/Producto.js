@@ -17,9 +17,10 @@ Ext.define('Imobile.model.Producto', {
             type: 'string'
         },{
             name: 'cantidad',
-            type: 'int'
+            type: 'int',
+            defaultValue: 1
         },{
-            name: 'precio',
+            name: 'Precio',
             type: 'double'
         },{
             name: 'moneda',
@@ -43,9 +44,9 @@ Ext.define('Imobile.model.Producto', {
             name: 'existencia',
             type: 'float'
         },{
-            name: 'favorite',
+            name: 'DesplegarEnPanel',
             type: 'boolean',
-            defaultValue: true
+            //defaultValue: true
         },{
             name: 'color',
             type: 'string'

@@ -20,7 +20,8 @@ Ext.define('Imobile.controller.Main', {
             productosView: 'productosview',
             navigationOrden: 'navigationorden',
             totales: 'totalescontainer',
-            listaFacturas: 'facturaslist'
+            listaFacturas: 'facturaslist',
+            ordenContainer: 'ordencontainer'
 
         },
         control: {
@@ -132,7 +133,7 @@ Ext.define('Imobile.controller.Main', {
                 Token: me.Token
             };
 
-        store.getProxy().setUrl("http://192.168.15.9:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile");
+        store.getProxy().setUrl("http://25.15.241.121:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile");
         store.setParams(params);
         store.load();
     }

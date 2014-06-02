@@ -11,7 +11,7 @@ Ext.define('Imobile.store.Clientes', {
         model: 'Imobile.model.Cliente',
         autoLoad: true,
         proxy: {
-            url: "http://192.168.15.9:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",
+            url: "http://25.15.241.121:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {

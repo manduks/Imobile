@@ -30,7 +30,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 tap: 'onCancelar'
             },
             'agregarproductosform #cantidad': {
-             change: 'actualizaCantidad'
+             keyup: 'actualizaCantidad'
              },
             'clienteslist #busca': {
                 keyup: 'buscaCliente'
@@ -80,6 +80,9 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'opcionesorden #terminar': {
                 activate: 'onTerminarOrden'
+            },
+            'clientecontainer #guardar':{
+                tap: 'guardaDatosDeCliente'
             },
             'editarpedidoform #moneda': {
                 focus: 'muestraMonedas'
@@ -170,15 +173,22 @@ Ext.define('Imobile.controller.phone.Main', {
         }
     },
 
+    /**
+    * Guarda el código de dirección de la dirección seleccionada, ya sea de entrega o fiscal.
+    * @param list Ésta lista
+    * @param index El índice de la dirección seleccionada
+    * @param target El elemento tapeado
+    * @param record El record asociado al ítem.
+    */
     seleccionaDireccion: function (list, index, target, record) {
         var me = this,
             view = me.getMain().getActiveItem();
 
-        if (me.entrega) {
-            var direccionEntrega = record.data;
+        if (me.entrega) {            
+            me.direccionEntrega = record.data.Colonia;
             me.mandaMensaje('Dirección de entrega', 'Dirección de entrega seleccionada'); // mensajes temporales
         } else {
-            var direccionFiscal = record.data;
+            me.direccionFiscal = record.data.Ciudad;
             me.mandaMensaje('Dirección fiscal', 'Dirección fiscal seleccionada');
         }
 
@@ -223,15 +233,26 @@ Ext.define('Imobile.controller.phone.Main', {
         });
     },
 
+    
+    /**
+    * Determina qué hacer al momento de cambiar el ítem del navigationorden:
+    *   - Cliente: Obtiene los datos del cliente desde el JSON y llena las direcciones asignando por defecto la primera que aparece.
+                   Aparece el botón Back y desaparece Agregar.
+    *   - Editar: Establece valores para el formulario de editar pedido aparece el botón Back y desaparece Agregar.
+    * @param tabPanel Este TabPanel
+    * @param value El nuevo ítem
+    * @param oldValue El ítem anterior
+    */
     cambiaItem: function (tabPanel, value, oldValue) {
         var me = this,
-            view = me.getMain().getActiveItem();
-
-        view.getNavigationBar().down('#agregarProductos').show();
+            view = me.getMain().getActiveItem(),
+            boton = view.getNavigationBar().down('#agregarProductos');        
 
         if (value.xtype == 'clientecontainer') {
 
             //me.ponParametros('Clientes', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, "", me.Token);
+
+            boton.setText('< Back').show();
 
             var store = Ext.getStore('Clientes'),
 
@@ -243,21 +264,33 @@ Ext.define('Imobile.controller.phone.Main', {
                     Token: me.Token
                 };
 
-            store.getProxy().setUrl("http://192.168.15.9:88/iMobile/COK1_CL_Socio/ObtenerSocioiMobile");
+            store.getProxy().setUrl("http://" + me.dirIP + "/iMobile/COK1_CL_Socio/ObtenerSocioiMobile");
             store.setParams(params);
             store.load({
                 callback: function (record, operation) {
                     var form = value.down('clienteform'),
                         direcciones = Ext.getStore('Direcciones');
 
-                    direcciones.setData(record[0].data.Direcciones);
                     form.setValues(record[0].data);
+
+                    direcciones.setData(record[0].data.Direcciones);
+                    direcciones.clearFilter();
+                    direcciones.filter('TipoDireccion', 'B');
+                    me.direccionEntrega = direcciones.getAt(0).data.Calle; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una variable global.
+                    direcciones.clearFilter();
+                    direcciones.filter('TipoDireccion', 'S');
+                    me.direccionFiscal = direcciones.getAt(0).data.Calle; // Se obtiene el codigo de la direccion fiscal y se lo asignamos a una variable global.
                 }
             });
         }
 
         if (value.xtype == 'editarpedidoform') {
             value.setValues(me.traeCliente());
+            boton.setText('< Back').show();
+        }
+
+        if (value.xtype == 'partidacontainer'){
+            boton.setText('Agregar').show();
         }
     },
 
@@ -581,7 +614,8 @@ Ext.define('Imobile.controller.phone.Main', {
     * @param newValue El nuevo valor
     * @param oldValue El valor original
     */
-    actualizaCantidad: function(numberField, newValue, oldValue){
+    //actualizaCantidad: function(numberField, newValue, oldValue){
+        actualizaCantidad: function(numberField){
         var me = this,
             view = me.getMain().getActiveItem(),
             valoresForm = view.getActiveItem().getValues();
@@ -589,6 +623,15 @@ Ext.define('Imobile.controller.phone.Main', {
         view.getActiveItem().setValues({                        
             importe: valoresForm.precioConDescuento * newValue
         });
+    },
+
+    /**
+    * Manda el codigo de las direcciones tanto de entrega como fiscal al Backend
+    */
+    guardaDatosDeCliente: function (button){
+        var me = this;
+        
+        me.mandaMensaje('Códigos de dirección', 'Entrega: ' + me.direccionEntrega + '\nFiscal: ' + me.direccionFiscal);
     },
 
     onOpcionesCliente: function (t, index, target, record, e) {
@@ -669,25 +712,48 @@ Ext.define('Imobile.controller.phone.Main', {
         });
     },
 
-    onAgregarPartida: function () {
+    
+    /**
+    * Determina si regresa a productosorden o a partidacontainer dependiendo del ítem activo.
+    * @param button Este botón.
+    */
+    onAgregarPartida: function (button) {
         var me = this,
-            view = me.getMain().getActiveItem();
+            view = me.getMain().getActiveItem(),
+            navigationview = button.up('navigationorden'),
+            itemActivo = navigationview.getActiveItem().getActiveItem();
+
+            console.log(itemActivo.xtype);
 
         //me.ponParametros('Productos', '1', '001', '004', '12345', "6VVcR7brnB4=");
         //me.ponParametros('Productos', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, me.Contrasenia, me.Token);
-        me.ponParametros('Productos', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, "", me.Token);
+        me.ponParametros('Productos', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, "", me.Token);        
 
-        view.push({
-            xtype: 'productosorden'
-        });
+      if (itemActivo.isXType('partidacontainer')){
+            //navigationview.getActiveItem().setActiveItem(0);
+            //view.getNavigationBar().down('#agregarProductos').show();
+            view.push({
+                xtype: 'productosorden'
+            });
 
-        view.getNavigationBar().down('#agregarProductos').hide()
+            view.getNavigationBar().down('#agregarProductos').hide()
+        } else {
+            navigationview.getActiveItem().setActiveItem(0);
+        }
     },
 
-    onPopNavigationOrden: function (t, v, e) {
+    /**
+    * Al dispararse el evento pop de navigationorden muestra el botón agregarProductos si el ítem activo es 
+    * clientecontainer o editarpedidoform, esto sucede cuando se selecciona la moneda o la dirección.
+    * @param t This navigationview
+    * @param v La vista que ha sido popeada    
+    */
+    onPopNavigationOrden: function (t, v) {
         var me = this,
             view = me.getMain().getActiveItem(),
             itemActivo = t.getActiveItem().getActiveItem();
+
+
         //console.log(view.getActiveItem().isXType('ordenlist'));
         //console.log(t.getActiveItem().getActiveItem().xtype);
 
@@ -697,9 +763,9 @@ Ext.define('Imobile.controller.phone.Main', {
          view.getNavigationBar().down('#agregarProductos').show()
          }*/
 
-        /*            if(itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')){
-         view.getNavigationBar().down('#agregarProductos').show();
-         }*/
+        if(itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')){
+             view.getNavigationBar().down('#agregarProductos').show();
+        }
 
         /*        if (v.getItemId() != 'principal') {
          view.getNavigationBar().down('#agregarProductos').hide()
@@ -734,6 +800,8 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this;
 
         me.getMain().setActiveItem(1);
+        me.getMain().getActiveItem().pop();
+        me.onBackMenu();
     },
 
     //// Control de cobranza

@@ -758,6 +758,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
   "Imobile.model.Total": [],
+  "Imobile.model.Transaccion": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
   "Imobile.store.Clientes": [],
@@ -769,6 +770,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
   "Imobile.store.Totales": [],
+  "Imobile.store.Transacciones": [],
   "Imobile.view.Main": [],
   "Imobile.view.clientes.ClientesList": [],
   "Imobile.view.clientes.OpcionClienteList": [],
@@ -805,7 +807,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.view.ventas.OrdenContainer": [],
   "Imobile.view.ventas.OrdenList": [],
   "Imobile.view.ventas.PartidaContainer": [],
-  "Imobile.view.ventas.TplDirecciones": []
+  "Imobile.view.ventas.TplDirecciones": [],
+  "Imobile.view.ventas.TransaccionList": []
 });
 Ext.ClassManager.addNameAliasMappings({
   "Ext.AbstractComponent": [],
@@ -1772,6 +1775,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
   "Imobile.model.Total": [],
+  "Imobile.model.Transaccion": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
   "Imobile.store.Clientes": [],
@@ -1783,6 +1787,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
   "Imobile.store.Totales": [],
+  "Imobile.store.Transacciones": [],
   "Imobile.view.Main": [
     "widget.main"
   ],
@@ -1889,5 +1894,8 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.view.ventas.TplDirecciones": [
     "widget.tpldirecciones"
+  ],
+  "Imobile.view.ventas.TransaccionList": [
+    "widget.transaccionlist"
   ]
 });

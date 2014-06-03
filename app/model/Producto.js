@@ -17,8 +17,8 @@ Ext.define('Imobile.model.Producto', {
             type: 'string'
         },{
             name: 'cantidad',
-            type: 'int',
-            defaultValue: 1
+            type: 'float',
+            defaultValue: 0
         },{
             name: 'Precio',
             type: 'double'

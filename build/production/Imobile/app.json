@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 {"id":"02e60a7e-c9f2-4cb8-9899-4cb51209d057","js":[{"path":"app.js","update":"delta","version":"a2eaa3d59d19c153108b520cce28f3239285b888"}],"css":[{"path":"resources/css/app.css","update":"delta","version":"16daa773801759ee6e7298171a4cd4697a15344e"}]}
 =======
 {"id":"02e60a7e-c9f2-4cb8-9899-4cb51209d057","js":[{"path":"app.js","update":"delta","version":"d6108a552e0d9e4f40d729a9216efaacc0a4fee3"}],"css":[{"path":"resources/css/app.css","update":"delta","version":"0c5eba9b98fe68724fb8d86f54d611898f33f548"}]}
 >>>>>>> a9ed34faf5bdd62e4d1b9956ec346c616ea1f13d
+=======
+{"id":"02e60a7e-c9f2-4cb8-9899-4cb51209d057","js":[{"path":"app.js","update":"delta","version":"6f9a9d31210bc22949febbe7a89dfc536ee39f3b"}],"css":[{"path":"resources/css/app.css","update":"delta","version":"a54721d4140538929104b57cfc9dfe0c7999ff85"}]}
+>>>>>>> 13d60bca191129cc327fc1e24e1878fe61011a49

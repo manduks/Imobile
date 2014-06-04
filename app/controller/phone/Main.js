@@ -253,7 +253,9 @@ Ext.define('Imobile.controller.phone.Main', {
 
             //me.ponParametros('Clientes', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, "", me.Token);
 
-            boton.setText('< Back').show();
+            boton.setText('Back').show();
+            boton.setUi('back');
+
 
             var store = Ext.getStore('Clientes'),
 
@@ -288,11 +290,13 @@ Ext.define('Imobile.controller.phone.Main', {
 
         if (value.xtype == 'editarpedidoform') {
             value.setValues(me.traeCliente());
-            boton.setText('< Back').show();
+            boton.setText('Back').show();
+            boton.setUi('back');
         }
 
         if (value.xtype == 'partidacontainer') {
             boton.setText('Agregar').show();
+            boton.setUi('normal');
         }
     },
 

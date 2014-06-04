@@ -16,7 +16,7 @@ Ext.define('Imobile.view.ventas.OrdenList', {
             '<p style="margin: 0px;" class="total-product"><b>Total: {importe}</b></p>',
             '</span></div>'].join(''),
         store: 'Ordenes',
-        emptyText: '<div style="margin-top: 20px; text-align: center">No hay Productos en el Orden</div>'
+        emptyText: '<div style="float: left;"><div id="cliente_id" style="margin-left: 34px;"></div><div id="codigo_id"></div></div>'
     },
 
     onItemDisclosure: function (record, listItem, index, e) {

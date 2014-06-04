@@ -4,12 +4,11 @@
  * Este es el store para los clientes
  */
 Ext.define('Imobile.store.Clientes', {
-    extend: 'Ext.data.Store',
+    extend: 'Imobile.core.data.Store',
     requires: ['Imobile.model.Cliente'],
 
     config: {
         model: 'Imobile.model.Cliente',
-        autoLoad: true,
         proxy: {
             url: "http://25.15.241.121:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",
             type: 'jsonp',

@@ -10,7 +10,6 @@ Ext.define('Imobile.store.Transacciones', {
     config: {
         model:'Imobile.model.Transaccion',
         proxy: {
-            //url: 'http://192.168.15.9:88//iMobile/COK1_CL_Articulo/ObtenerListaArticulosiMobile',
             url: "http://25.15.241.121:88/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile",
             type: 'jsonp',
             callbackKey: 'callback',

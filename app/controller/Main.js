@@ -5,6 +5,9 @@ Ext.define('Imobile.controller.Main', {
     CodigoDispositivo: undefined,
     Contrasenia: undefined,
     Token: undefined,
+    direccionEntrega: undefined,
+    direccionFiscal: undefined,
+    dirIP: '25.15.241.121:88',    
 
     config: {
         refs: {
@@ -21,7 +24,8 @@ Ext.define('Imobile.controller.Main', {
             navigationOrden: 'navigationorden',
             totales: 'totalescontainer',
             listaFacturas: 'facturaslist',
-            ordenContainer: 'ordencontainer'
+            ordenContainer: 'ordencontainer',
+            partidaContainer: 'partidacontainer'
 
         },
         control: {
@@ -35,7 +39,7 @@ Ext.define('Imobile.controller.Main', {
                 tap: 'onAgregarPartida'
             },
             'navigationorden': {
-                //pop: 'onPopNavigationOrden',
+                pop: 'onPopNavigationOrden',
                 back: 'onBack'
             },
             'menu': {
@@ -49,7 +53,7 @@ Ext.define('Imobile.controller.Main', {
             values = form.getValues();
 
         Ext.data.JsonP.request({
-            url: "http://25.15.241.121:88/iMobile/COK1_CL_UsuarioiMobile/Login",
+            url: "http://" + me.dirIP + "/iMobile/COK1_CL_UsuarioiMobile/Login",
             params: {
                 CodigoUsuario: values.usuario,
                 CodigoSociedad: '001',
@@ -110,7 +114,8 @@ Ext.define('Imobile.controller.Main', {
             view = me.getMain().getActiveItem(),
             itemActivo = navigationview.getActiveItem().getActiveItem();
 
-        console.log(itemActivo.isXType('clientecontainer'));
+        me.getPartidaContainer().down('list').emptyTextCmp.show()
+        //console.log(itemActivo.isXType('clientecontainer'));
 
         /*        if(itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')){
          navigationview.getActiveItem().setActiveItem(0);
@@ -133,7 +138,7 @@ Ext.define('Imobile.controller.Main', {
                 Token: me.Token
             };
 
-        store.getProxy().setUrl("http://25.15.241.121:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile");
+        store.getProxy().setUrl("http://" + me.dirIP + "/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile");
         store.setParams(params);
         store.load();
     }

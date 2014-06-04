@@ -62,6 +62,7 @@ Ext.define('Imobile.controller.Main', {
             },
             callbackKey: 'callback',
             success: function (response) {
+                console.log(response);
                 var procesada = response.Procesada
 
                 if (procesada) {
@@ -70,15 +71,7 @@ Ext.define('Imobile.controller.Main', {
                     localStorage.setItem("CodigoSociedad", '001');
                     localStorage.setItem("CodigoDispositivo", '004');
                     localStorage.setItem("Contrasenia", response.Usuario.Contrasenia);
-
                     me.getMain().setActiveItem(1);
-
-                    me.CodigoUsuario = localStorage.getItem("CodigoUsuario");
-                    me.CodigoSociedad = localStorage.getItem("CodigoSociedad");
-                    me.CodigoDispositivo = localStorage.getItem("CodigoDispositivo");
-                    me.Contrasenia = localStorage.getItem("Contrasenia");
-                    me.Token = localStorage.getItem("Token");
-
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }

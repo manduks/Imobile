@@ -9,13 +9,12 @@ Ext.define('Imobile.core.data.Store', {
         autoLoad: false,
         listeners: {
             beforeload: function (store, operation, ops) {
-                store.setParams({
+                store.getProxy().setExtraParams({
                     Token: localStorage.getItem("Token"),
-                    CodigoUsuario: localStorage.getItem("CodigoUsario"),
+                    CodigoUsuario: localStorage.getItem("CodigoUsuario"),
                     CodigoSociedad: localStorage.getItem("CodigoSociedad"),
                     CodigoDispositivo: localStorage.getItem("CodigoDispositivo")
                 });
-                console.log(store);
             }
         }
     }

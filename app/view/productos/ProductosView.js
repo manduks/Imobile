@@ -14,7 +14,7 @@ Ext.define('Imobile.view.productos.ProductosView', {
         itemTpl: [
             '<tpl for=".">',
                 '<tpl if="cantidad &gt; 0">',
-                    '<div class= "ovalo"></div>',
+                    '<div class= "ovalo" {cantidad}></div>',
                 '</tpl>',
             '<div class="product-list" style="background-color: {color}">',
                 '<div class="container"> ',

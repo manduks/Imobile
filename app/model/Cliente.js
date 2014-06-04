@@ -31,7 +31,7 @@ Ext.define('Imobile.model.Cliente', {
             name: 'LimiteCredito',
             type: 'string'
         },{
-            name: 'saldo',
+            name: 'Saldo',
             type: 'double'
         },{
             name: 'Direcciones',

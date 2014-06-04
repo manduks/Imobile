@@ -58,7 +58,7 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                         label:'Nombre de Cliente'
                     },{
                         xtype:'numberfield',
-                        name:'limite',
+                        name:'LimiteCredito',
                         label:'Límite de Crédito'
                     },{
                         xtype:'textfield',
@@ -66,11 +66,11 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                         label:'Condición de Crédito'
                     },{
                         xtype:'numberfield',
-                        name:'saldo',
+                        name:'Saldo',
                         label:'Saldo'
                     },{
                         xtype:'textfield',
-                        name:'precios',
+                        name:'ListaPrecios',
                         label:'Lista de Precios'
                     },{
                         xtype:'textfield',

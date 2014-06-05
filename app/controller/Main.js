@@ -72,7 +72,7 @@ Ext.define('Imobile.controller.Main', {
                     localStorage.setItem("CodigoDispositivo", '004');
                     localStorage.setItem("NombreUsuario", response.Usuario.Nombre);
                     localStorage.setItem("Contrasenia", response.Usuario.Contrasenia);
-                    localStorage.setItem("FolioInterno", localStorage.getItem("FolioInterno"));
+                    localStorage.setItem("FolioInterno", response.ConfiguracionDispositivo.FolioOrden);
                     me.getMain().setActiveItem(1);
                     me.almacenes = response.ConfiguracionDispositivo.Almacenes;
                 } else {

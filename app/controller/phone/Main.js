@@ -272,7 +272,6 @@ Ext.define('Imobile.controller.phone.Main', {
         }
 
         if (value.xtype == 'editarpedidoform') {
-            console.log(clienteSeleccionado)
             value.setValues(clienteSeleccionado);
             boton.setText('Back').show();
             boton.setUi('back');
@@ -871,13 +870,13 @@ Ext.define('Imobile.controller.phone.Main', {
 
             params["Orden.TotalDocumento"] = parseFloat(total).toFixed(2);
 
-            console.log(params);
+            //console.log(params);
             Ext.data.JsonP.request({
                 url: "http://25.15.241.121:88/iMobile/COK1_CL_OrdenVenta/AgregarOrdenMobile",
                 params: params,
                 callbackKey: 'callback',
                 success: function (response) {
-                    console.log(response);
+                    //console.log(response);
                     me.getMain().setActiveItem(1);
                     store.clearData();
                     if (response.Procesada) {
@@ -994,7 +993,6 @@ Ext.define('Imobile.controller.phone.Main', {
             tax = 0;
 
         Ext.Array.forEach(items, function (item, index) {
-            console.log(item);
             precioTotal += item.get('Precio') * item.get('cantidad');
             descuentoTotal += item.get('descuento') * item.get('cantidad');
             tax += item.get('totalDeImpuesto');

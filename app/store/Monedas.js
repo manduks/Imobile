@@ -4,7 +4,7 @@
  * Este es el store para las monedas
  */
 Ext.define('Imobile.store.Monedas', {
-    extend: 'Ext.data.Store',
+    extend: 'Imobile.core.data.Store',
     requires: ['Imobile.model.Moneda'],
 
     config: {
@@ -18,6 +18,9 @@ Ext.define('Imobile.store.Monedas', {
                 type: 'json',
                 rootProperty: 'Data'
 
+            },
+            extraParams: {
+                type: 'json'
             }
         }
         /*data: [

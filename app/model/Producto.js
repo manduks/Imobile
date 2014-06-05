@@ -41,16 +41,20 @@ Ext.define('Imobile.model.Producto', {
             name: 'almacen',
             type: 'string'
         },{
-            name: 'existencia',
+            name: 'Disponible',
             type: 'float'
         },{
             name: 'DesplegarEnPanel',
+            type: 'boolean'            
+        },{
+            name: 'ListaPrecios',
+            type: 'array'
+        },{
+            name: 'SujetoImpuesto',
             type: 'boolean'
-            //defaultValue: true
         },{
             name: 'color',
-            type: 'string'
-            //defaultValue: 'blue'
+            type: 'string'            
         }]
     }
 });

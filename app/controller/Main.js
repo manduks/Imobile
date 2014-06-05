@@ -63,7 +63,6 @@ Ext.define('Imobile.controller.Main', {
             },
             callbackKey: 'callback',
             success: function (response) {
-                console.log(response);
                 var procesada = response.Procesada
 
                 if (procesada) {

@@ -10,6 +10,8 @@ Ext.define('Imobile.controller.phone.Main', {
     pendiente: 0,
     clienteSeleccionado: undefined,
     CodigoAlmacen: undefined,
+    codigoImpuesto: undefined,
+    tasaImpuesto: 0,
 
     config: {
         control: {
@@ -186,26 +188,27 @@ Ext.define('Imobile.controller.phone.Main', {
      */
     seleccionaDireccion: function (list, index, target, record) {
         var me = this,
-            view = me.getMain().getActiveItem();
+            view = me.getMain().getActiveItem();            
 
         if (me.entrega) {
-            me.direccionEntrega = record.data.Colonia;
+            me.direccionEntrega = record.data.CodigoDireccion;
             me.mandaMensaje('Dirección de entrega', 'Dirección de entrega seleccionada'); // mensajes temporales
         } else {
-            me.direccionFiscal = record.data.Ciudad;
+            me.direccionFiscal = record.data.CodigoDireccion;
             me.mandaMensaje('Dirección fiscal', 'Dirección fiscal seleccionada');
+            me.codigoImpuesto = record.data.CodigoImpuesto;
+            me.tasaImpuesto = record.data.Tasa;
         }
-
         view.pop();
     },
 
     seleccionaMoneda: function (list, index, target, record) {
         var me = this,
             view = me.getMain().getActiveItem();
-        moneda = record.data.NombreMoneda,
+        moneda = record.data.CodigoMoneda,
             tabOpciones = me.getOpcionesOrden(),
             form = tabOpciones.down('editarpedidoform');
-        form.setValues({NombreMoneda: moneda});
+        form.setValues({CodigoMoneda: moneda});
 
         view.pop();
     },
@@ -255,21 +258,22 @@ Ext.define('Imobile.controller.phone.Main', {
     cambiaItem: function (tabPanel, value, oldValue) {
         var me = this,
             view = me.getMain().getActiveItem(),
-            boton = view.getNavigationBar().down('#agregarProductos');
+            boton = view.getNavigationBar().down('#agregarProductos'),
+            clienteSeleccionado = me.getOpcionCliente().clienteSeleccionado;
 
         if (value.xtype == 'clientecontainer') {
             boton.setText('Back').show();
             boton.setUi('back');
 
             var form = value.down('clienteform'),
-                clienteSeleccionado = me.getOpcionCliente().clienteSeleccionado,
                 direcciones = Ext.getStore('Direcciones');
 
             form.setValues(clienteSeleccionado);
         }
 
         if (value.xtype == 'editarpedidoform') {
-            value.setValues(me.traeCliente());
+            console.log(clienteSeleccionado)
+            value.setValues(clienteSeleccionado);
             boton.setText('Back').show();
             boton.setUi('back');
         }
@@ -498,18 +502,25 @@ Ext.define('Imobile.controller.phone.Main', {
                     xtype: 'opcionclientelist',
                     title: me.titulo,
                     clienteSeleccionado: record.data
-                });
+                });                
 
                 var clienteSeleccionado = me.getOpcionCliente().clienteSeleccionado,
                     direcciones = Ext.getStore('Direcciones');
 
                 direcciones.setData(clienteSeleccionado.Direcciones);
-                direcciones.clearFilter();
-                direcciones.filter('TipoDireccion', 'B');
-                me.direccionEntrega = direcciones.getAt(0).data.Calle; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una variable global.
-                direcciones.clearFilter();
                 direcciones.filter('TipoDireccion', 'S');
-                me.direccionFiscal = direcciones.getAt(0).data.Calle; // Se obtiene el codigo de la direccion fiscal y se lo asignamos a una variable global.
+
+                if(direcciones.getCount() > 0){
+                    me.direccionFiscal = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion fiscal y se lo asignamos a una variable global.
+                    me.codigoImpuesto = direcciones.getAt(0).data.CodigoImpuesto;
+                    me.tasaImpuesto = direcciones.getAt(0).data.Tasa;
+                    direcciones.clearFilter();
+                    direcciones.filter('TipoDireccion', 'B');
+                    me.direccionEntrega = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una variable global.                                        
+                } else {
+                    me.mandaMensaje('Sin dirección fiscal','Este cliente no cuenta con dirección fiscal, solicite una al SAP.');
+                    view.pop();
+                }
 
                 break;
             case 'cobranza':
@@ -534,10 +545,11 @@ Ext.define('Imobile.controller.phone.Main', {
      */
     onAgregarProducto: function (list, index, target, record) {
         var me = this,
-            view = me.getMain().getActiveItem(),
+            view = me.getMain().getActiveItem(),            
             valores = record.data,
             valoresForm,
-            almacenes = me.almacenes;
+            almacenes = me.almacenes,
+            desc;
 
 
         Ext.Array.forEach(almacenes,function(item, index){
@@ -554,50 +566,68 @@ Ext.define('Imobile.controller.phone.Main', {
             xtype: 'agregarproductosform'
         });
 
+        var form = view.getActiveItem();
+        form.setValues(valores);
 
-        // var store = Ext.getStore('Productos'),
-
-        //     params = {
-        //         CodigoUsuario: me.CodigoUsuario,
-        //         CodigoSociedad: me.CodigoSociedad,
-        //         CodigoDispositivo: me.CodigoDispositivo,
-        //         Criterio: record.data.CodigoArticulo,
-        //         Token: me.Token,
-        //         CardCode: me.idCliente
-        //     };
-
-        // store.getProxy().setUrl("http://192.168.15.9:88/iMobile/COK1_CL_Articulo/ObtenerArticuloiMobile");
-        // store.setParams(params);
-        // store.load({
-        //     callback: function (record, operation) {
-        //         var valores = record[0].data;
-        //         /*var form = value.down('clienteform'),
-        //          direcciones = Ext.getStore('Direcciones');
-
-        //          direcciones.setData(record[0].data.Direcciones);
-        //          form.setValues(record[0].data);*/
-        //         view.getActiveItem().setValues(valores); //agregarproductoform
-        //     }
-        // });
-
-        view.getActiveItem().setValues(valores);
-
-        view.getActiveItem().setValues({
-            precioConDescuento: valores.Precio - valores.descuento,
+        //Se establece el valor de cantidad, precio y moneda
+        form.setValues({
+            Precio: valores.ListaPrecios[0].Precio,
+            moneda: valores.ListaPrecios[0].CodigoMoneda,
             cantidad: 1
         });
 
-        valoresForm = view.getActiveItem().getValues();
+        valoresForm = form.getValues();
 
-        view.getActiveItem().setValues({
-            importe: valoresForm.precioConDescuento * valoresForm.cantidad
-        });
+        //Se calcula descuento
+        Ext.data.JsonP.request({
+            url: "http://25.15.241.121:88/iMobile/COK1_CL_Consultas/ObtenerPrecioEspecialiMobile",
+            params: {
+                CodigoUsuario: localStorage.getItem("CodigoUsuario"),
+                CodigoSociedad: localStorage.getItem("CodigoSociedad"),
+                CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
+                Token: localStorage.getItem("Token"),
+                ItemCode: valores.CodigoArticulo,
+                CardCode: me.idCliente,
+                ListaPrecio: valores.ListaPrecios[0].CodigoLista,
+                Cantidad: valoresForm.cantidad
 
-        //if (list.isXType('ordenlist')) { // Para editar pedido
-        if (valores.cantidad > 0) {
-            view.getActiveItem().down('fieldset').setTitle('Editar producto');
-            view.getNavigationBar().down('#agregarProductos').hide();
-        }
+            },
+            callbackKey: 'callback',
+            success: function (response) {
+                var procesada = response.Procesada,
+                    desc = response.Data[0] * 100 / valoresForm.Precio;
+                if (procesada) {
+                    form.setValues({
+                        descuento: desc
+                    });
+
+                     //Se calcula precio con descuento
+                        form.setValues({
+                            precioConDescuento: valoresForm.Precio - desc
+                        });        
+
+
+                        //Se calcula total de impuesto
+                        form.setValues({
+                            totalDeImpuesto: valoresForm.precioConDescuento * me.tasaImpuesto/100
+                        });        
+
+                        //Se calcula importe
+                        form.setValues({
+                            importe: valoresForm.precioConDescuento * valoresForm.cantidad
+                        });
+
+                        //if (list.isXType('ordenlist')) { // Para editar pedido
+                        if (valores.cantidad > 0) {
+                            form.down('fieldset').setTitle('Editar producto');
+                            view.getNavigationBar().down('#agregarProductos').hide();
+                        }
+                                              
+                                } else {
+                                    Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
+                                }
+                            }
+                        }); 
 
     },
 
@@ -618,7 +648,7 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     /**
-     * Manda el codigo de las direcciones tanto de entrega como fiscal al Backend
+     * Manda un mensaje con el codigo de las direcciones tanto de entrega como fiscal.
      */
     guardaDatosDeCliente: function (button) {
         var me = this;
@@ -710,19 +740,24 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this,
             view = me.getMain().getActiveItem(),
             navigationview = button.up('navigationorden'),
-            itemActivo = navigationview.getActiveItem().getActiveItem();
-
-
-        //me.ponParametros('Productos', '1', '001', '004', '12345', "6VVcR7brnB4=");
-        //me.ponParametros('Productos', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, me.Contrasenia, me.Token);
-        me.ponParametros('Productos', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, "", me.Token);
+            itemActivo = navigationview.getActiveItem().getActiveItem(),
+            store = Ext.getStore('Productos');
 
         if (itemActivo.isXType('partidacontainer')) {
             //navigationview.getActiveItem().setActiveItem(0);
             //view.getNavigationBar().down('#agregarProductos').show();
+
+            var params = {
+                CardCode: me.idCliente
+            };
+
+            store.setParams(params);
+
             view.push({
                 xtype: 'productosorden'
-            });
+            })  
+
+            store.load();          
 
             view.getNavigationBar().down('#agregarProductos').hide()
         } else {
@@ -959,14 +994,12 @@ Ext.define('Imobile.controller.phone.Main', {
             view = me.getMain().getActiveItem(),
             value = view.down('agregarproductosform').getValues();
 
-        console.log(value.NombreAlmacen);
         view.push({
             xtype: 'almacenlist',
             codigoArticulo: value.CodigoArticulo
         });
         view.down('almacenlist').setData(me.almacenes);
 
-        console.log(view.down('almacenlist'));
     },
 
     onSeleccionarAlmacen: function (t, index, target, record, e, eOpts){
@@ -988,7 +1021,7 @@ Ext.define('Imobile.controller.phone.Main', {
             callbackKey: 'callback',
             success: function (response) {
                 var valor =  {
-                    existencia: response.Data[0],
+                    Disponible: response.Data[0],
                     NombreAlmacen: record.get('NombreAlmacen')
                 };
                 view.down('agregarproductosform').setValues(valor);

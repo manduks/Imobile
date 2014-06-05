@@ -42,6 +42,15 @@ Ext.define('Imobile.model.Direccion', {
         },{
             name: 'TipoDireccion', //La B es la dirección de entrega y S es la dirección fiscal
             type: 'string'
+        },{
+            name: 'CodigoImpuesto',
+            type: 'string',
+        },{
+            name: 'Tasa',
+            type: 'string'
+        },{
+            name: 'CodigoDireccion',
+            type: 'string'
         }]
     }
 });

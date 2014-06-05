@@ -62,7 +62,7 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                         label:'Límite de Crédito'
                     },{
                         xtype:'textfield',
-                        name:'condicion',
+                        name:'CondicionPago',
                         label:'Condición de Crédito'
                     },{
                         xtype:'numberfield',
@@ -70,11 +70,11 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                         label:'Saldo'
                     },{
                         xtype:'textfield',
-                        name:'ListaPrecios',
+                        name:'NombreListaPrecio',
                         label:'Lista de Precios'
                     },{
                         xtype:'textfield',
-                        name:'vendedor',
+                        name:'CodigoVendedor',
                         label:'Vendedor'
                     },{
                         xtype:'numberfield',
@@ -82,7 +82,7 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                         label:'Descuento'
                     },{
                         xtype:'textfield',
-                        name:'NombreMoneda',
+                        name:'CodigoMoneda',
                         label:'Moneda',
                         disabled: false,
                         itemId: 'moneda',

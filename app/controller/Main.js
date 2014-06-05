@@ -7,7 +7,8 @@ Ext.define('Imobile.controller.Main', {
     Token: undefined,
     direccionEntrega: undefined,
     direccionFiscal: undefined,
-    dirIP: '25.15.241.121:88',    
+    dirIP: '25.15.241.121:88',
+    almacenes: undefined,
 
     config: {
         refs: {
@@ -72,7 +73,9 @@ Ext.define('Imobile.controller.Main', {
                     localStorage.setItem("CodigoDispositivo", '004');
                     localStorage.setItem("NombreUsuario", response.Usuario.Nombre);
                     localStorage.setItem("Contrasenia", response.Usuario.Contrasenia);
+                    localStorage.setItem("FolioInterno", localStorage.getItem("FolioInterno"));
                     me.getMain().setActiveItem(1);
+                    me.almacenes = response.ConfiguracionDispositivo.Almacenes;
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }
@@ -109,7 +112,7 @@ Ext.define('Imobile.controller.Main', {
             itemActivo = navigationview.getActiveItem().getActiveItem();
 
         var store = Ext.getStore('Ordenes');
-        if (store.getData().items.length <= 2) {
+        if (store.getData().items.length <= 1) {
             me.getPartidaContainer().down('list').emptyTextCmp.show();
         } else {
             me.getPartidaContainer().down('list').emptyTextCmp.hide();

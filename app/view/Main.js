@@ -41,6 +41,7 @@ Ext.define('Imobile.view.Main', {
         'Imobile.view.cobranza.TotalAPagarContainer',
         'Imobile.view.cobranza.TotalAPagarList',
         'Imobile.view.cobranza.TotalesContainer',
-        'Imobile.view.ventas.TransaccionList'
+        'Imobile.view.ventas.TransaccionList',
+        'Imobile.view.ventas.AlmacenList'
     ]
 });

@@ -761,21 +761,23 @@ Ext.define('Imobile.controller.phone.Main', {
             //view.getNavigationBar().down('#agregarProductos').show();
 
             var params = {
-                CardCode: me.idCliente
+                CardCode: me.idCliente,
+                page: 1
             };
 
             store.setParams(params);
 
             view.push({
                 xtype: 'productosorden'
-            })  
+            });
 
-            store.load();          
+            store.load();
 
             view.getNavigationBar().down('#agregarProductos').hide()
         } else {
             navigationview.getActiveItem().setActiveItem(0);
         }
+
     },
 
     /**
@@ -857,7 +859,8 @@ Ext.define('Imobile.controller.phone.Main', {
 
             localStorage.setItem("FolioInterno", Folio);
             Ext.Array.forEach(array, function (item, index, allItems) {
-                total += item.get('precioConDescuento')
+                console.log(item);
+                total += (item.get('precioConDescuento') * item.get('cantidad')) + item.get('totalDeImpuesto');
 
                 params["Orden.Partidas[" + index + "].CodigoArticulo"] = item.get('CodigoArticulo');
                 params["Orden.Partidas[" + index + "].Cantidad"] = item.get('cantidad');
@@ -865,12 +868,12 @@ Ext.define('Imobile.controller.phone.Main', {
                 params["Orden.Partidas[" + index + "].CodigoAlmacen"] = me.CodigoAlmacen;
                 params["Orden.Partidas[" + index + "].Linea"] = index;
                 params["Orden.Partidas[" + index + "].Moneda"] = item.get('moneda');
-                params["Orden.Partidas[" + index + "].Importe"] = item.get('importe');
+                params["Orden.Partidas[" + index + "].Importe"] = item.get('precioConDescuento') * item.get('cantidad');
             });
 
             params["Orden.TotalDocumento"] = parseFloat(total).toFixed(2);
 
-            //console.log(params);
+            console.log(params);
             Ext.data.JsonP.request({
                 url: "http://25.15.241.121:88/iMobile/COK1_CL_OrdenVenta/AgregarOrdenMobile",
                 params: params,
@@ -880,7 +883,7 @@ Ext.define('Imobile.controller.phone.Main', {
                     me.getMain().setActiveItem(1);
                     store.clearData();
                     if (response.Procesada) {
-                        Ext.Msg.alert("Orden Procesada", "Se proceso la orden correctamente");
+                        Ext.Msg.alert("Orden Procesada", "Se agrego la orden correctamente con folio: " + response.CodigoUnicoDocumento);
                     } else {
                         Ext.Msg.alert("Orden No Procesada", "No se proceso la orden correctamente");
                     }

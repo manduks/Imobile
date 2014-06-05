@@ -546,6 +546,9 @@ Ext.define('Imobile.controller.phone.Main', {
             view = me.getMain().getActiveItem(),            
             valores = record.data,
             desc,
+            preciocondescuento,
+            totalDeImpuesto,
+            importe,
             valoresForm;
 
         view.push({
@@ -583,41 +586,44 @@ Ext.define('Imobile.controller.phone.Main', {
             success: function (response) {
                 console.log(response);
                 var procesada = response.Procesada,
-                    desc = response.Data[0] * 100 / valoresForm.Precio;
-                    console.log(desc);
+                    desc = valoresForm.Precio - response.Data[0]; // * 100 / valoresForm.Precio;                    
                 if (procesada) {
                     form.setValues({
                         descuento: desc
                     });
 
-                     //Se calcula precio con descuento
-                        form.setValues({
-                            precioConDescuento: valoresForm.Precio - desc,
-                        });        
+                //Se calcula precio con descuento
 
-                        console.log(valoresForm.Precio - desc);
+                preciocondescuento = valoresForm.Precio - desc,
 
-                        //Se calcula total de impuesto
-                        form.setValues({
-                            totalDeImpuesto: valoresForm.precioConDescuento * me.tasaImpuesto/100
-                        });        
+                console.log(preciocondescuento);
+                    
+                //Se calcula total de impuesto                        
+                totaldeimpuesto = preciocondescuento * me.tasaImpuesto/100,
 
-                        //Se calcula importe
-                        form.setValues({
-                            importe: valoresForm.precioConDescuento * valoresForm.cantidad
-                        });
+                //Se calcula importe
+                
+                
+                importe = preciocondescuento * valoresForm.cantidad + totaldeimpuesto,
 
-                        //if (list.isXType('ordenlist')) { // Para editar pedido
-                        if (valores.cantidad > 0) {
-                            form.down('fieldset').setTitle('Editar producto');
-                            view.getNavigationBar().down('#agregarProductos').hide();
-                        }
-                                              
-                                } else {
-                                    Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
-                                }
-                            }
-                        }); 
+                form.setValues({
+                    descuento: desc,
+                    totalDeImpuesto: totaldeimpuesto,
+                    importe: importe,
+                    precioConDescuento: preciocondescuento
+                });
+
+                    //if (list.isXType('ordenlist')) { // Para editar pedido
+                    if (valores.cantidad > 0) {
+                        form.down('fieldset').setTitle('Editar producto');
+                        view.getNavigationBar().down('#agregarProductos').hide();
+                    }
+
+                } else {
+                            Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
+                       }
+                    }
+                }); 
 
     },
 
@@ -630,10 +636,14 @@ Ext.define('Imobile.controller.phone.Main', {
     actualizaCantidad: function (numberField, newValue, oldValue) {
         var me = this,
             view = me.getMain().getActiveItem(),
-            valoresForm = view.getActiveItem().getValues();
+            valoresForm = view.getActiveItem().getValues(),
+            preciocondescuento = valoresForm.precioConDescuento * newValue,
+            impuesto = newValue * valoresForm.totalDeImpuesto;
+
+            console.log(preciocondescuento + impuesto);
 
         view.getActiveItem().setValues({
-            importe: valoresForm.precioConDescuento * newValue
+            importe: preciocondescuento + impuesto
         });
     },
 

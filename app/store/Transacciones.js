@@ -4,7 +4,7 @@
  * Este es el store para los productos
  */
 Ext.define('Imobile.store.Transacciones', {
-    extend: 'Ext.data.Store',
+    extend: 'Imobile.core.data.Store',
     requires:['Imobile.model.Transaccion'],
 
     config: {
@@ -16,7 +16,9 @@ Ext.define('Imobile.store.Transacciones', {
             reader: {
                 type: 'json',
                 rootProperty: 'Data'
-
+            },
+            extraParams:{
+                format:'json'
             }
         }
     }

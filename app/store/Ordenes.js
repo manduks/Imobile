@@ -3,7 +3,6 @@ Ext.define('Imobile.store.Ordenes', {
     requires: ['Imobile.model.Orden'],
     config: {
         model: 'Imobile.model.Orden',
-        autoload: true
         /*data: [
             {clienteId: 'C0077', code: 'Producto 1', description:'prueba1', precio: 100},
             {clienteId: 'C0069', code: 'Producto 2', description: 'prueba2', precio: 130},

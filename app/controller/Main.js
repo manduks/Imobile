@@ -70,6 +70,7 @@ Ext.define('Imobile.controller.Main', {
                     localStorage.setItem("CodigoUsuario", response.Usuario.Codigo);
                     localStorage.setItem("CodigoSociedad", '001');
                     localStorage.setItem("CodigoDispositivo", '004');
+                    localStorage.setItem("NombreUsuario", response.Usuario.Nombre);
                     localStorage.setItem("Contrasenia", response.Usuario.Contrasenia);
                     me.getMain().setActiveItem(1);
                 } else {
@@ -107,7 +108,12 @@ Ext.define('Imobile.controller.Main', {
             view = me.getMain().getActiveItem(),
             itemActivo = navigationview.getActiveItem().getActiveItem();
 
-        me.getPartidaContainer().down('list').emptyTextCmp.show()
+        var store = Ext.getStore('Ordenes');
+        if (store.getData().items.length <= 2) {
+            me.getPartidaContainer().down('list').emptyTextCmp.show();
+        } else {
+            me.getPartidaContainer().down('list').emptyTextCmp.hide();
+        }
         //console.log(itemActivo.isXType('clientecontainer'));
 
         /*        if(itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')){

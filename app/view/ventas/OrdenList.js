@@ -16,7 +16,20 @@ Ext.define('Imobile.view.ventas.OrdenList', {
             '<p style="margin: 0px;" class="total-product"><b>Total: {importe}</b></p>',
             '</span></div>'].join(''),
         store: 'Ordenes',
-        emptyText: '<div style="float: left;"><div id="cliente_id" style="margin-left: 34px;"></div><div id="codigo_id"></div></div>'
+        emptyText: '<div style="display: table; text-align: left; font-size: 12px; z-index: 0;">' +
+            '<div style="display: table-row;">' +
+            '<div id="cliente_id" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Transacción: Orden de Venta</div>' +
+            '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Fecha: 04/06/2014</div>' +
+            '</div>' +
+            '<div style="display: table-row;">' +
+            '<div id="codigo_id" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Código de Dispositivo: '+localStorage.getItem("CodigoDispositivo")+'</div>' +
+            '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Código de Usuario: '+localStorage.getItem("CodigoUsuario")+'</div>' +
+            '</div>' +
+            '<div style="display: table-row;">' +
+            '<div id="codigo_dispositivo" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Nombre de Dispositivo: '+localStorage.getItem("CodigoDispositivo")+'</div>' +
+            '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Nombre de Usuario: '+localStorage.getItem("NombreUsuario")+'</div>' +
+            '</div>' +
+            '</div>'
     },
 
     onItemDisclosure: function (record, listItem, index, e) {

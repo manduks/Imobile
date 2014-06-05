@@ -8,7 +8,7 @@ Ext.define('Imobile.controller.phone.Main', {
     aPagar: 0,
     pagado: 0,
     pendiente: 0,
-    partida: undefined,
+    clienteSeleccionado: undefined,
 
     config: {
         control: {
@@ -59,9 +59,6 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'productosorden productosview': {
                 itemtap: 'onAgregarProducto'
-            },
-            'partidacontainer #agregarOrden': {
-                tap: 'agregaOrden'
             },
             /*'clienteForm #agregar': {
              tap: 'agregaDireccion'
@@ -230,6 +227,12 @@ Ext.define('Imobile.controller.phone.Main', {
                 var ind = ordenes.find('CodigoArticulo', record.data.CodigoArticulo);
                 ordenes.removeAt(ind);
                 me.actualizarTotales();
+                var store = Ext.getStore('Ordenes');
+                if (store.getData().items.length <= 2) {
+                    me.getPartidaContainer().down('list').emptyTextCmp.show();
+                } else {
+                    me.getPartidaContainer().down('list').emptyTextCmp.hide();
+                }
             }
         });
     },
@@ -250,42 +253,14 @@ Ext.define('Imobile.controller.phone.Main', {
             boton = view.getNavigationBar().down('#agregarProductos');
 
         if (value.xtype == 'clientecontainer') {
-
-            //me.ponParametros('Clientes', me.CodigoUsuario, me.CodigoSociedad, me.CodigoDispositivo, "", me.Token);
-
             boton.setText('Back').show();
             boton.setUi('back');
 
+            var form = value.down('clienteform'),
+                clienteSeleccionado = me.getOpcionCliente().clienteSeleccionado,
+                direcciones = Ext.getStore('Direcciones');
 
-            var store = Ext.getStore('Clientes'),
-
-                params = {
-                    CodigoUsuario: me.CodigoUsuario,
-                    CodigoSociedad: me.CodigoSociedad,
-                    CodigoDispositivo: me.CodigoDispositivo,
-                    Criterio: me.idCliente,
-                    Token: me.Token
-                };
-
-
-            store.getProxy().setUrl("http://" + me.dirIP + "/iMobile/COK1_CL_Socio/ObtenerSocioiMobile");
-            store.setParams(params);
-            store.load({
-                callback: function (record, operation) {
-                    var form = value.down('clienteform'),
-                        direcciones = Ext.getStore('Direcciones');
-
-                    form.setValues(record[0].data);
-
-                    direcciones.setData(record[0].data.Direcciones);
-                    direcciones.clearFilter();
-                    direcciones.filter('TipoDireccion', 'B');
-                    me.direccionEntrega = direcciones.getAt(0).data.Calle; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una variable global.
-                    direcciones.clearFilter();
-                    direcciones.filter('TipoDireccion', 'S');
-                    me.direccionFiscal = direcciones.getAt(0).data.Calle; // Se obtiene el codigo de la direccion fiscal y se lo asignamos a una variable global.
-                }
-            });
+            form.setValues(clienteSeleccionado);
         }
 
         if (value.xtype == 'editarpedidoform') {
@@ -337,15 +312,6 @@ Ext.define('Imobile.controller.phone.Main', {
 
     },
 
-    agregaOrden: function (button) {
-        /*var me = this,
-         view = me.getMenu();
-
-         view.push({
-         xtype: 'direccionescontainer'
-         });
-         me.muestraDirecciones();*/
-    },
 
     mostrarListaProductos: function (container, button, pressed) {
         var me = this;
@@ -528,8 +494,21 @@ Ext.define('Imobile.controller.phone.Main', {
             case 'venta':
                 view.push({
                     xtype: 'opcionclientelist',
-                    title: me.titulo
+                    title: me.titulo,
+                    clienteSeleccionado: record.data
                 });
+
+                var clienteSeleccionado = me.getOpcionCliente().clienteSeleccionado,
+                    direcciones = Ext.getStore('Direcciones');
+
+                direcciones.setData(clienteSeleccionado.Direcciones);
+                direcciones.clearFilter();
+                direcciones.filter('TipoDireccion', 'B');
+                me.direccionEntrega = direcciones.getAt(0).data.Calle; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una variable global.
+                direcciones.clearFilter();
+                direcciones.filter('TipoDireccion', 'S');
+                me.direccionFiscal = direcciones.getAt(0).data.Calle; // Se obtiene el codigo de la direccion fiscal y se lo asignamos a una variable global.
+
                 break;
             case 'cobranza':
                 view.push({
@@ -644,25 +623,22 @@ Ext.define('Imobile.controller.phone.Main', {
                 me.getMain().getActiveItem().getNavigationBar().setTitle(me.titulo); //Establecemos el title del menu principal como el mismo del menu de opciones
                 me.getMain().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 me.actualizarTotales();
+                //me.getPartidaContainer().down('list').add({xtype: 'container', html: 'hola'});
                 me.getPartidaContainer().down('list').emptyTextCmp.show();
-                var cliente_id = me.getPartidaContainer().down('list').getItems().getAt(1).getInnerHtmlElement().down('#cliente_id'),
+                /*var cliente_id = me.getPartidaContainer().down('list').getItems().getAt(1).getInnerHtmlElement().down('#cliente_id'),
                     codigo_id = me.getPartidaContainer().down('list').getItems().getAt(1).getInnerHtmlElement().down('#codigo_id');
 
                 console.log(cliente_id);
                 cliente_id.setText('Transacción: Orden de Venta');
-                codigo_id.setText('Codigo de Dispositivo: ' + me.CodigoUsuario);
-                codigo_id.setText('Nombre de Dispositivo:: ' + me.CodigoUsuario);
+                codigo_id.setText('Codigo de Dispositivo: ' + localStorage.getItem("CodigoUsuario"));
+                codigo_id.setText('Nombre de Dispositivo:: ' + localStorage.getItem("CodigoDispositivo"));*/
                 break;
             case 'visualizar':
-                var store = Ext.getStore('Transacciones');
+                var store = Ext.getStore('Transacciones'),
 
-                var params = {
-                    CodigoUsuario: me.CodigoUsuario,
-                    CodigoSociedad: me.CodigoSociedad,
-                    CodigoDispositivo: me.CodigoDispositivo,
-                    Token: me.Token,
-                    CardCode: 'C00001'
-                };
+                    params = {
+                        CardCode: 'C00001'//me.idCliente
+                    };
 
                 store.setParams(params);
                 store.load();
@@ -811,50 +787,56 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this,
             total = 0,
             store = Ext.getStore('Ordenes'),
-            array = store.getData().items,
+            array = store.getData().items;
 
-            params = {
+
+        if (array.length > 0) {
+            var params = {
                 CodigoUsuario: localStorage.getItem("CodigoUsuario"),
                 CodigoSociedad: localStorage.getItem("CodigoSociedad"),
                 CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
                 Token: localStorage.getItem("Token"),
-                "Orden.FolioInterno": 100,
-                "Orden.CodigoCliente": "C00001",
+                "Orden.FolioInterno": 101,
+                "Orden.CodigoCliente": me.idCliente,
                 "Orden.FechaCreacion": '2014-06-04',
                 "Orden.FechaEntrega": '2014-06-04',
                 "Orden.CodigoMoneda": '$'
             };
 
 
-        Ext.Array.forEach(array, function (item, index, allItems) {
-            total += item.get('precioConDescuento')
+            Ext.Array.forEach(array, function (item, index, allItems) {
+                total += item.get('precioConDescuento')
 
-            params["Orden.Partidas[" + index + "].CodigoArticulo"] = item.get('CodigoArticulo');
-            params["Orden.Partidas[" + index + "].Cantidad"] = item.get('cantidad');
-            params["Orden.Partidas[" + index + "].Precio"] = item.get('Precio');
-            params["Orden.Partidas[" + index + "].CodigoAlmacen"] = '01';
-            params["Orden.Partidas[" + index + "].Linea"] = index;
-            params["Orden.Partidas[" + index + "].Moneda"] = item.get('moneda');
-            params["Orden.Partidas[" + index + "].Importe"] = item.get('importe');
-        });
+                params["Orden.Partidas[" + index + "].CodigoArticulo"] = item.get('CodigoArticulo');
+                params["Orden.Partidas[" + index + "].Cantidad"] = item.get('cantidad');
+                params["Orden.Partidas[" + index + "].Precio"] = item.get('Precio');
+                params["Orden.Partidas[" + index + "].CodigoAlmacen"] = '01';
+                params["Orden.Partidas[" + index + "].Linea"] = index;
+                params["Orden.Partidas[" + index + "].Moneda"] = item.get('moneda');
+                params["Orden.Partidas[" + index + "].Importe"] = item.get('importe');
+            });
 
-        params["Orden.TotalDocumento"] =   parseFloat(total).toFixed(2);
-        console.log(params);
-        Ext.data.JsonP.request({
-            url: "http://25.15.241.121:88/iMobile/COK1_CL_OrdenVenta/AgregarOrdenMobile",
-            params: params,
-            callbackKey: 'callback',
-            success: function (response) {
-                console.log(response);
-                me.getMain().setActiveItem(1);
-                store.clearData();
-                if (response.Procesada) {
-                    Ext.Msg.alert("Orden Procesada", "Se proceso la orden correctamente");
-                } else {
-                    Ext.Msg.alert("Orden No Procesada", "No se proceso la orden correctamente");
+            params["Orden.TotalDocumento"] = parseFloat(total).toFixed(2);
+            
+            Ext.data.JsonP.request({
+                url: "http://25.15.241.121:88/iMobile/COK1_CL_OrdenVenta/AgregarOrdenMobile",
+                params: params,
+                callbackKey: 'callback',
+                success: function (response) {
+                    console.log(response);
+                    me.getMain().setActiveItem(1);
+                    store.clearData();
+                    if (response.Procesada) {
+                        Ext.Msg.alert("Orden Procesada", "Se proceso la orden correctamente");
+                    } else {
+                        Ext.Msg.alert("Orden No Procesada", "No se proceso la orden correctamente");
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            me.getMain().setActiveItem(1);
+            Ext.Msg.alert("Productos", "Selecciona al menos un Producto");
+        }
     },
 
     //// Control de cobranza
@@ -942,22 +924,23 @@ Ext.define('Imobile.controller.phone.Main', {
             callbackKey: 'callback',
             success: function (response) {
                 /*view.push({
-                    xtype: 'editarpedidoform'
-                });
+                 xtype: 'editarpedidoform'
+                 });
 
-                view.down('editarpedidoform').setValues(values);*/
+                 view.down('editarpedidoform').setValues(values);*/
                 me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
                 me.getMain().getActiveItem().getNavigationBar().setTitle(me.titulo); //Establecemos el title del menu principal como el mismo del menu de opciones
                 me.getMain().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 me.actualizarTotales();
                 me.getPartidaContainer().down('list').emptyTextCmp.show();
-                var cliente_id = me.getPartidaContainer().down('list').getItems().getAt(1).getInnerHtmlElement().down('#cliente_id'),
-                    codigo_id = me.getPartidaContainer().down('list').getItems().getAt(1).getInnerHtmlElement().down('#codigo_id');
+                /*var cliente_id = me.getPartidaContainer().down('list').getItems().getAt(1).getInnerHtmlElement().down('#cliente_id'),
+                    codigo_id = me.getPartidaContainer().down('list').getItems().getAt(1).getInnerHtmlElement().down('#codigo_id'),
+                    codigo_dispositivo = me.getPartidaContainer().down('list').getItems().getAt(1).getInnerHtmlElement().down('#codigo_dispositivo');
 
                 console.log(cliente_id);
                 cliente_id.setText('Transacción: Orden de Venta');
-                codigo_id.setText('Codigo de Dispositivo: ' + me.CodigoUsuario);
-                codigo_id.setText('Nombre de Dispositivo:: ' + me.CodigoUsuario);
+                codigo_id.setText('Codigo de Dispositivo: ' + localStorage.getItem("CodigoUsuario"));
+                codigo_dispositivo.setText('Nombre de Dispositivo:: ' + localStorage.getItem("CodigoDispositivo"));*/
             }
         });
 

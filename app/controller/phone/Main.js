@@ -549,7 +549,11 @@ Ext.define('Imobile.controller.phone.Main', {
             valores = record.data,
             valoresForm,
             almacenes = me.almacenes,
-            desc;
+            desc,
+            preciocondescuento,
+            totaldeimpuesto,
+            importe,
+            valoresForm;
 
 
         Ext.Array.forEach(almacenes,function(item, index){
@@ -596,38 +600,44 @@ Ext.define('Imobile.controller.phone.Main', {
             success: function (response) {
                 var procesada = response.Procesada,
                     desc = response.Data[0] * 100 / valoresForm.Precio;
+
                 if (procesada) {
                     form.setValues({
                         descuento: desc
                     });
 
-                     //Se calcula precio con descuento
-                        form.setValues({
-                            precioConDescuento: valoresForm.Precio - desc
-                        });        
+
+                //Se calcula precio con descuento
+
+                preciocondescuento = valoresForm.Precio - desc,
 
 
-                        //Se calcula total de impuesto
-                        form.setValues({
-                            totalDeImpuesto: valoresForm.precioConDescuento * me.tasaImpuesto/100
-                        });        
+                //Se calcula total de impuesto                        
+                totaldeimpuesto = preciocondescuento * me.tasaImpuesto/100,
 
-                        //Se calcula importe
-                        form.setValues({
-                            importe: valoresForm.precioConDescuento * valoresForm.cantidad
-                        });
+                //Se calcula importe
+                
+                
+                importe = preciocondescuento * valoresForm.cantidad + totaldeimpuesto,
 
-                        //if (list.isXType('ordenlist')) { // Para editar pedido
-                        if (valores.cantidad > 0) {
-                            form.down('fieldset').setTitle('Editar producto');
-                            view.getNavigationBar().down('#agregarProductos').hide();
-                        }
-                                              
-                                } else {
-                                    Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
-                                }
-                            }
-                        }); 
+                form.setValues({
+                    descuento: desc,
+                    totalDeImpuesto: totaldeimpuesto,
+                    importe: importe,
+                    precioConDescuento: preciocondescuento
+                });
+
+                    //if (list.isXType('ordenlist')) { // Para editar pedido
+                    if (valores.cantidad > 0) {
+                        form.down('fieldset').setTitle('Editar producto');
+                        view.getNavigationBar().down('#agregarProductos').hide();
+                    }
+
+                } else {
+                            Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
+                       }
+                    }
+                }); 
 
     },
 
@@ -640,10 +650,14 @@ Ext.define('Imobile.controller.phone.Main', {
     actualizaCantidad: function (numberField, newValue, oldValue) {
         var me = this,
             view = me.getMain().getActiveItem(),
-            valoresForm = view.getActiveItem().getValues();
+            valoresForm = view.getActiveItem().getValues(),
+            preciocondescuento = valoresForm.precioConDescuento * newValue,
+            impuesto = newValue * valoresForm.totalDeImpuesto;
+
 
         view.getActiveItem().setValues({
-            importe: valoresForm.precioConDescuento * newValue
+            importe: preciocondescuento + impuesto,
+            totalDeImpuesto: impuesto
         });
     },
 
@@ -976,16 +990,20 @@ Ext.define('Imobile.controller.phone.Main', {
             items = Ext.getStore('Ordenes').getData().items,
             precioTotal = 0,
             descuentoTotal = 0,
-            total = 0;
+            total = 0,
+            tax = 0;
 
         Ext.Array.forEach(items, function (item, index) {
-            precioTotal += item.get('Precio');
-            descuentoTotal += item.get('descuento');
-            total += item.get('precioConDescuento')
+            console.log(item);
+            precioTotal += item.get('Precio') * item.get('cantidad');
+            descuentoTotal += item.get('descuento') * item.get('cantidad');
+            tax += item.get('totalDeImpuesto');
+            total += item.get('importe')
         });
 
         me.getOrdenContainer().down('#descuento').setItems({xtype: 'container', html: descuentoTotal});
         me.getOrdenContainer().down('#subtotal').setItems({xtype: 'container', html: parseFloat(precioTotal).toFixed(2)});
+        me.getOrdenContainer().down('#tax').setItems({xtype: 'container', html: parseFloat(tax).toFixed(2)});
         me.getOrdenContainer().down('#total').setItems({xtype: 'container', html: parseFloat(total).toFixed(2)});
     },
 

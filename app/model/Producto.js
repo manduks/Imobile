@@ -41,7 +41,7 @@ Ext.define('Imobile.model.Producto', {
             name: 'almacen',
             type: 'string'
         },{
-            name: 'existencia',
+            name: 'Disponible',
             type: 'float'
         },{
             name: 'DesplegarEnPanel',

@@ -91,11 +91,13 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         label:'Importe'
                     },{
                         xtype:'textfield',
-                        name:'almacen',
-                        label:'Almacen'
+                        name:'NombreAlmacen',
+                        label:'Almacen',
+                        disabled: false,
+                        itemId: 'almacenProducto'
                     },{
                         xtype:'numberfield',
-                        name:'existencia',
+                        name:'Disponible',
                         label:'Existencia'
                     }
                 ]

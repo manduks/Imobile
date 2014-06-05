@@ -555,7 +555,8 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this,
             view = me.getMain().getActiveItem(),
             valores = record.data,
-            valoresForm;
+            valoresForm,
+            tasaImpuesto;
 
         view.push({
             xtype: 'agregarproductosform'
@@ -589,6 +590,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
         view.getActiveItem().setValues(valores);
 
+        //Se calcula precio con descuento
         view.getActiveItem().setValues({
             precioConDescuento: valores.Precio - valores.descuento,
             cantidad: 1
@@ -596,6 +598,12 @@ Ext.define('Imobile.controller.phone.Main', {
 
         valoresForm = view.getActiveItem().getValues();
 
+        //Se calcula total de impuesto
+        view.getActiveItem().setValues({
+            totalDeImpuesto: valoresForm.precioConDescuento * tasaImpuesto/100
+        });        
+
+        //Se calcula importe
         view.getActiveItem().setValues({
             importe: valoresForm.precioConDescuento * valoresForm.cantidad
         });

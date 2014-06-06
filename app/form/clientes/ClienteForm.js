@@ -24,47 +24,47 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                     disabled: true,
                     clearIcon: true,
                     autoCapitalize: true,
-                    labelWidth: '45%',                    
+                    labelWidth: '45%'
                 },
                 items: [
                     {
                         xtype: 'textfield',
-                        name: 'code',
+                        name: 'CodigoSocio',
                         label: 'Código'
                     },
                     {
                         xtype: 'textfield',
-                        name: 'name',
-                        label: 'nombre'
+                        name: 'NombreSocio',
+                        label: 'Nombre'
                     },
                     {
                         xtype: 'textfield',
-                        name: 'idFiscal',
-                        label: 'ID Fiscal'
+                        name: 'RFC',
+                        label: 'RFC'
                     },
                     {
                         xtype: 'numberfield',
-                        name: 'telefono',
+                        name: 'Telefono',
                         label: 'Teléfono'
                     },
                     {
                         xtype: 'emailfield',
-                        name: 'mail',
-                        label: 'Ciudad'
+                        name: 'Correo',
+                        label: 'Correo'
                     },
                     {
                         xtype: 'textfield',
-                        name: 'precios',
+                        name: 'ListaPrecios',
                         label: 'Lista de Precios'                        
                     },
                     {
                         xtype: 'textfield',
-                        name: 'condicionCredito',
+                        name: 'LimiteCredito',
                         label: 'Crédito'                        
                     },
                     {
                         xtype: 'numberfield',
-                        name: 'saldo',
+                        name: 'Saldo',
                         label: 'Saldo'
                     }                    
                 ]

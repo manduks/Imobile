@@ -8,7 +8,7 @@ Ext.define('Imobile.profile.Phone',{
         views:['Main']
     },
 
-    isActive: function () {
+    isActive: function () {        
         return Ext.os.is.Phone;
     },
 

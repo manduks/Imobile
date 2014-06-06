@@ -6,37 +6,63 @@
 Ext.define('Imobile.model.Cliente', {
     extend: 'Ext.data.Model',
     config: {
-        fields: [{
-            name: 'id',
-            type: 'int'
-        },{
-            name: 'code',
-            type: 'string'
-        }, {
-            name: 'name',
-            type: 'string'
-        },{
-            name: 'idFiscal',
-            type: 'string'
-        },{
-            name: 'telefono',
-            type: 'string'
-        },{
-            name: 'mail',
-            type: 'string'
-        },{
-            name: 'precios',
-            type: 'string'
-        },{
-            name: 'condicionCredito',
-            type: 'string'
-        },{
-            name: 'saldo',
-            type: 'double'
-        }],
-        
-        proxy: {
-            type: "sql"
-        }
+        fields: [
+            {
+                name: 'id',
+                type: 'int'
+            },
+            {
+                name: 'CodigoSocio',
+                type: 'string'
+            },
+            {
+                name: 'NombreSocio',
+                type: 'string'
+            },
+            {
+                name: 'RFC',
+                type: 'string'
+            },
+            {
+                name: 'Telefono',
+                type: 'string'
+            },
+            {
+                name: 'Correo',
+                type: 'string'
+            },
+            {
+                name: 'ListaPrecios',
+                type: 'string'
+            },
+            {
+                name: 'LimiteCredito',
+                type: 'string'
+            },
+            {
+                name: 'Saldo',
+                type: 'double'
+            },
+            {
+                name: 'Direcciones',
+                type: 'array'
+            },
+            {
+                name: 'CodigoVendedor',
+                type: 'string'
+            },
+            {
+                name: 'CondicionPago',
+                type: 'string'
+            },
+            {
+                name: 'NombreListaPrecio',
+                type: 'string'
+            },
+            {
+                name: 'CodigoMoneda',
+                type: 'string'
+            }
+        ]
     }
 });

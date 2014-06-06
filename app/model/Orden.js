@@ -13,19 +13,19 @@ Ext.define('Imobile.model.Orden', {
             name: 'id',
             type: 'int'
         },{
-            name: 'clienteId',
-            type: 'int'
+            name: 'CodigoSocio',
+            type: 'string'
         },{
-            name: 'code',
-            type: 'int'
+            name: 'CodigoArticulo',
+            type: 'string'
         }, {
-            name: 'description',
+            name: 'NombreArticulo',
             type: 'string'
         },{
             name: 'cantidad',
-            type: 'int'
+            type: 'float'
         },{
-            name: 'precio',
+            name: 'Precio',
             type: 'double'
         },{
             name: 'moneda',
@@ -43,15 +43,11 @@ Ext.define('Imobile.model.Orden', {
             name: 'importe',
             type: 'double'
         },{
-            name: 'almacen',
+            name: 'NombreAlmacen',
             type: 'string'
         },{
-            name: 'existencia',
-            type: 'int'
-        }],
-
-        proxy: {
-            type: "sql"
-        }
+            name: 'Disponible',
+            type: 'float'
+        }]
     }
 });

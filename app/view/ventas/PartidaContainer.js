@@ -12,24 +12,16 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
             direction: 'vertical',
             directionLock: true
         },
-        layout: 'card',
-        activeItem: 0,
+        layout: 'fit',
         items: [{
-            xtype: 'ordenlist'/*,
-            layout: 'fit',
-            items: [{
-                docked: 'bottom',
-                xtype: 'toolbar',
-                items: [{
-                    xtype: 'spacer'
-                }, {
-                    xtype: 'button',
-                    text:'Agregar Orden',
-                    itemId: 'agregarOrden'
-                }, {
-                    xtype: 'spacer'
-                }]
-            }]*/
+            style:{
+                background: 'gray'
+            },
+            xtype: 'ordenlist',
+            flex: 7
+        },{
+            xtype: 'ordencontainer',
+            flex: 1
         }]
     }
 });

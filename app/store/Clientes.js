@@ -4,18 +4,22 @@
  * Este es el store para los clientes
  */
 Ext.define('Imobile.store.Clientes', {
-    extend: 'Ext.data.Store',
-     requires:['Imobile.model.Cliente'],
+    extend: 'Imobile.core.data.Store',
+    requires: ['Imobile.model.Cliente'],
 
     config: {
-         model:'Imobile.model.Cliente',
-         autoLoad: true
-    //      data:[
- 			// {code:'C0077',name:'Pedro López López'},
- 			// {code:'C0069',name:'Pablo López López'},
- 			// {code:'C0071',name:'Jose López López'},
- 			// {code:'C0156',name:'Ramiro López López'},
- 			// {code:'C0141',name:'Roberto López López'},
-    //      ]
+        model: 'Imobile.model.Cliente',
+        proxy: {
+            url: "http://25.15.241.121:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",
+            type: 'jsonp',
+            callbackKey: 'callback',
+            reader: {
+                type: 'json',
+                rootProperty: 'Data'
+            },
+            extraParams:{
+                format:'json'
+            }
+        }
     }
 });

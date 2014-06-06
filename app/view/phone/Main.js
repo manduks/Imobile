@@ -30,27 +30,9 @@ Ext.define('Imobile.view.phone.Main',{
                 xtype: 'container'
             }]
         },{
-            xtype: 'menu'
+            xtype: 'menu'            
         },{
-            xtype: 'navigationview',
-            navigationBar: {
-                items:[
-                    {
-                        xtype: 'button',
-                        align: 'right',
-                        text: 'Imobile'
-                    },
-                    {
-                        xtype: 'button',
-                        text:'Agregar',
-                        align: 'left',
-                        itemId: 'agregarProductos'
-                    }
-                ]
-            },
-            items: [{
-                xtype: 'opcionesorden'
-            }]
+            xtype: 'navigationorden'
         }]
     }
 });

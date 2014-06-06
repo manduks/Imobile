@@ -10,16 +10,17 @@ Ext.define('Imobile.model.Producto', {
             name: 'id',
             type: 'int'            
         },{
-            name: 'code',
-            type: 'int'
+            name: 'CodigoArticulo',
+            type: 'string'
         }, {
-            name: 'description',
+            name: 'NombreArticulo',
             type: 'string'
         },{
             name: 'cantidad',
-            type: 'int'
+            type: 'float',
+            defaultValue: 0
         },{
-            name: 'precio',
+            name: 'Precio',
             type: 'double'
         },{
             name: 'moneda',
@@ -37,19 +38,23 @@ Ext.define('Imobile.model.Producto', {
             name: 'importe',
             type: 'double'
         },{
-            name: 'almacen',
+            name: 'NombreAlmacen',
             type: 'string'
         },{
-            name: 'existencia',
-            type: 'int'
+            name: 'Disponible',
+            type: 'float'
         },{
-            name: 'favorite',
-            type: 'boolean',
-            defaultValue: false
-        }],
-
-        proxy: {
-            type: "sql"
-        }
+            name: 'DesplegarEnPanel',
+            type: 'boolean'            
+        },{
+            name: 'ListaPrecios',
+            type: 'array'
+        },{
+            name: 'SujetoImpuesto',
+            type: 'boolean'
+        },{
+            name: 'color',
+            type: 'string'            
+        }]
     }
 });

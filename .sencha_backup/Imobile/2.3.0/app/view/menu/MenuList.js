@@ -13,10 +13,13 @@ Ext.define('Imobile.view.menu.MenuList', {
         //cls: 'dataview-inline',
         store: 'Menu',
         itemTpl: [
-        	'<div class="menu-list">',
-        		'<img src="{icon}"/>',
-        		'<span>{name}</span>',
-        	'</div>'
+        	'<tpl for=".">',
+	        	'<div class="menu-list">',
+	        		'<div class="menu-list-image"><img src="resources/images/{icon}"/></div>',
+	        		'<h2>{name}</h2>',
+	        	'</div>',
+	        '</tpl>'
+        	//'<div style="clear:both"></div>'
         ].join('')
     }
 });

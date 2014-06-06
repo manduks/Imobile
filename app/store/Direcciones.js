@@ -8,7 +8,6 @@ Ext.define('Imobile.store.Direcciones', {
     requires:['Imobile.model.Direccion'],
 
     config: {
-        model:'Imobile.model.Direccion',
-        autoLoad: true // Para que se cargue el store algunos datos
+        model:'Imobile.model.Direccion'
     }
 });

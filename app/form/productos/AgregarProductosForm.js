@@ -11,6 +11,26 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
 		//padding:'15 15 15 15',
 		items:[
             {
+                xtype:'container',
+                padding: '0 0 0 200',
+                defaults:{
+                    xtype:'button',
+                    style: 'margin: .5em',
+                    flex: 1
+                },
+                layout:{
+                    type:'hbox'
+                },
+                items:[
+                    {
+                        itemId:'agregar',
+                        text:'Guardar',
+                        ui: 'confirm'
+                    }
+                ]
+
+            },
+            {
                 xtype:'fieldset',
                 itemId:'datos',
                 title:'Agregar Productos',
@@ -24,14 +44,14 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                 },
                 items:[
                     {
-                        xtype:'numberfield',
-                        name:'code',
+                        xtype:'textfield',
+                        name:'CodigoArticulo',
                         label: 'Código',
                         itemId: 'codepro'
                         //value: 12345
                     },{
                         xtype:'textfield',
-                        name:'description',
+                        name:'NombreArticulo',
                         label:'Descripción',
                         disabled: false
                     },{
@@ -40,17 +60,19 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         label:'Cantidad',
                         disabled: false,
                         minValue: 1,
+                        itemId: 'cantidad'
                         //maxValue: 100,
-                        stepValue: .1,
-                        ui: 'spinner'
+                        //stepValue: .1,
+                        //ui: 'spinner'
                     },{
                         xtype:'numberfield',
-                        name:'precio',
+                        name:'Precio',
                         label:'Precio'
                     },{
                         xtype:'textfield',
                         name:'moneda',
                         label:'Moneda'
+                        //itemId: 'moneda'
                     },{
                         xtype:'numberfield',
                         name:'descuento',
@@ -66,45 +88,19 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                     },{
                         xtype:'numberfield',
                         name:'importe',
-                        label:'Importe' 
+                        label:'Importe'
                     },{
                         xtype:'textfield',
-                        name:'almacen',
-                        label:'Almacen'  
+                        name:'NombreAlmacen',
+                        label:'Almacen',
+                        disabled: false,
+                        itemId: 'almacenProducto'
                     },{
                         xtype:'numberfield',
-                        name:'existencia',
-                        label:'Existencia' 
+                        name:'Disponible',
+                        label:'Disponible'
                     }
                 ]
-            }, {        
-                xtype:'container',                
-                defaults:{
-                	xtype:'button',
-                	style: 'margin: .5em',
-                	flex: 1
-                },
-                layout:{
-                	type:'hbox'
-                },
-                items:[
-                    {                        
-                        itemId:'agregar',
-                        text:'Agregar',
-                        ui: 'confirm'
-                        //ui:'btn-login-ui',
-                        // handler:function(btn){
-                        //     var form = btn.up('formpanel');
-                        //     form.fireEvent('logged', form);
-                        // }
-                    }/*, {
-                       	itemId: 'cancelar',
-                    	text: 'Cancelar',
-                    	ui: 'decline'
-                    }*/
-
-                ]
-
             }
         ]
 	}

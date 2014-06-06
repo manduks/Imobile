@@ -31,6 +31,17 @@ Ext.define('Imobile.view.Main', {
         'Imobile.form.pedidos.EditarPedidoForm',
         'Imobile.view.ventas.DireccionesList',
         'Imobile.view.ventas.ClienteContainer',
-        'Imobile.view.ventas.TplDirecciones'
+        'Imobile.view.ventas.TplDirecciones',
+        'Imobile.view.ventas.NavigationOrden',
+        'Imobile.view.ventas.MonedasList',
+        'Imobile.view.cobranza.CobranzaList',
+        'Imobile.view.cobranza.FacturasList',
+        'Imobile.view.cobranza.FacturasContainer',
+        'Imobile.view.cobranza.FormasDePagoList',
+        'Imobile.view.cobranza.TotalAPagarContainer',
+        'Imobile.view.cobranza.TotalAPagarList',
+        'Imobile.view.cobranza.TotalesContainer',
+        'Imobile.view.ventas.TransaccionList',
+        'Imobile.view.ventas.AlmacenList'
     ]
 });

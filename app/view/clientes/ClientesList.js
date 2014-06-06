@@ -10,7 +10,7 @@ Ext.define('Imobile.view.clientes.ClientesList', {
     config: {
         indexBar: true,
         pinHeaders: false,
-        itemTpl: ['<div class="imobile-cliente-tpl">', '<p>{code}</p>', '<span style="color: cadetblue;"><b>{name}</b></span>', '</div>'].join(''),
+        itemTpl: ['<div class="imobile-cliente-tpl">', '<p>{CodigoSocio}</p>', '<span style="color: cadetblue;"><b>{NombreSocio}</b></span>', '</div>'].join(''),
         store: 'Clientes',
         useSimpleItems: true,
         emptyText: '<div style="margin-top: 20px; text-align: center">No hay clientes con esos datos</div>',
@@ -27,7 +27,7 @@ Ext.define('Imobile.view.clientes.ClientesList', {
                 itemId: 'busca',
                 placeHolder: ' Buscar cliente...'
             }]
-        }],
+        }], 
         plugins: [{
             xclass: 'Ext.plugin.ListPaging',
             autoPaging: true

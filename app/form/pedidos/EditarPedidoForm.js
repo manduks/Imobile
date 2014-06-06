@@ -4,12 +4,35 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
 	requires:[
 		'Ext.form.FieldSet',
 		'Ext.field.Text',
-		'Ext.field.Number',
+		'Ext.field.Number'
         //'Ext.field.Spinner'
 	],
 	config:{
 		//padding:'15 15 15 15',
-		items:[
+		items:[{        
+                xtype:'container',
+                padding: '0 0 0 200',
+                defaults:{
+                    xtype:'button',
+                    style: 'margin: .5em',
+                    flex: 1
+                },
+                layout:{
+                    type:'hbox'
+                },
+                items:[
+                    {                        
+                        itemId:'guardar',
+                        text:'Guardar',
+                        ui: 'confirm'
+                        //ui:'btn-login-ui',
+                        // handler:function(btn){
+                        //     var form = btn.up('formpanel');
+                        //     form.fireEvent('logged', form);
+                        // }
+                    }
+                ]
+            },
             {
                 xtype:'fieldset',
                 itemId:'datos',
@@ -24,34 +47,34 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                 },
                 items:[
                     {
-                        xtype:'numberfield',
-                        name:'codeClient',
+                        xtype:'textfield',
+                        name:'CodigoSocio',
                         label: 'Código de Cliente',
                         itemId: 'codepro'
                         //value: 12345
                     },{
                         xtype:'textfield',
-                        name:'nombreCliente',
-                        label:'Nombre de Cliente',                        
+                        name:'NombreSocio',
+                        label:'Nombre de Cliente'
                     },{
                         xtype:'numberfield',
-                        name:'limite',
-                        label:'Límite de Crédito',                        
+                        name:'LimiteCredito',
+                        label:'Límite de Crédito'
                     },{
                         xtype:'textfield',
-                        name:'condicion',
+                        name:'CondicionPago',
                         label:'Condición de Crédito'
                     },{
                         xtype:'numberfield',
-                        name:'saldo',
+                        name:'Saldo',
                         label:'Saldo'
                     },{
-                        xtype:'numberfield',
-                        name:'listaPrecios',
+                        xtype:'textfield',
+                        name:'NombreListaPrecio',
                         label:'Lista de Precios'
                     },{
                         xtype:'textfield',
-                        name:'vendedor',
+                        name:'CodigoVendedor',
                         label:'Vendedor'
                     },{
                         xtype:'numberfield',
@@ -59,35 +82,16 @@ Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
                         label:'Descuento'
                     },{
                         xtype:'textfield',
-                        name:'moneda',
-                        label:'moneda',
-                        disabled: false
+                        name:'CodigoMoneda',
+                        label:'Moneda',
+                        disabled: false,
+                        itemId: 'moneda',
+                        //tpl: ['<div style="font-size: 30px;float: right;margin-top: -25px;" class="fa fa-check"</div>'].join('')
+                        inputCls: 'fa-check'
                     },{
                         xtype:'textfield',
                         name:'tipoCambio',
                         label:'Tipo de Cambio'  
-                    }
-                ]
-            }, {        
-                xtype:'container',                
-                defaults:{
-                	xtype:'button',
-                	style: 'margin: .5em',
-                	flex: 1
-                },
-                layout:{
-                	type:'hbox'
-                },
-                items:[
-                    {                        
-                        itemId:'guardar',
-                        text:'Guardar',
-                        ui: 'confirm'
-                        //ui:'btn-login-ui',
-                        // handler:function(btn){
-                        //     var form = btn.up('formpanel');
-                        //     form.fireEvent('logged', form);
-                        // }
                     }
                 ]
             }

@@ -746,26 +746,43 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.controller.Main": [],
   "Imobile.controller.phone.Main": [],
   "Imobile.controller.tablet.Main": [],
+  "Imobile.core.data.Store": [],
   "Imobile.form.clientes.ClienteForm": [],
   "Imobile.form.login.LoginForm": [],
   "Imobile.form.pedidos.EditarPedidoForm": [],
   "Imobile.form.productos.AgregarProductosForm": [],
   "Imobile.model.Cliente": [],
   "Imobile.model.Direccion": [],
+  "Imobile.model.DireccionFiscal": [],
+  "Imobile.model.Factura": [],
   "Imobile.model.Menu": [],
+  "Imobile.model.Moneda": [],
   "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
+  "Imobile.model.Total": [],
+  "Imobile.model.Transaccion": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
   "Imobile.store.Clientes": [],
   "Imobile.store.Direcciones": [],
   "Imobile.store.DireccionesFiscales": [],
+  "Imobile.store.Facturas": [],
   "Imobile.store.Menu": [],
+  "Imobile.store.Monedas": [],
   "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
+  "Imobile.store.Totales": [],
+  "Imobile.store.Transacciones": [],
   "Imobile.view.Main": [],
   "Imobile.view.clientes.ClientesList": [],
   "Imobile.view.clientes.OpcionClienteList": [],
+  "Imobile.view.cobranza.CobranzaList": [],
+  "Imobile.view.cobranza.FacturasContainer": [],
+  "Imobile.view.cobranza.FacturasList": [],
+  "Imobile.view.cobranza.FormasDePagoList": [],
+  "Imobile.view.cobranza.TotalAPagarContainer": [],
+  "Imobile.view.cobranza.TotalAPagarList": [],
+  "Imobile.view.cobranza.TotalesContainer": [],
   "Imobile.view.configuracion.ConfiguracionContainer": [],
   "Imobile.view.configuracion.ConfiguracionList": [],
   "Imobile.view.configuracion.InitializeContainer": [],
@@ -779,6 +796,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.view.productos.ProductosOrden": [],
   "Imobile.view.productos.ProductosView": [],
   "Imobile.view.tablet.Main": [],
+  "Imobile.view.ventas.AlmacenList": [],
   "Imobile.view.ventas.ClienteContainer": [],
   "Imobile.view.ventas.DireccionEntregaContainer": [],
   "Imobile.view.ventas.DireccionEntregaList": [],
@@ -786,11 +804,14 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.view.ventas.DireccionFiscalList": [],
   "Imobile.view.ventas.DireccionesContainer": [],
   "Imobile.view.ventas.DireccionesList": [],
+  "Imobile.view.ventas.MonedasList": [],
+  "Imobile.view.ventas.NavigationOrden": [],
   "Imobile.view.ventas.OpcionesOrdenPanel": [],
   "Imobile.view.ventas.OrdenContainer": [],
   "Imobile.view.ventas.OrdenList": [],
   "Imobile.view.ventas.PartidaContainer": [],
-  "Imobile.view.ventas.TplDirecciones": []
+  "Imobile.view.ventas.TplDirecciones": [],
+  "Imobile.view.ventas.TransaccionList": []
 });
 Ext.ClassManager.addNameAliasMappings({
   "Ext.AbstractComponent": [],
@@ -1737,6 +1758,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.controller.Main": [],
   "Imobile.controller.phone.Main": [],
   "Imobile.controller.tablet.Main": [],
+  "Imobile.core.data.Store": [],
   "Imobile.form.clientes.ClienteForm": [
     "widget.clienteform"
   ],
@@ -1751,17 +1773,26 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.model.Cliente": [],
   "Imobile.model.Direccion": [],
+  "Imobile.model.DireccionFiscal": [],
+  "Imobile.model.Factura": [],
   "Imobile.model.Menu": [],
+  "Imobile.model.Moneda": [],
   "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
+  "Imobile.model.Total": [],
+  "Imobile.model.Transaccion": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
   "Imobile.store.Clientes": [],
   "Imobile.store.Direcciones": [],
   "Imobile.store.DireccionesFiscales": [],
+  "Imobile.store.Facturas": [],
   "Imobile.store.Menu": [],
+  "Imobile.store.Monedas": [],
   "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
+  "Imobile.store.Totales": [],
+  "Imobile.store.Transacciones": [],
   "Imobile.view.Main": [
     "widget.main"
   ],
@@ -1770,6 +1801,27 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.view.clientes.OpcionClienteList": [
     "widget.opcionclientelist"
+  ],
+  "Imobile.view.cobranza.CobranzaList": [
+    "widget.cobranzalist"
+  ],
+  "Imobile.view.cobranza.FacturasContainer": [
+    "widget.facturascontainer"
+  ],
+  "Imobile.view.cobranza.FacturasList": [
+    "widget.facturaslist"
+  ],
+  "Imobile.view.cobranza.FormasDePagoList": [
+    "widget.formasdepagolist"
+  ],
+  "Imobile.view.cobranza.TotalAPagarContainer": [
+    "widget.totalapagarcontainer"
+  ],
+  "Imobile.view.cobranza.TotalAPagarList": [
+    "widget.totalapagarlist"
+  ],
+  "Imobile.view.cobranza.TotalesContainer": [
+    "widget.totalescontainer"
   ],
   "Imobile.view.configuracion.ConfiguracionContainer": [
     "widget.configuracioncontainer"
@@ -1806,6 +1858,9 @@ Ext.ClassManager.addNameAliasMappings({
     "widget.productosview"
   ],
   "Imobile.view.tablet.Main": [],
+  "Imobile.view.ventas.AlmacenList": [
+    "widget.almacenlist"
+  ],
   "Imobile.view.ventas.ClienteContainer": [
     "widget.clientecontainer"
   ],
@@ -1827,6 +1882,12 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.view.ventas.DireccionesList": [
     "widget.direccioneslist"
   ],
+  "Imobile.view.ventas.MonedasList": [
+    "widget.monedaslist"
+  ],
+  "Imobile.view.ventas.NavigationOrden": [
+    "widget.navigationorden"
+  ],
   "Imobile.view.ventas.OpcionesOrdenPanel": [
     "widget.opcionesorden"
   ],
@@ -1841,5 +1902,8 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.view.ventas.TplDirecciones": [
     "widget.tpldirecciones"
+  ],
+  "Imobile.view.ventas.TransaccionList": [
+    "widget.transaccionlist"
   ]
 });

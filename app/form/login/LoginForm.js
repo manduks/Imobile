@@ -9,15 +9,15 @@ Ext.define('Imobile.form.login.LoginForm', {
             clearIcon: true
         },
         items: [{
-            xtype: 'emailfield',
-            name: 'email',
-            placeHolder: 'Email',
-            value: 'oswaldo@codetlan.com'
+            xtype: 'textfield',
+            name: 'usuario',
+            placeHolder: 'Codigo de Usuario',
+            value: '1'
         }, {
             xtype: 'passwordfield',
             name: 'password',
-            placeHolder: 'Password',
-            value: '12345678'
+            placeHolder: 'Contraseña',
+            value: '12345'
         },  {
             xtype:'component',
             height:10
@@ -25,6 +25,7 @@ Ext.define('Imobile.form.login.LoginForm', {
             xtype: 'button',
             text: 'Login',
             ui: 'btn-login-ui',
+            itemId: 'login',
             handler: function(btn) {
                 var form = btn.up('formpanel');
                 form.fireEvent('logged', form);

@@ -8,8 +8,8 @@ Ext.define('Imobile.profile.Tablet',{
         views:['Main']
     },
 
-    isActive: function () {
-        return !Ext.os.is.Phone;
+    isActive: function () {        
+        return !Ext.os.is.Phone;        
     },
 
     launch: function(){

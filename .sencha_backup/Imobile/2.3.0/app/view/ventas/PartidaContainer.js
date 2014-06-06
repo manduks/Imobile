@@ -15,7 +15,16 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
         layout: 'card',
         activeItem: 0,
         items: [{
+<<<<<<< HEAD
             xtype: 'ordenlist'/*,
+=======
+            style:{
+                background: 'gray'
+            },
+            xtype: 'ordenlist',
+            flex: 5/*,
+
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
             layout: 'fit',
             items: [{
                 docked: 'bottom',
@@ -30,6 +39,12 @@ Ext.define('Imobile.view.ventas.PartidaContainer', {
                     xtype: 'spacer'
                 }]
             }]*/
+<<<<<<< HEAD
+=======
+        },{
+            xtype: 'ordencontainer',
+            flex: 1
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
         }]
     }
 });

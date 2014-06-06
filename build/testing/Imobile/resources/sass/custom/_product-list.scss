@@ -1,0 +1,35 @@
+.product-list{
+	width:80px;
+	height: 80px;
+	float:center;
+	display:inline-block;
+	border-radius:10px; /* solid blue ; */
+	/*background-color: red;*/
+	/*padding:3em;*/
+	/*line-height: 80px; /*asignamos un line-height igual a la altura del elemento */
+	text-align:center;	
+	margin: .2em;
+	/*display: table;*/
+	vertical-align:middle;
+/*	display: table-cell;*/
+	font-size: 60%;
+
+/*	.menu-list-image{
+		width: 80px;
+		margin: auto;
+		img{
+			width: 80px;
+			margin: auto;
+		}
+	}	*/
+/*	h2{
+		text-align: center;
+		font-size: 80%;
+	}*/
+}
+
+.dataview-inline{
+	width:90%;
+	margin:auto;	
+	text-align:justify;	
+}

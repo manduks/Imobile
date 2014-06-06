@@ -13,6 +13,7 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
         tabBarPosition: 'bottom',
 
         defaults: {
+<<<<<<< HEAD
             styleHtmlContent: true
         },
         items: [
@@ -26,21 +27,50 @@ Ext.define('Imobile.view.ventas.OpcionesOrdenPanel', {
                 iconCls: 'team',
                 xtype: 'seleccionadorprofav'
             }*/,
+=======
+            styleHtmlContent: true,
+            background: '#000'
+        },
+        items: [
+            {
+                title: 'Orden',
+                iconCls: 'settings',
+                xtype: 'partidacontainer'
+            },
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
             {
                 title: 'Cliente',
                 iconCls: 'user',
                 xtype: 'clientecontainer'
             },
             {
+<<<<<<< HEAD
                 title: 'Editar Pedido',
                 iconCls: 'bookmarks',
+=======
+
+                title: 'Editar',
+                iconCls: 'fa fa-pencil-square-o',
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
                 xtype: 'editarpedidoform'
             },
 
             {
+<<<<<<< HEAD
                 title: 'Eliminar Orden',
                 iconCls: 'remove',
                 itemId: 'eliminar'                
+=======
+                title: 'Eliminar',
+                iconCls: 'fa fa-times',                
+                itemId: 'eliminar'
+            },
+            {
+                title: 'Terminar',
+                iconCls: 'action',
+                itemId: 'terminar'
+
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
             }
         ]
     }

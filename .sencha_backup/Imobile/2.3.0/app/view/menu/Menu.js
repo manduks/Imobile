@@ -10,6 +10,7 @@ Ext.define('Imobile.view.menu.Menu', {
                 {
                     xtype: 'button',
                     align: 'right',
+<<<<<<< HEAD
                     text: 'Imobile'
                 },
                 {
@@ -17,6 +18,10 @@ Ext.define('Imobile.view.menu.Menu', {
                     align: 'center'
                 }
             ]
+=======
+                    iconCls: 'logo'
+                }]
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
         },
         items: [
             {

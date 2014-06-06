@@ -24,16 +24,25 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                     disabled: true,
                     clearIcon: true,
                     autoCapitalize: true,
+<<<<<<< HEAD
                     labelWidth: '45%',                    
+=======
+                    labelWidth: '45%'
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
                 },
                 items: [
                     {
                         xtype: 'textfield',
+<<<<<<< HEAD
                         name: 'code',
+=======
+                        name: 'CodigoSocio',
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
                         label: 'Código'
                     },
                     {
                         xtype: 'textfield',
+<<<<<<< HEAD
                         name: 'name',
                         label: 'nombre'
                     },
@@ -41,6 +50,15 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                         xtype: 'textfield',
                         name: 'idFiscal',
                         label: 'ID Fiscal'
+=======
+                        name: 'NombreSocio',
+                        label: 'Nombre'
+                    },
+                    {
+                        xtype: 'textfield',
+                        name: 'RFC',
+                        label: 'RFC'
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
                     },
                     {
                         xtype: 'numberfield',
@@ -50,7 +68,11 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                     {
                         xtype: 'emailfield',
                         name: 'mail',
+<<<<<<< HEAD
                         label: 'Ciudad'
+=======
+                        label: 'Correo'
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
                     },
                     {
                         xtype: 'textfield',

@@ -10,10 +10,17 @@ Ext.define('Imobile.model.Producto', {
             name: 'id',
             type: 'int'            
         },{
+<<<<<<< HEAD
             name: 'code',
             type: 'int'
         }, {
             name: 'description',
+=======
+            name: 'CodigoArticulo',
+            type: 'string'
+        }, {
+            name: 'NombreArticulo',
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
             type: 'string'
         },{
             name: 'cantidad',
@@ -41,6 +48,7 @@ Ext.define('Imobile.model.Producto', {
             type: 'string'
         },{
             name: 'existencia',
+<<<<<<< HEAD
             type: 'int'
         },{
             name: 'favorite',
@@ -51,5 +59,17 @@ Ext.define('Imobile.model.Producto', {
         proxy: {
             type: "sql"
         }
+=======
+            type: 'float'
+        },{
+            name: 'favorite',
+            type: 'boolean',
+            defaultValue: true
+        },{
+            name: 'color',
+            type: 'string'
+            //defaultValue: 'blue'
+        }]
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
     }
 });

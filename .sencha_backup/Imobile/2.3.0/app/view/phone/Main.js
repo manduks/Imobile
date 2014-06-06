@@ -1,4 +1,4 @@
-/**
+    /**
  * @class Imobile.view.phone.Main
  * @extends Imobile.view.Main
  * La vista principal de nuestra version de telefono
@@ -30,6 +30,7 @@ Ext.define('Imobile.view.phone.Main',{
                 xtype: 'container'
             }]
         },{
+<<<<<<< HEAD
             xtype: 'menu'
         },{
             xtype: 'navigationview',
@@ -51,6 +52,11 @@ Ext.define('Imobile.view.phone.Main',{
             items: [{
                 xtype: 'opcionesorden'
             }]
+=======
+            xtype: 'menu'            
+        },{
+            xtype: 'navigationorden'
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
         }]
     }
 });

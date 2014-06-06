@@ -12,6 +12,10 @@ Ext.define('Imobile.view.ventas.DireccionFiscalList', {
         store: 'DireccionesFiscales',
     	onItemDisclosure: function (record, listItem, index, e) {
             this.fireEvent("tap", record, listItem, index, e);            
+<<<<<<< HEAD
         },
+=======
+        }
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
     }
 });

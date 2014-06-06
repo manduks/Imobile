@@ -12,7 +12,12 @@ Ext.define('Imobile.controller.Main',{
             seleccionadorProFav: 'seleccionadorprofav',
             direcciones: 'direccionescontainer',
             productosOrden: 'productosorden',
+<<<<<<< HEAD
             productosView: 'productosview'
+=======
+            productosView: 'productosview',
+            navigationOrden: 'navigationorden'
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
 
         },
         control:{
@@ -25,7 +30,11 @@ Ext.define('Imobile.controller.Main',{
             'main navigationview #agregarProductos':{
                 tap: 'onAgregarPartida'
             },
+<<<<<<< HEAD
             'main navigationview':{
+=======
+            'navigationorden':{
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
                 pop: 'onPopNavigationOrden'
             }
         }
@@ -35,22 +44,45 @@ Ext.define('Imobile.controller.Main',{
         this.getMain().setActiveItem(1);
 
         // Make the JsonP request
+<<<<<<< HEAD
         Ext.data.JsonP.request({
             url: 'http://192.168.15.8:88/login/COK1_CL_UsuarioiMobile/Login/1/004/001/12345',
+=======
+        /*Ext.data.JsonP.request({
+            url: 'http://192.168.15.8:88/iMobile/COK1_CL_UsuarioiMobile/Login',
+            params:{
+              CodigoUsuario: '1',
+                CodigoSociedad: '001',
+                CodigoDispositivo: '004',
+                Contrasenia: '12345'
+            },
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
             callbackKey: 'callback',
             success: function(result, request) {
                 console.log(result);
             }
+<<<<<<< HEAD
         });
+=======
+        });*/
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
 
     },
 
     onSelectMenu: Ext.emptyFn,
+<<<<<<< HEAD
 
      hazTransaccion: function (query, storeName, add, form){
         var me = this;
         var store = Ext.getStore(storeName);
 
+=======
+
+     hazTransaccion: function (query, storeName, add, form){
+        var me = this;
+        var store = Ext.getStore(storeName);
+
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
         db = store.getModel().getProxy().getDatabaseObject();
         
         db.transaction(function(tx) {
@@ -68,6 +100,7 @@ Ext.define('Imobile.controller.Main',{
             });
         });
     },
+<<<<<<< HEAD
 
     aleatorio: function (inferior,superior){ 
         numPosibilidades = superior - inferior 
@@ -161,4 +194,28 @@ Ext.define('Imobile.controller.Main',{
             store.sync();
         }*/
     }
+=======
+
+    aleatorio: function (inferior,superior){ 
+        numPosibilidades = superior - inferior 
+        aleat = Math.random() * numPosibilidades 
+        aleat = Math.floor(aleat) 
+        return parseInt(inferior) + aleat 
+    },
+
+    dameColorAleatorio: function (){ 
+        hexadecimal = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F") 
+        color_aleatorio = "#"; 
+        for (i=0;i<6;i++){ 
+            posarray = this.aleatorio(0,hexadecimal.length) 
+            color_aleatorio += hexadecimal[posarray] 
+        } 
+        return color_aleatorio 
+    },
+
+    launch:function(){
+         
+    }
+         
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
 });

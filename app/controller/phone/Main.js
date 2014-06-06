@@ -881,9 +881,9 @@ Ext.define('Imobile.controller.phone.Main', {
                 success: function (response) {
                     //console.log(response);
                     me.getMain().setActiveItem(1);
-                    store.clearData();
                     if (response.Procesada) {
                         Ext.Msg.alert("Orden Procesada", "Se agrego la orden correctamente con folio: " + response.CodigoUnicoDocumento);
+                        store.clearData();
                     } else {
                         Ext.Msg.alert("Orden No Procesada", "No se proceso la orden correctamente");
                     }

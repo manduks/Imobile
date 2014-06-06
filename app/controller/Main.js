@@ -63,6 +63,7 @@ Ext.define('Imobile.controller.Main', {
             },
             callbackKey: 'callback',
             success: function (response) {
+                console.log(response);
                 var procesada = response.Procesada
 
                 if (procesada) {
@@ -73,6 +74,7 @@ Ext.define('Imobile.controller.Main', {
                     localStorage.setItem("NombreUsuario", response.Usuario.Nombre);
                     localStorage.setItem("Contrasenia", response.Usuario.Contrasenia);
                     localStorage.setItem("FolioInterno", response.ConfiguracionDispositivo.FolioOrden);
+                    localStorage.setItem("NombreDispositivo", response.ConfiguracionDispositivo.Nombre);
                     me.getMain().setActiveItem(1);
                     me.almacenes = response.ConfiguracionDispositivo.Almacenes;
                 } else {

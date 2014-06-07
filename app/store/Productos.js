@@ -4,9 +4,8 @@
  * Este es el store para los productos
  */
 Ext.define('Imobile.store.Productos', {
-    extend: 'Imobile.core.data.Store',
+    extend: 'Imobile.core.data.Store',    
     requires:['Imobile.model.Producto'],
-
     config: {
         model:'Imobile.model.Producto',        
         proxy: {
@@ -31,5 +30,6 @@ Ext.define('Imobile.store.Productos', {
             {CodigoArticulo: 'P0128', NombreArticulo: 'Producto 6', DesplegarEnPanel: true, Precio: 16.5, descuento: .5,  importe: 78, almacen: 22, existencia: 10, moneda: '$', totalDeImpuesto: 23  }
             ]*/
         }
-    }
+    },
+
 });

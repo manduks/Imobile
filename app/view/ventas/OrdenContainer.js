@@ -38,7 +38,7 @@ Ext.define('Imobile.view.ventas.OrdenContainer', {
                 },
                 {
                     xtype: 'container',
-                    html: 'TAX',
+                    html: 'Impuesto',
                     flex: 1,
                     itemId: 'tax',
                     style: {

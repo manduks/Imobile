@@ -142,6 +142,11 @@ Ext.define('Imobile.controller.Main', {
         store.getProxy().setUrl("http://" + me.dirIP + "/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile");
         store.setParams(params);
         store.load();
+    },
+
+    launch: function (){
+        var me = this;        
+        Ext.getStore('Productos').on('refresh', me.estableceCantidadAProductos);
     }
 
 });

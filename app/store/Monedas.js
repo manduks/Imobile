@@ -9,7 +9,7 @@ Ext.define('Imobile.store.Monedas', {
 
     config: {
         model: 'Imobile.model.Moneda',
-        autoLoad: true,
+        //autoLoad: true,
         proxy: {
             url: 'http://25.15.241.121:88/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasiMobile',
             type: 'jsonp',

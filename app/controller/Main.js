@@ -26,7 +26,8 @@ Ext.define('Imobile.controller.Main', {
             totales: 'totalescontainer',
             listaFacturas: 'facturaslist',
             ordenContainer: 'ordencontainer',
-            partidaContainer: 'partidacontainer'
+            partidaContainer: 'partidacontainer',
+            tituloContainer: 'titulocontainer'
 
         },
         control: {
@@ -72,7 +73,7 @@ Ext.define('Imobile.controller.Main', {
                     localStorage.setItem("CodigoDispositivo", '004');
                     localStorage.setItem("NombreUsuario", response.Usuario.Nombre);
                     localStorage.setItem("Contrasenia", response.Usuario.Contrasenia);
-                    localStorage.setItem("FolioInterno", localStorage.getItem("FolioInterno"));
+                    localStorage.setItem("FolioInterno", response.ConfiguracionDispositivo.FolioOrden);
                     me.getMain().setActiveItem(1);
                     me.almacenes = response.ConfiguracionDispositivo.Almacenes;
                 } else {
@@ -142,6 +143,11 @@ Ext.define('Imobile.controller.Main', {
         store.getProxy().setUrl("http://" + me.dirIP + "/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile");
         store.setParams(params);
         store.load();
+    },
+
+    launch: function (){
+        var me = this;        
+        Ext.getStore('Productos').on('refresh', me.estableceCantidadAProductos);
     }
 
 });

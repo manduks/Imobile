@@ -753,6 +753,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.form.productos.AgregarProductosForm": [],
   "Imobile.model.Cliente": [],
   "Imobile.model.Direccion": [],
+  "Imobile.model.DireccionFiscal": [],
   "Imobile.model.Factura": [],
   "Imobile.model.Menu": [],
   "Imobile.model.Moneda": [],
@@ -795,6 +796,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.view.productos.ProductosOrden": [],
   "Imobile.view.productos.ProductosView": [],
   "Imobile.view.tablet.Main": [],
+  "Imobile.view.ventas.AlmacenList": [],
   "Imobile.view.ventas.ClienteContainer": [],
   "Imobile.view.ventas.DireccionEntregaContainer": [],
   "Imobile.view.ventas.DireccionEntregaList": [],
@@ -1771,6 +1773,7 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.model.Cliente": [],
   "Imobile.model.Direccion": [],
+  "Imobile.model.DireccionFiscal": [],
   "Imobile.model.Factura": [],
   "Imobile.model.Menu": [],
   "Imobile.model.Moneda": [],
@@ -1855,6 +1858,9 @@ Ext.ClassManager.addNameAliasMappings({
     "widget.productosview"
   ],
   "Imobile.view.tablet.Main": [],
+  "Imobile.view.ventas.AlmacenList": [
+    "widget.almacenlist"
+  ],
   "Imobile.view.ventas.ClienteContainer": [
     "widget.clientecontainer"
   ],

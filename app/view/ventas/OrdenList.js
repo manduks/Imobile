@@ -5,21 +5,22 @@ Ext.define('Imobile.view.ventas.OrdenList', {
     config: {
         itemCls: 'partida',
         itemTpl: ['<div>',
-            '<span style="float: left; padding: 15px 0px 0px 10px;"><i class="fa fa-shopping-cart" style="font-size: 30px;"></i></span><span style="float: left; padding: 0 35px; width: 180px;" class="imobile-cliente-tpl">',
+            '<span style="float: left; padding: 15px 0px 0px 10px;"><i class="fa fa-shopping-cart" style="font-size: 30px;"></i></span>' +
+            '<span style="float: left; padding: 0 35px; width: 145px;" class="imobile-cliente-tpl">',
             '<p style="margin: 0px;">{CodigoArticulo}</p>',
             '<p style="margin: 0px;"><b>{NombreArticulo}</b></p>',
             '<p style="margin: 0px; color: red;">Quantity: <b>{cantidad}</b></p>',
             '</span>',
             '<span>',
-            '<p style="margin: 0px;">Precio: {Precio}</p>',
-            '<p style="margin: 0px;">Disc: {descuento}</p>',
-            '<p style="margin: 0px;" class="total-product"><b>Total: {importe}</b></p>',
+            '<p style="margin: 0px;">Precio: $ {Precio} </p>',
+            '<p style="margin: 0px;">Disc: $ {descuento}</p>',
+            '<p style="margin: 0px;" class="total-product"><b>Total: $ {importe}</b></p>',
             '</span></div>'].join(''),
         store: 'Ordenes',
-        emptyText: '<div style="display: table; text-align: left; font-size: 12px; z-index: 0;">' +
+        emptyText: '<div style="display: table; text-align: left; font-size: 10px; z-index: 0;">' +
             '<div style="display: table-row;">' +
             '<div id="cliente_id" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Transacción: Orden de Venta</div>' +
-            '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Fecha: 04/06/2014</div>' +
+            '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Fecha: ' + Ext.DateExtras.dateFormat(new Date(), 'd/m/Y') +'</div>' +
             '</div>' +
             '<div style="display: table-row;">' +
             '<div id="codigo_id" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Código de Dispositivo: '+localStorage.getItem("CodigoDispositivo")+'</div>' +

@@ -74,19 +74,19 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         label:'Moneda'
                         //itemId: 'moneda'
                     },{
-                        xtype:'numberfield',
+                        xtype:'textfield',
                         name:'descuento',
                         label:'Descuento'
                     },{
-                        xtype:'numberfield',
+                        xtype:'textfield',
                         name:'precioConDescuento',
                         label:'Precio con Descuento'
                     },{
-                        xtype:'numberfield',
+                        xtype:'textfield',
                         name:'totalDeImpuesto',
                         label:'Total de impuesto'
                     },{
-                        xtype:'numberfield',
+                        xtype:'textfield',
                         name:'importe',
                         label:'Importe'
                     },{
@@ -98,7 +98,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                     },{
                         xtype:'numberfield',
                         name:'Disponible',
-                        label:'Existencia'
+                        label:'Disponible'
                     }
                 ]
             }

@@ -20,7 +20,8 @@ Ext.define('Imobile.view.ventas.OrdenContainer', {
                         'margin-right': '1px',
                         'text-align': 'center',
                         'font-weight': 'bold',
-                        'vertical-align': 'middle'
+                        'vertical-align': 'middle',
+                        'font-size': '12px'
                     }
                 },
                 {
@@ -33,7 +34,8 @@ Ext.define('Imobile.view.ventas.OrdenContainer', {
                         'color': 'white',
                         'margin-right': '1px',
                         'text-align': 'center',
-                        'font-weight': 'bold'
+                        'font-weight': 'bold',
+                        'font-size': '12px'
                     }
                 },
                 {
@@ -46,7 +48,8 @@ Ext.define('Imobile.view.ventas.OrdenContainer', {
                         'color': 'white',
                         'margin-right': '1px',
                         'text-align': 'center',
-                        'font-weight': 'bold'
+                        'font-weight': 'bold',
+                        'font-size': '12px'
                     }
                 },
                 {
@@ -59,7 +62,8 @@ Ext.define('Imobile.view.ventas.OrdenContainer', {
                         'color': 'black',
                         'margin-right': '1px',
                         'text-align': 'center',
-                        'font-weight': 'bold'
+                        'font-weight': 'bold',
+                        'font-size': '12px'
                     }
                 }
             ]

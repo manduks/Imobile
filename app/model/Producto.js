@@ -38,7 +38,7 @@ Ext.define('Imobile.model.Producto', {
             name: 'importe',
             type: 'double'
         },{
-            name: 'almacen',
+            name: 'NombreAlmacen',
             type: 'string'
         },{
             name: 'Disponible',

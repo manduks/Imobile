@@ -5,6 +5,20 @@
  */
 Ext.define('Imobile.store.Clientes', {
     extend: 'Ext.data.Store',
+<<<<<<< HEAD
+     requires:['Imobile.model.Cliente'],
+
+    config: {
+         model:'Imobile.model.Cliente',
+         autoLoad: true
+    //      data:[
+ 			// {code:'C0077',name:'Pedro López López'},
+ 			// {code:'C0069',name:'Pablo López López'},
+ 			// {code:'C0071',name:'Jose López López'},
+ 			// {code:'C0156',name:'Ramiro López López'},
+ 			// {code:'C0141',name:'Roberto López López'},
+    //      ]
+=======
     requires: ['Imobile.model.Cliente'],
 
     config: {
@@ -27,5 +41,6 @@ Ext.define('Imobile.store.Clientes', {
             {CodigoSocio: 'C0156', NombreSocio: 'Ramiro López López', RFC: 'RFC-DE-RAMIRO', telefono: '56581114', mail: 'mail@ramiro.com', precios: 'Precios para Ramiro', condicionCredito: 'Crédito para Ramiro', saldo: '5000.00', Direcciones: [{Calle: 'Monera', NoExterior: '35', NoInterior: '', Colonia: 'San Miguel', Municipio: 'Coyoacán', CodigoPostal: '04235', Ciudad: 'México', Estado: 'DF', Pais: 'México', TipoDireccion: 'B'}, {Calle: 'Av. Siempreviva', NoExterior: '100', NoInterior: '28', Colonia: 'Emiliano Zapata', Municipio: 'Álvaro Obregón', CodigoPostal: '01234', Ciudad: 'México', Estado: 'DF', Pais: 'México', TipoDireccion: 'S'}]},
             {CodigoSocio: 'C0141', NombreSocio: 'Roberto López López', RFC: 'RFC-DE-ROBERTO', telefono: '56581115', mail: 'mail@roberto.com', precios: 'Precios para Roberto', condicionCredito: 'Crédito para Roberto', saldo: '6000.00', Direcciones: [{Calle: 'Oriente 33', NoExterior: '36', NoInterior: '12', Colonia: 'Unión de Guadalupe', Municipio: 'Valle de Chalco', CodigoPostal: '52487', Ciudad: 'México', Estado: 'México', Pais: 'México', TipoDireccion: 'B'}, {Calle: 'Agustín Yáñez', NoExterior: '548', NoInterior: '28', Colonia: 'Acatitla', Municipio: 'Iztapalapa', CodigoPostal: '09654', Ciudad: 'México', Estado: 'DF', Pais: 'México', TipoDireccion: 'S'}]}
         ]
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
     }
 });

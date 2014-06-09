@@ -763,8 +763,13 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.form.productos.AgregarProductosForm": [],
   "Imobile.model.Cliente": [],
   "Imobile.model.Direccion": [],
+<<<<<<< HEAD
+  "Imobile.model.DireccionFiscal": [],
+  "Imobile.model.Menu": [],
+=======
   "Imobile.model.Menu": [],
   "Imobile.model.Moneda": [],
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
   "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
   "Imobile.profile.Phone": [],
@@ -773,7 +778,10 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.store.Direcciones": [],
   "Imobile.store.DireccionesFiscales": [],
   "Imobile.store.Menu": [],
+<<<<<<< HEAD
+=======
   "Imobile.store.Monedas": [],
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
   "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
   "Imobile.view.Main": [],
@@ -799,8 +807,11 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.view.ventas.DireccionFiscalList": [],
   "Imobile.view.ventas.DireccionesContainer": [],
   "Imobile.view.ventas.DireccionesList": [],
+<<<<<<< HEAD
+=======
   "Imobile.view.ventas.MonedasList": [],
   "Imobile.view.ventas.NavigationOrden": [],
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
   "Imobile.view.ventas.OpcionesOrdenPanel": [],
   "Imobile.view.ventas.OrdenContainer": [],
   "Imobile.view.ventas.OrdenList": [],
@@ -1777,8 +1788,13 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.model.Cliente": [],
   "Imobile.model.Direccion": [],
+<<<<<<< HEAD
+  "Imobile.model.DireccionFiscal": [],
+  "Imobile.model.Menu": [],
+=======
   "Imobile.model.Menu": [],
   "Imobile.model.Moneda": [],
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
   "Imobile.model.Orden": [],
   "Imobile.model.Producto": [],
   "Imobile.profile.Phone": [],
@@ -1787,7 +1803,10 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.store.Direcciones": [],
   "Imobile.store.DireccionesFiscales": [],
   "Imobile.store.Menu": [],
+<<<<<<< HEAD
+=======
   "Imobile.store.Monedas": [],
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
   "Imobile.store.Ordenes": [],
   "Imobile.store.Productos": [],
   "Imobile.view.Main": [
@@ -1855,12 +1874,15 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.view.ventas.DireccionesList": [
     "widget.direccioneslist"
   ],
+<<<<<<< HEAD
+=======
   "Imobile.view.ventas.MonedasList": [
     "widget.monedaslist"
   ],
   "Imobile.view.ventas.NavigationOrden": [
     "widget.navigationorden"
   ],
+>>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
   "Imobile.view.ventas.OpcionesOrdenPanel": [
     "widget.opcionesorden"
   ],

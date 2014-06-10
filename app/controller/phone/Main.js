@@ -28,7 +28,8 @@ Ext.define('Imobile.controller.phone.Main', {
                 keyup: 'busca'
             },
             'agregarproductosform #agregar': {
-                tap: 'agregaProductos'
+                tap: 'agregaProductos',
+
             },
             'agregarproductosform #cancelar': {
                 tap: 'onCancelar'
@@ -61,7 +62,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 tap: 'mostrarPanelProductos'
             },
             'productosorden productoslist': {
-                itemtap: 'onAgregarProducto'
+                itemtap: 'onAgregarProducto',                
             },
             'productosorden productosview': {
                 itemtap: 'onAgregarProducto'
@@ -579,38 +580,46 @@ Ext.define('Imobile.controller.phone.Main', {
     alSelecionarCliente: function (list, index, target, record) {
         var me = this,
             view = me.getMenu(),
-            name = record.get('NombreSocio');
+            name = record.get('NombreSocio'),
+            barraTitulo = ({
+                xtype: 'toolbar',
+                docked: 'top',            
+                title: 'titulo'
+            });            
 
         me.idCliente = record.get('CodigoSocio');
         me.titulo = me.idCliente + ' ' + name;
+        barraTitulo.title = me.titulo;
 
         switch (list.opcion) {
             case 'venta':
                 view.push({
                     xtype: 'opcionclientelist',
-                    title: me.idCliente,//me.titulo,
+                    //title: me.idCliente,//me.titulo,
                     clienteSeleccionado: record.data
-                });
-
-                //view.getActiveItem().down('toolbar').setTitle(name);
-
+                });                
+                
                 var clienteSeleccionado = me.getOpcionCliente().clienteSeleccionado,
-                    direcciones = Ext.getStore('Direcciones');      
-
+                direcciones = Ext.getStore('Direcciones');  
                 direcciones.setData(clienteSeleccionado.Direcciones);
+                direcciones.clearFilter();
                 direcciones.filter('TipoDireccion', 'S');
 
                 if(direcciones.getCount() > 0){
+                    view.add(barraTitulo);
                     me.direccionFiscal = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion fiscal y se lo asignamos a una variable global.
                     me.codigoImpuesto = direcciones.getAt(0).data.CodigoImpuesto;
                     me.tasaImpuesto = direcciones.getAt(0).data.Tasa;
                     direcciones.clearFilter();
                     direcciones.filter('TipoDireccion', 'B');
-                    me.direccionEntrega = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una variable global.                                        
+                    if(direcciones.getCount() > 0){
+                        me.direccionEntrega = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una variable global.
+                    }
                 } else {
-                    me.mandaMensaje('Sin dirección fiscal','Este cliente no cuenta con dirección fiscal, solicite una al SAP.');
+                    me.mandaMensaje('Sin dirección fiscal','Este cliente no cuenta con dirección fiscal, solicite una al SAP.');                
                     view.pop();
-                }
+                    direcciones.removeAll();
+                }            
 
                 break;
             case 'cobranza':
@@ -620,9 +629,7 @@ Ext.define('Imobile.controller.phone.Main', {
                     title: me.idCliente
                 });
                 break;
-        }
-
-        //this.idCliente = record.get('id');
+        }        
         this.muestralistaOrden();
     },
 
@@ -634,9 +641,9 @@ Ext.define('Imobile.controller.phone.Main', {
      * @param target El elemento o DataItem tapeado.
      * @param record El record asociado al ítem.
      */
-    onAgregarProducto: function (list, index, target, record) {
-        console.log(record);
-
+    onAgregarProducto: function (list, index, target, record, e) {
+    //onAgregarProducto: function (newActiveItem, list, oldActiveItem) {
+        //console.log(record);        
         var me = this,
             view = me.getMain().getActiveItem(),            
             valores = record.data,
@@ -646,7 +653,11 @@ Ext.define('Imobile.controller.phone.Main', {
             preciocondescuento,
             totaldeimpuesto,
             importe,
-            valoresForm;        
+            valoresForm;
+
+        if (view.getActiveItem().xtype == 'agregarproductosform'){            
+            return;
+        }
 
         if(me.estaEnOrden(valores.CodigoArticulo) != -1){  // Validamos si el producto ya está en la orden.
             me.editarPartida(list, index, target, record);
@@ -661,10 +672,10 @@ Ext.define('Imobile.controller.phone.Main', {
                    valores.NombreAlmacen = item.NombreAlmacen;
                 }
             });
-
+            
             view.push({
                 xtype: 'agregarproductosform'
-            });        
+            }); 
 
             var form = view.getActiveItem();
             form.setValues(valores);
@@ -745,7 +756,11 @@ Ext.define('Imobile.controller.phone.Main', {
             codigo = record.data.CodigoArticulo,
             ordenes = Ext.getStore('Ordenes'), // Porque el evento no responde a la misma lista, pueden ser productos de la lista, del panel o de la orden
             ind = ordenes.find('CodigoArticulo', codigo),
-            values = ordenes.getAt(ind).data;            
+            values = ordenes.getAt(ind).data;
+
+        if(view.getActiveItem().xtype == 'agregarproductosform'){
+            return
+        }
 
         view.push({
             xtype: 'agregarproductosform'
@@ -798,7 +813,7 @@ Ext.define('Imobile.controller.phone.Main', {
         switch (opcion) {
             case 'orden':
                 me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
-                me.getMain().getActiveItem().getNavigationBar().setTitle(me.titulo); //Establecemos el title del menu principal como el mismo del menu de opciones
+                //me.getMain().getActiveItem().getNavigationBar().setTitle(me.titulo); //Establecemos el title del menu principal como el mismo del menu de opciones
                 me.getMain().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 me.actualizarTotales();
                 me.getPartidaContainer().down('list').emptyTextCmp.show();
@@ -901,6 +916,13 @@ Ext.define('Imobile.controller.phone.Main', {
 
     },
 
+    /**
+    * Verifica que la vista actual no sea la misma que la pusheada.
+    */
+    validaPush: function (oldView, newView){        
+        return oldView.toString().localeCompare(newView.toString());
+    },
+
     estableceCantidadAProductos: function (productos, data){        
             var ordenes = Ext.getStore('Ordenes'),
                 codigo,                
@@ -909,7 +931,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
             if (ordenes.getCount() > 0){
                 ordenes.each(function(item, index, length){
-                    console.log(item.get('CodigoArticulo'), item.get('cantidad'));
+                    //console.log(item.get('CodigoArticulo'), item.get('cantidad'));
                     codigo = item.get('CodigoArticulo');
                     ind = productos.find('CodigoArticulo', codigo);
                     cantidad = item.get('cantidad');
@@ -1005,7 +1027,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
             localStorage.setItem("FolioInterno", Folio);
             Ext.Array.forEach(array, function (item, index, allItems) {
-                console.log(item);
+                //console.log(item);
                 total += (item.get('precioConDescuento') * item.get('cantidad')) + item.get('totalDeImpuesto');
 
                 params["Orden.Partidas[" + index + "].CodigoArticulo"] = item.get('CodigoArticulo');
@@ -1019,7 +1041,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
             params["Orden.TotalDocumento"] = parseFloat(total).toFixed(2);
 
-            console.log(params);
+            //console.log(params);
             Ext.data.JsonP.request({
                 url: "http://25.15.241.121:88/iMobile/COK1_CL_OrdenVenta/AgregarOrdenMobile",
                 params: params,

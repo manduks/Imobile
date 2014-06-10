@@ -132,6 +132,8 @@ Ext.define('Imobile.controller.Main', {
     onBackMenu: function(){
         var me =this,
             store = Ext.getStore('Clientes'),
+            view = me.getMenu(),
+            titulo,
 
             params = {
                 CodigoUsuario: me.CodigoUsuario,
@@ -140,9 +142,12 @@ Ext.define('Imobile.controller.Main', {
                 Token: me.Token
             };
 
+        titulo = view.down('toolbar');
+        view.remove(titulo, true);
+
         store.getProxy().setUrl("http://" + me.dirIP + "/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile");
         store.setParams(params);
-        store.load();
+        store.load();        
     },
 
     launch: function (){

@@ -46,9 +46,9 @@ Ext.define('Imobile.controller.Main', {
                 push: 'onPushNavigationOrden'
             },
             'menu': {
-                pop: 'popMenu',
-                back: 'onBackMenu',
-                push: 'pushMenu'
+                //pop: 'popMenu'
+               back: 'onBackMenu',
+               push: 'pushMenu'
             }
         }
     },
@@ -139,7 +139,7 @@ Ext.define('Imobile.controller.Main', {
         navigationview.getNavigationBar().setTitle(me.idCliente);
     },
 
-    onBackMenu: function(navigationview, e){
+    onBackMenu: function(navigationview){
         var me =this,
             store = Ext.getStore('Clientes'),
             view = me.getMenu(),
@@ -150,7 +150,7 @@ Ext.define('Imobile.controller.Main', {
                 CodigoSociedad: me.CodigoSociedad,
                 CodigoDispositivo: me.CodigoDispositivo,
                 Token: me.Token
-            };
+            };            
         
         if(navigationview.getActiveItem().isXType('clienteslist')){            
             titulo = view.down('toolbar');
@@ -160,7 +160,7 @@ Ext.define('Imobile.controller.Main', {
             store.getProxy().setUrl("http://" + me.dirIP + "/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile");
             store.setParams(params);
             store.load();
-        }        
+        }
     },
 
     /**
@@ -175,7 +175,7 @@ Ext.define('Imobile.controller.Main', {
     },
 
     pushMenu: function(navigationview){
-        var me = this;
+        var me = this;        
 
         if(me.opcion == 'cobranza'){
             if(!navigationview.getActiveItem().isXType('clienteslist')){

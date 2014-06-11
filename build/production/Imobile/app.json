@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"id":"02e60a7e-c9f2-4cb8-9899-4cb51209d057","js":[{"path":"app.js","update":"delta","version":"dda8c963ee0dfc83db10946655014656e03df1b3"}],"css":[{"path":"resources/css/app.css","update":"delta","version":"db29af5ba9d623b6dd05ba933e99bb5432c84a77"}]}
-=======
-{"id":"02e60a7e-c9f2-4cb8-9899-4cb51209d057","js":[{"path":"app.js","update":"delta","version":"60b40ad673feea321ba37279e72e101282b99c83"}],"css":[{"path":"resources/css/app.css","update":"delta","version":"45ccfc7a3f3d7a34fdf25486612c1a61c3ad19f4"}]}
->>>>>>> b1ea61258045ce9d476a33aad607e3fec63052e3
+{"id":"02e60a7e-c9f2-4cb8-9899-4cb51209d057","js":[{"path":"app.js","update":"delta","version":"2d9955aa50ea776e3fc1165c55e6fa18bfc52877"}],"css":[{"path":"resources/css/app.css","update":"delta","version":"45ccfc7a3f3d7a34fdf25486612c1a61c3ad19f4"}]}

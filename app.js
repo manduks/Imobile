@@ -16,7 +16,8 @@ Ext.application({
     requires: [
         'Ext.MessageBox',
         'Ext.data.proxy.JsonP',
-        'Imobile.core.data.Store'
+        'Imobile.core.data.Store',
+        'Imobile.core.FormatCurrency'
     ],
 
     models:[

@@ -684,7 +684,9 @@ Ext.define('Imobile.controller.phone.Main', {
             importe,
             valoresForm;
 
-        if (view.getActiveItem().xtype == 'agregarproductosform'){            
+        console.log(view.getActiveItem().xtype);
+        if (view.getActiveItem().xtype == 'agregarproductosform'){
+            console.log('entra');
             return;
         }
 
@@ -705,10 +707,6 @@ Ext.define('Imobile.controller.phone.Main', {
                     valores.NombreAlmacen = item.NombreAlmacen;
                 }
             });
-
-            view.push({
-                xtype: 'agregarproductosform'
-            }); 
 
             var form = view.getActiveItem();
 

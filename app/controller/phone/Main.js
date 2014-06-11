@@ -684,7 +684,6 @@ Ext.define('Imobile.controller.phone.Main', {
             importe,
             valoresForm;
 
-        console.log(view.getActiveItem().xtype);
         if (view.getActiveItem().xtype == 'agregarproductosform'){
             console.log('entra');
             return;

@@ -53,6 +53,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         xtype:'textfield',
                         name:'NombreArticulo',
                         label:'Descripción',
+                        itemId: 'descripcion',
                         disabled: false
                     },{
                         xtype:'numberfield',
@@ -65,7 +66,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         //stepValue: .1,
                         //ui: 'spinner'
                     },{
-                        xtype:'numberfield',
+                        xtype:'textfield',
                         name:'Precio',
                         label:'Precio'
                     },{

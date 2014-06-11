@@ -49,5 +49,9 @@ Ext.define('Imobile.core.FormatCurrency', {
             x1 = x1.replace(rgx, '$1' + Imobile.core.FormatCurrency.thousandSeparator + '$2');
         }
         return x1 + x2;
+    },
+
+    formatCurrencytoNumber: function (value){
+        return parseFloat(value.replace(/[^0-9-.]/g, ''))
     }
 });

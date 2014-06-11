@@ -8,8 +8,6 @@ Ext.define('Imobile.view.clientes.ClientesList', {
     xtype: 'clienteslist',
     requires: ['Ext.field.Search', 'Ext.plugin.ListPaging', 'Ext.SegmentedButton'],
     config: {
-        indexBar: true,
-        pinHeaders: false,
         itemTpl: ['<div class="imobile-cliente-tpl">', '<p>{CodigoSocio}</p>', '<span style="color: cadetblue;"><b>{NombreSocio}</b></span>', '</div>'].join(''),
         store: 'Clientes',
         useSimpleItems: true,
@@ -21,16 +19,23 @@ Ext.define('Imobile.view.clientes.ClientesList', {
         items: [{
             xtype: 'toolbar',
             docked: 'top',
-            layout:'fit',
+            layout:'hbox',
             items: [{
                 xtype: 'searchfield',
-                itemId: 'busca',
-                placeHolder: ' Buscar cliente...'
+                itemId: 'buscarClientes',
+                placeHolder: ' Buscar cliente...',
+                flex: 8
+            },{
+                xtype: 'button',
+                iconCls: 'search',
+                itemId: 'btnBuscarClientes',
+                flex: 0.5
             }]
-        }], 
+        }],
         plugins: [{
             xclass: 'Ext.plugin.ListPaging',
-            autoPaging: true
+            autoPaging: true,
+            loadMoreText: 'Ver Más...'
         }]
     }
 });

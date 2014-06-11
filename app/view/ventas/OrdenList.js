@@ -12,9 +12,9 @@ Ext.define('Imobile.view.ventas.OrdenList', {
             '<p style="margin: 0px; color: red;">Quantity: <b>{cantidad}</b></p>',
             '</span>',
             '<span>',
-            '<p style="margin: 0px;">Precio: $ {Precio} </p>',
-            '<p style="margin: 0px;">Disc: $ {descuento}</p>',
-            '<p style="margin: 0px;" class="total-product"><b>Total: $ {importe}</b></p>',
+            '<p style="margin: 0px;">Precio: {Precio} </p>',
+            '<p style="margin: 0px;">Disc: {descuento}</p>',
+            '<p style="margin: 0px;" class="total-product"><b>Total: {importe}</b></p>',
             '</span></div>'].join(''),
         store: 'Ordenes',
         emptyText: '<div style="display: table; text-align: left; font-size: 10px; z-index: 0;">' +

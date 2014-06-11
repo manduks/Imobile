@@ -261,7 +261,7 @@ Ext.define('Imobile.controller.phone.Main', {
      */
     cambiaItem: function (tabPanel, value, oldValue) {
         var me = this,
-            view = me.getMain().getActiveItem(),
+            view = me.getNavigationOrden(),//me.getMain().getActiveItem(),
             boton = view.getNavigationBar().down('#agregarProductos'),
             clienteSeleccionado = me.getOpcionCliente().clienteSeleccionado;
 
@@ -583,19 +583,19 @@ Ext.define('Imobile.controller.phone.Main', {
             name = record.get('NombreSocio'),
             barraTitulo = ({
                 xtype: 'toolbar',
-                docked: 'top',            
-                title: 'titulo'
-            });            
+                docked: 'top',
+                title: 'titulo',                
+            });
 
         me.idCliente = record.get('CodigoSocio');
-        me.titulo = me.idCliente + ' ' + name;
+        me.titulo = name;
         barraTitulo.title = me.titulo;
-
+        
         switch (list.opcion) {
             case 'venta':
                 view.push({
                     xtype: 'opcionclientelist',
-                    //title: me.idCliente,//me.titulo,
+                    title: me.idCliente,//me.titulo,
                     clienteSeleccionado: record.data
                 });                
                 
@@ -624,10 +624,9 @@ Ext.define('Imobile.controller.phone.Main', {
                 break;
             case 'cobranza':
                 view.push({
-                    xtype: 'cobranzalist',
-                    //title: me.titulo
-                    title: me.idCliente
+                    xtype: 'cobranzalist',                    
                 });
+                view.add(barraTitulo);
                 break;
         }        
         this.muestralistaOrden();
@@ -805,18 +804,38 @@ Ext.define('Imobile.controller.phone.Main', {
         me.mandaMensaje('Códigos de dirección', 'Entrega: ' + me.direccionEntrega + '\nFiscal: ' + me.direccionFiscal);
     },
 
-    onOpcionesCliente: function (t, index, target, record, e) {
+    /**
+    * Determina qué hacer dependiendo de la opción seleccionada.
+    * Orden:
+    *   Activa el ítem 2 del menú principal dejando la vista actual en navigationorden (con un sólo ítem, un tabpanel) y establece como activo el ítem 0 de este tabpanel.
+    *   Hace aparecer un toolbar con el nombre del cliente.
+    *
+    * Visualizar:
+    *
+    * @param list Ésta lista.
+    * @param index El índice del ítem tapeado.
+    * @param target El elemento tapeado.
+    * @param record EL record asociado a este ítem.
+    */    
+    onOpcionesCliente: function (list, index, target, record) {
         var me = this,
             view = me.getMenu(),
+            viewPrincipal = me.getMain(),
             opcion = record.get('action');
+             barraTitulo = ({
+                xtype: 'toolbar',
+                docked: 'top',            
+                title: me.titulo
+            });             
 
         switch (opcion) {
             case 'orden':
-                me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
-                //me.getMain().getActiveItem().getNavigationBar().setTitle(me.titulo); //Establecemos el title del menu principal como el mismo del menu de opciones
-                me.getMain().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
+                viewPrincipal.setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
+                me.getNavigationOrden().getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
+                viewPrincipal.getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 me.actualizarTotales();
                 me.getPartidaContainer().down('list').emptyTextCmp.show();
+                viewPrincipal.getActiveItem().add(barraTitulo);
                 break;
             case 'visualizar':
                 var store = Ext.getStore('Transacciones'),
@@ -827,7 +846,8 @@ Ext.define('Imobile.controller.phone.Main', {
                 store.setParams(params);
                 store.load();
                 view.push({
-                    xtype: 'transaccionlist'
+                    xtype: 'transaccionlist',
+                    title: me.idCliente
                 });
                 break;
         }
@@ -866,11 +886,13 @@ Ext.define('Imobile.controller.phone.Main', {
         Ext.Msg.confirm("Eliminar orden", "Se va a eliminar la orden, todos los productos agregados se perderán ¿está seguro?", function (e) {
 
             if (e == 'yes') {
-                //var query = "DELETE FROM ORDEN WHERE clienteId = " + me.idCliente + "";
-                //me.hazTransaccion(query, 'Ordenes', false);
+                var view = me.getMain().getActiveItem(),
+                    titulo = view.down('toolbar');
+
                 ordenes.removeAll();
                 //me.muestralistaOrden();
                 me.getMain().setActiveItem(1);
+                view.remove(titulo, true);
             } else {
                 tabPanel.setActiveItem(0);
             }
@@ -886,8 +908,9 @@ Ext.define('Imobile.controller.phone.Main', {
     onAgregarPartida: function (button) {
         var me = this,
             view = me.getMain().getActiveItem(),
-            navigationview = button.up('navigationorden'),
-            itemActivo = navigationview.getActiveItem().getActiveItem(),
+            //navigationview = button.up('navigationorden'),
+            //itemActivo = navigationview.getActiveItem().getActiveItem(),
+            itemActivo = me.getOpcionesOrden().getActiveItem();
             store = Ext.getStore('Productos');
 
         if (itemActivo.isXType('partidacontainer')) {
@@ -902,14 +925,15 @@ Ext.define('Imobile.controller.phone.Main', {
             store.setParams(params);
 
             view.push({
-                xtype: 'productosorden'
+                xtype: 'productosorden',
+                //title: me.idCliente
             });            
 
             store.load();
 
             view.getNavigationBar().down('#agregarProductos').hide()
         } else {
-            navigationview.getActiveItem().setActiveItem(0);
+            view.getActiveItem().setActiveItem(0);
         }
 
         //store.removeListener('refresh', me.estableceCantidadAProductos);
@@ -948,12 +972,13 @@ Ext.define('Imobile.controller.phone.Main', {
     /**
      * Al dispararse el evento pop de navigationorden muestra el botón agregarProductos si el ítem activo es
      * clientecontainer o editarpedidoform, esto sucede cuando se selecciona la moneda o la dirección.
-     * @param t This navigationview
-     * @param v La vista que ha sido popeada
+     * @param t Éste navigationview.
+     * @param v La vista que ha sido popeada.
      */
     onPopNavigationOrden: function (t, v) {
         var me = this,
             view = me.getMain().getActiveItem(),
+            tabPanel = me.getOpcionesOrden(),
             itemActivo = t.getActiveItem().getActiveItem();
 
         /*            if(v.getItemId().substring(4, 24) == 'agregarproductosform'){
@@ -969,6 +994,10 @@ Ext.define('Imobile.controller.phone.Main', {
         if (itemActivo.isXType('partidacontainer') && v.isXType('agregarproductosform')) {
             view.getNavigationBar().down('#agregarProductos').show();
         }
+
+        t.getNavigationBar().setTitle(me.idCliente);
+
+        //tabPanel.setTitle(me.idCliente);
 
         /*        if (v.getItemId() != 'principal') {
          view.getNavigationBar().down('#agregarProductos').hide()
@@ -1052,15 +1081,19 @@ Ext.define('Imobile.controller.phone.Main', {
                     store.clearData();
                     if (response.Procesada) {
                         Ext.Msg.alert("Orden Procesada", "Se agrego la orden correctamente con folio: " + response.CodigoUnicoDocumento);
+                        console.log(me.getMain().getActiveItem().xtype);                        
+                        me.getNavigationOrden().remove(me.getNavigationOrden().down('toolbar'), true);
+                        me.getMenu().remove(me.getMenu().down('toolbar'), true);
                         me.getMain().getActiveItem().pop();
 
                     } else {
                         Ext.Msg.alert("Orden No Procesada", "No se proceso la orden correctamente");
+                        me.getOpcionesOrden().setActiveItem(0);
                     }
                 }
             });
-        } else {
-            me.getMain().setActiveItem(1);
+        } else {            
+            me.getOpcionesOrden().setActiveItem(0);
             Ext.Msg.alert("Productos", "Selecciona al menos un Producto");
         }
     },
@@ -1072,8 +1105,7 @@ Ext.define('Imobile.controller.phone.Main', {
             view = me.getMenu();
 
         view.push({
-            xtype: 'facturascontainer',
-            title: me.titulo
+            xtype: 'facturascontainer',            
         });
     },
 
@@ -1091,8 +1123,7 @@ Ext.define('Imobile.controller.phone.Main', {
         me.aPagar = total;
 
         view.push({
-            xtype: 'formasdepagolist',
-            title: me.titulo
+            xtype: 'formasdepagolist',            
         });
     },
 
@@ -1102,8 +1133,7 @@ Ext.define('Imobile.controller.phone.Main', {
             forma = record.get('title');
 
         view.push({
-            xtype: 'totalapagarcontainer',
-            title: me.titulo
+            xtype: 'totalapagarcontainer',            
         });
 
         Ext.Msg.prompt(forma, 'Ingrese el monto a pagar:', function (text, entrada) {
@@ -1135,7 +1165,12 @@ Ext.define('Imobile.controller.phone.Main', {
 
     onSeleccionarTransaccion: function () {
         var me = this,
-            view = me.getMenu();
+            view = me.getMenu(),
+            barraTitulo = ({
+                xtype: 'toolbar',
+                docked: 'top',
+                title: 'titulo',                
+            });
 
         Ext.data.JsonP.request({
             url: "http://25.15.241.121:88/iMobile/COK1_CL_Consultas/RegresarOrdenVentaiMobile",
@@ -1149,10 +1184,12 @@ Ext.define('Imobile.controller.phone.Main', {
             callbackKey: 'callback',
             success: function (response) {
                 me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
-                me.getMain().getActiveItem().getNavigationBar().setTitle(me.titulo); //Establecemos el title del menu principal como el mismo del menu de opciones
+                me.getMain().getActiveItem().getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
                 me.getMain().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 me.actualizarTotales();
                 me.getPartidaContainer().down('list').emptyTextCmp.show();
+                barraTitulo.title = me.titulo;
+                me.getMain().getActiveItem().add(barraTitulo);
             }
         });
 

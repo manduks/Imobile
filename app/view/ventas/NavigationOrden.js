@@ -17,6 +17,7 @@ Ext.define('Imobile.view.ventas.NavigationOrden', {
                 }
             ]
         },
+
         items: [{
             xtype: 'opcionesorden'
         }]

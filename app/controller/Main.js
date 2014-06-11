@@ -42,10 +42,13 @@ Ext.define('Imobile.controller.Main', {
             },
             'navigationorden': {
                 pop: 'onPopNavigationOrden',
-                back: 'onBack'
+                back: 'onBack',
+                push: 'onPushNavigationOrden'
             },
             'menu': {
-                back: 'onBackMenu'
+                //pop: 'popMenu'
+               back: 'onBackMenu',
+               push: 'pushMenu'
             }
         }
     },
@@ -108,6 +111,11 @@ Ext.define('Imobile.controller.Main', {
         return color_aleatorio
     },
 
+    /**
+     * Determina si muestra o no los campos de una lista vacía del store de órdenes.
+     * Si el ítem activo es partidacontainer, clientecontainer o editarpedidoform setea como activo al ítem 0 (partidacontainer) y muestra el botón de agregar.
+     * @param navigationview Éste navigationview.
+     */
     onBack: function (navigationview) {
         var me = this,
             view = me.getMain().getActiveItem(),
@@ -129,22 +137,53 @@ Ext.define('Imobile.controller.Main', {
             navigationview.getActiveItem().setActiveItem(0);
             view.getNavigationBar().down('#agregarProductos').show();
         }
+
+        navigationview.getNavigationBar().setTitle(me.idCliente);
     },
 
-    onBackMenu: function(){
+    onBackMenu: function(navigationview){
         var me =this,
             store = Ext.getStore('Clientes'),
+            view = me.getMenu(),
+            titulo,
 
             params = {
                 CodigoUsuario: me.CodigoUsuario,
                 CodigoSociedad: me.CodigoSociedad,
                 CodigoDispositivo: me.CodigoDispositivo,
                 Token: me.Token
-            };
+            };            
+        
+        if(navigationview.getActiveItem().isXType('clienteslist')){            
+            titulo = view.down('toolbar');
+            
+            view.remove(titulo, true);
 
-        store.getProxy().setUrl("http://" + me.dirIP + "/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile");
-        store.setParams(params);
-        store.load();
+            store.getProxy().setUrl("http://" + me.dirIP + "/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile");
+            store.setParams(params);
+            store.load();
+        }
+    },
+
+    /**
+     * Establece como título el código de cliente elegido en la vista pusheada.
+     * @param navigationview Éste navigationview.
+     * @param view La vista que sido pusheada.
+     */
+    onPushNavigationOrden: function(navigationview){
+        var me = this;
+        
+        navigationview.getNavigationBar().setTitle(me.idCliente);
+    },
+
+    pushMenu: function(navigationview){
+        var me = this;        
+
+        if(me.opcion == 'cobranza'){
+            if(!navigationview.getActiveItem().isXType('clienteslist')){
+            navigationview.getNavigationBar().setTitle(me.idCliente);
+            }
+        }        
     },
 
     launch: function (){

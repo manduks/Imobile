@@ -333,7 +333,7 @@ Ext.define('Imobile.controller.phone.Main', {
      */
     cambiaItem: function (tabPanel, value, oldValue) {
         var me = this,
-            view = me.getMain().getActiveItem(),
+            view = me.getNavigationOrden(), //me.getMain().getActiveItem(),
             boton = view.getNavigationBar().down('#agregarProductos'),
             clienteSeleccionado = me.getOpcionCliente().clienteSeleccionado;
 
@@ -1064,8 +1064,11 @@ Ext.define('Imobile.controller.phone.Main', {
                 "Orden.CodigoCliente": me.idCliente,
                 "Orden.FechaCreacion": '2014-06-04',
                 "Orden.FechaEntrega": '2014-06-04',
-                "Orden.CodigoMoneda": '$'
+                "Orden.CodigoMoneda": '$',
+                "Orden.CodigoImpuesto": me.codigoImpuesto
             };
+
+            console.log(me.codigoImpuesto);
 
             localStorage.setItem("FolioInterno", Folio);
             Ext.Array.forEach(array, function (item, index, allItems) {
@@ -1090,15 +1093,16 @@ Ext.define('Imobile.controller.phone.Main', {
                 callbackKey: 'callback',
                 success: function (response) {
                     console.log(response);
-                    me.getMain().setActiveItem(1);
+                    //me.getMain().setActiveItem(1);
                     if (response.Procesada) {
+                        me.getMain().setActiveItem(1);
                         Ext.Msg.alert("Orden Procesada", "Se agrego la orden correctamente con folio: " + response.CodigoUnicoDocumento);
                         store.clearData();
                         me.getNavigationOrden().remove(me.getNavigationOrden().down('toolbar'), true);
                         me.getMenu().remove(me.getMenu().down('toolbar'), true);
                         me.getMain().getActiveItem().pop();
                     } else {
-                        Ext.Msg.alert("Orden No Procesada", "No se proceso la orden correctamente");
+                        Ext.Msg.alert("Orden No Procesada", "No se proceso la orden correctamente: " + response.Descripcion);
                         me.getOpcionesOrden().setActiveItem(0);
                     }
                 }

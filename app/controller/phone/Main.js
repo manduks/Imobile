@@ -144,8 +144,7 @@ Ext.define('Imobile.controller.phone.Main', {
             case 'cobranza':
 
                 view.push({
-                    xtype: 'clienteslist',
-                    //xtype: 'container',
+                    xtype: 'clienteslist',                    
                     opcion: me.opcion
                 });
 
@@ -592,8 +591,9 @@ Ext.define('Imobile.controller.phone.Main', {
         me.idCliente = record.get('CodigoSocio');
         me.titulo = name;
         barraTitulo.title = me.titulo;
+        me.opcion = list.opcion;
         
-        switch (list.opcion) {
+        switch (me.opcion) {
             case 'venta':            
                 view.push({
                     xtype: 'opcionclientelist',
@@ -820,12 +820,12 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this,
             view = me.getMenu(),
             viewPrincipal = me.getMain(),
-            opcion = record.get('action');
+            opcion = record.get('action'),
              barraTitulo = ({
                 xtype: 'toolbar',
                 docked: 'top',            
                 title: me.titulo
-            });             
+            });
 
         switch (opcion) {
             case 'orden':
@@ -834,7 +834,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 viewPrincipal.getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 me.actualizarTotales();
                 me.getPartidaContainer().down('list').emptyTextCmp.show();
-                //viewPrincipal.getActiveItem().add(barraTitulo);
+                viewPrincipal.getActiveItem().add(barraTitulo);
                 break;
             case 'visualizar':
                 var store = Ext.getStore('Transacciones'),
@@ -845,8 +845,8 @@ Ext.define('Imobile.controller.phone.Main', {
                 store.setParams(params);
                 store.load();
                 view.push({
-                    xtype: 'transaccionlist'
-                    //title: me.idCliente
+                    xtype: 'transaccionlist',
+                    title: me.idCliente
                 });
                 break;
         }

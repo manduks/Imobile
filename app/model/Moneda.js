@@ -6,15 +6,23 @@
 Ext.define('Imobile.model.Moneda', {
     extend: 'Ext.data.Model',
     config: {
-        fields: [{
-            name: 'id',
-            type: 'int'
-        },{
-            name: 'CodigoMoneda',
-            type: 'string'
-        }, {
-            name: 'NombreMoneda',
-            type: 'string'
-        }]
+        fields: [
+            {
+                name: 'id',
+                type: 'int'
+            },
+            {
+                name: 'CodigoMoneda',
+                type: 'string'
+            },
+            {
+                name: 'NombreMoneda',
+                type: 'string'
+            },
+            {
+                name: 'Predeterminada',
+                type: 'boolean'
+            }
+        ]
     }
 });

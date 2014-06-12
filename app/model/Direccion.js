@@ -44,7 +44,7 @@ Ext.define('Imobile.model.Direccion', {
             type: 'string'
         },{
             name: 'CodigoImpuesto',
-            type: 'string',
+            type: 'string'
         },{
             name: 'Tasa',
             type: 'string'

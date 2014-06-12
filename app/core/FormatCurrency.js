@@ -38,13 +38,13 @@ Ext.define('Imobile.core.FormatCurrency', {
     },
 
     formatValue: function (nVal) {
-
         nVal += '';
         x = nVal.split(Imobile.core.FormatCurrency.decimalSeparator);
         x1 = x[0];
-        x2 = x.length > 1 ? Imobile.core.FormatCurrency.decimalSeparator + x[1] : '';
-        var rgx = /(\d+)(\d{3})/;
 
+        x2 = x.length > 1 ? Imobile.core.FormatCurrency.decimalSeparator + x[1] : '';
+
+        var rgx = /(\d+)(\d{3})/;
         while (rgx.test(x1)) {
             x1 = x1.replace(rgx, '$1' + Imobile.core.FormatCurrency.thousandSeparator + '$2');
         }
@@ -52,6 +52,7 @@ Ext.define('Imobile.core.FormatCurrency', {
     },
 
     formatCurrencytoNumber: function (value){
-        return parseFloat(value.replace(/[^0-9-.]/g, ''))
+        console.log(value);
+        return value.replace(/[^0-9-.]/g, '');
     }
 });

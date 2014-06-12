@@ -48,7 +48,7 @@ Ext.define('Imobile.controller.Main', {
             'menu': {
                 //pop: 'popMenu'
                back: 'onBackMenu',
-               push: 'pushMenu'
+               //push: 'pushMenu'
             }
         }
     },
@@ -177,13 +177,20 @@ Ext.define('Imobile.controller.Main', {
     },
 
     pushMenu: function(navigationview){
-        var me = this;        
+        var me = this;   
+        console.log(me.opcion);
+        console.log(navigationview.getActiveItem().xtype);
+        console.log(navigationview.getActiveItem().opcion);
 
-        if(me.opcion == 'cobranza'){
+        if(navigationview.getActiveItem().opcion != undefined){
+            navigationview.getNavigationBar().setTitle(me.idCliente);
+        }
+
+/*        if(me.opcion == 'cobranza' || me.opcion == 'orden'){
             if(!navigationview.getActiveItem().isXType('clienteslist')){
             navigationview.getNavigationBar().setTitle(me.idCliente);
             }
-        }        
+        }        */
     },
 
     launch: function (){

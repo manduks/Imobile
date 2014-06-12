@@ -48,10 +48,11 @@ Ext.define('Imobile.core.FormatCurrency', {
         while (rgx.test(x1)) {
             x1 = x1.replace(rgx, '$1' + Imobile.core.FormatCurrency.thousandSeparator + '$2');
         }
-        return parseFloat(x1 + x2).toFixed(2);
+        return x1 + x2;
     },
 
     formatCurrencytoNumber: function (value){
-        return parseFloat(value.replace(/[^0-9-.]/g, '')).toFixed(2);
+        console.log(value);
+        return value.replace(/[^0-9-.]/g, '');
     }
 });

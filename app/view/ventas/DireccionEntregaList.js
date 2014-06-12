@@ -9,7 +9,7 @@ Ext.define('Imobile.view.ventas.DireccionEntregaList', {
     xtype: 'direccionentregalist',
     config: { 
     	itemTpl: '{calle}, {colonia}',
-        store: 'Direcciones'
+        store: 'Direcciones',        
     	/*onItemDisclosure: function (record, listItem, index, e) {
             this.fireEvent("tap", record, listItem, index, e);            
         },*/

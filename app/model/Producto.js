@@ -27,7 +27,7 @@ Ext.define('Imobile.model.Producto', {
             type: 'string'
         },{
             name: 'descuento',
-            type: 'double'
+            type: 'string'
         },{
             name: 'precioConDescuento',
             type: 'double'

@@ -705,7 +705,7 @@ Ext.define('Imobile.controller.phone.Main', {
             return;
         }
 
-        if (me.estaEnOrden(valores.CodigoArticulo) != -1) {  // Validamos si el producto ya está en la orden.
+        if (false/*me.estaEnOrden(valores.CodigoArticulo) != -1*/) {  // Validamos si el producto ya está en la orden.
             me.editarPartida(list, index, target, record); // Si ya está, lo editamos en vez de agregarlo.
         } else {
 

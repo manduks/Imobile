@@ -51,6 +51,9 @@ Ext.define('Imobile.model.Direccion', {
         },{
             name: 'CodigoDireccion',
             type: 'string'
+        },{
+            name: 'Predeterminado',
+            type: 'boolean'
         }]
     }
 });

@@ -84,10 +84,6 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         label:'Precio con Descuento'
                     },{
                         xtype:'textfield',
-                        name:'totalDeImpuesto',
-                        label:'Total de impuesto'
-                    },{
-                        xtype:'textfield',
                         name:'importe',
                         label:'Importe'
                     },{

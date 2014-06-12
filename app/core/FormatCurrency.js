@@ -38,20 +38,20 @@ Ext.define('Imobile.core.FormatCurrency', {
     },
 
     formatValue: function (nVal) {
-
         nVal += '';
         x = nVal.split(Imobile.core.FormatCurrency.decimalSeparator);
         x1 = x[0];
-        x2 = x.length > 1 ? Imobile.core.FormatCurrency.decimalSeparator + x[1] : '';
-        var rgx = /(\d+)(\d{3})/;
 
+        x2 = x.length > 1 ? Imobile.core.FormatCurrency.decimalSeparator + x[1] : '';
+
+        var rgx = /(\d+)(\d{3})/;
         while (rgx.test(x1)) {
             x1 = x1.replace(rgx, '$1' + Imobile.core.FormatCurrency.thousandSeparator + '$2');
         }
-        return x1 + x2;
+        return parseFloat(x1 + x2).toFixed(2);
     },
 
     formatCurrencytoNumber: function (value){
-        return parseFloat(value.replace(/[^0-9-.]/g, ''))
+        return parseFloat(value.replace(/[^0-9-.]/g, '')).toFixed(2);
     }
 });

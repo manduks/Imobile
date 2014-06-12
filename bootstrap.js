@@ -746,6 +746,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.controller.Main": [],
   "Imobile.controller.phone.Main": [],
   "Imobile.controller.tablet.Main": [],
+  "Imobile.core.FormatCurrency": [],
   "Imobile.core.data.Store": [],
   "Imobile.form.clientes.ClienteForm": [],
   "Imobile.form.login.LoginForm": [],
@@ -1758,6 +1759,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.controller.Main": [],
   "Imobile.controller.phone.Main": [],
   "Imobile.controller.tablet.Main": [],
+  "Imobile.core.FormatCurrency": [],
   "Imobile.core.data.Store": [],
   "Imobile.form.clientes.ClienteForm": [
     "widget.clienteform"

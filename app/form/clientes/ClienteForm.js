@@ -54,7 +54,7 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                     },
                     {
                         xtype: 'textfield',
-                        name: 'ListaPrecios',
+                        name: 'NombreListaPrecio',
                         label: 'Lista de Precios'                        
                     },
                     {

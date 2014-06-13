@@ -128,17 +128,11 @@ Ext.define('Imobile.controller.phone.Main', {
         me.opcion = record.get('action');
 
         switch (me.opcion) {
-            case 'favoritos':
-                view.push({
-                    xtype: 'seleccionadorprofav'
-                    //html:'Favoritos'
-                });
-                me.lista(true);
-                break;
             case 'sistema':
                 view.push({
                     xtype: 'configuracionlist'
                 });
+                console.log(view.getActiveItem().xtype);
                 break;
 
             case 'prospectos':
@@ -380,6 +374,8 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this,
             productos = Ext.getStore('Productos');
 
+        me.lista(true);
+
         me.getProductosOrden().setItems({xtype: 'productosview'});
 
         setTimeout(function () { //Función para esperar algunos milisegundos
@@ -412,7 +408,7 @@ Ext.define('Imobile.controller.phone.Main', {
             descripcion = values.NombreArticulo,
             cantidad = values.cantidad,
             importe = values.importe;
-
+            console.log(values);
         if (Ext.isEmpty(descripcion) || Ext.isEmpty(cantidad)) {
             me.mandaMensaje("Campos inválidos o vacíos", "Verifique que el valor de los campos sea correcto o que no estén vacíos");
         } else {
@@ -423,7 +419,9 @@ Ext.define('Imobile.controller.phone.Main', {
 
             cantidadProducto.set('cantidad', cantidad);
 
-            if (ind == -1) {
+//            if (ind == -1) { // Si no está en la orden
+    console.log('El modo de la vista es: ' + form.modo);
+              if (form.modo != 'edicion'){  
                 values.Precio = values.Precio;
                 values.descuento = values.descuento;
                 values.importe = values.importe;
@@ -634,8 +632,7 @@ Ext.define('Imobile.controller.phone.Main', {
             preciocondescuento,
             totaldeimpuesto,
             importe,
-            valoresForm;
-
+            valoresForm;            
 
         if (view.getActiveItem().xtype == 'agregarproductosform') {
             return;
@@ -689,7 +686,7 @@ Ext.define('Imobile.controller.phone.Main', {
                     var procesada = response.Procesada,
                         precio2 = Imobile.core.FormatCurrency.formatCurrencytoNumber(valoresForm.Precio),
                         desc = precio2 - response.Data[0];
-                    desc = desc * 100 / precio2;
+                        desc = desc * 100 / precio2;
 
                     if (procesada) {
 
@@ -728,9 +725,9 @@ Ext.define('Imobile.controller.phone.Main', {
             view = me.getMain().getActiveItem(),
             form,
             field,
-            codigo = record.data.CodigoArticulo,
+            id = record.data.id,
             ordenes = Ext.getStore('Ordenes'), // Porque el evento no responde a la misma lista, pueden ser productos de la lista, del panel o de la orden
-            ind = ordenes.find('CodigoArticulo', codigo),
+            ind = ordenes.find('id', id),
             values = ordenes.getAt(ind).data;
 
         if (view.getActiveItem().xtype == 'agregarproductosform') {
@@ -738,7 +735,8 @@ Ext.define('Imobile.controller.phone.Main', {
         }
 
         view.push({
-            xtype: 'agregarproductosform'
+            xtype: 'agregarproductosform',
+            modo: 'edicion'
         });
 
         form = view.getActiveItem();

@@ -22,8 +22,8 @@ Ext.define('Imobile.view.configuracion.ConfiguracionList', {
         itemTpl: '<i class="{icon}"> </i>{title}',
         data: [
             { title: 'Conectividad del Servidor', action: 'servidor', icon: 'icon-cloud'},
-            { title: 'Inicialización del dispositivo', action: 'inicializacion', icon: 'icon-mobile'},
-            { title: 'Sincronización', action: 'sincronizacion', icon: 'icon-arrows-cw'},
+//            { title: 'Inicialización del dispositivo', action: 'inicializacion', icon: 'icon-mobile'},
+//            { title: 'Sincronización', action: 'sincronizacion', icon: 'icon-arrows-cw'},
             { title: 'Configuración', action: 'configuracion', icon: 'icon-cog-alt'}
         ]
         // plugins: [{

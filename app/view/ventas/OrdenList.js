@@ -5,7 +5,7 @@ Ext.define('Imobile.view.ventas.OrdenList', {
     config: {
         itemCls: 'partida',
         itemTpl: ['<div>',
-            '<span style="float: left; padding: 15px 0px 0px 10px;"><i class="fa fa-shopping-cart" style="font-size: 30px;"></i></span>' +
+            '<span style="float: left; padding: 15px 0px 0px 10px;"><img src="{Imagen}" width="50px" height="50px"></span>' +
             '<span style="float: left; padding: 0 35px; width: 145px;" class="imobile-cliente-tpl">',
             '<p style="margin: 0px;">{CodigoArticulo}</p>',
             '<p style="margin: 0px;"><b>{NombreArticulo}</b></p>',

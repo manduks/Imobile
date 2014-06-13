@@ -428,6 +428,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 values.descuento = values.descuento;
                 values.importe = values.importe;
                 values.totalDeImpuesto = Imobile.core.FormatCurrency.currency(me.totalDeImpuesto, '$');
+                values.Imagen = cantidadProducto.get('Imagen');
                 ordenes.add(values);
             } else {
                 var datosProducto = ordenes.getAt(ind);
@@ -435,12 +436,12 @@ Ext.define('Imobile.controller.phone.Main', {
                 datosProducto.set('NombreArticulo', descripcion);
                 datosProducto.set('importe', importe);
                 datosProducto.set('totalDeImpuesto', Imobile.core.FormatCurrency.currency(me.totalDeImpuesto, '$'));
+                datosProducto.set('Imagen', cantidadProducto.get('Imagen'));
             }
 
             menu.pop();
+            me.actualizarTotales();
         }
-
-        me.actualizarTotales();
     },
 
     /**
@@ -661,7 +662,6 @@ Ext.define('Imobile.controller.phone.Main', {
             var form = view.getActiveItem();
 
             form.setValues(valores);
-
             //Se establece el valor de cantidad, precio y moneda
             form.setValues({
                 Precio: Imobile.core.FormatCurrency.currency(valores.ListaPrecios[0].Precio, '$'),
@@ -994,7 +994,8 @@ Ext.define('Imobile.controller.phone.Main', {
                 CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
                 Token: localStorage.getItem("Token"),
                 "Orden.FolioInterno": Folio,
-                "Orden.CodigoCliente": me.idCliente,
+                "Orden.CodigoSocio": me.idCliente,
+                //"Orden.NombreSocio":
                 "Orden.FechaCreacion": '2014-06-04',
                 "Orden.FechaEntrega": '2014-06-04',
                 "Orden.CodigoMoneda": '$',
@@ -1140,23 +1141,22 @@ Ext.define('Imobile.controller.phone.Main', {
 
     actualizarTotales: function () {
         var me = this,
-            items = Ext.getStore('Ordenes').getData().items,
+            store = Ext.getStore('Ordenes'),
             precioTotal = 0,
             descuentoTotal = 0,
             total = 0,
             tax = 0;
 
-        Ext.Array.forEach(items, function (item, index) {
+        store.each(function(item){
             precioTotal += Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')) * item.get('cantidad');
             descuentoTotal += Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('descuento')) * item.get('cantidad');
-            tax += Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('totalDeImpuesto'));
-            total += Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('importe'))
+            tax += me.totalDeImpuesto
         });
 
-        me.getOrdenContainer().down('#descuento').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + Imobile.core.FormatCurrency.currency(descuentoTotal, '$') + '</div>'});
-        me.getOrdenContainer().down('#subtotal').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + Imobile.core.FormatCurrency.currency(precioTotal, '$') + '</div>'});
-        me.getOrdenContainer().down('#tax').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + Imobile.core.FormatCurrency.currency(tax, '$') + '</div>'});
-        me.getOrdenContainer().down('#total').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + Imobile.core.FormatCurrency.currency(total, '$') + '</div>' });
+        me.getOrdenContainer().down('#descuento').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">$0.00</div>'});
+        me.getOrdenContainer().down('#subtotal').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">$' + parseFloat(precioTotal).toFixed(2) + '</div>'});
+        me.getOrdenContainer().down('#tax').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">$' + parseFloat(tax).toFixed(2) + '</div>'});
+        me.getOrdenContainer().down('#total').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">$' + parseFloat(precioTotal + tax).toFixed(2) + '</div>' });
     },
 
     /**
@@ -1199,7 +1199,7 @@ Ext.define('Imobile.controller.phone.Main', {
             callbackKey: 'callback',
             success: function (response) {
                 var valor = {
-                    Disponible: response.Data[0],
+                    Disponible: parseFloat(response.Data[0]).toFixed(2),
                     NombreAlmacen: record.get('NombreAlmacen')
                 };
                 view.down('agregarproductosform').setValues(valor);

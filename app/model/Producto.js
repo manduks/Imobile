@@ -42,7 +42,10 @@ Ext.define('Imobile.model.Producto', {
             type: 'string'
         },{
             name: 'Disponible',
-            type: 'float'
+            type: 'float',
+            convert: function(Disponible){
+                return parseFloat(Disponible).toFixed(2);
+            }
         },{
             name: 'DesplegarEnPanel',
             type: 'boolean'            
@@ -55,6 +58,13 @@ Ext.define('Imobile.model.Producto', {
         },{
             name: 'color',
             type: 'string'            
+        },{
+            name: 'Imagen',
+            type: 'string',
+            mapping: 'Imagen',
+            convert: function(Imagen){
+                return 'http://25.15.241.121:88' + Imagen;
+            }
         }]
     }
 });

@@ -47,7 +47,7 @@ Ext.define('Imobile.controller.Main', {
             },
             'menu': {
                 //pop: 'popMenu'
-               back: 'onBackMenu',
+               back: 'onBackMenu'
                //push: 'pushMenu'
             }
         }
@@ -67,7 +67,6 @@ Ext.define('Imobile.controller.Main', {
             },
             callbackKey: 'callback',
             success: function (response) {
-                console.log(response);
                 var procesada = response.Procesada
 
                 if (procesada) {
@@ -177,10 +176,7 @@ Ext.define('Imobile.controller.Main', {
     },
 
     pushMenu: function(navigationview){
-        var me = this;   
-        console.log(me.opcion);
-        console.log(navigationview.getActiveItem().xtype);
-        console.log(navigationview.getActiveItem().opcion);
+        var me = this;
 
         if(navigationview.getActiveItem().opcion != undefined){
             navigationview.getNavigationBar().setTitle(me.idCliente);

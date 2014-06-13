@@ -48,6 +48,9 @@ Ext.define('Imobile.model.Orden', {
         },{
             name: 'Disponible',
             type: 'float'
+        },{
+            name: 'Imagen',
+            type: 'string'
         }]
     }
 });

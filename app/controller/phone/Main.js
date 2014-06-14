@@ -1,19 +1,21 @@
 Ext.define('Imobile.controller.phone.Main', {
     extend: 'Imobile.controller.Main',
-    esFavorito: undefined,
-    idCliente: undefined,
-    entrega: undefined,
-    titulo: undefined,
-    opcion: undefined,
+    esFavorito: undefined, // Para saber si el producto se visualiza en el panel de productos.
+    idCliente: undefined, // EL id del cliente.
+    entrega: undefined, // Para saber si la dirección es de entrega o fiscal.
+    titulo: undefined, // El titulo del navigationbar del navigationorden.
+    opcion: undefined, // Guarda la opción elegida del  menú principal.    
+    clienteSeleccionado: undefined, // Guarda los valores del cliente seleccionado.
+    CodigoAlmacen: undefined, // El código del almacén.
+    codigoImpuesto: undefined, // El código de impuesto.
+    tasaImpuesto: 0, // La tasa de impuesto.
+    sujetoImpuesto: undefined, // Para saber si el artítulo es sujeto de impuesto o no.
+    totalDeImpuesto: 0, // Guarda el total de impuesto si es que lo hay.
+    codigoMonedaPredeterminada: undefined, // Guarda el código de moneda predeterminada.
+    codigoMonedaSeleccinada: undefined, // Guarda el código de moneda seleccionada.
     aPagar: 0,
     pagado: 0,
     pendiente: 0,
-    clienteSeleccionado: undefined,
-    CodigoAlmacen: undefined,
-    codigoImpuesto: undefined,
-    tasaImpuesto: 0,
-    codigoMonedaPredeterminada: undefined,
-    codigoMonedaSeleccinada: undefined,
 
     config: {
         control: {
@@ -126,8 +128,7 @@ Ext.define('Imobile.controller.phone.Main', {
             case 'sistema':
                 view.push({
                     xtype: 'configuracionlist'
-                });
-                console.log(view.getActiveItem().xtype);
+                });                
                 break;
 
             case 'prospectos':
@@ -364,7 +365,7 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this,
             productos = Ext.getStore('Productos');
 
-        me.lista(true);
+        me.lista(true);        
 
         me.getProductosOrden().setItems({xtype: 'productosview'});
 
@@ -385,14 +386,14 @@ Ext.define('Imobile.controller.phone.Main', {
             me = this,
             ordenes = Ext.getStore('Ordenes'),
             productos = Ext.getStore('Productos'),
-            menu = me.getMain().getActiveItem(), //NavigationOrden
+            menu = me.getMain().getActiveItem(),     //NavigationOrden
 
             form = btn.up('agregarproductosform'),
             values = form.getValues(),
             descripcion = values.NombreArticulo,
             cantidad = values.cantidad,
             importe = values.importe;
-            console.log(values);
+
         if (Ext.isEmpty(descripcion) || Ext.isEmpty(cantidad)) {
             me.mandaMensaje("Campos inválidos o vacíos", "Verifique que el valor de los campos sea correcto o que no estén vacíos");
         } else {
@@ -665,17 +666,25 @@ Ext.define('Imobile.controller.phone.Main', {
 
                         //Se establece precio con descuento
                         preciocondescuento = response.Data[0];
+                        me.sujetoImpuesto = valores.SujetoImpuesto;
 
-                        //Se calcula total de impuesto
-                        totaldeimpuesto = preciocondescuento * me.tasaImpuesto / 100;
-                        me.totalDeImpuesto = totaldeimpuesto;
+                        //Se valida si el producto es sujeto de impuesto                        
+                        if(me.sujetoImpuesto){
+                            //Se calcula total de impuesto
+                            totaldeimpuesto = preciocondescuento * me.tasaImpuesto / 100;
+                            me.totalDeImpuesto = totaldeimpuesto;
+                        } else {
+                            me.totalDeImpuesto = 0;                            
+                        }
+
                         //Se calcula importe
                         importe = preciocondescuento * valoresForm.cantidad;
 
+                        // Se establecen los valores al formulario
                         form.setValues({
                             descuento: desc + '%',
                             importe: Imobile.core.FormatCurrency.currency(importe, '$'),
-                            precioConDescuento: Imobile.core.FormatCurrency.currency(preciocondescuento, '$')
+                            precioConDescuento: Imobile.core.FormatCurrency.currency(preciocondescuento, '$'),                            
                         });
 
                     } else {
@@ -733,11 +742,14 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this,
             view = me.getMain().getActiveItem(),
             valoresForm = view.getActiveItem().getValues(),
-            preciocondescuento = Imobile.core.FormatCurrency.formatCurrencytoNumber(valoresForm.precioConDescuento) * newValue,
-            totaldeimpuesto = preciocondescuento * me.tasaImpuesto / 100,
+            preciocondescuento = Imobile.core.FormatCurrency.formatCurrencytoNumber(valoresForm.precioConDescuento) * newValue,            
             importe = preciocondescuento;
 
-        me.totalDeImpuesto = totaldeimpuesto;
+            if(me.sujetoImpuesto){
+                totaldeimpuesto = preciocondescuento * me.tasaImpuesto / 100;
+                me.totalDeImpuesto = totaldeimpuesto;
+            }            
+        
         view.getActiveItem().setValues({
             importe: Imobile.core.FormatCurrency.currency(importe, '$')
         });
@@ -851,8 +863,8 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this,
             view = me.getMain().getActiveItem(),        
             itemActivo = me.getOpcionesOrden().getActiveItem(),
-            store = Ext.getStore('Productos');
-
+            store = Ext.getStore('Productos');                    
+            console.log(store.getCount());
         if (itemActivo.isXType('partidacontainer')) {
 
             var params = {
@@ -886,9 +898,7 @@ Ext.define('Imobile.controller.phone.Main', {
             codigo,
             ind,
             cantidadActual,
-            cantidad;
-
-            console.log('escuché el evento load');
+            cantidad;            
 
         if (ordenes.getCount() > 0) {
             ordenes.each(function (item, index, length) {

@@ -195,7 +195,7 @@ Ext.define('Imobile.controller.Main', {
 
     launch: function (){
         var me = this;        
-        Ext.getStore('Productos').on('refresh', me.estableceCantidadAProductos);
+        Ext.getStore('Productos').on('load', me.estableceCantidadAProductos);
     }
 
 });

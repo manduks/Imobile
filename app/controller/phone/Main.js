@@ -409,7 +409,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 values.descuento = values.descuento;
                 values.importe = values.importe;
                 values.totalDeImpuesto = Imobile.core.FormatCurrency.currency(me.totalDeImpuesto, '$');
-                values.Imagen = cantidadProducto.get('Imagen');
+                values.Imagen = productoAgregado.get('Imagen');
                 ordenes.add(values);
             } else {
                 var ind = form.ind,

@@ -407,15 +407,80 @@ Ext.define('Imobile.controller.phone.Main', {
 
               if (form.modo != 'edicion'){
                 if(moneda != me.codigoMonedaPredeterminada){
-                    
-                }  
-                values.Precio = values.Precio;
-                values.descuento = values.descuento;
-                values.importe = values.importe;
-                values.totalDeImpuesto = me.totalDeImpuesto;//Imobile.core.FormatCurrency.currency(me.totalDeImpuesto, '$');
+                    me.obtenerTipoCambio(moneda); // Aquí esperamos a que obtenga el tipo de cambio y realizamos el cálculo del nuevo precio.
+                } else {
+                    me.ayudaAAgregar(form, 'monedaIgual');
+
+/*                    values.totalDeImpuesto = me.totalDeImpuesto;
+                    values.Imagen = productoAgregado.get('Imagen');
+                    ordenes.add(values);
+                    menu.pop();
+                    me.actualizarTotales();*/
+                }
+
+/*                values.descuento = values.descuento;
+                values.importe = values.importe;*/
+            } else {
+                me.ayudaAAgregar(form, 'edicion');
+                // var ind = form.ind,
+                //     datosProducto = ordenes.getAt(ind);
+
+                // datosProducto.set('cantidad', cantidad);
+                // datosProducto.set('importe', importe);
+                // datosProducto.set('totalDeImpuesto', /*Imobile.core.FormatCurrency.currency(me.totalDeImpuesto, '$')*/ me.totalDeImpuesto);
+                // //datosProducto.set('Imagen', cantidadProducto.get('Imagen'));
+                // menu.pop();
+                // me.actualizarTotales();
+            }
+        }
+    },
+
+    /**
+    * Función auxiliar para agregar los productos a la orden, en sí ésta hace toda la chamba de acuerdo al flujo en turno.
+    */
+
+    ayudaAAgregar: function(form, caso){
+        var form, values, descripcion, cantidad, ordenes, codigo, indPro, productoAgregado,cantidadActual,
+            me = this,
+            ordenes = Ext.getStore('Ordenes'),
+            productos = Ext.getStore('Productos'),
+            menu = me.getNavigationOrden(),     //NavigationOrden
+
+//            form = btn.up('agregarproductosform'),
+            values = form.getValues(),
+            descripcion = values.NombreArticulo,
+            cantidad = values.cantidad,
+            moneda = values.moneda,
+            importe = values.importe;
+
+            codigo = values.CodigoArticulo,                
+            indPro = productos.find('CodigoArticulo', codigo),
+            productoAgregado = productos.getAt(indPro),
+            cantidadActual = productoAgregado.get('cantidad');
+
+        switch (caso){
+            case 'monedaIgual':
+                values.totalDeImpuesto = me.totalDeImpuesto;
                 values.Imagen = productoAgregado.get('Imagen');
                 ordenes.add(values);
-            } else {
+                menu.pop();
+                me.actualizarTotales();
+                break;
+
+            case 'monedaDiferente':
+                console.log(me.tipoCambio);
+                var values = view.getValues(), // Obtenemos los valores del agregarproductosform.
+                //precio = values.Precio * me.tipoCambio;
+                precio = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.Precio) * me.tipoCambio;
+                        console.log(values.Precio);
+                        values.Precio = precio;
+                        console.log('el precio es:' + precio);
+                        Ext.getStore('Ordenes').add(values);
+                        view.getParent().pop();
+                        me.actualizarTotales();
+                break;
+
+            case 'edicion':
                 var ind = form.ind,
                     datosProducto = ordenes.getAt(ind);
 
@@ -423,10 +488,9 @@ Ext.define('Imobile.controller.phone.Main', {
                 datosProducto.set('importe', importe);
                 datosProducto.set('totalDeImpuesto', /*Imobile.core.FormatCurrency.currency(me.totalDeImpuesto, '$')*/ me.totalDeImpuesto);
                 //datosProducto.set('Imagen', cantidadProducto.get('Imagen'));
-            }
-
-            menu.pop();
-            me.actualizarTotales();
+                menu.pop();
+                me.actualizarTotales();
+                break;
         }
     },
 
@@ -1201,9 +1265,19 @@ Ext.define('Imobile.controller.phone.Main', {
         });
     },
 
+    
+    /**
+    * Obtiene el tipo de cambio actual de acuerdo a la moneda que le pasan, éste valor lo deja en la variable global tipoCambio.
+    * @param moneda La divisa cuyo tipo de cambio se necesita.
+    */
     obtenerTipoCambio: function (moneda) {
         var me = this,
-            form = me.getMain().getActiveItem().down('editarpedidoform');
+            form = me.getOpcionesOrden().down('editarpedidoform'),
+            view = me.getNavigationOrden().getActiveItem();
+/*          formProducto = me.getNavigationOrden().getActiveItem();
+            values = formProducto.getValues();
+            console.log(formProducto.xtype);*/
+            //if(Ext.isDefined(formProducto))
 
         Ext.data.JsonP.request({
             url: "http://25.15.241.121:88/iMobile/COK1_CL_Consultas/RegresarTipoCambio",
@@ -1217,12 +1291,28 @@ Ext.define('Imobile.controller.phone.Main', {
             callbackKey: 'callback',
             success: function (response) {
                 if (response.Procesada) {
-                    me.tipoCambio = response.Data[0]
-                    me.codigoMonedaSeleccinada = moneda
-                    form.setValues({
-                        CodigoMoneda: moneda,
-                        tipoCambio: response.Data[0]
-                    });
+                    me.tipoCambio = response.Data[0];
+                    
+                    if(view.isXType('agregarproductosform')){
+                        /*console.log(me.tipoCambio);
+                        var values = view.getValues(), // Obtenemos los valores del agregarproductosform.
+                            //precio = values.Precio * me.tipoCambio;
+                            precio = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.Precio) * me.tipoCambio;
+                        console.log(values.Precio);
+                        values.Precio = precio;
+                        console.log('el precio es:' + precio);
+                        Ext.getStore('Ordenes').add(values);
+                        view.getParent().pop();
+                        me.actualizarTotales();*/
+                        me.ayudaAAgregar(view, 'monedaDiferente');
+                    } else {
+                        me.codigoMonedaSeleccinada = moneda;
+                        form.setValues({
+                            CodigoMoneda: moneda,
+                            tipoCambio: response.Data[0]
+                        });
+                    }
+
                 } else {
                     form.setValues({
                         CodigoMoneda: me.codigoMonedaSeleccinada,

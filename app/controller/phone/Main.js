@@ -939,7 +939,6 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     ponValoresOriginalesAAgregarProductoForm: function (values, moneda) {
-        alert(12);
         var me = this,
 
             precio, importe, newObject, totalDeImpuesto;
@@ -1240,7 +1239,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
 
         if (array.length > 0) {
-            var Folio = parseInt(localStorage.getItem("FolioInterno")) + 1;
+            var Folio = parseInt(localStorage.getItem("FolioInterno")) + 100;
 
 
             var params = {
@@ -1388,7 +1387,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 CodigoSociedad: localStorage.getItem("CodigoSociedad"),
                 CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
                 Token: localStorage.getItem("Token"),
-                Criterio: '004200'
+                Criterio: record.get('FolioUID')
             },
             callbackKey: 'callback',
             success: function (response) {

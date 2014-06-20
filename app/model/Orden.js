@@ -26,7 +26,7 @@ Ext.define('Imobile.model.Orden', {
             type: 'float'
         },{
             name: 'Precio',
-            type: 'double'
+            type: 'string'
         },{
             name: 'moneda',
             type: 'string'
@@ -41,7 +41,7 @@ Ext.define('Imobile.model.Orden', {
             type: 'double'
         },{
             name: 'importe',
-            type: 'double'
+            type: 'string'
         },{
             name: 'NombreAlmacen',
             type: 'string'

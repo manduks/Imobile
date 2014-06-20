@@ -1396,7 +1396,6 @@ Ext.define('Imobile.controller.phone.Main', {
 
                 me.codigoMonedaSeleccinada = response.CodigoMoneda;
 
-                console.log(partidas.length);
                 if (partidas.length < 2) {
                     me.getPartidaContainer().down('list').emptyTextCmp.show();
                 } else {
@@ -1413,7 +1412,6 @@ Ext.define('Imobile.controller.phone.Main', {
                 me.getMain().getActiveItem().getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
                 me.getMain().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 me.actualizarTotales();
-                me.getPartidaContainer().down('list').emptyTextCmp.show();
                 barraTitulo.title = me.titulo;
                 me.getMain().getActiveItem().add(barraTitulo);
             }

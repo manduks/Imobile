@@ -12,7 +12,7 @@ Ext.define('Imobile.model.Transaccion', {
                 type: 'string'
             },
             {
-                name: 'CodigoCliente',
+                name: 'CodigoSocio',
                 type: 'string'
             },
             {
@@ -22,6 +22,10 @@ Ext.define('Imobile.model.Transaccion', {
             {
                 name: 'TipoTransaccion',
                 type: 'int'
+            },
+            {
+                name: 'FolioUID',
+                type: 'string'
             }
         ]
     }

@@ -1256,10 +1256,10 @@ Ext.define('Imobile.controller.phone.Main', {
                 "Orden.CodigoImpuesto": me.codigoImpuesto
             };
 
-
+            console.log(params);
             localStorage.setItem("FolioInterno", Folio);
             Ext.Array.forEach(array, function (item, index, allItems) {
-                console.log(item);
+                console.log(item, 'terminarr....');
                 total += (Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad')) + item.get('totalDeImpuesto');
 
                 params["Orden.Partidas[" + index + "].CodigoArticulo"] = item.get('CodigoArticulo');

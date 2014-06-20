@@ -116,25 +116,21 @@ Ext.define('Imobile.controller.Main', {
      * @param navigationview Éste navigationview.
      */
     onBack: function (navigationview) {
-        var me = this,
-            view = me.getMain().getActiveItem(),
+        var me = this,            
             itemActivo = navigationview.getActiveItem().getActiveItem();
+
+            console.log(itemActivo.xtype);
 
         var store = Ext.getStore('Ordenes');
         if (store.getData().items.length <= 1) {
             me.getPartidaContainer().down('list').emptyTextCmp.show();
         } else {
             me.getPartidaContainer().down('list').emptyTextCmp.hide();
-        }
-        //console.log(itemActivo.isXType('clientecontainer'));
-
-        /*        if(itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')){
-         navigationview.getActiveItem().setActiveItem(0);
-         }*/
+        }        
 
         if (itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
             navigationview.getActiveItem().setActiveItem(0);
-            view.getNavigationBar().down('#agregarProductos').show();
+            navigationview.getNavigationBar().down('#agregarProductos').show();
         }
 
         navigationview.getNavigationBar().setTitle(me.idCliente);

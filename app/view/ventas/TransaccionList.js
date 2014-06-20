@@ -10,7 +10,7 @@ Ext.define('Imobile.view.ventas.TransaccionList', {
         indexBar: true,
         pinHeaders: false,
         useSimpleItems: true,
-        itemTpl: 'Folio: {Folio} <br> Tipo de transacción: {TipoTransaccion} <br> Cliente: {CodigoSocio} - {NombreCliente}',
+        itemTpl: 'Folio: {Folio} <br> Tipo de transacción: {TipoTransaccion}',
         store: 'Transacciones',
         /*data:[
             {folio: 'F001', transaccion: 'Ordenes de Venta', cliente: 'C091 Oswaldo Lopez'},

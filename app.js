@@ -34,7 +34,8 @@ Ext.application({
         'Monedas',
         'Facturas',
         'Totales',
-        'Transacciones'
+        'Transacciones',
+        'Prospectos'
     ],
 
     views: [

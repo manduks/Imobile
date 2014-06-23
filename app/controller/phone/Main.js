@@ -108,6 +108,9 @@ Ext.define('Imobile.controller.phone.Main', {
             },
             'almacenlist': {
                 itemtap: 'onSeleccionarAlmacen'
+            },
+            'prospectoscontainer #agregar':{
+                tap: 'onAgregarProspecto'
             }
         }
     },
@@ -135,7 +138,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
             case 'prospectos':
                 view.push({
-                    xtype: 'clienteslist'
+                    xtype: 'prospectoscontainer'
                 });
                 me.muestraClientes();
                 break;
@@ -210,7 +213,7 @@ Ext.define('Imobile.controller.phone.Main', {
      * @param target El elemento tapeado.
      * @param record El record asociado al ítem.
      */
-    seleccionaMoneda: function (list, index, target, record) {
+   seleccionaMoneda: function (list, index, target, record) {
         var me = this,
             view = me.getMain().getActiveItem(),
             moneda = record.get('CodigoMoneda'),
@@ -230,49 +233,17 @@ Ext.define('Imobile.controller.phone.Main', {
             if (moneda != me.codigoMonedaSeleccinada) {
                 me.codigoMonedaSeleccinada = me.codigoMonedaPredeterminada;
                 me.actualizaOrden(moneda);
-                me.tipoCambio = 1;
+                //me.tipoCambio = 1;
                 form.setValues({
                     CodigoMoneda: me.codigoMonedaSeleccinada,
-                    tipoCambio: me.tipoCambio
+                    tipoCambio: 1//me.tipoCambio
                 });
                 me.estableceMonedaPredeterminada(record);
             }
             //me.actualizarTotales();
         }
 
-        view.pop();        
-
-/*        switch(moneda){
-            case '$':
-                if(me.codigoMonedaSeleccinada == '$'){
-                    view.pop();
-                } else {
-                    me.codigoMonedaSeleccinada = me.codigoMonedaPredeterminada;
-                    me.actualizaOrden(moneda);
-                    me.tipoCambio = 1;
-                    form.setValues({
-                        CodigoMoneda: me.codigoMonedaSeleccinada,
-                        tipoCambio: me.tipoCambio
-                    });
-                    me.estableceMonedaPredeterminada(record);
-                }
-                break;
-
-            case: 'USD':
-                if(me.codigoMonedaSeleccinada == 'USD'){
-                    view.pop();
-                } else {
-                    if(me.dameProductoConMonedaPredeterminada() != 'No hay'){
-                        me.mandaMensaje('Error', 'No es posible cambiar la configuración debido a que la moneda del producto con código ' + me.dameProductoConMonedaPredeterminada() + ' es ' + me.codigoMonedaPredeterminada + '. Elimínelo primero de la orden.');
-                    }else{
-                        me.obtenerTipoCambio(moneda, record);
-                    }
-                }
-                break;
-
-            default:
-                me.mandaMensaje('Moneda no válida');
-        }*/
+        view.pop();   
     },
 
     /**
@@ -413,7 +384,12 @@ Ext.define('Imobile.controller.phone.Main', {
         }
 
         if (value.xtype == 'editarpedidoform') {
-            clienteSeleccionado.tipoCambio = me.tipoCambio;
+            if(me.codigoMonedaSeleccinada == me.codigoMonedaPredeterminada){
+                clienteSeleccionado.tipoCambio = 1;    
+            } else {
+                clienteSeleccionado.tipoCambio = me.tipoCambio;    
+            }
+            
             clienteSeleccionado.CodigoMoneda = me.codigoMonedaSeleccinada;
             value.setValues(clienteSeleccionado);
             boton.setText('Back').show();
@@ -935,7 +911,7 @@ Ext.define('Imobile.controller.phone.Main', {
         } else {
             form.setValues(values);
         }
-        form.setValues(values);
+        //form.setValues(values);
     },
 
     ponValoresOriginalesAAgregarProductoForm: function (values, moneda) {
@@ -1541,5 +1517,18 @@ Ext.define('Imobile.controller.phone.Main', {
                 }
             }
         });
+    },
+
+    //////////// Controlador de Prospectos ////////////////////////
+
+    onAgregarProspecto: function(btn){
+        var me = this,
+            view = me.getMenu();
+
+            view.push({
+                xtype: 'prospectosform'
+            })
     }
+
+
 });

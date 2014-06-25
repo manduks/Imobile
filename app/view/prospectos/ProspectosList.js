@@ -8,7 +8,7 @@ Ext.define('Imobile.view.prospectos.ProspectosList', {
     xtype: 'prospectoslist',
     requires: ['Ext.field.Search', 'Ext.plugin.ListPaging', 'Ext.SegmentedButton'],
     config: {
-        itemTpl: ['<div class="imobile-cliente-tpl">', '<p>{CodigoSocio}</p>', '<span style="color: cadetblue;"><b>{NombreSocio}</b></span>', '</div>'].join(''),
+        itemTpl: ['<div class="imobile-cliente-tpl">', '<p>{codigo}</p>', '<span style="color: cadetblue;"><b>{razonSocial}</b></span>', '</div>'].join(''),
         store: 'Prospectos',
         useSimpleItems: true,
         emptyText: '<div style="margin-top: 20px; text-align: center">No hay prospectos con esos datos</div>',
@@ -23,13 +23,19 @@ Ext.define('Imobile.view.prospectos.ProspectosList', {
             items: [{
                 xtype: 'searchfield',
                 itemId: 'buscarProspectos',
-                placeHolder: ' Buscar prospecto...',
-                flex: 8
-            },{
+                placeHolder: ' Buscar prospecto...',                
+                flex: 12,
+                cls: 'list-search'
+            },/*{
                 xtype: 'button',
                 iconCls: 'search',
-                itemId: 'btnBuscarProspectos',
-                flex: 0.5
+                itemId: 'buscar',
+                flex: 1
+            },*/{
+                xtype: 'button',
+                iconCls: 'add',
+                itemId: 'agregar',
+                flex: 1
             }]
         }],
         plugins: [{

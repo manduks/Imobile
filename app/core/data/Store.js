@@ -17,5 +17,10 @@ Ext.define('Imobile.core.data.Store', {
                 });
             }
         }
+    },
+
+    setParams:function(resetParams){
+        var me = this;
+        me.resetParams = resetParams;
     }
 });

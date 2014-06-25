@@ -30,6 +30,17 @@ Ext.define('Imobile.view.configuracion.ConfiguracionContainer', {
                 height: 64,
                 width: 64
             },{xtype:'component'}]
+        },{
+            xtype: 'fieldset',
+            title: 'My Uploader',
+            items: [
+                {
+                    xtype: 'filefield',
+                    label: "MyPhoto:",
+                    name: 'photo',
+                    accept: 'image'
+                }
+            ]
         }, {
             xtype: 'formpanel',
             height:132,

@@ -24,7 +24,7 @@ Ext.define('Imobile.model.Transaccion', {
                 type: 'int'
             },
             {
-                name: 'FolioUID',
+                name: 'NumeroDocumento',
                 type: 'string'
             }
         ]

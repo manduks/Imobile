@@ -31,7 +31,7 @@ Ext.define('Imobile.model.Orden', {
             name: 'moneda',
             type: 'string'
         },{
-            name: 'descuento',
+            name: 'PorcentajeDescuento',
             type: 'double'
         },{
             name: 'precioConDescuento',

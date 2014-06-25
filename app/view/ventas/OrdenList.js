@@ -5,15 +5,15 @@ Ext.define('Imobile.view.ventas.OrdenList', {
     config: {
         itemCls: 'partida',
         itemTpl: ['<div>',
-            '<span style="float: left; padding: 15px 0px 0px 10px;"><img src="{Imagen}" width="50px" height="50px"></span>' +
-            '<span style="float: left; padding: 0 35px; width: 145px;" class="imobile-cliente-tpl">',
+            '<span style="float: left; padding: 15px 0px 0px 10px;"><img src="{Imagen}" width="40px" height="40px"></span>' +
+            '<span style="float: left; padding: 0 35px; width: 143px;" class="imobile-cliente-tpl">',
             '<p style="margin: 0px;">{CodigoArticulo}</p>',
             '<p style="margin: 0px;"><b>{NombreArticulo}</b></p>',
             '<p style="margin: 0px; color: red;">Quantity: <b>{cantidad}</b></p>',
             '</span>',
-            '<span>',
+            '<span style="width: 145px">',
             '<p style="margin: 0px;">Precio: {Precio} </p>',
-            '<p style="margin: 0px;">Disc: {descuento}</p>',
+            '<p style="margin: 0px;">Disc: {PorcentajeDescuento}</p>',
             '<p style="margin: 0px;" class="total-product"><b>Total: {importe}</b></p>',
             '</span></div>'].join(''),
         store: 'Ordenes',

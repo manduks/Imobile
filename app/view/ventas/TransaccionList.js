@@ -7,9 +7,6 @@ Ext.define('Imobile.view.ventas.TransaccionList', {
     extend: 'Ext.dataview.List',
     xtype: 'transaccionlist',
     config: {
-        indexBar: true,
-        pinHeaders: false,
-        useSimpleItems: true,
         itemTpl: 'Folio: {Folio} <br> Tipo de transacción: {TipoTransaccion}',
         store: 'Transacciones',
         /*data:[

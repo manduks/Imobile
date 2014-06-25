@@ -76,7 +76,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         //itemId: 'moneda'
                     },{
                         xtype:'textfield',
-                        name:'descuento',
+                        name:'PorcentajeDescuento',
                         label:'Descuento'
                     },{
                         xtype:'textfield',

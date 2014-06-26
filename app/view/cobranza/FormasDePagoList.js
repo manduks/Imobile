@@ -10,11 +10,12 @@ Ext.define('Imobile.view.cobranza.FormasDePagoList', {
         onItemDisclosure: function (record, listItem, index, e) {
             this.fireEvent("tap", record, listItem, index, e);            
         },
-        itemTpl: '{title}',
-        data:[
+        itemTpl: '{Nombre}',
+        store: 'FormasDePago'
+        /*data:[
             {title: 'Efectivo', action: 'efectivo'},
             {title: 'Tarjeta de Crédito', action: 'credito'},
             {title: 'Tarjeta de Regalo', action: 'regalo'}
-        ]
+        ]*/
     }
 });

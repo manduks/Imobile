@@ -754,9 +754,11 @@ Ext.define('Imobile.controller.phone.Main', {
                 break;
             case 'cobranza':
                 view.push({
-                    xtype: 'cobranzalist'
+                    xtype: 'cobranzalist',
+                    title: me.idCliente
                 });
                 view.add(barraTitulo);
+                //me.getTotales().up('totalapagarcontainer')
                 break;
         }
         this.muestralistaOrden();
@@ -1292,11 +1294,20 @@ Ext.define('Imobile.controller.phone.Main', {
 
     muestraFacturasPendientes: function () {
         var me = this,
-            view = me.getMenu();
+            view = me.getMenu(),
+            store = Ext.getStore('Facturas');
 
         view.push({
-            xtype: 'facturascontainer'
+            xtype: 'facturascontainer',
+            title: me.idCliente
         });
+
+        params = {
+            CardCode: me.idCliente
+        };
+
+        store.setParams(params);
+        store.load();
     },
 
     aplicaPago: function () {
@@ -1307,50 +1318,75 @@ Ext.define('Imobile.controller.phone.Main', {
             seleccion = view.getActiveItem().down('facturaslist').getSelection();
 
         for (i = 0; i < seleccion.length; i++) {
-            total += seleccion[i].data.saldo;
+            total += seleccion[i].data.TotalDocumento;
         }
 
         me.aPagar = total;
 
         view.push({
-            xtype: 'formasdepagolist'
+            xtype: 'formasdepagolist',
+            title: me.idCliente
         });
     },
 
     muestraCobranza: function (list, index, target, record) {
         var me = this,
             view = me.getMenu(),
-            forma = record.get('title');
+            forma = record.get('Nombre'),
+            permiteCambio = record.get('PermiteCambio');
 
         view.push({
-            xtype: 'totalapagarcontainer'
+            xtype: 'totalapagarcontainer',
+            title: me.idCliente
         });
 
         Ext.Msg.prompt(forma, 'Ingrese el monto a pagar:', function (text, entrada) {
-            if (text == 'ok') {
-                var store = Ext.getStore('Totales');
-                store.add({
-                    tipo: forma,
-                    monto: entrada
-                });
+            if (text === 'ok') {
+                var pendiente = me.aPagar - me.pagado;
+                console.log(pendiente);
+                console.log(entrada);
+                console.log(permiteCambio);
+                console.log(entrada > pendiente);
 
-                me.pagado = 0;
-
-                store.each(function (item) {
-                    me.pagado += parseFloat(item.get('monto'));
-                });
-
-                me.getTotales().down('#pagado').setItems({xtype: 'container', html: me.pagado});
-                me.getTotales().down('#pendiente').setItems({xtype: 'container', html: me.aPagar - me.pagado});
+                if(permiteCambio === 'false'){
+                    console.log('no se permite dar cambio');
+                    if(entrada > pendiente){
+                        me.mandaMensaje('Sin cambio', 'Esta forma de pago no permite dar cambio, disminuya la cantidad.');
+                    } else {
+                        me.sumaCobros(forma, entrada);
+                    }                       
+                } else {
+                    console.log('si se permite dar cambio');
+                    me.sumaCobros(forma, entrada);
+                }
 
             } else {
 
-
             }
         });
+
         me.getTotales().down('#aCobrar').setItems({xtype: 'container', html: me.aPagar});
         me.getTotales().down('#pagado').setItems({xtype: 'container', html: me.pagado});
         me.getTotales().down('#pendiente').setItems({xtype: 'container', html: me.aPagar - me.pagado});
+    },
+
+    sumaCobros: function (forma, entrada){
+        var me = this,
+            store = Ext.getStore('Totales');
+
+        store.add({
+            tipo: forma,
+            monto: entrada
+        });
+
+        me.pagado = 0;
+
+        store.each(function (item) {
+                    me.pagado += parseFloat(item.get('monto'));
+        });
+
+        me.getTotales().down('#pagado').setItems({xtype: 'container', html: me.pagado});
+        me.getTotales().down('#pendiente').setItems({xtype: 'container', html: me.aPagar - me.pagado});        
     },
 
     onSeleccionarTransaccion: function (t, index, target, record, e, eOpts) {

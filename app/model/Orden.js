@@ -51,6 +51,9 @@ Ext.define('Imobile.model.Orden', {
         },{
             name: 'Imagen',
             type: 'string'
+        },{
+            name: 'CodigoAlmacen',
+            type: 'String'
         }]
     }
 });

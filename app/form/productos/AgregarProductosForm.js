@@ -5,7 +5,8 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
 		'Ext.form.FieldSet',
 		'Ext.field.Text',
 		'Ext.field.Number',
-        'Ext.field.Spinner'
+        'Ext.field.Spinner',
+        'Ext.field.Hidden'
 	],
 	config:{
 		//padding:'15 15 15 15',
@@ -92,6 +93,9 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         label:'Almacen',
                         disabled: false,
                         itemId: 'almacenProducto'
+                    },{
+                        xtype: 'hiddenfield',
+                        name: 'CodigoAlmacen'
                     },{
                         xtype:'textfield',
                         name:'Disponible',

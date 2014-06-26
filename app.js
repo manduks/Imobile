@@ -10,6 +10,12 @@
     will need to resolve manually.
 */
 
+//<debug>
+Ext.Loader.setPath({
+    'Ext.ux': 'src/ux'
+});
+//</debug>
+
 Ext.application({
     name: 'Imobile',
 
@@ -34,7 +40,8 @@ Ext.application({
         'Monedas',
         'Facturas',
         'Totales',
-        'Transacciones'
+        'Transacciones',
+        'Prospectos'
     ],
 
     views: [

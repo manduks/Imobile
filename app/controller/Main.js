@@ -27,7 +27,9 @@ Ext.define('Imobile.controller.Main', {
             listaFacturas: 'facturaslist',
             ordenContainer: 'ordencontainer',
             partidaContainer: 'partidacontainer',
-            tituloContainer: 'titulocontainer'
+            tituloContainer: 'titulocontainer',
+            fileLoadBtn: 'configuracioncontainer #fileLoadBtn',
+            loadedImage: 'configuracioncontainer #loadedImage'
 
         },
         control: {
@@ -117,8 +119,6 @@ Ext.define('Imobile.controller.Main', {
     onBack: function (navigationview) {
         var me = this,            
             itemActivo = navigationview.getActiveItem().getActiveItem();
-
-            console.log(itemActivo.xtype);
 
         var store = Ext.getStore('Ordenes');
         if (store.getData().items.length <= 1) {

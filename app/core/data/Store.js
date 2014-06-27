@@ -13,7 +13,8 @@ Ext.define('Imobile.core.data.Store', {
                     Token: localStorage.getItem("Token"),
                     CodigoUsuario: localStorage.getItem("CodigoUsuario"),
                     CodigoSociedad: localStorage.getItem("CodigoSociedad"),
-                    CodigoDispositivo: localStorage.getItem("CodigoDispositivo")
+                    CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
+                    Elementos: 500
                 });
             }
         }

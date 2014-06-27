@@ -7,7 +7,7 @@ Ext.define('Imobile.controller.Main', {
     Token: undefined,
     direccionEntrega: undefined,
     direccionFiscal: undefined,
-    dirIP: 'ferman.no-ip.org:88',
+    dirIP: '25.15.241.121:88',//'ferman.no-ip.org:88',
     almacenes: undefined,
 
     config: {

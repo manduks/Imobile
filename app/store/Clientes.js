@@ -10,7 +10,8 @@ Ext.define('Imobile.store.Clientes', {
     config: {
         model: 'Imobile.model.Cliente',
         proxy: {
-            url: "http://ferman.no-ip.org:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",
+            //url: "http://ferman.no-ip.org:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",
+            url: "http://25.15.241.121:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {

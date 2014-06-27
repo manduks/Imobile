@@ -39,10 +39,23 @@ Ext.define('Imobile.view.cobranza.TotalAPagarContainer', {
             xtype: 'totalescontainer',
             flex: 1
         },{
-            xtype: 'button',
-            text: 'Terminar',
-            ui: 'confirm',
-            margin: 10
-        }]
+            xtype: 'container',
+            layout: 'hbox',
+            items:[{
+                xtype: 'button',
+                text: 'Terminar',
+                ui: 'confirm',
+                margin: 10,
+                flex: 1
+            },{
+                xtype: 'button',
+                text: 'Cancelar',
+                ui: 'decline',
+                itemId: 'cancelar',
+                margin: 10,
+                flex: 1 
+            }]
+        }
+        ]
     }
 });

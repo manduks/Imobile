@@ -12,7 +12,6 @@ Ext.define('Imobile.view.Main', {
         'Imobile.view.configuracion.ServidorContainer',
         'Imobile.view.configuracion.InitializeContainer',
         'Imobile.view.configuracion.ConfiguracionContainer',
-        'Imobile.view.favoritos.SeleccionadorProFav',
         'Imobile.form.productos.AgregarProductosForm',
         'Imobile.view.ventas.PartidaContainer',
         'Imobile.view.ventas.OpcionesOrdenPanel',
@@ -45,6 +44,7 @@ Ext.define('Imobile.view.Main', {
         'Imobile.view.ventas.AlmacenList',
         'Imobile.form.prospectos.ProspectosForm',
         'Imobile.view.prospectos.ProspectosList',
-        'Imobile.model.FormaDePago',
+        'Imobile.view.cobranza.NavigationCobranza',
+        'Imobile.form.cobranza.MontoAPagarForm'
     ]
 });

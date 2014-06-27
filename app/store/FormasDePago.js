@@ -11,8 +11,8 @@ Ext.define('Imobile.store.FormasDePago', {
         model: 'Imobile.model.FormaDePago',
         autoLoad: true,
         proxy: {
-            //url: 'http://192.168.15.8:88/iMobile/COK1_CL_Socio/ObtenerListaSocios',
-            url: 'http://ferman.no-ip.org:88/iMobile/COK1_CL_Catalogos/ObtenerFormasPagoiMobile',
+            url: 'http://25.15.241.121:88/iMobile/COK1_CL_Catalogos/ObtenerFormasPagoiMobile',
+            //url: 'http://ferman.no-ip.org:88/iMobile/COK1_CL_Catalogos/ObtenerFormasPagoiMobile',
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {

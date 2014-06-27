@@ -10,7 +10,8 @@ Ext.define('Imobile.store.Facturas', {
     config: {
         model: 'Imobile.model.Factura',        
         proxy: {
-            url: 'http://ferman.no-ip.org:88/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile',
+            //url: 'http://ferman.no-ip.org:88/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile',
+            url: 'http://25.15.241.121:88/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile',
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {

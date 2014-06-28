@@ -3,7 +3,9 @@ Ext.define('Imobile.form.cobranza.MontoAPagarForm', {
     xtype: 'montoapagarform',
     //requires: ['Ext.form.FieldSet', 'Ext.field.Email', 'Ext.field.Password'],
     config: {
-        padding: '15 15 15 15',
+        padding: '0 15 15 15',
+        layout: 'vbox',
+        
 /*        defaults: {
             required: true,
             clearIcon: true
@@ -25,10 +27,7 @@ Ext.define('Imobile.form.cobranza.MontoAPagarForm', {
             xtype: 'button',
             text: 'Pagar',
             ui: 'action',
-            itemId: 'pagar',
-        },  {
-            xtype:'component',
-            height:30
+            itemId: 'pagar',        
         }/*,  {
             xtype:'component',
             cls:'imobile-version',

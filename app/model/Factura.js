@@ -10,7 +10,7 @@ Ext.define('Imobile.model.Factura', {
             name: 'Folio',
             type: 'int'
         },{
-            name: 'TotalDocumento',
+            name: 'Saldo',
             type: 'float'
         }, {
             name: 'FechaCreacion',

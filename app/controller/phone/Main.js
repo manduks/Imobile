@@ -103,16 +103,16 @@ Ext.define('Imobile.controller.phone.Main', {
             'navigationcobranza #agregarPago':{
                 tap: 'onAgregarPago'
             },
-            'navigationcobranza':{
-                back: 'onBackNavigationCobranza'
-            },
+            'navigationcobranza':{                
+                pop: 'onPopNavigationCobranza'
+            },        
             'facturascontainer #aplicarPago': {
                 tap: 'muestraCobranza'
             },
             'formasdepagolist': {
                 itemtap: 'agregaPago',
             },
-            'montoapagarform':{
+            'montoapagarform #pagar':{
                 tap: 'onPagar'
             },
             'transaccionlist': {
@@ -1368,192 +1368,7 @@ Ext.define('Imobile.controller.phone.Main', {
         }
     },
 
-    //// Control de cobranza
-
-    muestraFacturasPendientes: function () {
-        var me = this,
-            view = me.getMenu(),
-            store = Ext.getStore('Facturas');
-
-        view.push({
-            xtype: 'facturascontainer',
-            title: me.idCliente
-        });
-
-        params = {
-            CardCode: me.idCliente
-        };
-
-        store.setParams(params);
-        store.load();
-    },
-
-    aplicaPago: function () {
-        view.push({
-            xtype: 'formasdepagolist',
-            title: me.idCliente
-        });
-    },
-
-    cancelaPago:function(btn){
-        var me = this,
-            view = me.getMain(),
-            navigationCobranza = view.getActiveItem(),
-            titulo = navigationCobranza.down('toolbar'),
-            totales = Ext.getStore('Totales');
-
-        navigationCobranza.remove(titulo, true); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.
-        totales.removeAll();
-
-        view.setActiveItem(1);
-    },
-
-    onAgregarPago: function (btn){
-        var me = this,
-            view = me.getMain().getActiveItem();
-
-        view.push({
-            xtype: 'formasdepagolist',
-            title: me.idCliente
-        });
-
-        view.getNavigationBar().down('#agregarPago').hide();
-    },
-
-    onBackNavigationCobranza: function(navigationview){
-        var me = this, 
-        barra = navigationview.getNavigationBar(),
-        view = navigationview.getActiveItem();
-
-        if(view.isXType('totalapagarcontainer')){
-            barra.down('#agregarPago').show();
-        }
-
-        barra.setTitle(me.idCliente);
-    },
-
-    agregaPago: function (list, index, target, record){
-        var me = this,
-            view = list.up('navigationcobranza'); //NavigationCobranza
-
-        view.push({
-            xtype: 'montoapagarform',
-            title: me.idCliente
-        });
-
-        view.down('fieldset').setTitle(record.data.Nombre);
-    },
-
-    onPagar: function(btn){
-        var me = this,
-            view = btn.up('navigationcobranza'),
-            form = view.down('montoapagarform'),
-            totales = Ext.getStore('Totales'),
-            pendiente = me.aPagar - me.pagado,
-            forma = form.record.get('Nombre'),
-            entrada = form.getValues().monto
-            permiteCambio = form.record.get('PermiteCambio');
-
-            console.log(pendiente);
-            console.log(entrada);
-            console.log(permiteCambio);
-            console.log(entrada > pendiente);
-
-            if(permiteCambio === 'false'){
-                console.log('no se permite dar cambio');
-                if(entrada > pendiente){
-                    me.mandaMensaje('Sin cambio', 'Esta forma de pago no permite dar cambio, disminuya la cantidad.');
-                } else {
-                    me.sumaCobros(forma, entrada);
-                }                       
-            } else {
-                console.log('si se permite dar cambio');
-                me.sumaCobros(forma, entrada);
-            }
-    },
-
-    //muestraCobranza: function (list, index, target, record) {
-    muestraCobranza: function () {
-        var me = this,
-            view = me.getMain(),
-            navigationCobranza,
-            i,
-            total = 0,
-            seleccion = view.getActiveItem().down('facturaslist').getSelection(),
-            barraTitulo = ({
-                xtype: 'toolbar',
-                docked: 'top',
-                title: me.titulo
-            });
-
-        for (i = 0; i < seleccion.length; i++) {
-            total += seleccion[i].data.TotalDocumento; // Este se tiene que cambiar por saldo, hay que esperar a que Rulo lo tenga bien chido.
-        }
-
-        me.aPagar = total;
-
-        view.setActiveItem(3);
-        navigationCobranza = view.getActiveItem();
-
-        navigationCobranza.getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
-        navigationCobranza.add(barraTitulo);
-
-/*        var me = this,
-            view = me.getMenu(),
-            forma = record.get('Nombre'),
-            permiteCambio = record.get('PermiteCambio');*/
-
-/*        Ext.Msg.prompt(forma, 'Ingrese el monto a pagar:', function (text, entrada) {
-            if (text === 'ok') {
-                var pendiente = me.aPagar - me.pagado;
-                console.log(pendiente);
-                console.log(entrada);
-                console.log(permiteCambio);
-                console.log(entrada > pendiente);
-
-                if(permiteCambio === 'false'){
-                    console.log('no se permite dar cambio');
-                    if(entrada > pendiente){
-                        me.mandaMensaje('Sin cambio', 'Esta forma de pago no permite dar cambio, disminuya la cantidad.');
-                    } else {
-                        me.sumaCobros(forma, entrada);
-                    }                       
-                } else {
-                    console.log('si se permite dar cambio');
-                    me.sumaCobros(forma, entrada);
-                }
-
-            } else {
-
-            }
-        });*/
-
-        me.getTotales().down('#aCobrar').setItems({xtype: 'container', html: me.aPagar});
-        me.getTotales().down('#pagado'
-            ).setItems({xtype: 'container', html: me.pagado});
-        me.getTotales().down('#pendiente').setItems({xtype: 'container', html: me.aPagar - me.pagado});
-    },
-
-    sumaCobros: function (forma, entrada){
-        var me = this,
-            store = Ext.getStore('Totales');
-
-        store.add({
-            tipo: forma,
-            monto: entrada
-        });
-
-        me.pagado = 0;
-
-        store.each(function (item) {
-                    me.pagado += parseFloat(item.get('monto'));
-        });
-
-        me.getTotales().down('#pagado').setItems({xtype: 'container', html: me.pagado});
-        me.getTotales().down('#pendiente').setItems({xtype: 'container', html: me.aPagar - me.pagado});        
-    },
-
-    onSeleccionarTransaccion: function (t, index, target, record, e, eOpts) {
+        onSeleccionarTransaccion: function (t, index, target, record, e, eOpts) {
         var me = this,
             view = me.getMenu(),
             store = Ext.getStore('Ordenes');
@@ -1674,7 +1489,6 @@ Ext.define('Imobile.controller.phone.Main', {
         });
     },
 
-
     /**
      * Obtiene el tipo de cambio actual de acuerdo a la moneda que le pasan, este valor lo deja en la variable global tipoCambio.
      * @param moneda La divisa cuyo tipo de cambio se necesita.
@@ -1725,6 +1539,209 @@ Ext.define('Imobile.controller.phone.Main', {
             }
         });
     },
+
+    //// Control de cobranza
+
+    /**
+    * Muestra la lista de facturas pendientes asociadas al cliente elegido en clienteslist.
+    */
+    muestraFacturasPendientes: function () {
+        var me = this,
+            view = me.getMenu(),
+            store = Ext.getStore('Facturas');
+
+        view.push({
+            xtype: 'facturascontainer',
+            title: me.idCliente
+        });
+
+        params = {
+            CardCode: me.idCliente
+        };
+
+        store.setParams(params);
+        store.load();
+    },
+
+    /**
+    * Muestra la lista de formas de pago.
+    */
+    aplicaPago: function () {
+        view.push({
+            xtype: 'formasdepagolist',
+            title: me.idCliente
+        });
+    },
+
+    /**
+    * Responde al evento "tap" del botón "cancelar" de "totalapagarcontainer".
+    * Establece en el menú principal el item 1 como activo.
+    * @param btn Este botón.
+    */
+
+    cancelaPago:function(btn){
+        var me = this,
+            view = me.getMain(),
+            navigationCobranza = view.getActiveItem(),
+            titulo = navigationCobranza.down('toolbar'),
+            totales = Ext.getStore('Totales');
+
+        navigationCobranza.remove(titulo, true); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.
+        totales.removeAll();
+
+        view.setActiveItem(1);
+    },
+
+    /**
+    * Responde al evento "tap" del botón "Agregar" de "totalapagarcontainer".
+    * Muestra la lista de las formas de pago.
+    * @param btn Este botón.
+    */
+    onAgregarPago: function (btn){
+        var me = this,
+            view = me.getMain().getActiveItem();
+
+        view.push({
+            xtype: 'formasdepagolist',
+            title: me.idCliente
+        });
+
+        view.getNavigationBar().down('#agregarPago').hide();
+    },
+
+    /** 
+    * Valida la vista actual y si es el caso hace visible el botón "Agregar".
+    * Setea el título el toolbar.
+    * @param navigationview Este navigationview.
+    */
+    onPopNavigationCobranza: function(navigationview){
+        var me = this, 
+        barra = navigationview.getNavigationBar(),
+        view = navigationview.getActiveItem();
+
+        if(view.isXType('totalapagarcontainer')){
+            barra.down('#agregarPago').show();
+        }
+
+        barra.setTitle(me.idCliente);        
+    },
+
+    /**
+    * Responde al evento "itemtap" de "formasdepagolist".
+    * Muestra el formulario para agregar un pago a la cobranza actual.
+    * @param list Esta lista "formasdepagolist"
+    * @param index El índice del ítem tapeado.
+    * @param target El elemento tapeado.
+    * @param record El record asociado al ítem.    
+    */
+    agregaPago: function (list, index, target, record){
+        var me = this,
+            view = list.up('navigationcobranza'); //NavigationCobranza
+
+        view.push({
+            xtype: 'montoapagarform',
+            title: me.idCliente,
+            datos: record.data
+        });
+
+        view.down('fieldset').setTitle(record.data.Nombre);
+    },
+
+    /**
+    * Responde al evento "tap" del botón "pagar" de "montoapagarform".
+    * Valida si este tipo de pago permite dar cambio para en su caso permitirlo o no.
+    * @param btn Este botón.
+    */
+    onPagar: function(btn){
+        var me = this,
+            view = btn.up('navigationcobranza'),
+            form = view.down('montoapagarform'),
+            totales = Ext.getStore('Totales'),
+            pendiente = me.aPagar - me.pagado,
+            forma = form.datos.Nombre,
+            entrada = form.getValues().monto
+            permiteCambio = form.datos.PermiteCambio;
+
+/*            console.log(pendiente);
+            console.log(entrada);
+            console.log(permiteCambio);
+            console.log(entrada > pendiente);*/
+
+            if(permiteCambio === 'false'){
+                console.log('no se permite dar cambio');
+                if(entrada > pendiente){
+                    me.mandaMensaje('Sin cambio', 'Esta forma de pago no permite dar cambio, disminuya la cantidad.');
+                } else {
+                    me.sumaCobros(forma, entrada);
+                    view.pop(2);
+                }                       
+            } else {
+                console.log('si se permite dar cambio');
+                me.sumaCobros(forma, entrada);
+                view.pop(2);
+            }
+    },
+
+    /**
+    * Muestra la vista "totalapagarcontainer".
+    */
+    muestraCobranza: function () {
+        var me = this,
+            view = me.getMain(),
+            navigationCobranza,
+            i,
+            total = 0,
+            seleccion = view.getActiveItem().down('facturaslist').getSelection(),
+            barraTitulo = ({
+                xtype: 'toolbar',
+                docked: 'top',
+                title: me.titulo
+            });
+
+        for (i = 0; i < seleccion.length; i++) {
+            total += seleccion[i].data.Saldo;
+        }
+
+        me.aPagar = total;
+
+        view.setActiveItem(3);
+        navigationCobranza = view.getActiveItem();
+
+        navigationCobranza.getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
+        navigationCobranza.add(barraTitulo);
+
+        me.getTotales().down('#aCobrar').setItems({xtype: 'container', html: me.aPagar});
+        me.getTotales().down('#pagado'
+            ).setItems({xtype: 'container', html: me.pagado});
+        me.getTotales().down('#pendiente').setItems({xtype: 'container', html: me.aPagar - me.pagado});
+    },
+
+    /**
+    * Agrega el pago ingresado al store "Totales".
+    * Suma cada uno de los saldos del store "Totales" y los muestra en "totalescontainer".
+    * @param forma La forma de pago.
+    * @param entrada El monto a pagar.
+    */
+    sumaCobros: function (forma, entrada){
+        var me = this,
+            store = Ext.getStore('Totales');
+
+        store.add({
+            tipo: forma,
+            monto: entrada
+        });
+
+        me.pagado = 0;
+
+        store.each(function (item) {
+                    me.pagado += parseFloat(item.get('monto'));
+        });
+
+        me.getTotales().down('#pagado').setItems({xtype: 'container', html: me.pagado});
+        me.getTotales().down('#pendiente').setItems({xtype: 'container', html: me.aPagar - me.pagado});        
+    },
+
+    ////// Termina control de cobranza /////////
 
     //////////// Controlador de Prospectos ////////////////////////
 

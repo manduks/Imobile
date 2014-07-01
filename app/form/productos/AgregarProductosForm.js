@@ -5,10 +5,11 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
 		'Ext.form.FieldSet',
 		'Ext.field.Text',
 		'Ext.field.Number',
-        'Ext.field.Spinner'
+        //'Ext.field.Spinner'
 	],
 	config:{
-		//padding:'15 15 15 15',
+		padding:'10 15 15 15',
+        scrollable: 'vertical',
 		items:[
             {
                 xtype:'container',

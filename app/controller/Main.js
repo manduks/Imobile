@@ -26,8 +26,7 @@ Ext.define('Imobile.controller.Main', {
             listaFacturas: 'facturaslist',
             ordenContainer: 'ordencontainer',
             partidaContainer: 'partidacontainer',
-            tituloContainer: 'titulocontainer',
-            montoAPagar: 'montoapagarform'
+            tituloContainer: 'titulocontainer'            
         },
         control: {
             'loginform': {

@@ -110,7 +110,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 tap: 'muestraCobranza'
             },
             'formasdepagolist': {
-                itemtap: 'agregaPago',
+                itemtap: 'agregaPago'
             },
             'montoapagarform #pagar':{
                 tap: 'onPagar'
@@ -498,14 +498,13 @@ Ext.define('Imobile.controller.phone.Main', {
             ordenes = Ext.getStore('Ordenes'),
             productos = Ext.getStore('Productos'),
             menu = me.getMain().getActiveItem(),     //NavigationOrden
-
             form = btn.up('agregarproductosform'),
             values = form.getValues(),
             descripcion = values.NombreArticulo,
             cantidad = values.cantidad,
-            moneda = values.moneda;
-        importe = values.importe;
-
+            moneda = values.moneda,
+            importe = values.importe;
+    console.log(me.totalDeImpuesto);
         if (Ext.isEmpty(descripcion) || Ext.isEmpty(cantidad)) {
             me.mandaMensaje("Campos inválidos o vacíos", "Verifique que el valor de los campos sea correcto o que no estén vacíos");
         } else {
@@ -525,7 +524,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 me.ayudaAAgregar(form, 'cantidad');
                 me.ayudaAAgregar(form, 'edicion');
             }
-        }
+        }        
     },
 
     /**
@@ -552,6 +551,7 @@ Ext.define('Imobile.controller.phone.Main', {
             case 'monedaIgual':
                 values.totalDeImpuesto = me.totalDeImpuesto;
                 values.Imagen = productoAgregado.get('Imagen');
+                console.log(me.totalDeImpuesto);
                 ordenes.add(values);
                 menu.pop();
                 me.actualizarTotales();
@@ -574,7 +574,7 @@ Ext.define('Imobile.controller.phone.Main', {
             case 'edicion':
                 var ind = form.ind,
                     datosProducto = ordenes.getAt(ind),
-                    totalDeImpuesto,
+                    totaldeimpuesto,
                     moneda = values.moneda;
 
                 if (moneda != me.codigoMonedaSeleccinada) {
@@ -582,11 +582,11 @@ Ext.define('Imobile.controller.phone.Main', {
                     importe = precio * cantidad;
                     precio = Imobile.core.FormatCurrency.currency(precio, me.codigoMonedaSeleccinada);
                     importe = Imobile.core.FormatCurrency.currency(importe, me.codigoMonedaSeleccinada);
-                    totalDeImpuesto = me.totalDeImpuesto * me.tipoCambio;
+                    totaldeimpuesto = me.totalDeImpuesto * me.tipoCambio;
                     datosProducto.set('Precio', precio);
                     datosProducto.set('cantidad', cantidad);
                     datosProducto.set('importe', importe);
-                    datosProducto.set('totalDeImpuesto', /*Imobile.core.FormatCurrency.currency(me.totalDeImpuesto, '$')*/ totalDeImpuesto);
+                    datosProducto.set('totalDeImpuesto', /*Imobile.core.FormatCurrency.currency(me.totalDeImpuesto, '$')*/ me.totalDeImpuesto);
                     //datosProducto.set('Imagen', cantidadProducto.get('Imagen'));
                     menu.pop();
                     me.actualizarTotales();
@@ -733,7 +733,7 @@ Ext.define('Imobile.controller.phone.Main', {
             case 'venta':
                 view.push({
                     xtype: 'opcionclientelist',
-                    title: me.idCliente,//me.titulo,
+                    title: me.idCliente//me.titulo,
                     //clienteSeleccionado: record.data
                 });
 
@@ -744,8 +744,7 @@ Ext.define('Imobile.controller.phone.Main', {
                         CodigoSociedad: localStorage.getItem("CodigoSociedad"),
                         CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
                         Token: localStorage.getItem("Token"),
-                        Criterio: me.idCliente,
-
+                        CardCode: me.idCliente
                     },
                     callbackKey: 'callback',
                     success: function (response) {
@@ -840,8 +839,8 @@ Ext.define('Imobile.controller.phone.Main', {
                 success: function (response) {
                     var procesada = response.Procesada;
 
-                    if (procesada) {
-                        me.llenaAgregarProductos(response.data); // Hacer un console.log de esta parte para manipular adecuadamente los datos, se supone que me regresa el artículo.
+                    if (procesada) {                        
+                        me.llenaAgregarProductos(response.Data[0]); // Hacer un console.log de esta parte para manipular adecuadamente los datos, se supone que me regresa el artículo.
                     } else {
                         Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                     }
@@ -910,9 +909,14 @@ Ext.define('Imobile.controller.phone.Main', {
             callbackKey: 'callback',
             success: function (response) {
                 var procesada = response.Procesada,
-                    precio2 = Imobile.core.FormatCurrency.formatCurrencytoNumber(precio),
+                    precio2 = Imobile.core.FormatCurrency.formatCurrencytoNumber(precio);
+
+                if(precio2 == 0){
+                    desc = 0;
+                } else {
                     desc = precio2 - response.Data[0];
                     desc = desc * 100 / precio2;
+                }                    
 
                 if (procesada) {
 
@@ -920,11 +924,13 @@ Ext.define('Imobile.controller.phone.Main', {
                     preciocondescuento = response.Data[0];
                     me.sujetoImpuesto = valores.SujetoImpuesto;
 
-                    //Se valida si el producto es sujeto de impuesto                        
+                    //Se valida si el producto es sujeto de impuesto
+                    console.log(me.sujetoImpuesto);
                     if (me.sujetoImpuesto) {
                         //Se calcula total de impuesto
                         totaldeimpuesto = preciocondescuento * me.tasaImpuesto / 100;
                         me.totalDeImpuesto = totaldeimpuesto;
+                        console.log(me.totalDeImpuesto);
                     } else {
                         me.totalDeImpuesto = 0;
                     }
@@ -1004,7 +1010,7 @@ Ext.define('Imobile.controller.phone.Main', {
     ponValoresOriginalesAAgregarProductoForm: function (values, moneda) {
         var me = this,
 
-            precio, importe, newObject, totalDeImpuesto;
+            precio, importe, newObject, totaldeimpuesto,
 
             newObject = {
                 Precio: values.Precio,
@@ -1024,17 +1030,17 @@ Ext.define('Imobile.controller.phone.Main', {
             };
 
             if(moneda != me.codigoMonedaSeleccinada){
-                if(moneda == 'USD' && me.codigoMonedaSeleccinada == '$'){
+                if(moneda == 'USD' && me.codigoMonedaSeleccinada == '$'){ //// Checar esta parte hay que hacerlo mas generico
                     precio = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.Precio) / me.tipoCambio;
 /*                    console.log(Imobile.core.FormatCurrency.formatCurrencytoNumber(values.Precio));
                     console.log(me.tipoCambio);*/
                     importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.importe) / me.tipoCambio;
-                    totalDeImpuesto = values.totalDeImpuesto;
+                    totaldeimpuesto = values.totalDeImpuesto;
                     //values.precioConDescuento = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento);
                     newObject.Precio = Imobile.core.FormatCurrency.currency(precio, moneda);
                     newObject.importe = Imobile.core.FormatCurrency.currency(importe, moneda);
                     //values.precioConDescuento = Imobile.core.FormatCurrency.currency(values.precioConDescuento, moneda);
-                    newObject.totalDeImpuesto = totalDeImpuesto / me.tipoCambio;
+                    newObject.totalDeImpuesto = totaldeimpuesto / me.tipoCambio;
                     //console.log(newObject); 
 
                 }/* else if (moneda == '$' && me.codigoMonedaSeleccinada == 'USD'){
@@ -1071,6 +1077,7 @@ Ext.define('Imobile.controller.phone.Main', {
         if (me.sujetoImpuesto) {
             totaldeimpuesto = preciocondescuento * me.tasaImpuesto / 100;
             me.totalDeImpuesto = totaldeimpuesto;
+            console.log(me.totalDeImpuesto);
         }
 
         view.getActiveItem().setValues({
@@ -1650,18 +1657,25 @@ Ext.define('Imobile.controller.phone.Main', {
     * @param record El record asociado al ítem.    
     */
     agregaPago: function (list, index, target, record){
-        var me = this,
-            monto = me.getMontoAPagar(),
+        var me = this,            
             view = list.up('navigationcobranza'); //NavigationCobranza
         console.log(record.data.TipoFormaPago);
-        switch(record.TipoFormaPago){
-            case 0:
-                monto.down('fieldset').add([{
+
+        view.push({
+            xtype: 'montoapagarform',
+            //xtype: 'montoapagarformcontainer',
+            title: me.idCliente,
+            datos: record.data
+        });
+
+        switch(record.data.TipoFormaPago){
+            case "0":                
+                view.down('fieldset').add([{
                     xtype: 'numberfield',
                     name: 'numeroCheque',
                     placeHolder: 'Ingrese el número de cheque',
                     label: 'No. Cheque'
-                }/*,{
+                },{
                     xtype: 'numberfield',
                     name: 'numeroCuenta',
                     placeHolder: 'Ingrese el número de cuenta',
@@ -1671,20 +1685,22 @@ Ext.define('Imobile.controller.phone.Main', {
                     name: 'banco',
                     placeHolder: 'Ingrese el nombre del banco',
                     label: 'Banco'
-                }*/])
+                }]);
                 break;
-            case 2:
-
+            case "2":
+                view.down('fieldset').add([{
+                    xtype: 'numberfield',
+                    name: 'numeroAutorizacion',
+                    placeHolder: 'Ingrese el número de autorización',
+                    label: 'No. Autorización'
+                },{
+                    xtype: 'numberfield',
+                    name: 'numeroCuenta',
+                    placeHolder: 'Ingrese el número de cuenta',
+                    label: 'No. Cuenta' 
+                }]);
                 break;
         }
-        console.log(monto);
-
-        view.push({
-            xtype: 'montoapagarform',
-            //xtype: 'montoapagarformcontainer',
-            title: me.idCliente,
-            datos: record.data
-        });
 
         view.down('fieldset').setTitle(record.data.Nombre);
     },

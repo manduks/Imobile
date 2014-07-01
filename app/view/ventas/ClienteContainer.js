@@ -8,10 +8,10 @@ Ext.define('Imobile.view.ventas.ClienteContainer', {
     requires: [],
     xtype: 'clientecontainer',
     config: {
-        scrollable: {
+        /*scrollable: {
             direction: 'vertical',
             directionLock: true
-        },
+        },*/
         layout: 'vbox',
         items: [{
             xtype: 'container',

@@ -45,7 +45,7 @@ Ext.define('Imobile.form.prospectos.ProspectosForm', {
                     //disabled: true,
                     clearIcon:true,
                     autoCapitalize:true,
-                    labelWidth: '45%',                    
+                    labelWidth: '45%'
                 },
                 items:[
                     {
@@ -103,7 +103,7 @@ Ext.define('Imobile.form.prospectos.ProspectosForm', {
                         },{
                             xtype:'textfield',
                             name:'colonia',
-                            label:'Colonia',
+                            label:'Colonia'
                         },{
                             xtype:'textfield',
                             name:'ciudad',
@@ -141,7 +141,7 @@ Ext.define('Imobile.form.prospectos.ProspectosForm', {
                     },{
                         xtype:'textfield',
                         name:'telOficina',
-                        label:'Tel. Oficina',                    
+                        label:'Tel. Oficina'                    
                     },{
                         xtype:'textfield',
                         name:'telMovil',
@@ -175,7 +175,7 @@ Ext.define('Imobile.form.prospectos.ProspectosForm', {
                         label: 'Cultivos',
                         hidden: false,
                         itemId: 'cultivos'
-                    },/*{
+                    }/*,{
                         xtype:'textfield',
                         name:'superficie',
                         label:'Superficie',                    
@@ -196,7 +196,7 @@ Ext.define('Imobile.form.prospectos.ProspectosForm', {
                         xtype: 'checkboxfield',
                         name: 'superficie',
                         label: 'Superficie',
-                        hidden: false,
+                        hidden: false
                     },{
                         xtype:'numberfield',
                         name:'campoAbierto',
@@ -238,19 +238,19 @@ Ext.define('Imobile.form.prospectos.ProspectosForm', {
                     },{
                         xtype:'textfield',
                         name:'comercializa',
-                        label:'Comercializa',                    
+                        label:'Comercializa'
                     },{
                         xtype:'textfield',
                         name:'encargadoCompras',
-                        label:'Encargado de compras',
+                        label:'Encargado de compras'
                     },{
                         xtype:'textfield',
                         name:'encargadoPagos',
-                        label:'Encargado de pagos',
+                        label:'Encargado de pagos'
                     },{
                         xtype:'textfield',
                         name:'responsableTecnico',
-                        label:'Responsable Técnico',
+                        label:'Responsable Técnico'
                     }
                 ]
             },{
@@ -284,7 +284,7 @@ Ext.define('Imobile.form.prospectos.ProspectosForm', {
                 },
                 items:[
                     {
-                        xtype:'textareafield',
+                        xtype:'textareafield'
                         //name:'productos',
                         //label:'Productos'
                     }

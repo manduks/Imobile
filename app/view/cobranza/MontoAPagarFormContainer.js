@@ -9,14 +9,13 @@ Ext.define('Imobile.view.cobranza.MontoAPagarFormContainer', {
     xtype: 'montoapagarformcontainer',
     config: {
         layout: {
-            type: 'vbox',
+            type: 'vbox'
             //pack: 'center',
             //align: 'center'
         },
         items: [{
             xtype: 'montoapagarform',
             flex: 1
-        }
-        ]
+        }]
     }
 });

@@ -14,6 +14,12 @@ Ext.define('Imobile.form.cobranza.MontoAPagarForm', {
         items: [{
             xtype: 'fieldset',
             title: 'Title',
+            defaults:{
+                labelWidth: '40%',
+                required:true,
+                labelCls: 'labels',
+                inputCls: 'labels'
+            },
             items:[{
                 xtype: 'numberfield',
                 name: 'monto',
@@ -27,11 +33,10 @@ Ext.define('Imobile.form.cobranza.MontoAPagarForm', {
             xtype: 'button',
             text: 'Pagar',
             ui: 'action',
-            itemId: 'pagar',        
+            itemId: 'pagar'
         }/*,  {
             xtype:'component',
-            cls:'imobile-version',
-            html:'Versión 1.0'
+            height:10
         }, {
             xtype:'component',
             height:20

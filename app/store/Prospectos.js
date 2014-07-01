@@ -9,7 +9,7 @@ Ext.define('Imobile.store.Prospectos', {
 
     config: {
         model: 'Imobile.model.Prospecto',
-        autoLoad: true,
+        autoLoad: true
 /*        proxy: {
             url: "http://25.15.241.121:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",
             type: 'jsonp',

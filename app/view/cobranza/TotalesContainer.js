@@ -3,21 +3,22 @@ Ext.define('Imobile.view.cobranza.TotalesContainer', {
     xtype: 'totalescontainer',
     requires:['Ext.Label'],
     config: {
-        layout: 'hbox',
+        layout: 'hbox',        
         //itemCls: 'factura',
         items: [{   
             xtype: 'container',
-            html: 'A cobrar', 
             flex: 1,
-            itemId: 'aCobrar',
-            style: {
+            itemId: 'aCobrar',  
+            html: 'A cobrar',            
+            cls: 'aCobrar2'
+            /*style: {
                 background: 'black',
                 'color': 'yellow',
                 'margin-right': '1px',
                 'text-align': 'center',
                 'font-weight':'bold',
-                'vertical-align': 'middle'
-            }
+                'vertical-align':'middle'
+            }*/
         },{
             xtype: 'container',
             html: 'Pagado',

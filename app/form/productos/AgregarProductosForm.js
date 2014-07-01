@@ -9,7 +9,8 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
         'Ext.field.Hidden'
 	],
 	config:{
-		//padding:'15 15 15 15',
+		padding:'10 15 15 15',
+        scrollable: 'vertical',
 		items:[
             {
                 xtype:'container',

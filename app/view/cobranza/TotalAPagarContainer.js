@@ -8,10 +8,10 @@ Ext.define('Imobile.view.cobranza.TotalAPagarContainer', {
     requires: [],
     xtype: 'totalapagarcontainer',
     config: {
-        scrollable: {
+        /*scrollable: {
             direction: 'vertical',
             directionLock: true
-        },
+        },*/
         layout: 'vbox',
         //activeItem: 0,
         items: [{

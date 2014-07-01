@@ -23,7 +23,8 @@ Ext.application({
         'Ext.MessageBox',
         'Ext.data.proxy.JsonP',
         'Imobile.core.data.Store',
-        'Imobile.core.FormatCurrency'
+        'Imobile.core.FormatCurrency',
+        'Ext.ux.Fileup'
     ],
 
     models:[

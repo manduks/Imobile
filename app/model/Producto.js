@@ -63,6 +63,7 @@ Ext.define('Imobile.model.Producto', {
             type: 'string',
             mapping: 'Imagen',
             convert: function(Imagen){
+                console.log(Imagen);
                 return 'http://25.15.241.121:88' + Imagen;
             }
         }]

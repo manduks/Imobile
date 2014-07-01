@@ -102,11 +102,23 @@ Ext.define('Imobile.controller.phone.Main', {
             'cobranzalist': {
                 itemtap: 'muestraFacturasPendientes'
             },
+            'totalapagarcontainer #cancelar':{
+                tap: 'cancelaPago'
+            },
+            'navigationcobranza #agregarPago':{
+                tap: 'onAgregarPago'
+            },
+            'navigationcobranza':{                
+                pop: 'onPopNavigationCobranza'
+            },        
             'facturascontainer #aplicarPago': {
-                tap: 'aplicaPago'
+                tap: 'muestraCobranza'
             },
             'formasdepagolist': {
-                itemtap: 'muestraCobranza'
+                itemtap: 'agregaPago'
+            },
+            'montoapagarform #pagar':{
+                tap: 'onPagar'
             },
             'transaccionlist': {
                 itemtap: 'onSeleccionarTransaccion'
@@ -387,8 +399,8 @@ Ext.define('Imobile.controller.phone.Main', {
     cambiaItem: function (tabPanel, value, oldValue) {
         var me = this,
             view = me.getNavigationOrden(),//me.getMain().getActiveItem(),
-            boton = view.getNavigationBar().down('#agregarProductos'),
-            clienteSeleccionado = me.getOpcionCliente().clienteSeleccionado;
+            boton = view.getNavigationBar().down('#agregarProductos');
+            //clienteSeleccionado = me.getOpcionCliente().clienteSeleccionado;
 
         if (value.xtype == 'clientecontainer') {
             boton.setText('Back').show();
@@ -397,18 +409,18 @@ Ext.define('Imobile.controller.phone.Main', {
             var form = value.down('clienteform'),
                 direcciones = Ext.getStore('Direcciones');
 
-            form.setValues(clienteSeleccionado);
+            form.setValues(me.clienteSeleccionado);
         }
 
         if (value.xtype == 'editarpedidoform') {
-            if (me.codigoMonedaSeleccinada == me.codigoMonedaPredeterminada) {
-                clienteSeleccionado.tipoCambio = 1;
+            if(me.codigoMonedaSeleccinada == me.codigoMonedaPredeterminada){
+                me.clienteSeleccionado.tipoCambio = 1;    
             } else {
-                clienteSeleccionado.tipoCambio = me.tipoCambio;
+                me.clienteSeleccionado.tipoCambio = me.tipoCambio;    
             }
-
-            clienteSeleccionado.CodigoMoneda = me.codigoMonedaSeleccinada;
-            value.setValues(clienteSeleccionado);
+            
+            me.clienteSeleccionado.CodigoMoneda = me.codigoMonedaSeleccinada;
+            value.setValues(me.clienteSeleccionado);
             boton.setText('Back').show();
             boton.setUi('back');
         }
@@ -721,8 +733,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
     /**
      * Establece el título y el id del cliente cada uno en una variable. Verifica de qué opción viene, venta o cobranza:
-     * Venta: Muestra la vista de ventas y establece como predeterminadas las primeras direcciones que encuentra tanto fiscal
-     * como de entrega, si este cliente no tiene dirección fiscal manda un mensaje y no permite avanzar.
+     * Venta: Muestra la vista de ventas.
      * Cobranza: Muestra la vista de cobranza.
      * @param list Ésta lista.
      * @param index El índice del ítem tapeado.
@@ -750,36 +761,34 @@ Ext.define('Imobile.controller.phone.Main', {
             case 'venta':
                 view.push({
                     xtype: 'opcionclientelist',
-                    title: me.idCliente,//me.titulo,
-                    clienteSeleccionado: record.data
+                    title: me.idCliente//me.titulo,
+                    //clienteSeleccionado: record.data
                 });
 
-                var clienteSeleccionado = me.getOpcionCliente().clienteSeleccionado,
-                    direcciones = Ext.getStore('Direcciones');
-                direcciones.setData(clienteSeleccionado.Direcciones);
-                direcciones.clearFilter();
-                direcciones.filter('TipoDireccion', 'S');
+                Ext.data.JsonP.request({
+                    url: "http://" + me.dirIP + "/iMobile/COK1_CL_Socio/ObtenerSocioiMobile",
+                    params: {
+                        CodigoUsuario: localStorage.getItem("CodigoUsuario"),
+                        CodigoSociedad: localStorage.getItem("CodigoSociedad"),
+                        CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
+                        Token: localStorage.getItem("Token"),
+                        Criterio: me.idCliente
+                    },
+                    callbackKey: 'callback',
+                    success: function (response) {
+                        var procesada = response.Procesada;
+                        
+                        me.clienteSeleccionado = response.Data[0];
 
-                if (direcciones.getCount() > 0) {
-                    view.add(barraTitulo);
-                    me.direccionFiscal = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion fiscal y se lo asignamos a una variable global.
-                    me.codigoImpuesto = direcciones.getAt(0).data.CodigoImpuesto;
-                    me.tasaImpuesto = direcciones.getAt(0).data.Tasa;
-                    direcciones.getAt(0).set('Predeterminado', true);
-                    direcciones.clearFilter();
-                    direcciones.filter('TipoDireccion', 'B');
-                    if (direcciones.getCount() > 0) {
-                        me.direccionEntrega = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una variable global.
-                        direcciones.getAt(0).set('Predeterminado', true);
+                        if (procesada) {
+                            me.estableceDirecciones(view, barraTitulo);
+                        } else {
+                            Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
+                        }
                     }
-
-                } else {
-                    me.mandaMensaje('Sin dirección fiscal', 'Este cliente no cuenta con dirección fiscal, solicite una al SAP.');
-                    view.pop();
-                    direcciones.removeAll();
-                }
-
+                });
                 break;
+
             case 'cobranza':
                 view.push({
                     xtype: 'cobranzalist',
@@ -793,6 +802,41 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     /**
+    * Establece como predeterminadas las primeras direcciones que encuentra tanto fiscal
+    * como de entrega, si este cliente no tiene dirección fiscal manda un mensaje y no permite avanzar.
+    * @param view La vista actual.
+    * @param barraTitulo El toolbar para agregar el nombre del cliente.
+    */
+    estableceDirecciones: function (view, barraTitulo){
+        var me = this, 
+        direcciones = Ext.getStore('Direcciones');
+        console.log(me.clienteSeleccionado);
+        direcciones.setData(me.clienteSeleccionado.Direcciones);
+        direcciones.clearFilter();
+        direcciones.filter('TipoDireccion', 'S');
+
+        if (direcciones.getCount() > 0) {
+            view.add(barraTitulo);
+            me.direccionFiscal = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion fiscal y se lo asignamos a una variable global.
+            me.codigoImpuesto = direcciones.getAt(0).data.CodigoImpuesto;
+            me.tasaImpuesto = direcciones.getAt(0).data.Tasa;
+            direcciones.getAt(0).set('Predeterminado', true);
+            direcciones.clearFilter();
+            direcciones.filter('TipoDireccion', 'B');
+
+            if (direcciones.getCount() > 0) {
+                me.direccionEntrega = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una variable global.
+                direcciones.getAt(0).set('Predeterminado', true);
+            }
+
+       } else {
+            me.mandaMensaje('Sin dirección fiscal', 'Este cliente no cuenta con dirección fiscal, solicite una al SAP.');
+            view.pop();
+            direcciones.removeAll();
+        }
+    },
+
+    /**
      * Muestra el formulario para agregar un producto a la orden.
      * @param list Esta lista.
      * @param index El índice del item tapeado.
@@ -800,90 +844,123 @@ Ext.define('Imobile.controller.phone.Main', {
      * @param record El record asociado al ítem.
      */
     onAgregarProducto: function (list, index, target, record, e) {
-        var me = this, precio,
-            view = me.getMain().getActiveItem(),
-            valores = record.data,
-            moneda = valores.ListaPrecios[0].CodigoMoneda,
-            valoresForm,
-            almacenes = me.almacenes,
-            desc,
-            preciocondescuento,
-            totaldeimpuesto,
-            importe,
-            valoresForm;
+        var me = this,
+            valores = record.data;
+            //moneda,// = valores.ListaPrecios[0].CodigoMoneda,
+            
 
-        if (view.getActiveItem().xtype == 'agregarproductosform') {
-            return;
-        }
-
-        if (false/*me.estaEnOrden(valores.CodigoArticulo) != -1*/) {  // Validamos si el producto ya está en la orden.
-            me.editarPartida(list, index, target, record); // Si ya está, lo editamos en vez de agregarlo.
-        } else {
-
-            view.push({
-                xtype: 'agregarproductosform',
-                modo: 'agregar'
-            });
-
-            Ext.Array.forEach(almacenes, function (item, index) {
-                var predeterminado = item.Predeterminado;
-
-                if (predeterminado) {
-                    valores.NombreAlmacen = item.NombreAlmacen;
-                    valores.CodigoAlmacen = item.CodigoAlmacen
-                    //me.CodigoAlmacen = item.CodigoAlmacen;
-                }
-            });
-
-            var form = view.getActiveItem();
-
-            form.setValues(valores);
-            //Se establece el valor de cantidad, precio y moneda
-
-            precio = Imobile.core.FormatCurrency.currency(valores.ListaPrecios[0].Precio, moneda),
-                cantidad = 1;
-
-            //Se calcula descuento
             Ext.data.JsonP.request({
-                url: "http://25.15.241.121:88/iMobile/COK1_CL_Consultas/ObtenerPrecioEspecialiMobile",
+                url: "http://" + me.dirIP + "/iMobile/COK1_CL_Articulo/ObtenerArticuloiMobile",
                 params: {
                     CodigoUsuario: localStorage.getItem("CodigoUsuario"),
                     CodigoSociedad: localStorage.getItem("CodigoSociedad"),
                     CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
                     Token: localStorage.getItem("Token"),
-                    ItemCode: valores.CodigoArticulo,
+                    //ItemCode: valores.CodigoArticulo,
                     CardCode: me.idCliente,
-                    ListaPrecio: valores.ListaPrecios[0].CodigoLista,
-                    Cantidad: cantidad
-
+                    //ListaPrecio: valores.ListaPrecios[0].CodigoLista,
+                    //Cantidad: cantidad
+                    Criterio: valores.CodigoArticulo
                 },
+
                 callbackKey: 'callback',
                 success: function (response) {
-                    var procesada = response.Procesada,
-                        precio2 = Imobile.core.FormatCurrency.formatCurrencytoNumber(precio),
-                        desc = precio2 - response.Data[0];
-                    desc = desc * 100 / precio2;
+                    var procesada = response.Procesada;
 
                     if (procesada) {
+                        me.llenaAgregarProductos(response.data); // Hacer un console.log de esta parte para manipular adecuadamente los datos, se supone que me regresa el artículo.
+                    } else {
+                        Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
+                    }
+                }
+            });
+        },
+    //},
 
-                        //Se establece precio con descuento
-                        preciocondescuento = response.Data[0];
-                        me.sujetoImpuesto = valores.SujetoImpuesto;
 
-                        //Se valida si el producto es sujeto de impuesto                        
-                        if (me.sujetoImpuesto) {
-                            //Se calcula total de impuesto
-                            totaldeimpuesto = preciocondescuento * me.tasaImpuesto / 100;
-                            me.totalDeImpuesto = totaldeimpuesto;
-                        } else {
-                            me.totalDeImpuesto = 0;
-                        }
+    llenaAgregarProductos: function (valores){
+        var me = this,
+            view = me.getMain().getActiveItem(),
+            almacenes = me.almacenes,
+            precio,
+            form,
+            cantidad,
+            valoresForm,
+            desc,
+            preciocondescuento,
+            totaldeimpuesto,
+            importe,
+            //valores = record.data,
+            moneda = valores.ListaPrecios[0].CodigoMoneda;
 
-                        //Se calcula importe
-                        importe = preciocondescuento * cantidad;
+        if (view.getActiveItem().xtype == 'agregarproductosform') {
+            return;
+        }
 
-                        // Se establecen los valores al formulario
-                        form.setValues({
+        view.push({
+            xtype: 'agregarproductosform',
+            modo: 'agregar'
+        });
+
+        Ext.Array.forEach(almacenes, function (item, index) {
+            var predeterminado = item.Predeterminado;
+
+            if (predeterminado) {
+                valores.NombreAlmacen = item.NombreAlmacen;
+                me.CodigoAlmacen = item.CodigoAlmacen;
+            }
+        });
+
+        form = view.getActiveItem();
+
+        form.setValues(valores);
+        
+        //Se establece el valor de cantidad, precio y moneda
+        precio = Imobile.core.FormatCurrency.currency(valores.ListaPrecios[0].Precio, moneda),
+        cantidad = 1;
+
+        //Se calcula descuento
+        Ext.data.JsonP.request({
+            url: "http://" + me.dirIP + "/iMobile/COK1_CL_Consultas/ObtenerPrecioEspecialiMobile",
+
+            params: {
+                CodigoUsuario: localStorage.getItem("CodigoUsuario"),
+                CodigoSociedad: localStorage.getItem("CodigoSociedad"),
+                CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
+                Token: localStorage.getItem("Token"),
+                ItemCode: valores.CodigoArticulo,
+                CardCode: me.idCliente,
+                ListaPrecio: valores.ListaPrecios[0].CodigoLista,
+                Cantidad: cantidad
+            },
+
+            callbackKey: 'callback',
+            success: function (response) {
+                var procesada = response.Procesada,
+                    precio2 = Imobile.core.FormatCurrency.formatCurrencytoNumber(precio),
+                    desc = precio2 - response.Data[0];
+                    desc = desc * 100 / precio2;
+
+                if (procesada) {
+
+                    //Se establece precio con descuento
+                    preciocondescuento = response.Data[0];
+                    me.sujetoImpuesto = valores.SujetoImpuesto;
+
+                    //Se valida si el producto es sujeto de impuesto                        
+                    if (me.sujetoImpuesto) {
+                        //Se calcula total de impuesto
+                        totaldeimpuesto = preciocondescuento * me.tasaImpuesto / 100;
+                        me.totalDeImpuesto = totaldeimpuesto;
+                    } else {
+                        me.totalDeImpuesto = 0;
+                    }
+
+                    //Se calcula importe
+                    importe = preciocondescuento * cantidad;
+
+                    // Se establecen los valores al formulario
+                    form.setValues({
                             Precio: precio,
                             cantidad: cantidad,
                             moneda: moneda,
@@ -897,7 +974,6 @@ Ext.define('Imobile.controller.phone.Main', {
                     }
                 }
             });
-        }
     },
 
     /**
@@ -1068,8 +1144,8 @@ Ext.define('Imobile.controller.phone.Main', {
                 });
 
                 viewPrincipal.getActiveItem().add(barraTitulo);
-
                 break;
+
             case 'visualizar':
                 me.actionOrden = 'actualizar';
                 var store = Ext.getStore('Transacciones');
@@ -1256,13 +1332,13 @@ Ext.define('Imobile.controller.phone.Main', {
 
             params["Orden.TotalDocumento"] = parseFloat(total).toFixed(2);
 
-            if (me.actionOrden == 'crear') {
-                url = "http://25.15.241.121:88/iMobile/COK1_CL_OrdenVenta/AgregarOrdenMobile";
+
+            if(me.actionOrden == 'crear'){
+                url = "http://" + me.dirIP + "/iMobile/COK1_CL_OrdenVenta/AgregarOrdenMobile";
                 msg = "Se agrego la orden correctamente con folio: ";
             } else {
-                url = "http://25.15.241.121:88/iMobile/COK1_CL_OrdenVenta/ActualizarOrdenVentaiMobile";
-                msg = "Se acualizo la orden correctamente con folio: ",
-                    params["Orden.NumeroDocumento"] = me.NumeroDocumento;
+                url = "http://" + me.dirIP + "iMobile/COK1_CL_OrdenVenta/ActualizarOrdenVentaiMobile";
+                msg = "Se acualizo la orden correctamente con folio: ";
             }
             console.log(params, 'paramss actualizar')
             Ext.data.JsonP.request({
@@ -1290,106 +1366,7 @@ Ext.define('Imobile.controller.phone.Main', {
         }
     },
 
-    //// Control de cobranza
-
-    muestraFacturasPendientes: function () {
-        var me = this,
-            view = me.getMenu(),
-            store = Ext.getStore('Facturas');
-
-        view.push({
-            xtype: 'facturascontainer',
-            title: me.idCliente
-        });
-
-        params = {
-            CardCode: me.idCliente
-        };
-
-        store.setParams(params);
-        store.load();
-    },
-
-    aplicaPago: function () {
-        var me = this,
-            view = me.getMenu(),
-            i,
-            total = 0,
-            seleccion = view.getActiveItem().down('facturaslist').getSelection();
-
-        for (i = 0; i < seleccion.length; i++) {
-            total += seleccion[i].data.TotalDocumento;
-        }
-
-        me.aPagar = total;
-
-        view.push({
-            xtype: 'formasdepagolist',
-            title: me.idCliente
-        });
-    },
-
-    muestraCobranza: function (list, index, target, record) {
-        var me = this,
-            view = me.getMenu(),
-            forma = record.get('Nombre'),
-            permiteCambio = record.get('PermiteCambio');
-
-        view.push({
-            xtype: 'totalapagarcontainer',
-            title: me.idCliente
-        });
-
-        Ext.Msg.prompt(forma, 'Ingrese el monto a pagar:', function (text, entrada) {
-            if (text === 'ok') {
-                var pendiente = me.aPagar - me.pagado;
-                console.log(pendiente);
-                console.log(entrada);
-                console.log(permiteCambio);
-                console.log(entrada > pendiente);
-
-                if(permiteCambio === 'false'){
-                    console.log('no se permite dar cambio');
-                    if(entrada > pendiente){
-                        me.mandaMensaje('Sin cambio', 'Esta forma de pago no permite dar cambio, disminuya la cantidad.');
-                    } else {
-                        me.sumaCobros(forma, entrada);
-                    }                       
-                } else {
-                    console.log('si se permite dar cambio');
-                    me.sumaCobros(forma, entrada);
-                }
-
-            } else {
-
-            }
-        });
-
-        me.getTotales().down('#aCobrar').setItems({xtype: 'container', html: me.aPagar});
-        me.getTotales().down('#pagado').setItems({xtype: 'container', html: me.pagado});
-        me.getTotales().down('#pendiente').setItems({xtype: 'container', html: me.aPagar - me.pagado});
-    },
-
-    sumaCobros: function (forma, entrada){
-        var me = this,
-            store = Ext.getStore('Totales');
-
-        store.add({
-            tipo: forma,
-            monto: entrada
-        });
-
-        me.pagado = 0;
-
-        store.each(function (item) {
-                    me.pagado += parseFloat(item.get('monto'));
-        });
-
-        me.getTotales().down('#pagado').setItems({xtype: 'container', html: me.pagado});
-        me.getTotales().down('#pendiente').setItems({xtype: 'container', html: me.aPagar - me.pagado});        
-    },
-
-    onSeleccionarTransaccion: function (t, index, target, record, e, eOpts) {
+        onSeleccionarTransaccion: function (t, index, target, record, e, eOpts) {
         var me = this,
             view = me.getMenu(),
             store = Ext.getStore('Ordenes');
@@ -1400,7 +1377,7 @@ Ext.define('Imobile.controller.phone.Main', {
         });
 
         Ext.data.JsonP.request({
-            url: "http://25.15.241.121:88/iMobile/COK1_CL_Consultas/RegresarOrdenVentaiMobile",
+            url: "http://" + me.dirIP + "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaiMobile",
             params: {
                 CodigoUsuario: localStorage.getItem("CodigoUsuario"),
                 CodigoSociedad: localStorage.getItem("CodigoSociedad"),
@@ -1496,7 +1473,7 @@ Ext.define('Imobile.controller.phone.Main', {
         //me.CodigoAlmacen = me.almacenes[index].CodigoAlmacen; //record.get('CodigoAlmacen');
 
         Ext.data.JsonP.request({
-            url: "http://25.15.241.121:88/iMobile/COK1_CL_Consultas/ObtenerDisponibleiMobile",
+            url: "http://" + me.dirIP + "/iMobile/COK1_CL_Consultas/ObtenerDisponibleiMobile",
             params: {
                 CodigoUsuario: localStorage.getItem('CodigoUsuario'),
                 CodigoSociedad: '001',
@@ -1521,9 +1498,8 @@ Ext.define('Imobile.controller.phone.Main', {
         });
     },
 
-
     /**
-     * Obtiene el tipo de cambio actual de acuerdo a la moneda que le pasan, éste valor lo deja en la variable global tipoCambio.
+     * Obtiene el tipo de cambio actual de acuerdo a la moneda que le pasan, este valor lo deja en la variable global tipoCambio.
      * @param moneda La divisa cuyo tipo de cambio se necesita.
      */
     obtenerTipoCambio: function (moneda, record) {
@@ -1533,7 +1509,7 @@ Ext.define('Imobile.controller.phone.Main', {
             view = me.getNavigationOrden().getActiveItem();
 
         Ext.data.JsonP.request({
-            url: "http://25.15.241.121:88/iMobile/COK1_CL_Consultas/RegresarTipoCambio",
+            url: "http://" + me.dirIP + "/iMobile/COK1_CL_Consultas/RegresarTipoCambio",
             params: {
                 CodigoUsuario: localStorage.getItem('CodigoUsuario'),
                 CodigoSociedad: '001',
@@ -1571,6 +1547,369 @@ Ext.define('Imobile.controller.phone.Main', {
             }
         });
     },
+
+    //// Control de cobranza
+
+    /**
+    * Muestra la lista de facturas pendientes asociadas al cliente elegido en clienteslist.
+    */
+    muestraFacturasPendientes: function () {
+        var me = this,
+            view = me.getMenu(),
+            store = Ext.getStore('Facturas');
+
+        view.push({
+            xtype: 'facturascontainer',
+            title: me.idCliente
+        });
+
+        params = {
+            CardCode: me.idCliente
+        };
+
+        store.setParams(params);
+        store.load();
+    },
+
+    agregaSaldoAMostrar: function(facturas){
+        var me = this,
+            moneda,
+            saldoMostrado
+
+        facturas.each(function (item, index, length) {
+            moneda = item.get('CodigoMoneda');
+            saldoMostrado = Imobile.core.FormatCurrency.currency(item.get('Saldo'), moneda);
+            item.set('saldoAMostrar', saldoMostrado);
+            console.log(item.get('Saldo'));
+        });
+    },
+
+    /**
+    * Muestra la lista de formas de pago.
+    */
+    aplicaPago: function () {
+        view.push({
+            xtype: 'formasdepagolist',
+            title: me.idCliente
+        });
+    },
+
+    /**
+    * Responde al evento "tap" del botón "cancelar" de "totalapagarcontainer".
+    * Establece en el menú principal el item 1 como activo.
+    * @param btn Este botón.
+    */
+
+    cancelaPago:function(btn){
+        var me = this,
+            view = me.getMain(),
+            navigationCobranza = view.getActiveItem(),
+            titulo = navigationCobranza.down('toolbar'),
+            totales = Ext.getStore('Totales'),
+            facturas = Ext.getStore('Facturas');
+
+        navigationCobranza.remove(titulo, true); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.
+        totales.removeAll();
+        me.pagado = 0;
+        facturas.clearFilter();
+        view.setActiveItem(1);
+    },
+
+    /**
+    * Responde al evento "tap" del botón "Agregar" de "totalapagarcontainer".
+    * Muestra la lista de las formas de pago.
+    * @param btn Este botón.
+    */
+    onAgregarPago: function (btn){
+        var me = this,
+            view = me.getMain().getActiveItem();
+
+        view.push({
+            xtype: 'formasdepagolist',
+            title: me.idCliente
+        });
+
+        view.getNavigationBar().down('#agregarPago').hide();
+    },
+
+    /** 
+    * Valida la vista actual y si es el caso hace visible el botón "Agregar".
+    * Setea el título el toolbar.
+    * @param navigationview Este navigationview.
+    */
+    onPopNavigationCobranza: function(navigationview){
+        var me = this, 
+        barra = navigationview.getNavigationBar(),
+        view = navigationview.getActiveItem();
+
+        if(view.isXType('totalapagarcontainer')){
+            barra.down('#agregarPago').show();
+        }
+
+        barra.setTitle(me.idCliente);        
+    },
+
+    /**
+    * Responde al evento "itemtap" de "formasdepagolist".
+    * Muestra el formulario para agregar un pago a la cobranza actual.
+    * @param list Esta lista "formasdepagolist"
+    * @param index El índice del ítem tapeado.
+    * @param target El elemento tapeado.
+    * @param record El record asociado al ítem.    
+    */
+    agregaPago: function (list, index, target, record){
+        var me = this,
+            monto = me.getMontoAPagar(),
+            view = list.up('navigationcobranza'); //NavigationCobranza
+        console.log(record.data.TipoFormaPago);
+        switch(record.TipoFormaPago){
+            case 0:
+                monto.down('fieldset').add([{
+                    xtype: 'numberfield',
+                    name: 'numeroCheque',
+                    placeHolder: 'Ingrese el número de cheque',
+                    label: 'No. Cheque'
+                }/*,{
+                    xtype: 'numberfield',
+                    name: 'numeroCuenta',
+                    placeHolder: 'Ingrese el número de cuenta',
+                    label: 'No. Cuenta' 
+                },{
+                    xtype: 'textfield',
+                    name: 'banco',
+                    placeHolder: 'Ingrese el nombre del banco',
+                    label: 'Banco'
+                }*/])
+                break;
+            case 2:
+
+                break;
+        }
+        console.log(monto);
+
+        view.push({
+            xtype: 'montoapagarform',
+            //xtype: 'montoapagarformcontainer',
+            title: me.idCliente,
+            datos: record.data
+        });
+
+        view.down('fieldset').setTitle(record.data.Nombre);
+    },
+
+    /**
+    * Responde al evento "tap" del botón "pagar" de "montoapagarform".
+    * Valida si este tipo de pago permite dar cambio para en su caso permitirlo o no.
+    * @param btn Este botón.
+    */
+    onPagar: function(btn){
+        var me = this,
+            view = btn.up('navigationcobranza'),
+            form = view.down('montoapagarform'),
+            moneda,
+            pendiente = me.aPagar - me.pagado,
+            forma = form.datos.Nombre,
+            entrada = form.getValues().monto,
+            codigo =  form.datos.Codigo,
+            tipo = form.datos.tipoFormaPago,
+            permiteCambio = form.datos.PermiteCambio;
+
+/*            console.log(pendiente);
+            console.log(entrada);
+            console.log(permiteCambio);
+            console.log(entrada > pendiente);*/
+
+        moneda = Ext.getStore('Facturas').getAt(0).CodigoMoneda;
+
+        if(Ext.isEmpty(entrada)){
+            me.mandaMensaje('Sin cantidad', 'Ingrese la cantidad a pagar.');
+        } else {
+
+            if(permiteCambio === 'false'){
+                console.log('no se permite dar cambio');
+                if(entrada > pendiente){
+                    me.mandaMensaje('Sin cambio', 'Esta forma de pago no permite dar cambio, disminuya la cantidad.');
+                } else {
+                    me.sumaCobros(forma, entrada, moneda, codigo, tipo);
+                    view.pop(2);
+                }                       
+            } else {
+                console.log('si se permite dar cambio');
+                me.sumaCobros(forma, entrada, moneda, codigo, tipo);
+                view.pop(2);
+            }
+        }
+    },
+
+    /**
+    * Muestra la vista "totalapagarcontainer".
+    */
+    muestraCobranza: function () {
+        var me = this,
+            view = me.getMain(),
+            navigationCobranza,
+            i,
+            total = 0,
+            seleccion = view.getActiveItem().down('facturaslist').getSelection(),
+            moneda = seleccion[0].data.CodigoMoneda,
+            facturas = Ext.getStore('Facturas'),
+            barraTitulo = ({
+                xtype: 'toolbar',
+                docked: 'top',
+                title: me.titulo
+            });
+
+        //me.codigoMonedaSeleccinada = moneda;
+
+        for (i = 0; i < seleccion.length; i++) {
+            total += seleccion[i].data.Saldo;
+            seleccion[i].data.aPagar = true;
+        }
+
+        facturas.clearFilter();
+        facturas.filter('aPagar', true);
+
+        me.aPagar = total;
+
+        view.setActiveItem(3);
+        navigationCobranza = view.getActiveItem();
+
+        navigationCobranza.getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
+        navigationCobranza.add(barraTitulo);
+
+        me.getTotales().down('#aCobrar').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.aPagar, moneda)});
+        me.getTotales().down('#pagado').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.pagado, moneda)});
+        me.getTotales().down('#pendiente').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.aPagar - me.pagado, moneda)});
+    },
+
+    /**
+    * Agrega el pago ingresado al store "Totales".
+    * Suma cada uno de los saldos del store "Totales" y los muestra en "totalescontainer".
+    * @param forma La forma de pago.
+    * @param entrada El monto a pagar.
+    */
+    sumaCobros: function (forma, entrada, moneda, codigo, tipoFormaPago){
+        var me = this,
+            temp,
+            entradaMostrada = Imobile.core.FormatCurrency.currency(entrada, moneda),
+            store = Ext.getStore('Totales');
+
+        store.add({
+            tipo: forma,
+            monto: entradaMostrada,
+            codigoFormaPago: codigo,
+            tipoFormaPago: tipoFormaPago
+        });
+
+        temp = Imobile.core.FormatCurrency.formatCurrencytoNumber(store.getAt(store.getCount()-1).get('monto'));
+        me.pagado += parseFloat(temp);
+
+        // store.each(function (item) {
+        //     temp = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('monto'));
+        //     me.pagado += parseFloat(temp);
+        // });
+
+        me.getTotales().down('#pagado').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.pagado, moneda)});
+        me.getTotales().down('#pendiente').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.aPagar - me.pagado, moneda)});        
+    },
+
+    /**
+     * Termina la cobranza
+     */
+    onTerminarCobranza: function () {
+        var me = this,
+            total = 0,
+            store = Ext.getStore('Facturas'),
+            totales = Ext.getStore('Totales'),
+            array = store.getData().items,
+            fecha = new Date(now),
+            url, msg;
+
+
+        if (totales.getCount() > 0) {
+            var Folio = parseInt(localStorage.getItem("FolioInterno")) + 100;
+
+
+            var params = {
+                CodigoUsuario: localStorage.getItem("CodigoUsuario"),
+                CodigoSociedad: localStorage.getItem("CodigoSociedad"),
+                CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
+                Token: localStorage.getItem("Token"),
+                "Cobranza.Fecha": fecha,
+                "Cobranza.CodigoVendedor": localStorage.getItem("CodigoUsuario"),
+                "Cobranza.Tipo": 'C',
+                "Cobranza.CodigoCliente": me.idCliente
+            };
+
+            console.log(params);
+            //localStorage.setItem("FolioInterno", Folio);
+
+            Ext.Array.forEach(array, function (item, index, allItems) {
+                console.log(item, 'terminarr....');
+                //total += (Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad')) + item.get('totalDeImpuesto');
+
+                params["CobranzaFacturas[" + index + "].NumeroFactura"] = item.get('NumeroDocumento');
+                params["CobranzaFacturas[" + index + "].Monto"] = item.get('Saldo');
+            });
+
+            totales.each(function (item, index) {
+                params["oCobranzaDetalles[" + index + "].NumeroLinea"] = index;
+                params["oCobranzaDetalles[" + index + "].CodigoFormaPago"] = item.CodigoFormaPago;
+                params["oCobranzaDetalles[" + index + "].MontoNeto"] = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.monto);
+                params["oCobranzaDetalles[" + index + "].NoFacturaAplicada"] = 'Sin número'
+
+                switch(item.tipoFormaPago){
+                    case 0: //Cheque
+                        params["oCobranzaDetalles[" + index + "].NumeroCheque"] = 'Sin número';
+                        params["oCobranzaDetalles[" + index + "].NumeroCuenta"] = '9999';
+                        params["oCobranzaDetalles[" + index + "].Banco"] = 'Maya';
+                        params["oCobranzaDetalles[" + index + "].Fecha"] = fecha;
+                        break;
+
+                    case 1: //Transferencia
+                        break;
+                    case 2: //Tarjeta
+                        params["oCobranzaDetalles[" + index + "].NumeroAutorizacion"] = 'Sin número';
+                        params["oCobranzaDetalles[" + index + "].NumeroCuenta"] = '9999';
+                        break;
+                }
+            });
+
+            //params["Orden.TotalDocumento"] = parseFloat(total).toFixed(2);
+
+/*            if(me.actionOrden == 'crear'){
+                url = "http://" + me.dirIP + "/iMobile/COK1_CL_OrdenVenta/AgregarOrdenMobile";
+                msg = "Se agrego la orden correctamente con folio: ";
+            } else {
+                url = "http://" + me.dirIP + "iMobile/COK1_CL_OrdenVenta/ActualizarOrdenVentaiMobile";
+                msg = "Se acualizo la orden correctamente con folio: ";
+            }*/
+
+            Ext.data.JsonP.request({
+                url: url,
+                params: params,
+                callbackKey: 'callback',
+                success: function (response) {
+                    if (response.Procesada) {
+                        me.getMain().setActiveItem(1);
+                        Ext.Msg.alert("Orden Procesada", msg + response.CodigoUnicoDocumento);
+                        store.clearData();
+                        me.getNavigationOrden().remove(me.getNavigationOrden().down('toolbar'), true);
+                        me.getMenu().remove(me.getMenu().down('toolbar'), true);
+                        me.getMain().getActiveItem().pop();
+                    } else {
+                        Ext.Msg.alert("Orden No Procesada", "No se proceso la orden correctamente: " + response.Descripcion);
+                        me.getOpcionesOrden().setActiveItem(0);
+                    }
+                }
+            });
+        } else {
+            me.getOpcionesOrden().setActiveItem(0);
+            Ext.Msg.alert("Sin pago", "Agrega por lo menos un pago.");
+        }
+    }, 
+
+    ////// Termina control de cobranza /////////
 
     //////////// Controlador de Prospectos ////////////////////////
 

@@ -10,7 +10,7 @@ Ext.define('Imobile.store.Transacciones', {
     config: {
         model:'Imobile.model.Transaccion',
         proxy: {
-            url: "http://25.15.241.121:88/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile",
+            url: 'http://ferman.no-ip.org:88/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile',
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {

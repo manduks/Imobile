@@ -9,14 +9,6 @@ Ext.define('Imobile.core.data.Store', {
         autoLoad: false,
         listeners: {
             beforeload: function (store, operation, ops) {
-                /*store.getProxy().setExtraParams({
-                 Token: localStorage.getItem("Token"),
-                 CodigoUsuario: localStorage.getItem("CodigoUsuario"),
-                 CodigoSociedad: localStorage.getItem("CodigoSociedad"),
-                 CodigoDispositivo: localStorage.getItem("CodigoDispositivo")
-                 });*/
-
-
                 var me = this,
                     extraParams = store.getProxy().getExtraParams();
                 me.params.auth_token = localStorage.getItem("Token");

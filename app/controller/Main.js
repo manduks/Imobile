@@ -7,7 +7,7 @@ Ext.define('Imobile.controller.Main', {
     Token: undefined,
     direccionEntrega: undefined,
     direccionFiscal: undefined,
-    dirIP: '25.15.241.121:88',
+    dirIP: '25.15.241.121:88',//'ferman.no-ip.org:88',
     almacenes: undefined,
 
     config: {
@@ -17,8 +17,7 @@ Ext.define('Imobile.controller.Main', {
             },
             menu: 'menu',
             opcionesOrden: 'opcionesorden',
-            opcionCliente: 'opcionclientelist',
-            seleccionadorProFav: 'seleccionadorprofav',
+            //opcionCliente: 'opcionclientelist',
             direcciones: 'direccionescontainer',
             productosOrden: 'productosorden',
             productosView: 'productosview',
@@ -29,8 +28,8 @@ Ext.define('Imobile.controller.Main', {
             partidaContainer: 'partidacontainer',
             tituloContainer: 'titulocontainer',
             fileLoadBtn: 'configuracioncontainer #fileLoadBtn',
-            loadedImage: 'configuracioncontainer #loadedImage'
-
+            loadedImage: 'configuracioncontainer #loadedImage',
+            montoAPagar: 'montoapagarform'
         },
         control: {
             'loginform': {
@@ -187,6 +186,7 @@ Ext.define('Imobile.controller.Main', {
     launch: function (){
         var me = this;        
         Ext.getStore('Productos').on('load', me.estableceCantidadAProductos);
+        Ext.getStore('Facturas').on('load', me.agregaSaldoAMostrar);
     }
 
 });

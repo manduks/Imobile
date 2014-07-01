@@ -10,8 +10,12 @@ Ext.define('Imobile.model.Factura', {
             name: 'Folio',
             type: 'int'
         },{
-            name: 'TotalDocumento',
-            type: 'float'
+            name: 'Saldo',
+            type: 'float',
+            convert: function(decimales){
+                var nuevo = Ext.Number.toFixed(decimales, 2);
+                return Ext.Number.from(nuevo, 1);
+            }
         }, {
             name: 'FechaCreacion',
             type: 'string',
@@ -24,6 +28,15 @@ Ext.define('Imobile.model.Factura', {
             convert: function(fechaFin){
                 return Ext.Date.format(new Date(fechaFin), "d-m-Y");
             }
+        },{
+            name: 'CodigoMoneda',
+            type: 'string'
+        },{
+            name: 'saldoAMostrar',
+            type: 'string'
+        },{
+            name: 'aPagar',
+            type: 'boolean'
         }]
     }
 });

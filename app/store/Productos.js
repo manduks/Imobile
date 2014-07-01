@@ -9,7 +9,7 @@ Ext.define('Imobile.store.Productos', {
     config: {
         model:'Imobile.model.Producto',        
         proxy: {
-            url: "http://25.15.241.121:88/iMobile/COK1_CL_Articulo/ObtenerListaArticulosiMobile",
+            url: 'http://ferman.no-ip.org:88/iMobile/COK1_CL_Articulo/ObtenerListaArticulosiMobile',
                  
             type: 'jsonp',
             callbackKey: 'callback',

@@ -4,7 +4,7 @@ Ext.define('Imobile.view.cobranza.FacturasList', {
     requires: [],
     config: {
         //itemCls: 'partida',
-        itemTpl: ['<div class="factura">', '<div> <p>Número: <b>{Folio}</b> Saldo: <b>{TotalDocumento}</b></div> <i style="font-size: 30px;float: right;margin-top: -25px;" class="fa fa-check"></i>',
+        itemTpl: ['<div class="factura">', '<div> <p>Número: <b>{Folio}</b> Saldo: <b>{saldoAMostrar}</b></div> <i style="font-size: 30px;float: right;margin-top: -25px;" class="fa fa-check"></i>',
                   '<div style="font-size: 90%"> <div><p>Fecha: <b>{FechaCreacion}</b> Vencimiento: <b>{FechaFin}</b> </div>',
 /*            '<p style="margin: 0px; color: red;">Quantity: <b>{cantidad}</b></p>',            */
             '</div>'].join(''),

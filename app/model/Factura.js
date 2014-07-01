@@ -7,17 +7,23 @@ Ext.define('Imobile.model.Factura', {
     extend: 'Ext.data.Model',
     config: {
         fields: [{
-            name: 'id',
+            name: 'Folio',
             type: 'int'
         },{
-            name: 'saldo',
+            name: 'TotalDocumento',
             type: 'float'
         }, {
-            name: 'fecha',
-            type: 'string'
+            name: 'FechaCreacion',
+            type: 'string',
+            convert: function(fechaCreacion){
+                return Ext.Date.format(new Date(fechaCreacion), "d-m-Y");
+            }
         },{
-            name: 'vencimiento',
-            type: 'string'
+            name: 'FechaFin',
+            type: 'string',
+            convert: function(fechaFin){
+                return Ext.Date.format(new Date(fechaFin), "d-m-Y");
+            }
         }]
     }
 });

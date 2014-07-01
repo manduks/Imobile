@@ -44,6 +44,7 @@ Ext.define('Imobile.view.Main', {
         'Imobile.view.ventas.TransaccionList',
         'Imobile.view.ventas.AlmacenList',
         'Imobile.form.prospectos.ProspectosForm',
-        'Imobile.view.prospectos.ProspectosList'
+        'Imobile.view.prospectos.ProspectosList',
+        'Imobile.model.FormaDePago',
     ]
 });

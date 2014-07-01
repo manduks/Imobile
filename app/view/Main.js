@@ -45,6 +45,7 @@ Ext.define('Imobile.view.Main', {
         'Imobile.form.prospectos.ProspectosForm',
         'Imobile.view.prospectos.ProspectosList',
         'Imobile.view.cobranza.NavigationCobranza',
-        'Imobile.form.cobranza.MontoAPagarForm'
+        'Imobile.form.cobranza.MontoAPagarForm',
+        'Imobile.view.cobranza.MontoAPagarFormContainer'
     ]
 });

@@ -18,7 +18,6 @@ Ext.define('Imobile.controller.Main', {
             menu: 'menu',
             opcionesOrden: 'opcionesorden',
             //opcionCliente: 'opcionclientelist',
-            seleccionadorProFav: 'seleccionadorprofav',
             direcciones: 'direccionescontainer',
             productosOrden: 'productosorden',
             productosView: 'productosview',
@@ -27,8 +26,8 @@ Ext.define('Imobile.controller.Main', {
             listaFacturas: 'facturaslist',
             ordenContainer: 'ordencontainer',
             partidaContainer: 'partidacontainer',
-            tituloContainer: 'titulocontainer'
-
+            tituloContainer: 'titulocontainer',
+            montoAPagar: 'montoapagarform'
         },
         control: {
             'loginform': {
@@ -188,6 +187,7 @@ Ext.define('Imobile.controller.Main', {
     launch: function (){
         var me = this;        
         Ext.getStore('Productos').on('load', me.estableceCantidadAProductos);
+        Ext.getStore('Facturas').on('load', me.agregaSaldoAMostrar);
     }
 
 });

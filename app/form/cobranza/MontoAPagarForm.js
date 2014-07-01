@@ -3,8 +3,8 @@ Ext.define('Imobile.form.cobranza.MontoAPagarForm', {
     xtype: 'montoapagarform',
     //requires: ['Ext.form.FieldSet', 'Ext.field.Email', 'Ext.field.Password'],
     config: {
-        padding: '0 15 15 15',
-        layout: 'vbox',
+        padding: '0 15 15 15',        
+
         
 /*        defaults: {
             required: true,

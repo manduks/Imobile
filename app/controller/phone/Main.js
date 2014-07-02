@@ -6,7 +6,7 @@ Ext.define('Imobile.controller.phone.Main', {
     titulo: undefined, // El titulo del navigationbar del navigationorden.
     opcion: undefined, // Guarda la opción elegida del  menú principal.    
     clienteSeleccionado: undefined, // Guarda los valores del cliente seleccionado.
-    //CodigoAlmacen: undefined, // El código del almacén.
+    CodigoAlmacen: undefined, // El código del almacén.
     codigoImpuesto: undefined, // El código de impuesto.
     tasaImpuesto: 0, // La tasa de impuesto.
     sujetoImpuesto: undefined, // Para saber si el artítulo es sujeto de impuesto o no.
@@ -747,7 +747,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 xtype: 'toolbar',
                 docked: 'top',
                 title: 'titulo'
-            });
+            });            
 
         me.idCliente = record.get('CodigoSocio');
         me.titulo = name;
@@ -757,6 +757,11 @@ Ext.define('Imobile.controller.phone.Main', {
 
         switch (me.opcion) {
             case 'venta':
+                
+                if (view.getActiveItem().xtype == 'opcionclientelist') {
+                    return;
+                }
+
                 view.push({
                     xtype: 'opcionclientelist',
                     title: me.idCliente//me.titulo,
@@ -788,10 +793,15 @@ Ext.define('Imobile.controller.phone.Main', {
                 break;
 
             case 'cobranza':
+                if (view.getActiveItem().xtype == 'cobranzalist') {
+                    return;
+                }
+
                 view.push({
                     xtype: 'cobranzalist',
                     title: me.idCliente
                 });
+
                 view.add(barraTitulo);
                 //me.getTotales().up('totalapagarcontainer')
                 break;
@@ -1191,6 +1201,10 @@ Ext.define('Imobile.controller.phone.Main', {
                 break;
 
             case 'visualizar':
+                if (view.getActiveItem().xtype == 'transaccionlist') {
+                    return;
+                }
+
                 me.actionOrden = 'actualizar';
                 var store = Ext.getStore('Transacciones');
 

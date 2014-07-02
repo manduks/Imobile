@@ -17,7 +17,7 @@ Ext.define('Imobile.view.ventas.OrdenList', {
             '<p style="margin: 0px;" class="total-product"><b>Total: {importe}</b></p>',
             '</span></div>'].join(''),
         store: 'Ordenes',
-        emptyText:'<img src="'+localStorage.getItem('image')+'" width="50px" height="50px" />' +
+        emptyText://'<img src="'+localStorage.getItem('image')+'" width="50px" height="50px" />' +
             '<div style="display: table; text-align: left; font-size: 10px; z-index: 0;">' +
             '<div style="display: table-row;">' +
             '<div id="cliente_id" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Transacción: Orden de Venta</div>' +

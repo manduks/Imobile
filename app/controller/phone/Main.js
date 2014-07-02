@@ -6,7 +6,7 @@ Ext.define('Imobile.controller.phone.Main', {
     titulo: undefined, // El titulo del navigationbar del navigationorden.
     opcion: undefined, // Guarda la opción elegida del  menú principal.    
     clienteSeleccionado: undefined, // Guarda los valores del cliente seleccionado.
-    //CodigoAlmacen: undefined, // El código del almacén.
+    CodigoAlmacen: undefined, // El código del almacén.
     codigoImpuesto: undefined, // El código de impuesto.
     tasaImpuesto: 0, // La tasa de impuesto.
     sujetoImpuesto: undefined, // Para saber si el artítulo es sujeto de impuesto o no.
@@ -1322,14 +1322,26 @@ Ext.define('Imobile.controller.phone.Main', {
     confirmaTerminarOrden: function (newActiveItem, t, oldActiveItem, eOpts) {
         var me = this;
 
-        Ext.Msg.confirm("Terminar orden", "¿Desea terminar la orden de venta?", function (e) {
+        if (me.actionOrden == 'crear') {
+            Ext.Msg.confirm("Terminar orden", "¿Desea terminar la orden de venta?", function (e) {
 
-            if (e == 'yes') {
-                me.onTerminarOrden();
-            } else {
-                me.getOpcionesOrden().setActiveItem(0);
-            }
-        });
+                if (e == 'yes') {
+                    me.onTerminarOrden();
+                } else {
+                    me.getOpcionesOrden().setActiveItem(0);
+                }
+            });
+        } else {
+            Ext.Msg.confirm("Actualizar orden", "¿Desea actualizar la orden de venta?", function (e) {
+
+                if (e == 'yes') {
+                    me.onTerminarOrden();
+                } else {
+                    me.getOpcionesOrden().setActiveItem(0);
+                }
+            });
+        }
+
     },
 
     /**

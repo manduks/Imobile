@@ -18,6 +18,24 @@ Ext.define('Imobile.model.Total', {
         },{
             name: 'codigoFormaPago',
             type: 'string'
+        },{
+            name: 'NumeroCheque',
+            type: 'string'
+        },{
+            name: 'NumeroCuenta',
+            type: 'string'
+        },{
+            name: 'Banco',
+            type: 'string'
+        },{
+            name: 'Fecha',
+            type: 'string',
+            convert: function(fechaPago){
+                return Ext.Date.format(new Date(fechaPago), "d-m-Y");
+            }
+        },{
+            name: 'NumeroAutorizacion',
+            type: 'string'
         }]
     }
 });

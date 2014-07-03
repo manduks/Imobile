@@ -37,6 +37,9 @@ Ext.define('Imobile.model.Factura', {
         },{
             name: 'aPagar',
             type: 'boolean'
+        },{
+            name: 'NumeroDocumento',
+            type: 'string'
         }]
     }
 });

@@ -28,8 +28,7 @@ Ext.define('Imobile.controller.Main', {
             partidaContainer: 'partidacontainer',
             tituloContainer: 'titulocontainer',
             fileLoadBtn: 'configuracioncontainer #fileLoadBtn',
-            loadedImage: 'configuracioncontainer #loadedImage',
-            montoAPagar: 'montoapagarform'
+            loadedImage: 'configuracioncontainer #loadedImage'
         },
         control: {
             'loginform': {
@@ -145,7 +144,7 @@ Ext.define('Imobile.controller.Main', {
                 CodigoSociedad: me.CodigoSociedad,
                 CodigoDispositivo: me.CodigoDispositivo,
                 Token: me.Token
-            };            
+            };
         
         if(navigationview.getActiveItem().isXType('clienteslist')){            
             titulo = view.down('toolbar');
@@ -188,5 +187,4 @@ Ext.define('Imobile.controller.Main', {
         Ext.getStore('Productos').on('load', me.estableceCantidadAProductos);
         Ext.getStore('Facturas').on('load', me.agregaSaldoAMostrar);
     }
-
 });

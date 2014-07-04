@@ -14,7 +14,7 @@ Ext.define('Imobile.model.Total', {
             type: 'string'
         }, {
             name: 'monto',
-            type: 'double'
+            type: 'string'
         },{
             name: 'codigoFormaPago',
             type: 'string'
@@ -35,6 +35,12 @@ Ext.define('Imobile.model.Total', {
             }
         },{
             name: 'NumeroAutorizacion',
+            type: 'string'
+        },{
+            name: 'moneda',
+            type: 'string'
+        },{
+            name: 'tipoFormaPago',
             type: 'string'
         }]
     }

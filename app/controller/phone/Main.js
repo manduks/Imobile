@@ -124,6 +124,10 @@ Ext.define('Imobile.controller.phone.Main', {
             'montoapagarform #pagar': {
                 tap: 'onPagar'
             },
+            'totalapagarlist':{
+                itemtap: 'editaPago',
+                itemswipe: 'eliminaPago'
+            },
             'transaccionlist': {
                 itemtap: 'onSeleccionarTransaccion'
             },
@@ -1645,9 +1649,10 @@ Ext.define('Imobile.controller.phone.Main', {
         params = {
             CardCode: me.idCliente
         };
-
+        
+        store.clearFilter();
         store.setParams(params);
-        store.load();
+        store.load();        
     },
 
     agregaSaldoAMostrar: function (facturas) {
@@ -1728,7 +1733,7 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     /**
-     * Responde al evento "itemtap" de "formasdepagolist".
+     * Responde al evento "itemtap" de "formasdepagolist". Muestra el formulario correspondiente a la forma de pago elegida.
      * Muestra el formulario para agregar un pago a la cobranza actual.
      * @param list Esta lista "formasdepagolist"
      * @param index El índice del ítem tapeado.
@@ -1746,7 +1751,9 @@ Ext.define('Imobile.controller.phone.Main', {
             datos: record.data
         });
 
-        switch (record.data.TipoFormaPago) {
+        me.determinaVistaMontoAPagar(record.data.TipoFormaPago, view);
+
+/*        switch (record.data.TipoFormaPago) {
             case "0":
                 view.down('fieldset').add([
                     {
@@ -1785,13 +1792,59 @@ Ext.define('Imobile.controller.phone.Main', {
                     }
                 ]);
                 break;
-        }
+        }*/
 
         view.down('fieldset').setTitle(record.data.Nombre);
     },
 
+    determinaVistaMontoAPagar: function(opcion, view){
+
+        switch (opcion) {
+            case "0":
+                view.down('fieldset').add([
+                    {
+                        xtype: 'numberfield',
+                        name: 'NumeroCheque',
+                        placeHolder: 'Ingrese el número de cheque',
+                        label: 'No. Cheque'
+                    },
+                    {
+                        xtype: 'numberfield',
+                        name: 'NumeroCuenta',
+                        placeHolder: 'Ingrese el número de cuenta',
+                        label: 'No. Cuenta'
+                    },
+                    {
+                        xtype: 'textfield',
+                        name: 'Banco',
+                        placeHolder: 'Ingrese el nombre del banco',
+                        label: 'Banco'
+                    }
+                ]);
+                break;
+            case "2":
+                view.down('fieldset').add([
+                    {
+                        xtype: 'numberfield',
+                        name: 'NumeroAutorizacion',
+                        placeHolder: 'Ingrese el número de autorización',
+                        label: 'No. Autorización'
+                    },
+                    {
+                        xtype: 'numberfield',
+                        name: 'NumeroCuenta',
+                        placeHolder: 'Ingrese el número de cuenta',
+                        label: 'No. Cuenta'
+                    }
+                ]);
+                break;
+        }
+
+    },
+
     /**
      * Responde al evento "tap" del botón "pagar" de "montoapagarform".
+     * Valida si todos los campos del formulario vienen llenos.
      * Valida si este tipo de pago permite dar cambio para en su caso permitirlo o no.
      * @param btn Este botón.
      */
@@ -1804,7 +1857,7 @@ Ext.define('Imobile.controller.phone.Main', {
             forma = form.datos.Nombre,
             entrada = form.getValues().monto,
             codigo = form.datos.Codigo,
-            tipo = form.datos.tipoFormaPago,
+            tipo = form.datos.TipoFormaPago,
             esVacio = false,
             valores = form.getValues(),
             numeroCheque = valores.numeroCheque,
@@ -1812,20 +1865,21 @@ Ext.define('Imobile.controller.phone.Main', {
             banco = valores.banco,
             numeroAutorizacion = valores.numeroAutorizacion,
             nombres = form.getInnerItems(),
+            modoEdicion = form.modo === 'edicion' ? true : false,
             permiteCambio = form.datos.PermiteCambio;
 
         /*            console.log(pendiente);
          console.log(entrada);
          console.log(permiteCambio);
          console.log(entrada > pendiente);*/
-
         moneda = Ext.getStore('Facturas').getAt(0).CodigoMoneda; //Estamos asumiendo que el código de moneda de todas las facturas es la local.
         console.log(nombres[0].innerItems[0]._label);
+        console.log(Ext.getStore('Facturas').getAt(0));
 
-        Ext.Object.each(valores, function (key, value, myself) {
+        Ext.Object.each(valores, function (key, value, myself) { // Validamos que todos los campos estén llenos.
             console.log(key + ":" + value);
 
-            if (value === null) {
+            if (value === null) { 
                 esVacio = true;
                 me.mandaMensaje('Datos incompletos', 'Ingrese todos los datos.');
                 return false; // stop the iteration
@@ -1835,17 +1889,17 @@ Ext.define('Imobile.controller.phone.Main', {
         if (esVacio) {
             //me.mandaMensaje('Sin cantidad', 'Ingrese la cantidad a pagar.');
         } else {
-
-
             if (permiteCambio === 'false') {
                 if (entrada > pendiente) {
                     me.mandaMensaje('Sin cambio', 'Esta forma de pago no permite dar cambio, disminuya la cantidad.');
                 } else {
-                    me.sumaCobros(forma, entrada, moneda, codigo, tipo, numeroCheque, numeroCuenta, banco, numeroAutorizacion);
+                    //me.sumaCobros(forma, entrada, moneda, codigo, tipo, numeroCheque, numeroCuenta, banco, numeroAutorizacion, form);
+                    me.sumaCobros(form, moneda);
                     view.pop(2);
                 }
             } else {
-                me.sumaCobros(forma, entrada, moneda, codigo, tipo);
+                //me.sumaCobros(forma, entrada, moneda, codigo, tipo, numeroCheque, numeroCuenta, banco, numeroAutorizacion, form);
+                me.sumaCobros(form, moneda);
                 view.pop(2);
             }
         }
@@ -1861,61 +1915,164 @@ Ext.define('Imobile.controller.phone.Main', {
             i,
             total = 0,
             seleccion = view.getActiveItem().down('facturaslist').getSelection(),
-            moneda = seleccion[0].data.CodigoMoneda,
+            moneda,// = seleccion[0].data.CodigoMoneda,
             facturas = Ext.getStore('Facturas'),
             barraTitulo = ({
                 xtype: 'toolbar',
                 docked: 'top',
                 title: me.titulo
             });
+        
+        if(seleccion.length > 0){ // Validamos que por lo menos se haya seleccionado una factura.
+            moneda = seleccion[0].data.CodigoMoneda;
 
-        //me.codigoMonedaSeleccinada = moneda;
+            for (i = 0; i < seleccion.length; i++) {
+                total += seleccion[i].data.Saldo;
+                seleccion[i].data.aPagar = true;
+            }
 
-        for (i = 0; i < seleccion.length; i++) {
-            total += seleccion[i].data.Saldo;
-            seleccion[i].data.aPagar = true;
+            facturas.clearFilter();
+            facturas.filter('aPagar', true);
+
+            me.aPagar = total;
+
+            view.setActiveItem(3);
+            navigationCobranza = view.getActiveItem();
+
+            navigationCobranza.getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
+            navigationCobranza.add(barraTitulo);
+
+            me.getTotales().down('#aCobrar').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.aPagar, moneda)});
+            me.getTotales().down('#pagado').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.pagado, moneda)});
+            me.getTotales().down('#pendiente').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.aPagar - me.pagado, moneda)});
+        } else {
+            me.mandaMensaje("Sin selección", "Seleccione al menos una factura para continuar.");
         }
+    },
 
-        facturas.clearFilter();
-        facturas.filter('aPagar', true);
+    /**
+    * Elimina el pago de totalapagarlist. Primero valida preguntándole al usuario si realmente desea elminar el pago.
+    * @param list Ésta lista totalapagarlist.
+    * @param index El índice del ítem swipeado.
+    * @param target El elemento swipeado.
+    * @param record El record asociado al ítem.
+    */
+    eliminaPago: function (list, index, target, record){
+        var me = this,
+            totales = Ext.getStore('Totales');
 
-        me.aPagar = total;
+        Ext.Msg.confirm("Eliminar pago", "Se va a eliminar el pago, ¿está seguro?", function (e) {
 
-        view.setActiveItem(3);
-        navigationCobranza = view.getActiveItem();
+            if (e == 'yes') {
+                totales.removeAt(index);
+                me.pagado-= Imobile.core.FormatCurrency.formatCurrencytoNumber(record.data.monto);
+                me.actualizaCobranza(record.data.moneda);
+            }
+        });
+    },
 
-        navigationCobranza.getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
-        navigationCobranza.add(barraTitulo);
+    editaPago: function(list, index, target, record){
+        var me = this
+            view = list.up('navigationcobranza'), //NavigationCobranza
+            valores = record.data;
+        
+        console.log(record.data);
 
-        me.getTotales().down('#aCobrar').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.aPagar, moneda)});
+        //me.agregaPago(list, index, target, record);        
+
+        view.push({
+            xtype: 'montoapagarform',
+            modo: 'edicion',
+            ind: record.data.id,
+            montoAnterior: record.data.monto,
+            //xtype: 'montoapagarformcontainer',
+            //title: me.idCliente,
+            datos: record.data
+        });
+
+        me.determinaVistaMontoAPagar(record.data.tipoFormaPago, view);
+
+        view.down('fieldset').setTitle(record.data.tipo);
+
+        console.log(view.getActiveItem().xtype);
+
+        view.getActiveItem().setValues(valores);
+
+        view.getNavigationBar().down('#agregarPago').hide();
+    },
+
+    /**
+    * Actualiza los campos "pagado" y "pendiente" del totalescontainer
+    * @moneda El código de moneda que se tiene que mostrar.
+    */
+    actualizaCobranza: function (moneda){
+        var me = this;
+
         me.getTotales().down('#pagado').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.pagado, moneda)});
         me.getTotales().down('#pendiente').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.aPagar - me.pagado, moneda)});
     },
 
     /**
-     * Agrega el pago ingresado al store "Totales".
+     * Agrega el pago ingresado al store "Totales" o lo modifica si el pago es editado.
      * Suma cada uno de los saldos del store "Totales" y los muestra en "totalescontainer".
      * @param forma La forma de pago.
      * @param entrada El monto a pagar.
+     * @param moneda El código de moneda del pago.
+     * @param codigo El código de la forma de pago.
+     * @param tipoFormaPago El tipo de la forma de pago.
+     * @param numeroCheque El número de cheque en caso de que se haya pagado con uno.
+     * @param numeroCuenta El número de cuenta a la que se aplicará el pago, no siempre está disponible, depende del tipo de pago.
+     * @param banco El banco al cual se aplicará el pago.
+     * @param numeroAutorizacion El número de autorización del pago.
+     * @param modoEdición Indica si montoapagarform viene en modo edición o no.
      */
-    sumaCobros: function (forma, entrada, moneda, codigo, tipoFormaPago, numeroCheque, numeroCuenta, banco, numeroAutorizacion) {
+//    sumaCobros: function (forma, entrada, moneda, codigo, tipoFormaPago, numeroCheque, numeroCuenta, banco, numeroAutorizacion, modoEdicion) {
+    sumaCobros: function (form, moneda) {
         var me = this,
+            forma = form.datos.Nombre,
+            entrada = form.getValues().monto,
+            codigo = form.datos.Codigo,
+            tipo = form.datos.TipoFormaPago,
+            esVacio = false,
+            valores = form.getValues(),
+            numeroCheque = valores.NumeroCheque,
+            numeroCuenta = valores.NumeroCuenta,
+            banco = valores.Banco,
+            numeroAutorizacion = valores.NumeroAutorizacion,
+            nombres = form.getInnerItems(),
+            modoEdicion = form.modo === 'edicion' ? true : false,
+            permiteCambio = form.datos.PermiteCambio,
             temp,
             entradaMostrada = Imobile.core.FormatCurrency.currency(entrada, moneda),
+            ind = form.ind,
             store = Ext.getStore('Totales');
 
-        store.add({
-            tipo: forma,
-            monto: entradaMostrada,
-            codigoFormaPago: codigo,
-            tipoFormaPago: tipoFormaPago,
-            NumeroCheque: numeroCheque,
-            NumeroCuenta: numeroCuenta,
-            Banco: banco,
-            NumeroAutorizacion: numeroAutorizacion
-        });
+            console.log(form);
+        if(modoEdicion){
+            var ind = store.find('id', ind);
+            pagoACambiar = store.getAt(ind);
 
-        temp = Imobile.core.FormatCurrency.formatCurrencytoNumber(store.getAt(store.getCount() - 1).get('monto'));
+            pagoACambiar.set('monto', entradaMostrada);            
+            me.pagado-= Imobile.core.FormatCurrency.formatCurrencytoNumber(form.montoAnterior);
+            temp = entrada;
+
+        } else {
+
+            store.add({
+                tipo: forma,
+                monto: entradaMostrada,
+                codigoFormaPago: codigo,
+                tipoFormaPago: tipo,
+                NumeroCheque: numeroCheque,
+                NumeroCuenta: numeroCuenta,
+                Banco: banco,
+                NumeroAutorizacion: numeroAutorizacion,
+                moneda: moneda
+            });
+
+            temp = Imobile.core.FormatCurrency.formatCurrencytoNumber(store.getAt(store.getCount() - 1).get('monto'));
+        }
+        
         me.pagado += parseFloat(temp);
 
         // store.each(function (item) {
@@ -1923,8 +2080,7 @@ Ext.define('Imobile.controller.phone.Main', {
         //     me.pagado += parseFloat(temp);
         // });
 
-        me.getTotales().down('#pagado').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.pagado, moneda)});
-        me.getTotales().down('#pendiente').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.aPagar - me.pagado, moneda)});
+        me.actualizaCobranza(moneda);
     },
 
     /**
@@ -1938,7 +2094,7 @@ Ext.define('Imobile.controller.phone.Main', {
             array = store.getData().items,
             fecha = new Date(Ext.Date.now()),
             fecha = Ext.Date.format(fecha, "d-m-Y"),
-            view = me.getMain().getActiveItem();
+            view = me.getMain().getActiveItem(),
             url, msg;
 
 
@@ -1964,30 +2120,30 @@ Ext.define('Imobile.controller.phone.Main', {
                 //console.log(item, 'terminar cobranza');
                 //total += (Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad')) + item.get('totalDeImpuesto');
 
-                params["CobranzaFacturas[" + index + "].NumeroFactura"] = item.data.NumeroDocumento;//get('NumeroDocumento');
-                params["CobranzaFacturas[" + index + "].Monto"] = item.get('Saldo');
+                params["Cobranza.CobranzaFacturas[" + index + "].NumeroFactura"] = item.data.NumeroDocumento;//get('NumeroDocumento');
+                params["Cobranza.CobranzaFacturas[" + index + "].Monto"] = item.get('Saldo');
             });
 
             totales.each(function (item, index) {
                 console.log(item.data);
-                params["oCobranzaDetalles[" + index + "].NumeroLinea"] = index;
-                params["oCobranzaDetalles[" + index + "].CodigoFormaPago"] = item.data.codigoFormaPago;
-                params["oCobranzaDetalles[" + index + "].MontoNeto"] = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.data.monto);
+                params["Cobranza.CobranzaDetalles[" + index + "].NumeroLinea"] = index;
+                params["Cobranza.Detalles[" + index + "].CodigoFormaPago"] = item.data.codigoFormaPago;
+                params["Cobranza.Detalles[" + index + "].MontoNeto"] = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.data.monto);
                 //params["oCobranzaDetalles[" + index + "].NoFacturaAplicada"] = 'Sin número'
 
                 switch (item.tipoFormaPago) {
                     case 0: //Cheque
-                        params["oCobranzaDetalles[" + index + "].NumeroCheque"] = item.NumeroCheque;
-                        params["oCobranzaDetalles[" + index + "].NumeroCuenta"] = item.NumeroCuenta;
-                        params["oCobranzaDetalles[" + index + "].Banco"] = item.Banco;
-                        params["oCobranzaDetalles[" + index + "].Fecha"] = fecha;
+                        params["Cobranza.Detalles[" + index + "].NumeroCheque"] = item.NumeroCheque;
+                        params["Cobranza.Detalles[" + index + "].NumeroCuenta"] = item.NumeroCuenta;
+                        params["Cobranza.Detalles[" + index + "].Banco"] = item.Banco;
+                        params["Cobranza.Detalles[" + index + "].Fecha"] = fecha;
                         break;
 
                     case 1: //Transferencia
                         break;
                     case 2: //Tarjeta
-                        params["oCobranzaDetalles[" + index + "].NumeroAutorizacion"] = item.NumeroAutorizacion;
-                        params["oCobranzaDetalles[" + index + "].NumeroCuenta"] = item.NumeroCuenta;
+                        params["Cobranza.Detalles[" + index + "].NumeroAutorizacion"] = item.NumeroAutorizacion;
+                        params["Cobranza.Detalles[" + index + "].NumeroCuenta"] = item.NumeroCuenta;
                         break;
                 }
             });
@@ -2003,6 +2159,7 @@ Ext.define('Imobile.controller.phone.Main', {
              } */
 
             url = "http://" + me.dirIP + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
+            msg = 'Se realizó el cobro exitosamente.'
 
             Ext.data.JsonP.request({
                 url: url,
@@ -2012,20 +2169,17 @@ Ext.define('Imobile.controller.phone.Main', {
                     if (response.Procesada) {
                         me.getMain().setActiveItem(1);
                         Ext.Msg.alert("Cobro procesado", msg + response.CodigoUnicoDocumento);
-                        store.clearData();
-                        totales.clearData();
-                        view.remove(view.down('toolbar'), true);
-                        me.getMenu().remove(me.getMenu().down('toolbar'), true);
+                        store.removeAll();
+                        totales.removeAll();                        
+                        view.remove(view.down('toolbar'), true);                        
                         me.getMain().getActiveItem().pop();
                     } else {
-                        Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);
-                        //me.getOpcionesOrden().setActiveItem(0);
+                        Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);                        
                     }
                 }
             });
 
-        } else {
-            me.getOpcionesOrden().setActiveItem(0);
+        } else {            
             Ext.Msg.alert("Sin pago", "Agrega por lo menos un pago.");
         }
     },

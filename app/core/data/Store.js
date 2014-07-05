@@ -29,6 +29,7 @@ Ext.define('Imobile.core.data.Store', {
         params.CodigoUsuario = localStorage.getItem("CodigoUsuario");
         params.CodigoSociedad = localStorage.getItem("CodigoSociedad");
         params.CodigoDispositivo = localStorage.getItem("CodigoDispositivo");
+        params.Elementos = 50;
 
         me.params = params;
         me.resetParams = resetParams;

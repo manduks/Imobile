@@ -10,11 +10,6 @@
     will need to resolve manually.
 */
 
-//<debug>
-Ext.Loader.setPath({
-    'Ext.ux': 'src/ux'
-});
-//</debug>
 
 Ext.application({
     name: 'Imobile',
@@ -23,8 +18,8 @@ Ext.application({
         'Ext.MessageBox',
         'Ext.data.proxy.JsonP',
         'Imobile.core.data.Store',
-        'Imobile.core.FormatCurrency',
-        'Ext.ux.Fileup'
+        'Imobile.core.FormatCurrency'/*,
+        'Ext.ux.Fileup'*/
     ],
 
     models:[

@@ -5,7 +5,7 @@
  */
 Ext.define('Imobile.view.configuracion.ConfiguracionContainer', {
     extend: 'Ext.Container',
-    requires: ['Ext.Img', 'Ext.field.Select', 'Ext.field.Toggle', 'Ext.ux.Fileup'],
+    requires: ['Ext.Img', 'Ext.field.Select', 'Ext.field.Toggle'/*, 'Ext.ux.Fileup'*/],
 
     xtype: 'configuracioncontainer',
     config: {
@@ -26,8 +26,8 @@ Ext.define('Imobile.view.configuracion.ConfiguracionContainer', {
                     flex: 1
                 },
                 items: [
-                    {xtype: 'component'},
-                    {
+                    {xtype: 'component'}
+                    /*{
                         itemId: 'loadedImage',
                         xtype: 'img',
                         width: '200px',
@@ -35,7 +35,7 @@ Ext.define('Imobile.view.configuracion.ConfiguracionContainer', {
                         style: 'margin-top:15px;',
                         src: localStorage.getItem('image')
                     },
-                    {xtype: 'component'}
+                    {xtype: 'component'}*/
                 ]
             },
             {

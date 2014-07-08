@@ -54,6 +54,9 @@ Ext.define('Imobile.model.Orden', {
         },{
             name: 'CodigoAlmacen',
             type: 'String'
+        },{
+            name: 'nombreMostrado',
+            type: 'String'
         }]
     }
 });

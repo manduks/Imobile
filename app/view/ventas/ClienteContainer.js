@@ -13,7 +13,7 @@ Ext.define('Imobile.view.ventas.ClienteContainer', {
             directionLock: true
         },*/
         layout: 'vbox',
-        items: [{
+        items: [/*{
             xtype: 'container',
             flex: 1,
             padding: '0 0 0 200',
@@ -36,7 +36,7 @@ Ext.define('Imobile.view.ventas.ClienteContainer', {
                         ui: 'confirm'
                     }
                 ]
-            },{
+            },*/{
             xtype: 'clienteform',
             flex: 6            
         },{

@@ -79842,7 +79842,8 @@ Ext.define('Imobile.controller.Main', {
     direccionEntrega: undefined,
     direccionFiscal: undefined,
     dirIP: 'ferman.ddns.net:88',//'ferman.no-ip.org:88',
-    //dirIP: '189.165.107.225:88',
+    //dirIP: '25.15.241.121:88',
+
     almacenes: undefined,
 
     config: {
@@ -80667,7 +80668,7 @@ Ext.define('Imobile.controller.phone.Main', {
             case 'monedaIgual':
                 values.totalDeImpuesto = me.totalDeImpuesto;
                 values.Imagen = productoAgregado.get('Imagen');
-                values.nombreMostrado = Ext.String.ellipsis(descripcion, 25, false);        
+                values.nombreMostrado = Ext.String.ellipsis(descripcion, 25, false);
                 ordenes.add(values);
                 menu.pop();
                 me.actualizarTotales();
@@ -80986,7 +80987,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
                     productoSeleccionado.set(response.Data[0]);                    
 
-                    me.llenaAgregarProductos(response.Data[0]); // Hacer un console.log de esta parte para manipular adecuadamente los datos, se supone que me regresa el artículo.                    
+                    me.llenaAgregarProductos(response.Data[0]); // Hacer un console.log de esta parte para manipular adecuadamente los datos, se supone que me regresa el artículo.
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }
@@ -81560,6 +81561,7 @@ Ext.define('Imobile.controller.phone.Main', {
             title: 'titulo'
         });
 
+
         Ext.data.JsonP.request({
             url: "http://" + me.dirIP + "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaiMobile",
             params: {
@@ -81573,7 +81575,6 @@ Ext.define('Imobile.controller.phone.Main', {
             success: function (response) {
                 var response = response.Data[0],
                     partidas = response.Partidas;
-
                 me.codigoMonedaSeleccinada = response.CodigoMoneda;
                 me.NumeroDocumento = record.get('NumeroDocumento');
 
@@ -81590,9 +81591,11 @@ Ext.define('Imobile.controller.phone.Main', {
                     partidas[index].moneda = partidas[index].Moneda;
                     partidas[index].precioConDescuento = Imobile.core.FormatCurrency.currency(parseFloat(partidas[index].PrecioDescuento));
                     partidas[index].Precio = Imobile.core.FormatCurrency.currency(parseFloat(partidas[index].Precio));
-                    partidas[index].CodigoAlmacen = partidas[index].CodigoAlmacen;
+                    partidas[index].nombreMostrado = Ext.String.ellipsis(partidas[index].NombreArticulo, 25, false);
+                    //partidas[index].CodigoAlmacen = partidas[index].CodigoAlmacen;
                     partidas[index].PorcentajeDescuento = '%' + partidas[index].PorcentajeDescuento;
                 });
+                                
                 store.setData(partidas);
                 Ext.getStore('Productos').setData(partidas);
                 me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
@@ -81737,7 +81740,6 @@ Ext.define('Imobile.controller.phone.Main', {
         var me = this,
             view = me.getMenu();
 
-        console.log(record.data.action);
 
         switch(record.data.action){
             case 'cobranzaFacturas':            
@@ -82239,7 +82241,6 @@ Ext.define('Imobile.controller.phone.Main', {
                         break;
                 }
             });
-            console.log(params);
             //params["Orden.TotalDocumento"] = parseFloat(total).toFixed(2);
 
             /*            if(me.actionOrden == 'crear'){
@@ -82250,7 +82251,7 @@ Ext.define('Imobile.controller.phone.Main', {
              msg = "Se acualizo la orden correctamente con folio: ";
              } */
 
-            url = "http://" + me.dirIP + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";            
+            url = "http://" + me.dirIP + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
 
             Ext.data.JsonP.request({
                 url: url,
@@ -82258,7 +82259,6 @@ Ext.define('Imobile.controller.phone.Main', {
                 callbackKey: 'callback',
                 success: function (response) {
                     if (response.Procesada) {
-                        console.log(response);
                         me.getMain().setActiveItem(1);
                         Ext.Msg.alert("Cobro procesado", msg + response.CodigoUnicoDocumento + ".");
                         store.removeAll();
@@ -82267,7 +82267,7 @@ Ext.define('Imobile.controller.phone.Main', {
                         me.pagado = 0;
                         me.getMain().getActiveItem().pop();
                     } else {
-                        Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);                        
+                        Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);
                     }
                 }
             });
@@ -82340,11 +82340,9 @@ Ext.define('Imobile.controller.phone.Main', {
     },
 
     onFileLoadSuccess: function (dataurl, e) {
-        console.log('File loaded');
 
         var me = this;
         var image = me.getLoadedImage();
-        console.log(dataurl);
         localStorage.setItem('image', dataurl);
         image.setSrc(dataurl);
     },
@@ -82501,67 +82499,85 @@ Ext.define('Imobile.store.Clientes', {
 Ext.define('Imobile.model.Producto', {
     extend:  Ext.data.Model ,
     config: {
-        fields: [{
-            name: 'id',
-            type: 'int'            
-        },{
-            name: 'CodigoArticulo',
-            type: 'string'
-        }, {
-            name: 'NombreArticulo',
-            type: 'string'
-        },{
-            name: 'cantidad',
-            type: 'float',
-            defaultValue: 0
-        },{
-            name: 'Precio',
-            type: 'double'
-        },{
-            name: 'moneda',
-            type: 'string'
-        },{
-            name: 'descuento',
-            type: 'string'
-        },{
-            name: 'precioConDescuento',
-            type: 'double'
-        },{
-            name: 'totalDeImpuesto',
-            type: 'double'
-        },{
-            name: 'importe',
-            type: 'string'
-        },{
-            name: 'NombreAlmacen',
-            type: 'string'
-        },{
-            name: 'Disponible',
-            type: 'float',
-            convert: function(Disponible){
-                return parseFloat(Disponible).toFixed(2);
+        fields: [
+            {
+                name: 'id',
+                type: 'int'
+            },
+            {
+                name: 'CodigoArticulo',
+                type: 'string'
+            },
+            {
+                name: 'NombreArticulo',
+                type: 'string'
+            },
+            {
+                name: 'cantidad',
+                type: 'float',
+                defaultValue: 0
+            },
+            {
+                name: 'Precio',
+                type: 'double'
+            },
+            {
+                name: 'moneda',
+                type: 'string'
+            },
+            {
+                name: 'descuento',
+                type: 'string'
+            },
+            {
+                name: 'precioConDescuento',
+                type: 'double'
+            },
+            {
+                name: 'totalDeImpuesto',
+                type: 'double'
+            },
+            {
+                name: 'importe',
+                type: 'string'
+            },
+            {
+                name: 'NombreAlmacen',
+                type: 'string'
+            },
+            {
+                name: 'Disponible',
+                type: 'float',
+                convert: function (Disponible) {
+                    return parseFloat(Disponible).toFixed(2);
+                }
+            },
+            {
+                name: 'DesplegarEnPanel',
+                type: 'boolean'
+            },
+            {
+                name: 'ListaPrecios',
+                type: 'array'
+            },
+            {
+                name: 'SujetoImpuesto',
+                type: 'boolean'
+            },
+            {
+                name: 'color',
+                type: 'string'
+            },
+            {
+                name: 'Imagen',
+                type: 'string',
+                mapping: 'Imagen',
+                convert: function (Imagen) {
+                    return 'http://ferman.ddns.net:88/' + Imagen;
+                    //return 'http://25.15.241.121:88' + Imagen;
+                }
             }
-        },{
-            name: 'DesplegarEnPanel',
-            type: 'boolean'            
-        },{
-            name: 'ListaPrecios',
-            type: 'array'
-        },{
-            name: 'SujetoImpuesto',
-            type: 'boolean'
-        },{
-            name: 'color',
-            type: 'string'            
-        },{
-            name: 'Imagen',
-            type: 'string',
-            mapping: 'Imagen',
-            convert: function(Imagen){                
-                return 'http://ferman.ddns.net:88/' + Imagen;
-                //return 'http://189.165.107.225:88/' + Imagen;
-            }
-        }]
+        ]
     }
 });
 

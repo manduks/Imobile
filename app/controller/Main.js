@@ -8,7 +8,8 @@ Ext.define('Imobile.controller.Main', {
     direccionEntrega: undefined,
     direccionFiscal: undefined,
     dirIP: 'ferman.ddns.net:88',//'ferman.no-ip.org:88',
-    //dirIP: '189.165.107.225:88',
+    //dirIP: '25.15.241.121:88',
+
     almacenes: undefined,
 
     config: {

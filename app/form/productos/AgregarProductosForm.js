@@ -55,7 +55,7 @@ Ext.define('Imobile.form.productos.AgregarProductosForm', {
                         xtype:'textfield',
                         name:'NombreArticulo',
                         label:'Descripción',
-                        itemId: 'descripcion',                        
+                        itemId: 'descripcion'
                     },{
                         xtype:'numberfield',
                         name:'cantidad',

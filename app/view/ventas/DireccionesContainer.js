@@ -7,8 +7,9 @@ Ext.define('Imobile.view.ventas.DireccionesContainer', {
     extend: 'Ext.Container',
     requires: [],
     xtype: 'direccionescontainer',
-    config: {        
-        layout: 'fit',
+    config: {
+    	//scrollable: false,
+        layout: 'fit',        
         items: [{
             xtype: 'direccioneslist'
         }]

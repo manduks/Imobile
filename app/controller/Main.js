@@ -7,8 +7,8 @@ Ext.define('Imobile.controller.Main', {
     Token: undefined,
     direccionEntrega: undefined,
     direccionFiscal: undefined,
-    //dirIP: '25.15.241.121:88',//'ferman.no-ip.org:88',
-    dirIP: '189.165.107.225:88',
+    dirIP: 'ferman.ddns.net:88',//'ferman.no-ip.org:88',
+    //dirIP: '189.165.107.225:88',
     almacenes: undefined,
 
     config: {
@@ -187,5 +187,6 @@ Ext.define('Imobile.controller.Main', {
         var me = this;        
         Ext.getStore('Productos').on('load', me.estableceCantidadAProductos);
         Ext.getStore('Facturas').on('load', me.agregaSaldoAMostrar);
+        Ext.getStore('Anticipos').on('load', me.agregaSaldoAMostrar);
     }
 });

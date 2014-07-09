@@ -769,6 +769,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.model.Transaccion": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
+  "Imobile.store.Anticipos": [],
   "Imobile.store.Clientes": [],
   "Imobile.store.Direcciones": [],
   "Imobile.store.DireccionesFiscales": [],
@@ -793,6 +794,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.view.cobranza.TotalAPagarContainer": [],
   "Imobile.view.cobranza.TotalAPagarList": [],
   "Imobile.view.cobranza.TotalesContainer": [],
+  "Imobile.view.cobranza.VisualizacionCobranzaList": [],
   "Imobile.view.configuracion.ConfiguracionContainer": [],
   "Imobile.view.configuracion.ConfiguracionList": [],
   "Imobile.view.configuracion.InitializeContainer": [],
@@ -1806,6 +1808,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.model.Transaccion": [],
   "Imobile.profile.Phone": [],
   "Imobile.profile.Tablet": [],
+  "Imobile.store.Anticipos": [],
   "Imobile.store.Clientes": [],
   "Imobile.store.Direcciones": [],
   "Imobile.store.DireccionesFiscales": [],
@@ -1853,6 +1856,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Imobile.view.cobranza.TotalesContainer": [
     "widget.totalescontainer"
+  ],
+  "Imobile.view.cobranza.VisualizacionCobranzaList": [
+    "widget.visualizacioncobranzalist"
   ],
   "Imobile.view.configuracion.ConfiguracionContainer": [
     "widget.configuracioncontainer"

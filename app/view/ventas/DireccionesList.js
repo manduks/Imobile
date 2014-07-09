@@ -9,8 +9,9 @@ Ext.define('Imobile.view.ventas.DireccionesList', {
     config: {
         onItemDisclosure: function (record, listItem, index, e) {
             this.fireEvent("tap", record, listItem, index, e);            
-        },
+        },        
         itemTpl: '{title}',
+        //scrollable: null,
         data:[
             {title: 'Dirección de entrega', action: 'entrega'},
             {title: 'Dirección fiscal', action: 'fiscal'}

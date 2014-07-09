@@ -19,7 +19,7 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
             {
                 xtype: 'fieldset',
                 itemId: 'datosCliente',
-                title: 'Datos de Cliente',
+                title: 'Datos de Cliente',                
                 defaults: {
                     disabled: true,
                     clearIcon: true,

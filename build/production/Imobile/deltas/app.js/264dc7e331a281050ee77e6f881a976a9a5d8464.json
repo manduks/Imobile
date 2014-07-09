@@ -1,0 +1,1 @@
+["function _bee7f54d6ab52ea004fa41aef9bcec219efbc4ca",50,630570,"c,d,g,b,e){var f=this,c=f.getMenu(),a=b.get(\"action\");switch(a){case\"sistema\":c",630713,58,"c",630772,32,"f",630805,52,"c.push({xtype:\"clienteslist\",itemId:a}",639310,46,630948,50,"f",630999,55,"c",631055,59,"c",631115,62,"c",631178,63,"c",631242,8500,"switch(f.getItemId()",639775,33790]

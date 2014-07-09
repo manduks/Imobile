@@ -9,7 +9,7 @@ Ext.define('Imobile.store.Productos', {
     config: {
         model:'Imobile.model.Producto',        
         proxy: {
-            url: 'http://189.165.107.225:88/iMobile/COK1_CL_Articulo/ObtenerListaArticulosiMobile',
+            url: 'http://ferman.ddns.net:88/iMobile/COK1_CL_Articulo/ObtenerListaArticulosiMobile',
             //url: 'http://25.15.241.121:88/iMobile/COK1_CL_Articulo/ObtenerListaArticulosiMobile',
                  
             type: 'jsonp',

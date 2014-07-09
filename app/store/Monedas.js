@@ -10,7 +10,7 @@ Ext.define('Imobile.store.Monedas', {
     config: {
         model: 'Imobile.model.Moneda',
         proxy: {
-            url: 'http://189.165.107.225:88/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasiMobile',
+            url: 'http://ferman.ddns.net:88/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasiMobile',
             //url: 'http://25.15.241.121:88/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasiMobile',
             type: 'jsonp',
             callbackKey: 'callback',

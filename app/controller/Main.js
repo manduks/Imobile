@@ -187,5 +187,6 @@ Ext.define('Imobile.controller.Main', {
         var me = this;        
         Ext.getStore('Productos').on('load', me.estableceCantidadAProductos);
         Ext.getStore('Facturas').on('load', me.agregaSaldoAMostrar);
+        Ext.getStore('Anticipos').on('load', me.agregaSaldoAMostrar);
     }
 });

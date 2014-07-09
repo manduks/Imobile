@@ -10,7 +10,7 @@ Ext.define('Imobile.model.Factura', {
             name: 'Folio',
             type: 'int'
         },{
-            name: 'Saldo',
+            name: 'TotalDocumento',//Se cambio para hacer pruebas, debería decir Saldo
             type: 'float',
             convert: function(decimales){
                 var nuevo = Ext.Number.toFixed(decimales, 2);

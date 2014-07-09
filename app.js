@@ -43,7 +43,8 @@ Ext.application({
         'Totales',
         'Transacciones',
         'Prospectos',
-        'FormasDePago'
+        'FormasDePago',
+        'Anticipos'
     ],
 
     views: [

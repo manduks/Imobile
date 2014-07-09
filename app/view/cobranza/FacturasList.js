@@ -18,5 +18,3 @@ Ext.define('Imobile.view.cobranza.FacturasList', {
             this.fireEvent("tap", record, listItem, index, e); 
     }
 });
-
-

@@ -572,7 +572,7 @@ Ext.define('Imobile.controller.phone.Main', {
             case 'monedaIgual':
                 values.totalDeImpuesto = me.totalDeImpuesto;
                 values.Imagen = productoAgregado.get('Imagen');
-                values.nombreMostrado = Ext.String.ellipsis(descripcion, 25, false);        
+                values.nombreMostrado = Ext.String.ellipsis(descripcion, 25, false);
                 ordenes.add(values);
                 menu.pop();
                 me.actualizarTotales();
@@ -893,7 +893,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
                     productoSeleccionado.set(response.Data[0]);                    
 
-                    me.llenaAgregarProductos(response.Data[0]); // Hacer un console.log de esta parte para manipular adecuadamente los datos, se supone que me regresa el artículo.                    
+                    me.llenaAgregarProductos(response.Data[0]); // Hacer un console.log de esta parte para manipular adecuadamente los datos, se supone que me regresa el artículo.
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }
@@ -1057,6 +1057,7 @@ Ext.define('Imobile.controller.phone.Main', {
                 importe: valuesForm.importe
             })
         } else {
+            console.log(values);
             form.setValues(values);
         }
         //form.setValues(values);
@@ -1467,6 +1468,8 @@ Ext.define('Imobile.controller.phone.Main', {
             title: 'titulo'
         });
 
+        console.log(record.data);
+
         Ext.data.JsonP.request({
             url: "http://" + me.dirIP + "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaiMobile",
             params: {
@@ -1480,7 +1483,7 @@ Ext.define('Imobile.controller.phone.Main', {
             success: function (response) {
                 var response = response.Data[0],
                     partidas = response.Partidas;
-
+                console.log(response);
                 me.codigoMonedaSeleccinada = response.CodigoMoneda;
                 me.NumeroDocumento = record.get('NumeroDocumento');
 
@@ -1497,10 +1500,14 @@ Ext.define('Imobile.controller.phone.Main', {
                     partidas[index].moneda = partidas[index].Moneda;
                     partidas[index].precioConDescuento = Imobile.core.FormatCurrency.currency(parseFloat(partidas[index].PrecioDescuento));
                     partidas[index].Precio = Imobile.core.FormatCurrency.currency(parseFloat(partidas[index].Precio));
-                    partidas[index].CodigoAlmacen = partidas[index].CodigoAlmacen;
+                    partidas[index].nombreMostrado = Ext.String.ellipsis(partidas[index].NombreArticulo, 25, false);
+                    //partidas[index].CodigoAlmacen = partidas[index].CodigoAlmacen;
                     partidas[index].PorcentajeDescuento = '%' + partidas[index].PorcentajeDescuento;
                 });
+                                
+                console.log(partidas);
                 store.setData(partidas);
+                console.log(store.data)
                 Ext.getStore('Productos').setData(partidas);
                 me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
                 me.getMain().getActiveItem().getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
@@ -2157,7 +2164,7 @@ Ext.define('Imobile.controller.phone.Main', {
              msg = "Se acualizo la orden correctamente con folio: ";
              } */
 
-            url = "http://" + me.dirIP + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";            
+            url = "http://" + me.dirIP + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
 
             Ext.data.JsonP.request({
                 url: url,
@@ -2174,7 +2181,7 @@ Ext.define('Imobile.controller.phone.Main', {
                         me.pagado = 0;
                         me.getMain().getActiveItem().pop();
                     } else {
-                        Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);                        
+                        Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);
                     }
                 }
             });

@@ -63,7 +63,7 @@ Ext.define('Imobile.form.clientes.ClienteForm', {
                         label: 'Crédito'                        
                     },
                     {
-                        xtype: 'numberfield',
+                        xtype: 'textfield',
                         name: 'Saldo',
                         label: 'Saldo'
                     }                    

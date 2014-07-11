@@ -1479,13 +1479,12 @@ console.log(values);
     onSeleccionarTransaccion: function (t, index, target, record, e, eOpts) {
         var me = this,
             view = me.getMenu(),
-            store = Ext.getStore('Ordenes');
+            store = Ext.getStore('Ordenes'),
         barraTitulo = ({
             xtype: 'toolbar',
             docked: 'top',
             title: 'titulo'
         });
-
 
         Ext.data.JsonP.request({
             url: "http://" + me.dirIP + "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaiMobile",
@@ -1500,6 +1499,7 @@ console.log(values);
             success: function (response) {
                 var response = response.Data[0],
                     partidas = response.Partidas;
+                
                 me.codigoMonedaSeleccinada = response.CodigoMoneda + ' ';
                 me.NumeroDocumento = record.get('NumeroDocumento');
 console.log(response);
@@ -1508,14 +1508,32 @@ console.log(response);
                 } else {
                     me.getPartidaContainer().down('list').emptyTextCmp.hide();
                 }
+
                 partidas.forEach(function (item, index) {
+                    console.log(item);
+                var moneda = item.Moneda + ' ',//get('Moneda'),
+                    precio = item.Precio,//Imobile.core.FormatCurrency.formatCurrencytoNumber(item.Precio),
+                    precioConDescuento = item.precioDescuento,//Imobile.core.FormatCurrency.formatCurrencytoNumber(item.precioDescuento),
+                    importe;
+                    //importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
+
+                    if(moneda != me.codigoMonedaSeleccinada){ // Si la moneda del artículo es diferente a la seleccionada hay que hacer una conversión.
+                        precioConDescuento *= me.tipoCambio;
+                        precio /= me.tipoCambio;
+                        console.log('moneda diferente ' + moneda + 'p ' + me.codigoMonedaSeleccinada + 'p');
+                    }
+
+                    importe = precioConDescuento * item.Cantidad;//get('cantidad');
+                //total += precioConDescuento * item.get('cantidad') + item.get('totalDeImpuesto');
+
+
                     partidas[index].cantidad = partidas[index].Cantidad;
-                    partidas[index].importe = Imobile.core.FormatCurrency.currency(parseFloat(partidas[index].Importe), me.codigoMonedaSeleccinada);
+                    partidas[index].importe = importe;//Imobile.core.FormatCurrency.currency(parseFloat(partidas[index].Importe), me.codigoMonedaSeleccinada);
                     partidas[index].totalDeImpuesto = partidas[index].TotalImpuesto;
                     partidas[index].Imagen = 'http://' + me.dirIP + partidas[index].Imagen;
                     partidas[index].moneda = partidas[index].Moneda + ' ';
-                    partidas[index].precioConDescuento = Imobile.core.FormatCurrency.currency(parseFloat(partidas[index].PrecioDescuento), me.codigoMonedaSeleccinada);
-                    partidas[index].Precio = Imobile.core.FormatCurrency.currency(parseFloat(partidas[index].Precio), me.codigoMonedaSeleccinada);
+                    partidas[index].precioConDescuento = Imobile.core.FormatCurrency.currency(parseFloat(precioConDescuento, me.codigoMonedaSeleccinada));
+                    partidas[index].Precio = Imobile.core.FormatCurrency.currency(parseFloat(precio), me.codigoMonedaSeleccinada);
                     partidas[index].nombreMostrado = Ext.String.ellipsis(partidas[index].NombreArticulo, 25, false);
                     //partidas[index].CodigoAlmacen = partidas[index].CodigoAlmacen;
                     partidas[index].PorcentajeDescuento = partidas[index].PorcentajeDescuento + '%';

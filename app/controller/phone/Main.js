@@ -541,7 +541,6 @@ Ext.define('Imobile.controller.phone.Main', {
                     if (moneda == me.codigoMonedaPredeterminada) {
                         me.mandaMensaje('Imposible agregar', 'No es posible agregar el producto a la orden debido a que la configuración de moneda actual es ' + me.codigoMonedaSeleccinada + '  y la moneda del producto es ' + moneda + '. Cambie primero la configuración de moneda a ' + moneda + '.');
                     } else {
-                        me.ayudaAAgregar(form, 'cantidad');
                         me.obtenerTipoCambio(moneda); // Aquí esperamos a que obtenga el tipo de cambio y realizamos el cálculo del nuevo precio.
                     }
                 } else {
@@ -560,7 +559,7 @@ Ext.define('Imobile.controller.phone.Main', {
      */
 
     ayudaAAgregar: function (form, caso) {
-        var form, values, descripcion, cantidad, ordenes, codigo, indPro, productoAgregado, cantidadActual, precio,
+        var values, descripcion, cantidad, ordenes, codigo, indPro, productoAgregado, cantidadActual, precio,
             me = this,
             ordenes = Ext.getStore('Ordenes'),
             productos = Ext.getStore('Productos'),
@@ -895,8 +894,8 @@ Ext.define('Imobile.controller.phone.Main', {
                 if (procesada) {
                     var ind = productos.find('CodigoArticulo', valores.CodigoArticulo),
                         productoSeleccionado = productos.getAt(ind);
-
-                    productoSeleccionado.set(response.Data[0]);                    
+console.log(response.Data[0]);
+                    productoSeleccionado.set(response.Data[0]);
 
                     me.llenaAgregarProductos(response.Data[0]); // Hacer un console.log de esta parte para manipular adecuadamente los datos, se supone que me regresa el artículo.
                 } else {
@@ -1055,7 +1054,7 @@ console.log(values);
         view.getNavigationBar().down('#agregarProductos').hide();
 
         if (values.moneda != me.codigoMonedaSeleccinada) {
-            valuesForm = me.ponValoresOriginalesAAgregarProductoForm(values); //values.moneda);
+            valuesForm = me.ponValoresOriginalesAAgregarProductoForm(values); // Por si la moneda del producto es diferente a la del documento.
 
             form.setValues(valuesForm);
             form.setValues({
@@ -1416,15 +1415,27 @@ console.log(values);
                 "Orden.DireccionFiscal": me.direccionFiscal
             };
             Ext.Array.forEach(array, function (item, index, allItems) {
-                total += (Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad')) + item.get('totalDeImpuesto');                
+                var moneda = item.get('moneda'),
+                    precio = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')), 
+                    precioConDescuento = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento'));
+                    //importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
+
+                if(moneda != me.codigoMonedaPredeterminada){ // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
+                    precioConDescuento *= me.tipoCambio;
+                    precio /= me.tipoCambio;
+                    console.log('moneda diferente ' + moneda + 'p ' + me.codigoMonedaPredeterminada + 'p');
+                }
+
+                importe = precioConDescuento * item.get('cantidad');
+                total += precioConDescuento * item.get('cantidad') + item.get('totalDeImpuesto');
 
                 params["Orden.Partidas[" + index + "].CodigoArticulo"] = item.get('CodigoArticulo');
                 params["Orden.Partidas[" + index + "].Cantidad"] = item.get('cantidad');
-                params["Orden.Partidas[" + index + "].Precio"] = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio'));
+                params["Orden.Partidas[" + index + "].Precio"] = precio;//Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio'));
                 params["Orden.Partidas[" + index + "].CodigoAlmacen"] = item.get('CodigoAlmacen');
                 params["Orden.Partidas[" + index + "].Linea"] = index;
-                params["Orden.Partidas[" + index + "].Moneda"] = item.get('moneda').trim();
-                params["Orden.Partidas[" + index + "].Importe"] = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
+                params["Orden.Partidas[" + index + "].Moneda"] = moneda.trim();//item.get('moneda').trim();
+                params["Orden.Partidas[" + index + "].Importe"] = importe;//Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
                 params["Orden.Partidas[" + index + "].PorcentajeDescuento"] = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('PorcentajeDescuento'));
             });
 
@@ -1437,7 +1448,9 @@ console.log(values);
                 params["Orden.NumeroDocumento"] = me.NumeroDocumento;
                 url = "http://" + me.dirIP + "/iMobile/COK1_CL_OrdenVenta/ActualizarOrdenVentaiMobile";
                 msg = "Se acualizo la orden correctamente con folio: ";
-            }            
+            }
+
+            console.log(params);
 
             Ext.data.JsonP.request({
                 url: url,
@@ -1489,13 +1502,13 @@ console.log(values);
                     partidas = response.Partidas;
                 me.codigoMonedaSeleccinada = response.CodigoMoneda + ' ';
                 me.NumeroDocumento = record.get('NumeroDocumento');
-
+console.log(response);
                 if (partidas.length < 2) {
                     me.getPartidaContainer().down('list').emptyTextCmp.show();
                 } else {
                     me.getPartidaContainer().down('list').emptyTextCmp.hide();
                 }
-                partidas.forEach(function (item, index) {                    
+                partidas.forEach(function (item, index) {
                     partidas[index].cantidad = partidas[index].Cantidad;
                     partidas[index].importe = Imobile.core.FormatCurrency.currency(parseFloat(partidas[index].Importe), me.codigoMonedaSeleccinada);
                     partidas[index].totalDeImpuesto = partidas[index].TotalImpuesto;
@@ -1598,8 +1611,7 @@ console.log(values);
      * @param moneda La divisa cuyo tipo de cambio se necesita.
      */
     obtenerTipoCambio: function (moneda, record) {
-        var me = this,
-
+        var me = this,             
             form = me.getOpcionesOrden().down('editarpedidoform'),            
             view = me.getNavigationOrden().getActiveItem();
 
@@ -1616,9 +1628,10 @@ console.log(values);
             success: function (response) {
                 if (response.Procesada) {
                     me.tipoCambio = parseFloat(response.Data[0]).toFixed(2);
-
+                    
                     if (view.isXType('agregarproductosform')) {
                         me.ayudaAAgregar(view, 'monedaDiferente');
+                        me.ayudaAAgregar(view, 'cantidad'); // Se modifica la cantidad sólo si el tipo de cambio es exitoso.
                     } else {
                         me.codigoMonedaSeleccinada = moneda;
                         //me.codigoMonedaPredeterminada = moneda;
@@ -1633,14 +1646,14 @@ console.log(values);
 
                 } else {
                     var error = response.Descripcion;
-                    me.mandaMensaje('Error', error);
+                    me.mandaMensaje('Error', error);                    
                     // form.setValues({
                     //     CodigoMoneda: me.codigoMonedaSeleccinada,
                     //     tipoCambio: me.tipoCambio
                     // });
                 }
             }
-        });
+        });        
     },
 
     //// Control de cobranza

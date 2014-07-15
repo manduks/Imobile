@@ -1229,8 +1229,7 @@ console.log(values);
                     }
                 });*/
 
-                me.dameMonedaPredeterminada();
-                me.actualizarTotales();
+                me.dameMonedaPredeterminada();                
 
                 viewPrincipal.getActiveItem().add(barraTitulo);
                 break;
@@ -1275,6 +1274,7 @@ console.log(values);
                         me.codigoMonedaSeleccinada = me.codigoMonedaPredeterminada;
                     }
                 });
+                me.actualizarTotales();
             }
         });
     },

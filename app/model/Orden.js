@@ -53,10 +53,13 @@ Ext.define('Imobile.model.Orden', {
             type: 'string'
         },{
             name: 'CodigoAlmacen',
-            type: 'String'
+            type: 'string'
         },{
             name: 'nombreMostrado',
-            type: 'String'
+            type: 'string'
+        },{
+            name: 'esOrdenRecuperada',
+            type: 'boolean'
         }]
     }
 });

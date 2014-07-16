@@ -17,6 +17,13 @@ Ext.define('Imobile.view.ventas.NavigationOrden', {
                 }
             ]
         },
+        masked:{
+            xtype: 'loadmask',
+            message: 'Trabajando...',
+            fullscreen: true,
+            indicator: true
+
+        },
 
         items: [{
             xtype: 'opcionesorden'

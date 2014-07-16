@@ -288,7 +288,7 @@ Ext.define('Imobile.controller.phone.Main', {
     estableceMonedaPredeterminada: function (record) {
         var store = Ext.getStore('Monedas');
 
-        store.each(function (item, index, length) {
+        store.each(function (item, index, length) {            
             item.set('Predeterminada', false);
         });
         record.set('Predeterminada', true);
@@ -862,7 +862,7 @@ Ext.define('Imobile.controller.phone.Main', {
 
     /**
      * Muestra el formulario para agregar un producto a la orden.
-     * @param list Esta lista.
+     * @param list Esta lista, productoslist.
      * @param index El índice del item tapeado.
      * @param target El elemento o DataItem tapeado.
      * @param record El record asociado al ítem.
@@ -1206,7 +1206,7 @@ console.log(values);
         switch (opcion) {
             case 'orden':
                 me.actionOrden = 'crear';
-                console.log(Ext.getStore('Totales').getCount());
+                viewPrincipal.getAt(2).setMasked(false);
                 viewPrincipal.setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
                 me.getNavigationOrden().getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
                 viewPrincipal.getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
@@ -1405,7 +1405,7 @@ console.log(values);
         } else {
             Ext.Msg.confirm("Actualizar orden", "¿Desea actualizar la orden de venta?", function (e) {
 
-                if (e == 'yes') {
+                if (e == 'yes') {                    
                     me.onTerminarOrden();
                 } else {
                     me.getOpcionesOrden().setActiveItem(0);
@@ -1424,7 +1424,10 @@ console.log(values);
             store = Ext.getStore('Ordenes'),
             array = store.getData().items,
             url, msg,
-            clienteSeleccionado = me.clienteSeleccionado;        
+            clienteSeleccionado = me.clienteSeleccionado;
+
+        me.getMain().getActiveItem().getMasked().setMessage('Enviando orden...');
+        me.getMain().getActiveItem().setMasked(true);
 
         if (array.length > 0) {
             var params = {
@@ -1441,7 +1444,8 @@ console.log(values);
                 "Orden.RFCSocio": clienteSeleccionado.RFC,
                 "Orden.DireccionEntrega": me.direccionEntrega,
                 "Orden.DireccionFiscal": me.direccionFiscal
-            };
+            };            
+
             Ext.Array.forEach(array, function (item, index, allItems) {
                 var moneda = item.get('moneda'),
                     precio = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')), 
@@ -1486,6 +1490,7 @@ console.log(values);
                 callbackKey: 'callback',
                 success: function (response) {                    
                     if (response.Procesada) {
+                        me.getMain().getActiveItem().setMasked(false);
                         me.getMain().setActiveItem(1);
                         Ext.Msg.alert("Orden Procesada", msg + response.CodigoUnicoDocumento);
                         store.clearData();
@@ -1493,12 +1498,14 @@ console.log(values);
                         me.getMenu().remove(me.getMenu().down('toolbar'), true);
                         me.getMain().getActiveItem().pop();
                     } else {
+                        me.getMain().getActiveItem().setMasked(false);
                         Ext.Msg.alert("Orden No Procesada", "No se proceso la orden correctamente: " + response.Descripcion);
                         me.getOpcionesOrden().setActiveItem(0);
                     }
                 }
             });
         } else {
+            me.getMain().getActiveItem().setMasked(false);
             me.getOpcionesOrden().setActiveItem(0);
             Ext.Msg.alert("Productos", "Selecciona al menos un Producto");
         }
@@ -1513,6 +1520,8 @@ console.log(values);
             docked: 'top',
             title: 'titulo'
         });
+
+        me.getMain().getAt(2).setMasked(false);
 
         Ext.data.JsonP.request({
             url: "http://" + me.dirIP + "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaiMobile",
@@ -1573,6 +1582,14 @@ console.log(response);
 
                     console.log(partidas[index]);
                 });
+
+                if(me.codigoMonedaSeleccinada != me.codigoMonedaPredeterminada){
+                    var monedas = Ext.getStore('Monedas'),
+                        indMoneda = monedas.find('CodigoMoneda', me.codigoMonedaSeleccinada.trim());
+                        console.log(monedas.getAt(indMoneda));
+
+                    me.estableceMonedaPredeterminada(monedas.getAt(indMoneda));
+                }
                                 
                 store.setData(partidas);
                 Ext.getStore('Productos').setData(partidas);                
@@ -1634,6 +1651,7 @@ console.log(response);
         });
 
         me.almacenes[index].Predeterminado = true;
+        console.log(me.almacenes[index]);
         //me.CodigoAlmacen = me.almacenes[index].CodigoAlmacen; //record.get('CodigoAlmacen');
 
         Ext.data.JsonP.request({
@@ -1648,13 +1666,22 @@ console.log(response);
             },
             callbackKey: 'callback',
             success: function (response) {
-                var valor = {
-                    Disponible: parseFloat(response.Data[0]).toFixed(2),
+
+                var procesada = response.Procesada,
+                valor = {
+                    Disponible: 'Disponible', 
                     NombreAlmacen: record.get('NombreAlmacen'),
                     CodigoAlmacen: record.get('CodigoAlmacen')
                 };
-                view.down('agregarproductosform').setValues(valor);                
-                view.pop();
+
+                if(procesada){
+                    valor.Disponible = parseFloat(response.Data[0]).toFixed(2);                    
+                } else {
+                    valor.Disponible = 'Error al obtener disponible';
+                }
+
+                    view.down('agregarproductosform').setValues(valor);
+                    view.pop();
             }
         });
     },

@@ -1752,8 +1752,8 @@ console.log(response);
 
                 view.push({
                     xtype: 'facturascontainer',
-                    title: me.idCliente,
-                    opcion: record.data.action
+                    title: me.idCliente
+                    //opcion: record.data.action
                 });
 
                 params = {
@@ -1772,8 +1772,8 @@ console.log(response);
 
                 view.push({
                     xtype: 'facturascontainer',
-                    title: me.idCliente,
-                    opcion: record.data.action
+                    title: me.idCliente
+                    //opcion: record.data.action
                 });
 
                 anticiposlist = view.getActiveItem().down('facturaslist');
@@ -1858,8 +1858,8 @@ console.log(response);
     
         view.push({
             xtype: 'formasdepagolist',
-            title: me.idCliente,
-            opcion: me.getMenu().getActiveItem().opcion
+            title: me.idCliente
+            //opcion: me.getMenu().getActiveItem().opcion
         });
 
         view.getNavigationBar().down('#agregarPago').hide();
@@ -1897,9 +1897,9 @@ console.log(response);
         view.push({
             xtype: 'montoapagarform',
             //xtype: 'montoapagarformcontainer',
-            title: me.idCliente,
-            datos: record.data,
-            opcion: list.opcion
+            title: me.idCliente
+            //datos: record.data,
+            //opcion: list.opcion
         });
 
         me.determinaVistaMontoAPagar(record.data.TipoFormaPago, view);
@@ -1950,16 +1950,18 @@ console.log(response);
      * Valida si este tipo de pago permite dar cambio para en su caso permitirlo o no.
      * @param btn Este botón.
      */
-    onPagar: function (btn) {
+    onPagar: function (btn) {        
         var me = this,
             view = btn.up('navigationcobranza'),
             form = view.down('montoapagarform'),
             moneda,
+            datos = view.down('formasdepagolist').getSelection()[0].data,
+            opcion = me.getMenu().down('cobranzalist').getSelection()[0].data.action,
             pendiente = me.aPagar - me.pagado,
-            forma = form.datos.Nombre,
+            forma = datos.Nombre,
             entrada = form.getValues().monto,
-            codigo = form.datos.Codigo,
-            tipo = form.datos.TipoFormaPago,
+            codigo = datos.Codigo,
+            tipo = datos.TipoFormaPago,
             esVacio = false,
             valores = form.getValues(),
             numeroCheque = valores.numeroCheque,
@@ -1969,9 +1971,11 @@ console.log(response);
             numeroAutorizacion = valores.numeroAutorizacion,
             nombres = form.getInnerItems(),
             modoEdicion = form.modo === 'edicion' ? true : false,
-            permiteCambio = form.datos.PermiteCambio;        
+            permiteCambio = datos.PermiteCambio;
 
-         if(form.opcion == 'cobranzaFacturas'){
+            console.log(opcion);
+
+         if(opcion == 'cobranzaFacturas'){
             moneda = Ext.getStore('Facturas').getAt(0).data.CodigoMoneda + ' '; //Estamos asumiendo que el código de moneda de todas las facturas es la local.            
          } else {
             moneda = Ext.getStore('Anticipos').getAt(0).data.CodigoMoneda + ' '; //Estamos asumiendo que el código de moneda de todas las facturas es la local.            
@@ -1998,12 +2002,12 @@ console.log(response);
                     me.mandaMensaje('Sin cambio', 'Esta forma de pago no permite dar cambio, disminuya la cantidad.');
                 } else {
                     //me.sumaCobros(forma, entrada, moneda, codigo, tipo, numeroCheque, numeroCuenta, banco, numeroAutorizacion, form);
-                    me.sumaCobros(form, moneda);
+                    me.sumaCobros(form, datos, moneda);
                     view.pop(2);
                 }
             } else {
                 //me.sumaCobros(forma, entrada, moneda, codigo, tipo, numeroCheque, numeroCuenta, banco, numeroAutorizacion, form);
-                me.sumaCobros(form, moneda);
+                me.sumaCobros(form, datos, moneda);
                 view.pop(2);
             }
         }
@@ -2121,12 +2125,12 @@ console.log(response);
      * @param moneda El código de moneda del pago.
      */
 //    sumaCobros: function (forma, entrada, moneda, codigo, tipoFormaPago, numeroCheque, numeroCuenta, banco, numeroAutorizacion, modoEdicion) {
-    sumaCobros: function (form, moneda) {
+    sumaCobros: function (form, datos, moneda) {
         var me = this,
-            forma = form.datos.Nombre,
+            forma = datos.Nombre,
             entrada = form.getValues().monto,
-            codigo = form.datos.Codigo,
-            tipo = form.datos.TipoFormaPago,
+            codigo = datos.Codigo,
+            tipo = datos.TipoFormaPago,
             esVacio = false,
             valores = form.getValues(),
             numeroCheque = valores.NumeroCheque,
@@ -2135,7 +2139,7 @@ console.log(response);
             numeroAutorizacion = valores.NumeroAutorizacion,
             nombres = form.getInnerItems(),
             modoEdicion = form.modo === 'edicion' ? true : false,
-            permiteCambio = form.datos.PermiteCambio,
+            permiteCambio = datos.PermiteCambio,
             temp,
             entradaMostrada = Imobile.core.FormatCurrency.currency(entrada, moneda),
             ind = form.ind,

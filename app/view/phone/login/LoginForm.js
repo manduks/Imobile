@@ -11,8 +11,19 @@ Ext.define('APP.view.phone.login.LoginForm', {
             clearIcon: true
         },
         items: [{
+            xtype: 'textfield',
+            name: 'usuario',
+            placeHolder: 'Codigo de Usuario',
+            value: '1'
+        },{
+            xtype: 'passwordfield',
+            name: 'password',
+            placeHolder: 'Contraseña',
+            value: '12345'
+        },{
             xtype: 'selectfield',
             name:'servidor',
+            margin:'10 0',
             options: [{
                 text: 'Server OK',
                 value: 'ferman.ddns.net:88'
@@ -24,15 +35,15 @@ Ext.define('APP.view.phone.login.LoginForm', {
                 value: 'fake2'
             }]
         },{
-            xtype: 'textfield',
-            name: 'usuario',
-            placeHolder: 'Codigo de Usuario',
-            value: '1'
-        },{
-            xtype: 'passwordfield',
-            name: 'password',
-            placeHolder: 'Contraseña',
-            value: '12345'
+            xtype: 'selectfield',
+            name:'idioma',
+            options: [{
+                text: 'Español',
+                value: 'es'
+            },{
+                text: 'Inglés',
+                value: 'en'
+            }]
         },{
             xtype:'component',
             height:10
@@ -49,7 +60,7 @@ Ext.define('APP.view.phone.login.LoginForm', {
             }
         },{
             xtype:'component',
-            height:30
+            height:20
         },{
             xtype:'component',
             cls:'imobile-version',

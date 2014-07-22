@@ -21,7 +21,7 @@ Ext.define('APP.controller.phone.Login', {
         var form = this.getLoginForm(),
             values = form.getValues();
 
-        localStorage.setItem("dirIP","values.servidor");
+        localStorage.setItem("dirIP",values.servidor);
 
         Ext.Viewport.setMasked({xtype:'loadmask',message:'Accediendo'});
 

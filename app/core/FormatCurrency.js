@@ -1,4 +1,4 @@
-Ext.define('Imobile.core.FormatCurrency', {
+Ext.define('APP.core.FormatCurrency', {
     widget: 'currency',
     singleton: true,
     currencyPrecision: 2,

@@ -57,7 +57,7 @@ Ext.define('APP.controller.phone.Login', {
             },
             failure:function(){
                 Ext.Msg.alert('Problemas de conexión', 'No se puede encontrar el servidor',function(){Ext.Viewport.setMasked(false);});
-
+                Ext.Viewport.setMasked(false);
             },
             scope:this
         });

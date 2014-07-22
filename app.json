@@ -2,7 +2,7 @@
     /**
      * The application's namespace, used by Sencha Command to generate classes
      */
-    "name": "Imobile",
+    "name": "APP",
 
     /**
      * The file path to this application's front HTML document, relative to this app.json file
@@ -39,10 +39,6 @@
      *      }
      */
     "js": [
-		{
-			"path": "phonegap.js",
-			"remote": true
-		},
         {
             "path": "touch/sencha-touch.js",
             "x-bootstrap": true
@@ -107,7 +103,6 @@
      * Extra resources to be copied along when build
      */
     "resources": [
-		"config.xml",
         "resources/images",
         "resources/icons",
         "resources/startup"
@@ -136,5 +131,5 @@
      * Uniquely generated id for this application, used as prefix for localStorage keys.
      * Normally you should never change this value.
      */
-    "id": "02e60a7e-c9f2-4cb8-9899-4cb51209d057"
+    "id": "6b4b1d57-617f-4d7f-99f2-a086e0c33812"
 }

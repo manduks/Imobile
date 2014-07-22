@@ -10,43 +10,15 @@
     will need to resolve manually.
 */
 
-
 Ext.application({
-    name: 'Imobile',
+    name: 'APP',
 
-    requires: [
+    requires:[
         'Ext.MessageBox',
-        'Ext.data.proxy.JsonP',
-        'Imobile.core.data.Store',
-        'Imobile.core.FormatCurrency'/*,
-        'Ext.ux.Fileup'*/
+        'Ext.field.Select',
+        'Ext.field.Password',
+        'Ext.data.proxy.JsonP'
     ],
-
-    models:[
-        'Menu'
-    ],
-
-    stores: [
-        'Menu',
-        'Clientes',
-        'Productos',
-        'Ordenes',
-        'Direcciones',
-        'DireccionesFiscales',
-        'Monedas',
-        'Facturas',
-        'Totales',
-        'Transacciones',
-        'Prospectos',
-        'FormasDePago',
-        'Anticipos'
-    ],
-
-    views: [
-        'Main'
-    ],
-
-    profiles:['Tablet', 'Phone'],
 
     icon: {
         '57': 'resources/icons/Icon.png',
@@ -66,9 +38,19 @@ Ext.application({
         '1496x2048': 'resources/startup/1496x2048.png'
     },
 
+    profiles:[
+        //'Tablet',
+        'Phone'
+    ],
+
     launch: function() {
         // Destroy the #appLoadingIndicator element
         Ext.fly('appLoadingIndicator').destroy();
+
+
+
+        // Initialize the main view
+        //Ext.Viewport.add(Ext.create('APP.view.Main'));
     },
 
     onUpdated: function() {

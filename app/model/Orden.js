@@ -60,6 +60,9 @@ Ext.define('Imobile.model.Orden', {
         },{
             name: 'esOrdenRecuperada',
             type: 'boolean'
+        },{
+            name: 'TipoCambio',
+            type: 'float'
         }]
     }
 });

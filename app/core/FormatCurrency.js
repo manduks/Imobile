@@ -54,6 +54,6 @@ Ext.define('Imobile.core.FormatCurrency', {
     },
 
     formatCurrencytoNumber: function (value){
-        return parseFloat(value.replace(/[^0-9-.]/g, '')).toFixed(2);
+        return parseFloat(value.replace(/[^0-9-.]/g, ''));
     }
 });

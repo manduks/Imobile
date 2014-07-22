@@ -20,12 +20,13 @@ Ext.define('APP.controller.phone.Login', {
     onLoginUser: function(btn){
         var form = this.getLoginForm(),
             values = form.getValues();
-        this.dirIP = values.servidor;
+
+        localStorage.setItem("dirIP","values.servidor");
 
         Ext.Viewport.setMasked({xtype:'loadmask',message:'Accediendo'});
 
         Ext.data.JsonP.request({
-            url: "http://" + this.dirIP + "/iMobile/COK1_CL_UsuarioiMobile/Login",
+            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_UsuarioiMobile/Login",
             params: {
                 CodigoUsuario: values.usuario,
                 CodigoSociedad: '001',

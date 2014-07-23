@@ -104,7 +104,10 @@ Ext.define('APP.controller.phone.Menu', {
                 Token: localStorage.getItem("Token")
             };
 
-        if(navigationview.getActiveItem().getId() == 'ordenescont' || navigationview.getActiveItem().getId() == 'cobranzacont'){
+        if( navigationview.getActiveItem().getId() == 'ordenescont' ||
+            navigationview.getActiveItem().getId() == 'cobranzacont' ||
+            navigationview.getActiveItem().getId() == 'rutacont'
+        ){
             titulo = view.down('toolbar');
 
             view.remove(titulo, true);

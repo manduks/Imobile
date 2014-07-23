@@ -5,36 +5,19 @@
  * @oswaldo@codetlan.com
  */
 
-Ext.define('Imobile.view.phone.Main',{
-    extend:'Imobile.view.Main',
+Ext.define('APP.view.phone.Main',{
+    extend:'Ext.Panel',
+    xtype:'main',
     config: {
         layout:'card',
         activeItem:0,
         items: [{
+            xtype: 'menunav'
+        },{
             xtype: 'container',
-            baseCls: 'login-background',
-            layout: {
-                type: 'vbox',
-                align: 'stretch'
-            },
-            defaults: {
-                flex: 1
-            },
-            items: [{
-                xtype: 'container'
-            }, {
-                xtype: 'loginform',
-                baseCls: '',
-                flex: 2
-            }, {
-                xtype: 'container'
-            }]
-        },{
-            xtype: 'menu'
-        },{
-            xtype: 'navigationorden'
-        },{
-            xtype: 'navigationcobranza'
+            html:'hey'
+        /*},{
+            xtype: 'navigationcobranza'*/
         }]
     }
 });

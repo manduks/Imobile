@@ -3,13 +3,10 @@
  * @extends Ext.dataview.List
  * Esta es la lista de las opciones que tiene un cliente
  */
-Ext.define('APP.view.phone.clientes.OpcionClienteList', {
+Ext.define('APP.view.phone.ordenes.OpcionOrdenesList', {
     extend: 'Ext.dataview.List',
-    xtype: 'opcionclientelist',    
+    xtype: 'opcionordeneslist',
     config: {
-        onItemDisclosure: function (record, listItem, index, e) {
-            this.fireEvent("tap", record, listItem, index, e);            
-        },
         itemTpl: '{title}',
         data:[
             {title: 'Orden de venta', action: 'orden'},

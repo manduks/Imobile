@@ -29,13 +29,15 @@ Ext.define('APP.profile.Phone',{
             'Direcciones'
         ],
         views:[
+            'Main',
             'configuracion.ConfiguracionPanel',
             'menu.MenuNav',
             'menu.MenuList',
             'login.LoginPanel',
             'login.LoginForm',
             'clientes.ClientesList',
-            'clientes.OpcionClienteList',
+            'ordenes.OpcionOrdenesList',
+
             'ordenes.AlmacenList',
             'ordenes.ClienteContainer',
             'ordenes.DireccionEntregaContainer',

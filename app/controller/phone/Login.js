@@ -50,7 +50,7 @@ Ext.define('APP.controller.phone.Login', {
                     localStorage.setItem("Almacenes", response.ConfiguracionDispositivo.Almacenes);
 
                     Ext.Viewport.removeAll(true);
-                    Ext.Viewport.add(Ext.create('APP.view.phone.menu.MenuNav'));
+                    Ext.Viewport.add(Ext.create('APP.view.phone.MainCard'));
 
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
@@ -62,12 +62,6 @@ Ext.define('APP.controller.phone.Login', {
                 Ext.Viewport.setMasked(false);
             },
             scope:this
-        });
-    },
-
-    addLogoutButton: function() {
-        this.getNav().add({
-            text: 'Logout'
         });
     }
 });

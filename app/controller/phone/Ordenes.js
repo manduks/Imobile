@@ -6,15 +6,28 @@ Ext.define('APP.controller.phone.Ordenes', {
 
     config:{
         refs:{
-            menuNav:'menunav'
+            menuNav:'menunav',
+            mainCard:'maincard',
+            navigationOrden:'navigationorden',
+            partidaContainer:'partidacontainer',
+            opcionesOrden:'opcionesorden',
+            ordenContainer:'ordencontainer'
         },
     	control:{
             'container[id=ordenescont] clienteslist': {
                 itemtap: 'alSelecionarCliente'
             },
-            'container[id=ordenescont] opcionclientelist': {
-                itemtap: 'onOpcionesCliente'
+            'opcionordeneslist': {
+                itemtap: 'onOpcionOrdenes'
             },
+
+
+
+
+
+
+
+
 
 			'productoslist #btnBuscarProductos': {
                 tap: 'onBuscaProductos'
@@ -102,8 +115,9 @@ Ext.define('APP.controller.phone.Ordenes', {
             });
 
         this.getMenuNav().push({
-            xtype: 'opcionclientelist',
-            title: idCliente
+            xtype: 'opcionordeneslist',
+            title: idCliente,
+            idCliente: idCliente
         });
 
         Ext.data.JsonP.request({
@@ -164,6 +178,86 @@ Ext.define('APP.controller.phone.Ordenes', {
             direcciones.removeAll();
         }
     },
+
+    /**
+     * Determina qué hacer dependiendo de la opción seleccionada.
+     * Orden:
+     *   Activa el ítem 2 del menú principal dejando la vista actual en navigationorden (con un sólo ítem, un tabpanel) y establece como activo el ítem 0 de este tabpanel.
+     *   Hace aparecer un toolbar con el nombre del cliente.
+     *
+     * Visualizar:
+     *
+     * @param list Ésta lista.
+     * @param index El índice del ítem tapeado.
+     * @param target El elemento tapeado.
+     * @param record EL record asociado a este ítem.
+     */
+    onOpcionOrdenes: function (list, index, target, record) {
+
+        var me = this,
+            opcion = record.get('action'),
+            barraTitulo = ({
+                xtype: 'toolbar',
+                docked: 'top',
+                title: record.get('title')
+            });
+
+        switch (opcion) {
+            case 'orden':
+                me.actionOrden = 'crear';
+                this.getMainCard().getAt(1).setMasked(false);
+                this.getMainCard().setActiveItem(1); // Activamos el item 2 del menu principal navigationorden
+                this.getNavigationOrden().getNavigationBar().setTitle(list.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
+                this.getOpcionesOrden().setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
+                this.getPartidaContainer().down('list').emptyTextCmp.show();
+
+                this.dameMonedaPredeterminada();
+
+                this.getNavigationOrden().add(barraTitulo);
+                break;
+
+            case 'visualizar':
+                if (view.getActiveItem().xtype == 'transaccionlist') {
+                    return;
+                }
+
+                me.actionOrden = 'actualizar';
+                var store = Ext.getStore('Transacciones');
+
+                Ext.getStore('Transacciones').resetCurrentPage();
+
+                store.setParams({
+                    CardCode: me.idCliente
+                });
+
+                store.load();
+
+                view.push({
+                    xtype: 'transaccionlist',
+                    title: me.idCliente
+                });
+
+                me.dameMonedaPredeterminada();
+
+                break;
+        }
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Guarda el código de dirección de la dirección seleccionada, ya sea de entrega o fiscal.
@@ -971,71 +1065,7 @@ console.log(values);
         me.mandaMensaje('Códigos de dirección', 'Entrega: ' + me.direccionEntrega + '\nFiscal: ' + me.direccionFiscal);
     },
 
-    /**
-     * Determina qué hacer dependiendo de la opción seleccionada.
-     * Orden:
-     *   Activa el ítem 2 del menú principal dejando la vista actual en navigationorden (con un sólo ítem, un tabpanel) y establece como activo el ítem 0 de este tabpanel.
-     *   Hace aparecer un toolbar con el nombre del cliente.
-     *
-     * Visualizar:
-     *
-     * @param list Ésta lista.
-     * @param index El índice del ítem tapeado.
-     * @param target El elemento tapeado.
-     * @param record EL record asociado a este ítem.
-     */
-    onOpcionesCliente: function (list, index, target, record) {
-        var me = this,
-            view = me.getMenu(),
-            viewPrincipal = me.getMain(),
 
-            opcion = record.get('action'),
-            barraTitulo = ({
-                xtype: 'toolbar',
-                docked: 'top',
-                title: me.titulo
-            });
-
-        switch (opcion) {
-            case 'orden':
-                me.actionOrden = 'crear';
-                viewPrincipal.getAt(2).setMasked(false);
-                viewPrincipal.setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
-                me.getNavigationOrden().getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
-                viewPrincipal.getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
-                me.getPartidaContainer().down('list').emptyTextCmp.show();
-
-                me.dameMonedaPredeterminada();                
-
-                viewPrincipal.getActiveItem().add(barraTitulo);
-                break;
-
-            case 'visualizar':
-                if (view.getActiveItem().xtype == 'transaccionlist') {
-                    return;
-                }
-
-                me.actionOrden = 'actualizar';
-                var store = Ext.getStore('Transacciones');
-
-                Ext.getStore('Transacciones').resetCurrentPage();
-
-                store.setParams({
-                    CardCode: me.idCliente
-                });
-
-                store.load();
-
-                view.push({
-                    xtype: 'transaccionlist',
-                    title: me.idCliente
-                });
-
-                me.dameMonedaPredeterminada();
-
-                break;
-        }
-    },
 
     /**
     * Recorre el store de monedas y obtiene la predeterminada.
@@ -1401,10 +1431,10 @@ console.log(response);
 
         });
 
-        me.getOrdenContainer().down('#descuento').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + me.codigoMonedaSeleccinada + '0.00</div>'}); //Imobile.core.FormatCurrency.currency(importe, '$')
-        me.getOrdenContainer().down('#subtotal').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + Imobile.core.FormatCurrency.currency(parseFloat(precioTotal), me.codigoMonedaSeleccinada)/*.toFixed(2)*/ + '</div>'});
-        me.getOrdenContainer().down('#tax').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + Imobile.core.FormatCurrency.currency(parseFloat(tax), me.codigoMonedaSeleccinada) + '</div>'});
-        me.getOrdenContainer().down('#total').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + Imobile.core.FormatCurrency.currency(parseFloat(precioTotal + tax), me.codigoMonedaSeleccinada) + '</div>' });
+        this.getOrdenContainer().down('#descuento').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + this.codigoMonedaSeleccinada + '0.00</div>'}); //Imobile.core.FormatCurrency.currency(importe, '$')
+        this.getOrdenContainer().down('#subtotal').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + APP.core.FormatCurrency.currency(parseFloat(precioTotal), this.codigoMonedaSeleccinada)/*.toFixed(2)*/ + '</div>'});
+        this.getOrdenContainer().down('#tax').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + APP.core.FormatCurrency.currency(parseFloat(tax), this.codigoMonedaSeleccinada) + '</div>'});
+        this.getOrdenContainer().down('#total').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + APP.core.FormatCurrency.currency(parseFloat(precioTotal + tax), this.codigoMonedaSeleccinada) + '</div>' });
     },
 
     /**

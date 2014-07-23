@@ -6,7 +6,7 @@ Ext.define('APP.controller.phone.Cobranza', {
 
     config: {
         refs:{
-            menuNav:'menunav',            
+            menuNav:'menunav'
         },
     	control:{
 
@@ -15,7 +15,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             },
             'container[id=cobranzacont] opcionclientelist': {
                 itemtap: 'onOpcionesCliente'
-            },            
+            },
             'opcionclientelist': {
                 itemtap: 'onOpcionesCliente'
             },

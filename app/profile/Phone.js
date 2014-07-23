@@ -22,23 +22,30 @@ Ext.define('APP.profile.Phone',{
             'Menu',
             'Cliente',
             'Direccion',
+            'Orden',
+            'Moneda',
             'Factura'
         ],
         stores:[
             'Menu',
             'Clientes',
             'Direcciones',
+            'Ordenes',
+            'Monedas',
             'Facturas',
             'Anticipos'
         ],
         views:[
+            'MainCard',
             'configuracion.ConfiguracionPanel',
             'menu.MenuNav',
             'menu.MenuList',
             'login.LoginPanel',
             'login.LoginForm',
             'clientes.ClientesList',
-            'clientes.OpcionClienteList',
+            'ordenes.OpcionOrdenesList',
+            'ordenes.OrdenList',
+
             'ordenes.AlmacenList',
             'ordenes.ClienteContainer',
             'ordenes.DireccionEntregaContainer',
@@ -62,7 +69,11 @@ Ext.define('APP.profile.Phone',{
             'cobranza.NavigationCobranza',
             'cobranza.TotalAPagarContainer',
             'cobranza.TotalesContainer',
-            'cobranza.VisualizacionCobranzaList'
+            'cobranza.VisualizacionCobranzaList',
+
+            'APP.form.phone.pedidos.EditarPedidoForm',
+            'APP.form.phone.clientes.ClienteForm'
+
 
         ]
     },

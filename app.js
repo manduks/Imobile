@@ -17,6 +17,7 @@ Ext.application({
 
     requires:[
         'Ext.MessageBox',
+        'Ext.field.Email',
         'Ext.field.Select',
         'Ext.field.Password',
         'Ext.form.FieldSet',

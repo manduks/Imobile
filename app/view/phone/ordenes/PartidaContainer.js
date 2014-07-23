@@ -5,7 +5,6 @@
  */
 Ext.define('APP.view.phone.ordenes.PartidaContainer', {
     extend: 'Ext.Container',
-    requires: [],
     xtype: 'partidacontainer',
     config: {
         scrollable: {

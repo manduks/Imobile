@@ -9,7 +9,9 @@
     changes and its generated code, it will produce a "merge conflict" that you
     will need to resolve manually.
 */
-
+Ext.Loader.setPath({
+    'Ext.ux': 'src/ux'
+});
 Ext.application({
     name: 'APP',
 
@@ -17,7 +19,13 @@ Ext.application({
         'Ext.MessageBox',
         'Ext.field.Select',
         'Ext.field.Password',
-        'Ext.data.proxy.JsonP'
+        'Ext.form.FieldSet',
+        'Ext.data.proxy.JsonP',
+        'Ext.field.Toggle',
+        'Ext.ux.Fileup',
+
+        'APP.core.data.Store',
+        'APP.core.FormatCurrency'
     ],
 
     icon: {

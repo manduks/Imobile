@@ -3,7 +3,7 @@
  * @extends Ext.data.Store
  * store genereico para aplicacion
  */
-Ext.define('Imobile.core.data.Store', {
+Ext.define('APP.core.data.Store', {
     extend: 'Ext.data.Store',
     config: {
         autoLoad: false,
@@ -12,6 +12,7 @@ Ext.define('Imobile.core.data.Store', {
                 var me = this,
                     extraParams = store.getProxy().getExtraParams();
                 me.params.auth_token = localStorage.getItem("Token");
+                me.params.language = localStorage.getItem("idioma");
                 if (me.resetParams) {
                     store.getProxy().setExtraParams(me.params);
                     me.resetParams = false;

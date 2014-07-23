@@ -24,6 +24,7 @@ Ext.define('APP.profile.Phone',{
             'Menu'
         ],
         views:[
+            'configuracion.ConfiguracionPanel',
             'menu.MenuNav',
             'menu.MenuList',
             'login.LoginPanel',

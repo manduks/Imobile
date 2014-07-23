@@ -38,8 +38,13 @@ Ext.define('APP.controller.phone.Menu', {
                 break;
             case 'rutas':
                 this.getMenuNav().push({
-                    title:'rutas',
-                    html:'rutas'
+                    xtype:'container',
+                    layout:'fit',
+                    id:'rutascont',
+                    items:[{
+                        xtype: 'clienteslist',
+                        title:'Rutas'
+                    }]
                 });
                 break;
             case 'cobranza':
@@ -99,7 +104,10 @@ Ext.define('APP.controller.phone.Menu', {
                 Token: localStorage.getItem("Token")
             };
 
-        if(navigationview.getActiveItem().getId() == 'ordenescont' || navigationview.getActiveItem().getId() == 'cobranzacont'){
+        if( navigationview.getActiveItem().getId() == 'ordenescont' ||
+            navigationview.getActiveItem().getId() == 'cobranzacont' ||
+            navigationview.getActiveItem().getId() == 'rutacont'
+        ){
             titulo = view.down('toolbar');
 
             view.remove(titulo, true);

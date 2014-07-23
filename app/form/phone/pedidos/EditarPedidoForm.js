@@ -1,4 +1,4 @@
-Ext.define('Imobile.form.pedidos.EditarPedidoForm', {
+Ext.define('APP.form.phone.pedidos.EditarPedidoForm', {
 	extend: 'Ext.form.Panel',
 	xtype: 'editarpedidoform',
 	requires:[

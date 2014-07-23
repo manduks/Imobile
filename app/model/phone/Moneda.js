@@ -3,7 +3,7 @@
  * @extends Ext.data.Model
  * El modelo de la moneda
  */
-Ext.define('Imobile.model.Moneda', {
+Ext.define('APP.model.phone.Moneda', {
     extend: 'Ext.data.Model',
     config: {
         fields: [

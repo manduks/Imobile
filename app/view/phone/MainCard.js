@@ -14,9 +14,7 @@ Ext.define('APP.view.phone.MainCard',{
         items: [{
             xtype: 'menunav'
         },{
-            xtype:'container',
-            html:'navigationorden'
-            //xtype: 'navigationorden'
+            xtype: 'navigationorden'
         /*},{
             xtype: 'navigationcobranza'*/
         }]

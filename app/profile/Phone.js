@@ -21,12 +21,16 @@ Ext.define('APP.profile.Phone',{
         models:[
             'Menu',
             'Cliente',
-            'Direccion'
+            'Direccion',
+            'Orden',
+            'Moneda'
         ],
         stores:[
             'Menu',
             'Clientes',
-            'Direcciones'
+            'Direcciones',
+            'Ordenes',
+            'Monedas'
         ],
         views:[
             'MainCard',
@@ -37,6 +41,7 @@ Ext.define('APP.profile.Phone',{
             'login.LoginForm',
             'clientes.ClientesList',
             'ordenes.OpcionOrdenesList',
+            'ordenes.OrdenList',
 
             'ordenes.AlmacenList',
             'ordenes.ClienteContainer',
@@ -61,7 +66,11 @@ Ext.define('APP.profile.Phone',{
             'cobranza.NavigationCobranza',
             'cobranza.TotalAPagarContainer',
             'cobranza.TotalesContainer',
-            'cobranza.VisualizacionCobranzaList'
+            'cobranza.VisualizacionCobranzaList',
+
+            'APP.form.phone.pedidos.EditarPedidoForm',
+            'APP.form.phone.clientes.ClienteForm'
+
 
         ]
     },

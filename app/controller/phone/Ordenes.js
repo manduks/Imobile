@@ -7,7 +7,11 @@ Ext.define('APP.controller.phone.Ordenes', {
     config:{
         refs:{
             menuNav:'menunav',
-            mainCard:'maincard'
+            mainCard:'maincard',
+            navigationOrden:'navigationorden',
+            partidaContainer:'partidacontainer',
+            opcionesOrden:'opcionesorden',
+            ordenContainer:'ordencontainer'
         },
     	control:{
             'container[id=ordenescont] clienteslist': {
@@ -113,7 +117,8 @@ Ext.define('APP.controller.phone.Ordenes', {
 
         this.getMenuNav().push({
             xtype: 'opcionordeneslist',
-            title: idCliente
+            title: idCliente,
+            idCliente: idCliente
         });
 
         Ext.data.JsonP.request({
@@ -189,6 +194,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param record EL record asociado a este ítem.
      */
     onOpcionOrdenes: function (list, index, target, record) {
+
         var me = this,
             opcion = record.get('action'),
             barraTitulo = ({
@@ -202,13 +208,13 @@ Ext.define('APP.controller.phone.Ordenes', {
                 me.actionOrden = 'crear';
                 this.getMainCard().getAt(1).setMasked(false);
                 this.getMainCard().setActiveItem(1); // Activamos el item 2 del menu principal navigationorden
-                //me.getNavigationOrden().getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
-                //viewPrincipal.getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
-                //me.getPartidaContainer().down('list').emptyTextCmp.show();
+                this.getNavigationOrden().getNavigationBar().setTitle(list.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
+                this.getOpcionesOrden().setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
+                this.getPartidaContainer().down('list').emptyTextCmp.show();
 
-                //me.dameMonedaPredeterminada();
+                this.dameMonedaPredeterminada();
 
-                //viewPrincipal.getActiveItem().add(barraTitulo);
+                this.getNavigationOrden().add(barraTitulo);
                 break;
 
             case 'visualizar':
@@ -1426,10 +1432,10 @@ console.log(response);
 
         });
 
-        me.getOrdenContainer().down('#descuento').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + me.codigoMonedaSeleccinada + '0.00</div>'}); //Imobile.core.FormatCurrency.currency(importe, '$')
-        me.getOrdenContainer().down('#subtotal').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + Imobile.core.FormatCurrency.currency(parseFloat(precioTotal), me.codigoMonedaSeleccinada)/*.toFixed(2)*/ + '</div>'});
-        me.getOrdenContainer().down('#tax').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + Imobile.core.FormatCurrency.currency(parseFloat(tax), me.codigoMonedaSeleccinada) + '</div>'});
-        me.getOrdenContainer().down('#total').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + Imobile.core.FormatCurrency.currency(parseFloat(precioTotal + tax), me.codigoMonedaSeleccinada) + '</div>' });
+        this.getOrdenContainer().down('#descuento').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + this.codigoMonedaSeleccinada + '0.00</div>'}); //Imobile.core.FormatCurrency.currency(importe, '$')
+        this.getOrdenContainer().down('#subtotal').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + APP.core.FormatCurrency.currency(parseFloat(precioTotal), this.codigoMonedaSeleccinada)/*.toFixed(2)*/ + '</div>'});
+        this.getOrdenContainer().down('#tax').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + APP.core.FormatCurrency.currency(parseFloat(tax), this.codigoMonedaSeleccinada) + '</div>'});
+        this.getOrdenContainer().down('#total').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + APP.core.FormatCurrency.currency(parseFloat(precioTotal + tax), this.codigoMonedaSeleccinada) + '</div>' });
     },
 
     /**

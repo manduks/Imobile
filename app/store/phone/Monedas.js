@@ -3,15 +3,13 @@
  * @extends Ext.data.Store
  * Este es el store para las monedas
  */
-Ext.define('Imobile.store.Monedas', {
-    extend: 'Imobile.core.data.Store',
-    requires: ['Imobile.model.Moneda'],
+Ext.define('APP.store.phone.Monedas', {
+    extend: 'APP.core.data.Store',
 
     config: {
-        model: 'Imobile.model.Moneda',
+        model: 'APP.model.phone.Moneda',
         proxy: {
-            url: 'http://ferman.ddns.net:88/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasiMobile',
-            //url: 'http://25.15.241.121:88/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasiMobile',
+            url: 'http://'+ localStorage.getItem('dirIP') +'/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasiMobile',
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {

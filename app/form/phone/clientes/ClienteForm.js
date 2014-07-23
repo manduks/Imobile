@@ -5,7 +5,7 @@
  * Time: 12:23
  * To change this template use File | Settings | File Templates.
  */
-Ext.define('Imobile.form.clientes.ClienteForm', {
+Ext.define('APP.form.phone.clientes.ClienteForm', {
     extend: 'Ext.form.Panel',
     xtype: 'clienteform',
     requires: [

@@ -5,7 +5,7 @@
  * Time: 13:54
  * To change this template use File | Settings | File Templates.
  */
-Ext.define('Imobile.model.Orden', {
+Ext.define('APP.model.phone.Orden', {
     extend: 'Ext.data.Model',
 
      config: {

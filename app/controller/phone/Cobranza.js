@@ -5,12 +5,17 @@ Ext.define('APP.controller.phone.Cobranza', {
     extend: 'Ext.app.Controller',
 
     config: {
+        refs:{
+            menuNav:'menunav',            
+        },
     	control:{
 
-            /*'clienteslist': {
-                //itemtap: 'alSelecionarCliente'
-                itemsingletap: 'alSelecionarCliente'
-            },*/
+            'container[id=cobranzacont] clienteslist': {
+                itemtap: 'alSeleccionarCliente'
+            },
+            'container[id=cobranzacont] opcionclientelist': {
+                itemtap: 'onOpcionesCliente'
+            },            
             'opcionclientelist': {
                 itemtap: 'onOpcionesCliente'
             },
@@ -43,6 +48,37 @@ Ext.define('APP.controller.phone.Cobranza', {
                 itemswipe: 'eliminaPago'
             }
     	}
+    },
+
+    /**
+     * Establece el título y el id del cliente cada uno en una variable. Verifica de qué opción viene, venta o cobranza:
+     * Venta: Muestra la vista de ventas.
+     * Cobranza: Muestra la vista de cobranza.
+     * @param list Ésta lista.
+     * @param index El índice del ítem tapeado.
+     * @param target El elemento tapeado.
+     * @param record El record asociado al ítem.
+     */
+    alSeleccionarCliente: function (list, index, target, record) {        
+        var me = this,
+            view = me.getMenuNav(),
+            name = record.get('NombreSocio'),
+            barraTitulo = ({
+                xtype: 'toolbar',
+                docked: 'top',
+                title: 'titulo'
+            });            
+
+        me.idCliente = record.get('CodigoSocio');
+        me.titulo = name;
+        barraTitulo.title = me.titulo;
+
+        view.push({
+            xtype: 'cobranzalist',
+            title: me.idCliente
+        });
+
+        view.add(barraTitulo);
     },
 
     /**

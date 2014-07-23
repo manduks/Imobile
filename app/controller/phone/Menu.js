@@ -21,7 +21,7 @@ Ext.define('APP.controller.phone.Menu', {
             case 'ordenes':
                 this.getMenuNav().push({
                     xtype: 'clienteslist',
-                    title:'ordenes',                    
+                    title:'Ordenes'
                 });
                 break;
             case 'rutas':
@@ -33,7 +33,7 @@ Ext.define('APP.controller.phone.Menu', {
             case 'cobranza':
                 this.getMenuNav().push({
                     xtype: 'clienteslist',
-                    title:'cobranza',                    
+                    title:'cobranza'
                 });
                 break;
             case 'informes':
@@ -44,7 +44,8 @@ Ext.define('APP.controller.phone.Menu', {
                 break;
             case 'configuracion':
                 this.getMenuNav().push({
-                    xtype:'configuracionpanel'
+                    xtype:'configuracionpanel',
+                    title:'Configuración'
                 });
                 break;
             case 'prospectos':

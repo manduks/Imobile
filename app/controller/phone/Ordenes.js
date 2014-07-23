@@ -1567,6 +1567,6 @@ console.log(response);
                 }
             }
         });        
-    },
+    }
 
 });

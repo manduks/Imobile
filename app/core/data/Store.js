@@ -12,7 +12,7 @@ Ext.define('APP.core.data.Store', {
                 var me = this,
                     extraParams = store.getProxy().getExtraParams();
                 me.params.auth_token = localStorage.getItem("Token");
-                me.params.language = localStorage.getItem("idioma");
+                me.params.idioma = localStorage.getItem("idioma");
                 if (me.resetParams) {
                     store.getProxy().setExtraParams(me.params);
                     me.resetParams = false;

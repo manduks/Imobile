@@ -22,6 +22,7 @@ Ext.define('APP.controller.phone.Login', {
             values = form.getValues();
 
         localStorage.setItem("dirIP",values.servidor);
+        localStorage.setItem("idioma",values.idioma);
 
         Ext.Viewport.setMasked({xtype:'loadmask',message:'Accediendo'});
 
@@ -31,7 +32,8 @@ Ext.define('APP.controller.phone.Login', {
                 CodigoUsuario: values.usuario,
                 CodigoSociedad: '001',
                 CodigoDispositivo: '004',
-                Contrasenia: values.password
+                Contrasenia: values.password,
+                idioma:values.idioma
             },
             callbackKey: 'callback',
             success: function (response) {

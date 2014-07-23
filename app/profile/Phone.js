@@ -29,7 +29,7 @@ Ext.define('APP.profile.Phone',{
             'Direcciones'
         ],
         views:[
-            'Main',
+            'MainCard',
             'configuracion.ConfiguracionPanel',
             'menu.MenuNav',
             'menu.MenuList',

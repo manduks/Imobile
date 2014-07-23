@@ -7,7 +7,7 @@ Ext.define('APP.controller.phone.Ordenes', {
     config:{
         refs:{
             menuNav:'menunav',
-            mainCard:'main'
+            mainCard:'maincard'
         },
     	control:{
             'container[id=ordenescont] clienteslist': {
@@ -189,16 +189,13 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param record EL record asociado a este ítem.
      */
     onOpcionOrdenes: function (list, index, target, record) {
-        console.log(record);
         var me = this,
-
             opcion = record.get('action'),
             barraTitulo = ({
                 xtype: 'toolbar',
                 docked: 'top',
                 title: record.get('title')
             });
-
 
         switch (opcion) {
             case 'orden':

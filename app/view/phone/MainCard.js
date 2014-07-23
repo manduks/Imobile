@@ -5,17 +5,18 @@
  * @oswaldo@codetlan.com
  */
 
-Ext.define('APP.view.phone.Main',{
+Ext.define('APP.view.phone.MainCard',{
     extend:'Ext.Panel',
-    xtype:'main',
+    xtype:'maincard',
     config: {
         layout:'card',
         activeItem:0,
         items: [{
             xtype: 'menunav'
         },{
-            xtype: 'container',
-            html:'hey'
+            xtype:'container',
+            html:'navigationorden'
+            //xtype: 'navigationorden'
         /*},{
             xtype: 'navigationcobranza'*/
         }]

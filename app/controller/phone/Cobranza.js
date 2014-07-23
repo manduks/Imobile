@@ -63,19 +63,18 @@ Ext.define('APP.controller.phone.Cobranza', {
         var me = this,
             view = me.getMenuNav(),
             name = record.get('NombreSocio'),
+            idCliente = record.get('CodigoSocio'),
             barraTitulo = ({
                 xtype: 'toolbar',
                 docked: 'top',
                 title: 'titulo'
             });            
-
-        me.idCliente = record.get('CodigoSocio');
-        me.titulo = name;
-        barraTitulo.title = me.titulo;
+                
+        barraTitulo.title = name;
 
         view.push({
             xtype: 'cobranzalist',
-            title: me.idCliente
+            title: idCliente
         });
 
         view.add(barraTitulo);

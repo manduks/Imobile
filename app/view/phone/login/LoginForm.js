@@ -25,11 +25,11 @@ Ext.define('APP.view.phone.login.LoginForm', {
             name:'servidor',
             margin:'10 0',
             options: [{
-                text: 'Server OK',
+                text: 'ddns',
                 value: 'ferman.ddns.net:88'
             },{
-                text: 'Server Fake 1',
-                value: 'fake1'
+                text: 'hamachi',
+                value: '25.15.241.121:88'
             },{
                 text: 'Server Fake 2',
                 value: 'fake2'

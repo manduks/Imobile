@@ -38,8 +38,13 @@ Ext.define('APP.controller.phone.Menu', {
                 break;
             case 'rutas':
                 this.getMenuNav().push({
-                    title:'rutas',
-                    html:'rutas'
+                    xtype:'container',
+                    layout:'fit',
+                    id:'rutascont',
+                    items:[{
+                        xtype: 'clienteslist',
+                        title:'Rutas'
+                    }]
                 });
                 break;
             case 'cobranza':

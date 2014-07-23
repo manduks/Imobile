@@ -3,11 +3,9 @@
  * @extends Ext.data.Store
  * Este es el store para las direcciones
  */
-Ext.define('Imobile.store.Direcciones', {
+Ext.define('APP.store.phone.Direcciones', {
     extend: 'Ext.data.Store',
-    requires:['Imobile.model.Direccion'],
-
     config: {
-        model:'Imobile.model.Direccion'
+        model:'APP.model.phone.Direccion'
     }
 });

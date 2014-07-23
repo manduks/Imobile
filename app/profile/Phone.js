@@ -20,11 +20,13 @@ Ext.define('APP.profile.Phone',{
         ],
         models:[
             'Menu',
-            'Cliente'
+            'Cliente',
+            'Direccion'
         ],
         stores:[
             'Menu',
-            'Clientes'
+            'Clientes',
+            'Direcciones'
         ],
         views:[
             'configuracion.ConfiguracionPanel',

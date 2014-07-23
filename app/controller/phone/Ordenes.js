@@ -9,6 +9,13 @@ Ext.define('APP.controller.phone.Ordenes', {
             menuNav:'menunav'
         },
     	control:{
+            'container[id=ordenescont] clienteslist': {
+                itemtap: 'alSelecionarCliente'
+            },
+            'container[id=ordenescont] opcionclientelist': {
+                itemtap: 'onOpcionesCliente'
+            },
+
 			'productoslist #btnBuscarProductos': {
                 tap: 'onBuscaProductos'
             },
@@ -25,12 +32,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 focus: 'onListAlmacen'
             },
 
-            'container[id=ordenescont] clienteslist': {
-                itemtap: 'alSelecionarCliente'
-            },
-            'container[id=ordenescont] opcionclientelist': {
-                itemtap: 'onOpcionesCliente'
-            },
+
             'opcionesorden #eliminar': {
                 activate: 'onEliminarOrden'
             },
@@ -91,21 +93,18 @@ Ext.define('APP.controller.phone.Ordenes', {
      */
     alSelecionarCliente: function (list, index, target, record) {
 
-        var me = this,
-            name = record.get('NombreSocio'),
+        var name = record.get('NombreSocio'),
+            idCliente = record.get('CodigoSocio'),
+            titulo = name,
             barraTitulo = ({
                 xtype: 'toolbar',
                 docked: 'top',
-                title: 'titulo'
+                title: titulo
             });
-
-        me.idCliente = record.get('CodigoSocio');
-        me.titulo = name;
-        barraTitulo.title = me.titulo;
 
         this.getMenuNav().push({
             xtype: 'opcionclientelist',
-            title: me.idCliente
+            title: idCliente
         });
 
         Ext.data.JsonP.request({
@@ -115,21 +114,56 @@ Ext.define('APP.controller.phone.Ordenes', {
                 CodigoSociedad: localStorage.getItem("CodigoSociedad"),
                 CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
                 Token: localStorage.getItem("Token"),
-                CardCode: me.idCliente
+                CardCode: idCliente
             },
             callbackKey: 'callback',
             success: function (response) {
                 var procesada = response.Procesada;
 
-                me.clienteSeleccionado = response.Data[0];
+                var clienteSeleccionado = response.Data[0];
 
                 if (procesada) {
-                    me.estableceDirecciones(view, barraTitulo);
+                    this.estableceDirecciones(this.getMenuNav(),barraTitulo,clienteSeleccionado);
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }
-            }
+            },
+            scope:this
         });
+    },
+
+    /**
+     * Establece como predeterminadas las primeras direcciones que encuentra tanto fiscal
+     * como de entrega, si este clienteme no tiene dirección fiscal manda un mensaje y no permite avanzar.
+     * @param view La vista actual.
+     * @param barraTitulo El toolbar para agregar el nombre del cliente.
+     */
+    estableceDirecciones: function (view,barraTitulo,clienteSeleccionado) {
+        var me = this,
+            direcciones = Ext.getStore('Direcciones');
+        direcciones.setData(clienteSeleccionado.Direcciones);
+        direcciones.clearFilter();
+        direcciones.filter('TipoDireccion', 'S');
+
+        if (direcciones.getCount() > 0) {
+            view.add(barraTitulo);
+            var direccionFiscal = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion fiscal y se lo asignamos a una variable global.
+            var codigoImpuesto = direcciones.getAt(0).data.CodigoImpuesto;
+            var tasaImpuesto = direcciones.getAt(0).data.Tasa;
+            direcciones.getAt(0).set('Predeterminado', true);
+            direcciones.clearFilter();
+            direcciones.filter('TipoDireccion', 'B');
+
+            if (direcciones.getCount() > 0) {
+                var direccionEntrega = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una variable global.
+                direcciones.getAt(0).set('Predeterminado', true);
+            }
+
+        } else {
+            this.mandaMensaje('Sin dirección fiscal', 'Este cliente no cuenta con dirección fiscal, contacte a su administrador de SAP B1');
+            view.pop();
+            direcciones.removeAll();
+        }
     },
 
     /**
@@ -627,43 +661,7 @@ Ext.define('APP.controller.phone.Ordenes', {
 
 
 
-    /**
-     * Establece como predeterminadas las primeras direcciones que encuentra tanto fiscal
-     * como de entrega, si este cliente no tiene dirección fiscal manda un mensaje y no permite avanzar.
-     * @param view La vista actual.
-     * @param barraTitulo El toolbar para agregar el nombre del cliente.
-     */
-    estableceDirecciones: function (view, barraTitulo) {
-        var me = this,
-            direcciones = Ext.getStore('Direcciones');
-        direcciones.setData(me.clienteSeleccionado.Direcciones);
-        direcciones.clearFilter();
-        direcciones.filter('TipoDireccion', 'S');
 
-        if (view.getActiveItem().xtype == 'clienteslist ') {
-            return;
-        }
-
-        if (direcciones.getCount() > 0) {
-            view.add(barraTitulo);
-            me.direccionFiscal = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion fiscal y se lo asignamos a una variable global.
-            me.codigoImpuesto = direcciones.getAt(0).data.CodigoImpuesto;
-            me.tasaImpuesto = direcciones.getAt(0).data.Tasa;
-            direcciones.getAt(0).set('Predeterminado', true);
-            direcciones.clearFilter();
-            direcciones.filter('TipoDireccion', 'B');
-
-            if (direcciones.getCount() > 0) {
-                me.direccionEntrega = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una variable global.
-                direcciones.getAt(0).set('Predeterminado', true);
-            }
-
-        } else {
-            me.mandaMensaje('Sin dirección fiscal', 'Este cliente no cuenta con dirección fiscal, contacte a su administrador de SAP B1');
-            view.pop();
-            direcciones.removeAll();
-        }
-    },
 
     /**
      * Muestra el formulario para agregar un producto a la orden.

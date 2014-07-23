@@ -10,6 +10,7 @@ Ext.define('APP.profile.Phone',{
         controllers:[
             'Login',
             'Menu',
+            'Clientes',
             'Ordenes',
             'Rutas',
             'Cobranza',

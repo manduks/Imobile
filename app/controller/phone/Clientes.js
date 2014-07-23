@@ -29,13 +29,10 @@ Ext.define('APP.controller.phone.Clientes', {
 
 
 
-    onBuscaClientes: function (t, e, eOpts) {
-        var store = Ext.getStore('Clientes'),
+    onBuscaClientes: function (t, e){
+        var store = this.getClientesList().getStore(),
             value = t.up('toolbar').down('#buscarClientes').getValue();
-        //value = t.getValue();
-
-        Ext.getStore('Clientes').resetCurrentPage();
-
+        store.resetCurrentPage();
         store.setParams({
             Criterio: value
         });
@@ -43,13 +40,13 @@ Ext.define('APP.controller.phone.Clientes', {
     },
 
     limpiaBusquedaClientes: function (t, e, eOpts) {
-        var store = Ext.getStore('Clientes');
+        var store = this.getClientesList().getStore();
 
-        Ext.getStore('Clientes').resetCurrentPage();
+        store.resetCurrentPage();
 
         store.setParams({
             Criterio: ''
         });
         store.load();
-    },
+    }
 });

@@ -7,10 +7,10 @@ Ext.define('APP.controller.phone.Cobranza', {
     config: {
     	control:{
 
-            'clienteslist': {
+            /*'clienteslist': {
                 //itemtap: 'alSelecionarCliente'
                 itemsingletap: 'alSelecionarCliente'
-            },
+            },*/
             'opcionclientelist': {
                 itemtap: 'onOpcionesCliente'
             },
@@ -41,7 +41,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             'totalapagarlist':{
                 itemtap: 'editaPago',
                 itemswipe: 'eliminaPago'
-            },
+            }
     	}
     },
 

@@ -39,11 +39,9 @@ Ext.define('APP.controller.phone.Clientes', {
         store.load();
     },
 
-    limpiaBusquedaClientes: function (t, e, eOpts) {
+    limpiaBusquedaClientes: function() {
         var store = this.getClientesList().getStore();
-
         store.resetCurrentPage();
-
         store.setParams({
             Criterio: ''
         });

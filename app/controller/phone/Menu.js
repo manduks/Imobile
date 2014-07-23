@@ -20,8 +20,14 @@ Ext.define('APP.controller.phone.Menu', {
         switch(action){
             case 'ordenes':
                 this.getMenuNav().push({
-                    xtype: 'clienteslist',
-                    title:'Ordenes'
+                    xtype:'container',
+                    layout:'fit',
+                    id:'ordenescont',
+                    items:[{
+                        xtype: 'clienteslist',
+                        title:'Ordenes'
+                    }]
+
                 });
                 break;
             case 'rutas':

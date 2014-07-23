@@ -22,13 +22,13 @@ Ext.define('APP.controller.phone.Ordenes', {
                 focus: 'onListAlmacen'
             },
 
-            /*'clienteslist': {
+            'container[id=ordenescont] clienteslist': {
                 //itemtap: 'alSelecionarCliente'
                 itemsingletap: 'alSelecionarCliente'
             },
-            'opcionclientelist': {
+            'container[id=ordenescont] opcionclientelist': {
                 itemtap: 'onOpcionesCliente'
-            },*/
+            },
             'opcionesorden #eliminar': {
                 activate: 'onEliminarOrden'
             },

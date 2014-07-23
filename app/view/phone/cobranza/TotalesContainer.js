@@ -1,4 +1,4 @@
-Ext.define('Imobile.view.cobranza.TotalesContainer', {
+Ext.define('APP.view.phone.cobranza.TotalesContainer', {
     extend: 'Ext.Container',
     xtype: 'totalescontainer',
     requires:['Ext.Label'],

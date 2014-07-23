@@ -48,7 +48,17 @@ Ext.define('APP.profile.Phone',{
             'ordenes.OrdenContainer',
             'ordenes.PartidaContainer',
             'ordenes.TplDirecciones',
-            'ordenes.TransaccionList'
+            'ordenes.TransaccionList',
+            'cobranza.CobranzaList',
+            'cobranza.FacturasContainer',
+            'cobranza.FacturasList',
+            'cobranza.FormasDePagoList',
+            'cobranza.MontoAPagarFormContainer',
+            'cobranza.NavigationCobranza',
+            'cobranza.TotalAPagarContainer',
+            'cobranza.TotalesContainer',
+            'cobranza.VisualizacionCobranzaList'
+
         ]
     },
 

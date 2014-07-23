@@ -3,7 +3,7 @@
  * @extends Ext.Container
  * Description
  */
-Ext.define('Imobile.view.cobranza.FacturasContainer', {
+Ext.define('APP.view.phone.cobranza.FacturasContainer', {
     extend: 'Ext.Container',
     requires: [],
     xtype: 'facturascontainer',

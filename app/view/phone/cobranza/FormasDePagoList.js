@@ -3,7 +3,7 @@
  * @extends Ext.dataview.List
  * Esta es la lista de las opciones que tiene un cliente al seleccionar las facturas a cobrar
  */
-Ext.define('Imobile.view.cobranza.FormasDePagoList', {
+Ext.define('APP.view.phone.cobranza.FormasDePagoList', {
     extend: 'Ext.dataview.List',
     xtype: 'formasdepagolist',
     config: {

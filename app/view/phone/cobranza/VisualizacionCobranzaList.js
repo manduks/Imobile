@@ -3,7 +3,7 @@
  * @extends Ext.dataview.List
  * Esta es la lista de las opciones que tiene un cliente
  */
-Ext.define('Imobile.view.cobranza.VisualizacionCobranzaList', {
+Ext.define('APP.view.phone.cobranza.VisualizacionCobranzaList', {
     extend: 'Ext.dataview.List',
     xtype: 'visualizacioncobranzalist',
     config: {

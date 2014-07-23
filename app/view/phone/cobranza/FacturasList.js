@@ -1,4 +1,4 @@
-Ext.define('Imobile.view.cobranza.FacturasList', {
+Ext.define('APP.view.phone.cobranza.FacturasList', {
     extend: 'Ext.dataview.List',
     xtype: 'facturaslist',
     requires: [],

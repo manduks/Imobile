@@ -3,7 +3,7 @@
  * @extends Ext.dataview.List
  * Esta es la lista de las opciones que tiene un cliente al seleccionar cobranza
  */
-Ext.define('Imobile.view.cobranza.CobranzaList', {
+Ext.define('APP.view.phone.cobranza.CobranzaList', {
     extend: 'Ext.dataview.List',
     xtype: 'cobranzalist',
     config: {

@@ -3,7 +3,7 @@
  * @extends extendsClass
  * Description
  */
-Ext.define('Imobile.view.cobranza.TotalAPagarContainer', {
+Ext.define('APP.view.phone.cobranza.TotalAPagarContainer', {
     extend: 'Ext.Container',
     requires: [],
     xtype: 'totalapagarcontainer',

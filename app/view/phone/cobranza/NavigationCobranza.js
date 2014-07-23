@@ -1,4 +1,4 @@
-Ext.define('Imobile.view.cobranza.NavigationCobranza', {
+Ext.define('APP.view.phone.cobranza.NavigationCobranza', {
     extend: 'Ext.NavigationView',
     xtype: 'navigationcobranza',
     config: {

@@ -3,7 +3,7 @@
  * @extends extendsClass
  * Description
  */
-Ext.define('Imobile.view.cobranza.MontoAPagarFormContainer', {
+Ext.define('APP.view.phone.cobranza.MontoAPagarFormContainer', {
     extend: 'Ext.Container',
     requires: [],
     xtype: 'montoapagarformcontainer',

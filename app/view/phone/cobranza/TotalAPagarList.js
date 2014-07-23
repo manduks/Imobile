@@ -3,7 +3,7 @@
  * @extends extendsClass
  * Description Lista de los tipos de pago que eligió el cliente
  */
-Ext.define('Imobile.view.cobranza.TotalAPagarList', {
+Ext.define('APP.view.phone.cobranza.TotalAPagarList', {
     extend: 'Ext.dataview.List',
     requires: [],
     xtype: 'totalapagarlist',

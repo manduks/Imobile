@@ -21,20 +21,14 @@ Ext.define('APP.controller.phone.Ordenes', {
             'agregarproductosform #almacenProducto': {
                 focus: 'onListAlmacen'
             },
-            'clienteslist #buscarClientes': {
-                clearicontap: 'limpiaBusquedaClientes'
-                //keyup: 'onBuscaClientes'
-            },
-            'clienteslist #btnBuscarClientes': {
-                tap: 'onBuscaClientes'
-            },
-            'clienteslist': {
+
+            /*'clienteslist': {
                 //itemtap: 'alSelecionarCliente'
                 itemsingletap: 'alSelecionarCliente'
             },
             'opcionclientelist': {
                 itemtap: 'onOpcionesCliente'
-            },
+            },*/
             'opcionesorden #eliminar': {
                 activate: 'onEliminarOrden'
             },
@@ -555,29 +549,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         store.load();
     },
 
-    onBuscaClientes: function (t, e, eOpts) {    
-        var store = Ext.getStore('Clientes'),
-            value = t.up('toolbar').down('#buscarClientes').getValue();
-            //value = t.getValue();
 
-        Ext.getStore('Clientes').resetCurrentPage();
-
-        store.setParams({
-            Criterio: value
-        });
-        store.load();
-    },
-
-    limpiaBusquedaClientes: function (t, e, eOpts) {
-        var store = Ext.getStore('Clientes');
-
-        Ext.getStore('Clientes').resetCurrentPage();
-
-        store.setParams({
-            Criterio: ''
-        });
-        store.load();
-    },
 
     /**
      * Filtra el store de productos por la variable DesplegarEnPanel.

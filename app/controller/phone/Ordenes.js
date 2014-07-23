@@ -5,6 +5,9 @@ Ext.define('APP.controller.phone.Ordenes', {
     extend: 'Ext.app.Controller',
 
     config:{
+        refs:{
+            menuNav:'menunav'
+        },
     	control:{
 			'productoslist #btnBuscarProductos': {
                 tap: 'onBuscaProductos'
@@ -23,8 +26,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             },
 
             'container[id=ordenescont] clienteslist': {
-                //itemtap: 'alSelecionarCliente'
-                itemsingletap: 'alSelecionarCliente'
+                itemtap: 'alSelecionarCliente'
             },
             'container[id=ordenescont] opcionclientelist': {
                 itemtap: 'onOpcionesCliente'
@@ -78,6 +80,57 @@ Ext.define('APP.controller.phone.Ordenes', {
     	}
     },
 
+    /**
+     * Establece el título y el id del cliente cada uno en una variable. Verifica de qué opción viene, venta o cobranza:
+     * Venta: Muestra la vista de ventas.
+     * Cobranza: Muestra la vista de cobranza.
+     * @param list Ésta lista.
+     * @param index El índice del ítem tapeado.
+     * @param target El elemento tapeado.
+     * @param record El record asociado al ítem.
+     */
+    alSelecionarCliente: function (list, index, target, record) {
+
+        var me = this,
+            name = record.get('NombreSocio'),
+            barraTitulo = ({
+                xtype: 'toolbar',
+                docked: 'top',
+                title: 'titulo'
+            });
+
+        me.idCliente = record.get('CodigoSocio');
+        me.titulo = name;
+        barraTitulo.title = me.titulo;
+
+        this.getMenuNav().push({
+            xtype: 'opcionclientelist',
+            title: me.idCliente
+        });
+
+        Ext.data.JsonP.request({
+            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Socio/ObtenerSocioiMobile",
+            params: {
+                CodigoUsuario: localStorage.getItem("CodigoUsuario"),
+                CodigoSociedad: localStorage.getItem("CodigoSociedad"),
+                CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
+                Token: localStorage.getItem("Token"),
+                CardCode: me.idCliente
+            },
+            callbackKey: 'callback',
+            success: function (response) {
+                var procesada = response.Procesada;
+
+                me.clienteSeleccionado = response.Data[0];
+
+                if (procesada) {
+                    me.estableceDirecciones(view, barraTitulo);
+                } else {
+                    Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
+                }
+            }
+        });
+    },
 
     /**
      * Guarda el código de dirección de la dirección seleccionada, ya sea de entrega o fiscal.
@@ -572,81 +625,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         Ext.Msg.alert(titulo, mensaje);
     },
 
-    /**
-     * Establece el título y el id del cliente cada uno en una variable. Verifica de qué opción viene, venta o cobranza:
-     * Venta: Muestra la vista de ventas.
-     * Cobranza: Muestra la vista de cobranza.
-     * @param list Ésta lista.
-     * @param index El índice del ítem tapeado.
-     * @param target El elemento tapeado.
-     * @param record El record asociado al ítem.
-     */
-    alSelecionarCliente: function (list, index, target, record) {
 
-        var me = this,
-            view = me.getMenu(),
-            name = record.get('NombreSocio'),
-            barraTitulo = ({
-                xtype: 'toolbar',
-                docked: 'top',
-                title: 'titulo'
-            });            
-
-        me.idCliente = record.get('CodigoSocio');
-        me.titulo = name;
-        barraTitulo.title = me.titulo;
-
-        switch (list.getItemId()) {
-            case 'venta':                                
-                if (view.getActiveItem().xtype == 'opcionclientelist') {
-                    return;
-                }
-
-                view.push({
-                    xtype: 'opcionclientelist',
-                    title: me.idCliente
-                });
-
-                Ext.data.JsonP.request({
-                    url: "http://" + me.dirIP + "/iMobile/COK1_CL_Socio/ObtenerSocioiMobile",
-                    params: {
-                        CodigoUsuario: localStorage.getItem("CodigoUsuario"),
-                        CodigoSociedad: localStorage.getItem("CodigoSociedad"),
-                        CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
-                        Token: localStorage.getItem("Token"),
-                        CardCode: me.idCliente
-                    },
-                    callbackKey: 'callback',
-                    success: function (response) {
-                        var procesada = response.Procesada;
-
-                        me.clienteSeleccionado = response.Data[0];
-
-                        if (procesada) {
-                            me.estableceDirecciones(view, barraTitulo);
-                        } else {
-                            Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
-                        }
-                    }
-                });
-                break;
-
-            case 'cobranza':
-                if (view.getActiveItem().xtype == 'cobranzalist') {
-                    return;
-                }
-
-                view.push({
-                    xtype: 'cobranzalist',
-                    title: me.idCliente
-                });
-
-                view.add(barraTitulo);
-                //me.getTotales().up('totalapagarcontainer')
-                break;
-        }
-        //this.muestralistaOrden();
-    },
 
     /**
      * Establece como predeterminadas las primeras direcciones que encuentra tanto fiscal

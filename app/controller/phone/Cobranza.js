@@ -6,13 +6,7 @@ Ext.define('APP.controller.phone.Cobranza', {
 
     config: {
     	control:{
-            'clienteslist #buscarClientes': {
-                clearicontap: 'limpiaBusquedaClientes'
-                //keyup: 'onBuscaClientes'
-            },
-            'clienteslist #btnBuscarClientes': {
-                tap: 'onBuscaClientes'
-            },
+
             'clienteslist': {
                 //itemtap: 'alSelecionarCliente'
                 itemsingletap: 'alSelecionarCliente'

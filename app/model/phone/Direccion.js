@@ -3,7 +3,7 @@
  * @extends Ext.data.Model
  * El modelo de la direccion
  */
-Ext.define('Imobile.model.Direccion', {
+Ext.define('APP.model.phone.Direccion', {
     extend: 'Ext.data.Model',
     config: {
         fields: [{

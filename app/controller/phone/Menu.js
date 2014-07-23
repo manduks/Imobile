@@ -6,12 +6,18 @@ Ext.define('APP.controller.phone.Menu', {
     config:{
         refs:{
             loginForm:'menunav menulist',
-            menuNav:'menunav'
+            menuNav:'menunav',
+            clientesList:'clienteslist'
         },
         control:{
+            'menunav': {
+                back: 'onBackMenu'
+            },
+
             'menunav menulist': {
                 itemtap: 'onMenuTap'
             }
+
         }
     },
     onMenuTap:function(list,index,target,record){
@@ -77,6 +83,30 @@ Ext.define('APP.controller.phone.Menu', {
                 Ext.Viewport.add(Ext.create('APP.view.phone.login.LoginPanel'));
                 break;
 
+        }
+    },
+
+    onBackMenu: function(navigationview){
+        var me =this,
+            store = this.getClientesList().getStore(),
+            view = this.getMenuNav(),
+            titulo,
+
+            params = {
+                CodigoUsuario: localStorage.getItem("CodigoUsuario"),
+                CodigoSociedad: localStorage.getItem("CodigoSociedad"),
+                CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
+                Token: localStorage.getItem("Token")
+            };
+
+        if(navigationview.getActiveItem().getId() == 'ordenescont' || navigationview.getActiveItem().getId() == 'cobranzacont'){
+            titulo = view.down('toolbar');
+
+            view.remove(titulo, true);
+
+            store.getProxy().setUrl("http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile");
+            store.setParams(params);
+            store.load();
         }
     }
 });

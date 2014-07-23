@@ -1,16 +1,17 @@
 /**
- * @class Imobile.store.Facturas
+ * @class Imobile.store.Anticipos
  * @extends Ext.data.Store
- * Este es el store para las facturas
+ * Este es el store para los anticipos.
  */
-Ext.define('Imobile.store.Facturas', {
-    extend: 'Imobile.core.data.Store',
-    requires: ['Imobile.model.Factura'],
+Ext.define('APP.store.phone.Anticipos', {
+    extend: 'APP.core.data.Store',
+    //requires: ['APP.core.data.Store'],
 
     config: {
-        model: 'Imobile.model.Factura',        
+        model: 'APP.model.phone.Factura',
         proxy: {
-            url: 'http://ferman.ddns.net:88/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile',
+            //url: 'http://ferman.ddns.net:88/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile',
+            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile",
             //url: 'http://25.15.241.121:88/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile',
             type: 'jsonp',
             callbackKey: 'callback',

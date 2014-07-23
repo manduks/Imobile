@@ -74,7 +74,8 @@ Ext.define('APP.controller.phone.Cobranza', {
 
         view.push({
             xtype: 'cobranzalist',
-            title: idCliente
+            title: idCliente,
+            idCliente: idCliente
         });
 
         view.add(barraTitulo);
@@ -85,21 +86,22 @@ Ext.define('APP.controller.phone.Cobranza', {
     */
     onItemTapCobranzaList: function (list, index, target, record) {
         var me = this,
-            view = me.getMenu();
+            view = me.getMenuNav(),            
+            idCliente = view.getActiveItem().idCliente;            
 
 
         switch(record.data.action){
             case 'cobranzaFacturas':            
-                var store = Ext.getStore('Facturas');                
+                var store = Ext.getStore('Facturas');
 
                 view.push({
                     xtype: 'facturascontainer',
-                    title: me.idCliente
+                    title: idCliente
                     //opcion: record.data.action
                 });
 
                 params = {
-                    CardCode: me.idCliente
+                    CardCode: idCliente
                 };
                 
                 store.clearFilter();
@@ -110,11 +112,11 @@ Ext.define('APP.controller.phone.Cobranza', {
 
             case 'anticipo':
                 var store = Ext.getStore('Anticipos'),
-                    anticiposlist;                
+                    anticiposlist;                    
 
                 view.push({
                     xtype: 'facturascontainer',
-                    title: me.idCliente
+                    title: idCliente
                     //opcion: record.data.action
                 });
 
@@ -124,7 +126,7 @@ Ext.define('APP.controller.phone.Cobranza', {
                 anticiposlist.setMode('SINGLE');
 
                 params = {
-                    CardCode: me.idCliente
+                    CardCode: idCliente
                 };
                 
                 store.clearFilter();
@@ -139,7 +141,8 @@ Ext.define('APP.controller.phone.Cobranza', {
 
                 view.push({
                     xtype: 'visualizacioncobranzalist',
-                    title: me.idCliente
+                    title: idCliente,
+                    html: 'Visualizar Cobranza'
                     //opcion: record.data.action
                 });
         }

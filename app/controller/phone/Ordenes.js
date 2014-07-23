@@ -83,9 +83,8 @@ Ext.define('APP.controller.phone.Ordenes', {
     },
 
     /**
-     * Establece el título y el id del cliente cada uno en una variable. Verifica de qué opción viene, venta o cobranza:
-     * Venta: Muestra la vista de ventas.
-     * Cobranza: Muestra la vista de cobranza.
+     * Establece el título y el id del cliente cada uno en una variable.
+     * Muestra la vista de ventas.
      * @param list Ésta lista.
      * @param index El índice del ítem tapeado.
      * @param target El elemento tapeado.

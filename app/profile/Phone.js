@@ -21,12 +21,15 @@ Ext.define('APP.profile.Phone',{
         models:[
             'Menu',
             'Cliente',
-            'Direccion'
+            'Direccion',
+            'Factura'
         ],
         stores:[
             'Menu',
             'Clientes',
-            'Direcciones'
+            'Direcciones',
+            'Facturas',
+            'Anticipos'
         ],
         views:[
             'configuracion.ConfiguracionPanel',

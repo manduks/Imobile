@@ -18,17 +18,36 @@ Ext.define('APP.profile.Phone',{
             'Prospectos'
         ],
         models:[
-            'Menu'
+            'Menu',
+            'Cliente'
         ],
         stores:[
-            'Menu'
+            'Menu',
+            'Clientes'
         ],
         views:[
             'configuracion.ConfiguracionPanel',
             'menu.MenuNav',
             'menu.MenuList',
             'login.LoginPanel',
-            'login.LoginForm'
+            'login.LoginForm',
+            'clientes.ClientesList',
+            'clientes.OpcionClienteList',
+            'ordenes.AlmacenList',
+            'ordenes.ClienteContainer',
+            'ordenes.DireccionEntregaContainer',
+            'ordenes.DireccionEntregaList',
+            'ordenes.DireccionesContainer',            
+            'ordenes.DireccionesList',
+            'ordenes.DireccionFiscalContainer',
+            'ordenes.DireccionFiscalList',
+            'ordenes.MonedasList',
+            'ordenes.NavigationOrden',
+            'ordenes.OpcionesOrdenPanel',
+            'ordenes.OrdenContainer',
+            'ordenes.PartidaContainer',
+            'ordenes.TplDirecciones',
+            'ordenes.TransaccionList'
         ]
     },
 

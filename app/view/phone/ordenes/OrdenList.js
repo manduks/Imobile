@@ -1,4 +1,4 @@
-Ext.define('Imobile.view.ventas.OrdenList', {
+Ext.define('APP.view.phone.ordenes.OrdenList', {
     extend: 'Ext.dataview.List',
     xtype: 'ordenlist',
     requires: [],

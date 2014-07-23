@@ -3,7 +3,7 @@
  * @extends Ext.dataview.List
  * Esta es la lista para listar clientes de la cartera
  */
-Ext.define('Imobile.view.clientes.ClientesList', {
+Ext.define('APP.view.phone.clientes.ClientesList', {
     extend: 'Ext.dataview.List',
     xtype: 'clienteslist',
     requires: ['Ext.field.Search', 'Ext.plugin.ListPaging', 'Ext.SegmentedButton'],

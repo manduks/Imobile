@@ -1,4 +1,4 @@
-Ext.define('Imobile.view.ventas.OrdenContainer', {
+Ext.define('APP.view.phone.ordenes.OrdenContainer', {
     extend: 'Ext.Container',
     xtype: 'ordencontainer',
     config: {

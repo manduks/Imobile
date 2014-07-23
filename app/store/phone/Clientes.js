@@ -3,12 +3,12 @@
  * @extends Ext.data.Store
  * Este es el store para los clientes
  */
-Ext.define('Imobile.store.Clientes', {
-    extend: 'Imobile.core.data.Store',
-    requires: ['Imobile.model.Cliente'],
+Ext.define('APP.store.phone.Clientes', {
+    extend: 'APP.core.data.Store',
+    //requires: ['Imobile.model.Cliente'],
 
     config: {
-        model: 'Imobile.model.Cliente',
+        model: 'APP.model.phone.Cliente',
         proxy: {
             url: "http://ferman.ddns.net:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",
             //url: "http://25.15.241.121:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",

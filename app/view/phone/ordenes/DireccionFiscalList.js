@@ -3,7 +3,7 @@
  * @extends Ext.dataview.List
  * Description Lista de las direcciones fiscales de los clientes
  */
-Ext.define('Imobile.view.ventas.DireccionFiscalList', {
+Ext.define('APP.view.phone.ordenes.DireccionFiscalList', {
     extend: 'Ext.dataview.List',            
     requires: [],
     xtype: 'direccionfiscallist',

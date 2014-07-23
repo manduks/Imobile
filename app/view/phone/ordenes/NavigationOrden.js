@@ -1,4 +1,4 @@
-Ext.define('Imobile.view.ventas.NavigationOrden', {
+Ext.define('APP.view.phone.ordenes.NavigationOrden', {
     extend: 'Ext.NavigationView',
     xtype: 'navigationorden',
     config: {

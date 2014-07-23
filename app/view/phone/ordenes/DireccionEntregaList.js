@@ -3,7 +3,7 @@
  * @extends extendsClass
  * Description Lista de las direcciones para los envíos de los clientes
  */
-Ext.define('Imobile.view.ventas.DireccionEntregaList', {
+Ext.define('APP.view.phone.ordenes.DireccionEntregaList', {
     extend: 'Ext.dataview.List',            
     requires: [],
     xtype: 'direccionentregalist',

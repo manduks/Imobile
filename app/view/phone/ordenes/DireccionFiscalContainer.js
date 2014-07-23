@@ -3,7 +3,7 @@
  * @extends Ext.Container
  * Description
  */
-Ext.define('Imobile.view.ventas.DireccionFiscalContainer', {
+Ext.define('APP.view.phone.ordenes.DireccionFiscalContainer', {
     extend: 'Ext.Container',
     requires: [],
     xtype: 'direccionfiscalcontainer',

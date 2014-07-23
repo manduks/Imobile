@@ -3,7 +3,7 @@
  * @extends extendsClass
  * Description Lista de las monedas
  */
-Ext.define('Imobile.view.ventas.AlmacenList', {
+Ext.define('APP.view.phone.ordenes.AlmacenList', {
     extend: 'Ext.dataview.List',
     requires: [],
     xtype: 'almacenlist',

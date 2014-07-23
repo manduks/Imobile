@@ -3,7 +3,7 @@
  * @extends Ext.dataview.List
  * Esta es la lista para listar las direcciones
  */
-Ext.define('Imobile.view.ventas.TplDirecciones', {
+Ext.define('APP.view.phone.ordenes.TplDirecciones', {
     extend: 'Ext.dataview.List',
     xtype: 'tpldirecciones',
     requires: ['Ext.field.Search', 'Ext.plugin.ListPaging', 'Ext.MessageBox'],

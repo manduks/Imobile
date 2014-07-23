@@ -3,7 +3,7 @@
  * @extends Ext.Container
  * Description
  */
-Ext.define('Imobile.view.ventas.ClienteContainer', {
+Ext.define('APP.view.phone.ordenes.ClienteContainer', {
     extend: 'Ext.Container',
     requires: [],
     xtype: 'clientecontainer',

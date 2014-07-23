@@ -3,7 +3,7 @@
  * @extends extendsClass
  * Description
  */
-Ext.define('Imobile.view.ventas.PartidaContainer', {
+Ext.define('APP.view.phone.ordenes.PartidaContainer', {
     extend: 'Ext.Container',
     requires: [],
     xtype: 'partidacontainer',

@@ -3,7 +3,7 @@
  * @extends extendsClass
  * Description
  */
-Ext.define('Imobile.view.ventas.DireccionesContainer', {
+Ext.define('APP.view.phone.ordenes.DireccionesContainer', {
     extend: 'Ext.Container',
     requires: [],
     xtype: 'direccionescontainer',

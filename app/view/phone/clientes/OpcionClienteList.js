@@ -1,20 +1,19 @@
 /**
- * @class Imobile.view.ventas.DireccionesList
+ * @class Imobile.view.clientes.OpcionClienteList
  * @extends Ext.dataview.List
  * Esta es la lista de las opciones que tiene un cliente
  */
-Ext.define('Imobile.view.ventas.DireccionesList', {
+Ext.define('APP.view.phone.clientes.OpcionClienteList', {
     extend: 'Ext.dataview.List',
-    xtype: 'direccioneslist',
+    xtype: 'opcionclientelist',    
     config: {
         onItemDisclosure: function (record, listItem, index, e) {
             this.fireEvent("tap", record, listItem, index, e);            
-        },        
+        },
         itemTpl: '{title}',
-        //scrollable: null,
         data:[
-            {title: 'Dirección de entrega', action: 'entrega'},
-            {title: 'Dirección fiscal', action: 'fiscal'}
+            {title: 'Orden de venta', action: 'orden'},
+            {title: 'Visualizar transacciones', action: 'visualizar'}
         ]
     }
 });

@@ -206,7 +206,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             me.getTotales().down('#pagado').setItems({xtype: 'container', html: APP.core.FormatCurrency.currency(pagado, moneda)});
             me.getTotales().down('#pendiente').setItems({xtype: 'container', html: APP.core.FormatCurrency.currency(aPagar - pagado, moneda)});
         } else {
-            APP.controller.phone.Ordenes.mandaMensaje("Sin selección", "Seleccione al menos una factura para continuar.");
+            Ext.Msg.alert("Sin selección", "Seleccione al menos una factura para continuar.");
         }
     },
 
@@ -349,7 +349,7 @@ Ext.define('APP.controller.phone.Cobranza', {
 
             if (value === null) { 
                 esVacio = true;
-                APP.controller.phone.Ordenes.mandaMensaje('Datos incompletos', 'Ingrese todos los datos.');
+                Ext.Msg.alert('Datos incompletos', 'Ingrese todos los datos.');
                 return false; // stop the iteration
             }
         });
@@ -359,7 +359,7 @@ Ext.define('APP.controller.phone.Cobranza', {
         } else {
             if (permiteCambio === 'false') {
                 if (entrada > pendiente) {
-                    APP.controller.phone.Ordenes.mandaMensaje('Sin cambio', 'Esta forma de pago no permite dar cambio, disminuya la cantidad.');
+                    Ext.Msg.alert('Sin cambio', 'Esta forma de pago no permite dar cambio, disminuya la cantidad.');
                 } else {
                     //me.sumaCobros(forma, entrada, moneda, codigo, tipo, numeroCheque, numeroCuenta, banco, numeroAutorizacion, form);
                     me.sumaCobros(form, datos, moneda);
@@ -511,7 +511,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             totales.each(function (item, index) {                
                 params["Cobranza.CobranzaDetalles[" + index + "].NumeroLinea"] = index;
                 params["Cobranza.CobranzaDetalles[" + index + "].CodigoFormaPago"] = item.data.codigoFormaPago;
-                params["Cobranza.CobranzaDetalles[" + index + "].MontoNeto"] = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.data.monto);
+                params["Cobranza.CobranzaDetalles[" + index + "].MontoNeto"] = APP.core.FormatCurrency.formatCurrencytoNumber(item.data.monto);
                 //params["oCobranzaCobranzaDetalles[" + index + "].NoFacturaAplicada"] = 'Sin número'
 
                 switch (item.data.tipoFormaPago) {
@@ -540,7 +540,7 @@ Ext.define('APP.controller.phone.Cobranza', {
              msg = "Se acualizo la orden correctamente con folio: ";
              } */
 
-            url = "http://" + me.dirIP + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
+            url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
 
             Ext.data.JsonP.request({
                 url: url,
@@ -548,13 +548,13 @@ Ext.define('APP.controller.phone.Cobranza', {
                 callbackKey: 'callback',
                 success: function (response) {
                     if (response.Procesada) {
-                        me.getMain().setActiveItem(1);
+                        me.getMainCard().setActiveItem(0);
                         Ext.Msg.alert("Cobro procesado", msg + response.CodigoUnicoDocumento + ".");
                         store.removeAll();
                         totales.removeAll();                        
                         view.remove(view.down('toolbar'), true);
-                        me.pagado = 0;
-                        me.getMain().getActiveItem().pop();
+                        //me.pagado = 0;
+                        me.getMainCard().getActiveItem().pop();
                     } else {
                         Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);
                     }

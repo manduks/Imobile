@@ -579,4 +579,22 @@ Ext.define('APP.controller.phone.Cobranza', {
         facturas.clearFilter();
         view.setActiveItem(0);
     },
+
+    agregaSaldoAMostrar: function (facturas) {
+        var me = this,
+            moneda,
+            saldoMostrado;
+
+        facturas.each(function (item, index, length) {
+            moneda = item.get('CodigoMoneda') + ' ';            
+            saldoMostrado = APP.core.FormatCurrency.currency(item.get('TotalDocumento'), moneda);
+            item.set('saldoAMostrar', saldoMostrado);
+        });
+    },
+
+    launch: function (){
+        var me = this;                
+        Ext.getStore('Facturas').on('load', me.agregaSaldoAMostrar);
+        Ext.getStore('Anticipos').on('load', me.agregaSaldoAMostrar);
+    }
 });

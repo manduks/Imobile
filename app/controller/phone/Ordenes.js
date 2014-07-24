@@ -20,8 +20,12 @@ Ext.define('APP.controller.phone.Ordenes', {
             'opcionordeneslist': {
                 itemtap: 'onOpcionOrdenes'
             },
-
-
+            'opcionesorden #eliminar': {
+                activate: 'onEliminarOrden'
+            },
+            'opcionesorden': {
+                activeitemchange: 'cambiaItem'
+            },
 
 
 
@@ -46,9 +50,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             },
 
 
-            'opcionesorden #eliminar': {
-                activate: 'onEliminarOrden'
-            },
+
             'productosorden #listaProductos': {
                 tap: 'mostrarListaProductos'
             },
@@ -61,9 +63,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             'productosorden productosview': {
                 itemtap: 'onAgregarProducto'
             },            
-            'opcionesorden': {
-                activeitemchange: 'cambiaItem'
-            },
+
             'direccioneslist': {
                 itemtap: 'muestraDirecciones'
             },
@@ -135,6 +135,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                 var procesada = response.Procesada;
 
                 var clienteSeleccionado = response.Data[0];
+
+                this.getOpcionesOrden().clienteSeleccionado = clienteSeleccionado;
 
                 if (procesada) {
                     this.estableceDirecciones(this.getMenuNav(),barraTitulo,clienteSeleccionado);
@@ -244,8 +246,78 @@ Ext.define('APP.controller.phone.Ordenes', {
         }
     },
 
+    /**
+     * Remueve todos los elementos del store de órdenes si el usuario lo confirma, en caso contrario muestra la vista
+     * de la lista  órdenes sin eliminar nada.
+     * @param newActiveItem El nuevo ítem activo dentro del contenedor.
+     * @param tabPanel Éste tabpanel.
+     */
+    onEliminarOrden: function (newActiveItem, tabPanel) {
+        var me = this,
+            ordenes = Ext.getStore('Ordenes');
+        Ext.Msg.confirm("Eliminar orden", "Se va a eliminar la orden, todos los productos agregados se perderán ¿está seguro?", function (e) {
 
+            if (e == 'yes') {
+                var view = this.getMainCard().getActiveItem(),
+                    titulo = view.down('toolbar');
+                ordenes.removeAll();
+                this.getMainCard().setActiveItem(0);
+                view.remove(titulo, true); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.
+            } else {
+                tabPanel.setActiveItem(0);
+            }
+        },this);
+    },
 
+    /**
+     * Determina qué hacer al momento de cambiar el ítem del navigationorden:
+     *   - Cliente: Obtiene los datos del cliente desde el JSON y llena las direcciones asignando por defecto la primera que aparece.
+     * Aparece el botón Back y desaparece Agregar.
+     *   - Editar: Establece valores para el formulario de editar pedido aparece el botón Back y desaparece Agregar.
+     * @param tabPanel Este TabPanel
+     * @param value El nuevo ítem
+     * @param oldValue El ítem anterior
+     */
+    cambiaItem: function (tabPanel, value, oldValue) {
+        var me = this,
+            view = this.getNavigationOrden(),//me.getMain().getActiveItem(),
+            boton = view.getNavigationBar().down('#agregarProductos');
+
+        if (value.xtype == 'clientecontainer') {
+            boton.setText('Back').show();
+            boton.setUi('back');
+
+            var form = value.down('clienteform'),
+                direcciones = Ext.getStore('Direcciones');
+
+            var clienteSeleccionado = this.getOpcionesOrden().clienteSeleccionado
+            clienteSeleccionado.LimiteCredito = parseFloat(clienteSeleccionado.LimiteCredito).toFixed(2);
+            clienteSeleccionado.Saldo = parseFloat(clienteSeleccionado.Saldo).toFixed(2);
+
+            form.setValues(clienteSeleccionado);
+        }
+
+        if (value.xtype == 'editarpedidoform') {
+            if (me.codigoMonedaSeleccinada == me.codigoMonedaPredeterminada) {
+                me.clienteSeleccionado.tipoCambio = parseFloat(1).toFixed(2);;
+            } else {
+                me.clienteSeleccionado.tipoCambio = parseFloat(me.tipoCambio).toFixed(2);
+            }
+
+            me.clienteSeleccionado.LimiteCredito = parseFloat(me.clienteSeleccionado.LimiteCredito).toFixed(2);
+            me.clienteSeleccionado.Saldo = parseFloat(me.clienteSeleccionado.Saldo).toFixed(2);
+            me.clienteSeleccionado.CodigoMoneda = me.codigoMonedaSeleccinada;
+            console.log(me.clienteSeleccionado);
+            value.setValues(me.clienteSeleccionado);
+            boton.setText('Back').show();
+            boton.setUi('back');
+        }
+
+        if (value.xtype == 'partidacontainer') {
+            boton.setText('Agregar').show();
+            boton.setUi('normal');
+        }
+    },
 
 
 
@@ -438,56 +510,7 @@ Ext.define('APP.controller.phone.Ordenes', {
     },
 
 
-    /**
-     * Determina qué hacer al momento de cambiar el ítem del navigationorden:
-     *   - Cliente: Obtiene los datos del cliente desde el JSON y llena las direcciones asignando por defecto la primera que aparece.
-     * Aparece el botón Back y desaparece Agregar.
-     *   - Editar: Establece valores para el formulario de editar pedido aparece el botón Back y desaparece Agregar.
-     * @param tabPanel Este TabPanel
-     * @param value El nuevo ítem
-     * @param oldValue El ítem anterior
-     */
-    cambiaItem: function (tabPanel, value, oldValue) {
-        var me = this,
-            view = me.getNavigationOrden(),//me.getMain().getActiveItem(),
-            boton = view.getNavigationBar().down('#agregarProductos');
-        //clienteSeleccionado = me.getOpcionCliente().clienteSeleccionado;
 
-
-        if (value.xtype == 'clientecontainer') {
-            boton.setText('Back').show();
-            boton.setUi('back');
-
-            var form = value.down('clienteform'),
-                direcciones = Ext.getStore('Direcciones');
-
-            me.clienteSeleccionado.LimiteCredito = parseFloat(me.clienteSeleccionado.LimiteCredito).toFixed(2);
-            me.clienteSeleccionado.Saldo = parseFloat(me.clienteSeleccionado.Saldo).toFixed(2);
-
-            form.setValues(me.clienteSeleccionado);
-        }
-
-        if (value.xtype == 'editarpedidoform') {
-            if (me.codigoMonedaSeleccinada == me.codigoMonedaPredeterminada) {
-                me.clienteSeleccionado.tipoCambio = parseFloat(1).toFixed(2);;
-            } else {
-                me.clienteSeleccionado.tipoCambio = parseFloat(me.tipoCambio).toFixed(2);
-            }
-
-            me.clienteSeleccionado.LimiteCredito = parseFloat(me.clienteSeleccionado.LimiteCredito).toFixed(2);
-            me.clienteSeleccionado.Saldo = parseFloat(me.clienteSeleccionado.Saldo).toFixed(2);
-            me.clienteSeleccionado.CodigoMoneda = me.codigoMonedaSeleccinada;
-            console.log(me.clienteSeleccionado);
-            value.setValues(me.clienteSeleccionado);
-            boton.setText('Back').show();
-            boton.setUi('back');
-        }
-
-        if (value.xtype == 'partidacontainer') {
-            boton.setText('Agregar').show();
-            boton.setUi('normal');
-        }
-    },
 
     /**
      * Muestra la lista de direcciones según se haya elegido, fiscal o de entrega.
@@ -1089,30 +1112,7 @@ console.log(values);
         });
     },
 
-    /**
-     * Remueve todos los elementos del store de órdenes si el usuario lo confirma, en caso contrario muestra la vista
-     * de la lista  órdenes sin eliminar nada.
-     * @param newActiveItem El nuevo ítem activo dentro del contenedor.
-     * @param tabPanel Éste tabpanel.
-     */
-    onEliminarOrden: function (newActiveItem, tabPanel) {
-        var me = this,
-            ordenes = Ext.getStore('Ordenes');
 
-        Ext.Msg.confirm("Eliminar orden", "Se va a eliminar la orden, todos los productos agregados se perderán ¿está seguro?", function (e) {
-
-            if (e == 'yes') {
-                var view = me.getMain().getActiveItem(),
-                    titulo = view.down('toolbar');
-
-                ordenes.removeAll();
-                me.getMain().setActiveItem(1);
-                view.remove(titulo, true); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.
-            } else {
-                tabPanel.setActiveItem(0);
-            }
-        });
-    },
 
 
     /**

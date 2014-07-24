@@ -92,6 +92,7 @@ Ext.define('APP.controller.phone.Menu', {
     },
 
     onBackMenu: function(navigationview){
+        
         var me =this,
             store = this.getClientesList().getStore(),
             view = this.getMenuNav(),

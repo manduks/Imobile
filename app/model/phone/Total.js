@@ -3,7 +3,7 @@
  * @extends Ext.data.Model
  * El modelo del total para realizar el pago
  */
-Ext.define('Imobile.model.Total', {
+Ext.define('APP.model.phone.Total', {
     extend: 'Ext.data.Model',
     config: {
         fields: [{

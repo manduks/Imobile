@@ -3,7 +3,7 @@
  * @extends Ext.data.Model
  * El modelo de la forma de pago
  */
-Ext.define('Imobile.model.FormaDePago', {
+Ext.define('APP.model.phone.FormaDePago', {
     extend: 'Ext.data.Model',
     config: {
         fields: [{

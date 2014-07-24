@@ -28,7 +28,6 @@ Ext.define('APP.controller.phone.Ordenes', {
 
 
 
-
 			'productoslist #btnBuscarProductos': {
                 tap: 'onBuscaProductos'
             },

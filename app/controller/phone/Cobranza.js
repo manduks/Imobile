@@ -6,7 +6,10 @@ Ext.define('APP.controller.phone.Cobranza', {
 
     config: {
         refs:{
-            menuNav:'menunav'
+            menuNav:'menunav',
+            mainCard:'maincard',
+            navigationCobranza:'navigationcobranza',
+            totales: 'totalescontainer'
         },
     	control:{
 
@@ -42,11 +45,11 @@ Ext.define('APP.controller.phone.Cobranza', {
             },
             'montoapagarform #pagar': {
                 tap: 'onPagar'
-            },
+            },/*,
             'totalapagarlist':{
                 itemtap: 'editaPago',
                 itemswipe: 'eliminaPago'
-            }
+            }*/
     	}
     },
 
@@ -74,7 +77,9 @@ Ext.define('APP.controller.phone.Cobranza', {
 
         view.push({
             xtype: 'cobranzalist',
-            title: idCliente
+            title: idCliente,
+            idCliente: idCliente,
+            name: name
         });
 
         view.add(barraTitulo);
@@ -85,21 +90,25 @@ Ext.define('APP.controller.phone.Cobranza', {
     */
     onItemTapCobranzaList: function (list, index, target, record) {
         var me = this,
-            view = me.getMenu();
+            view = me.getMenuNav(),            
+            idCliente = view.getActiveItem().idCliente;
+            name = view.getActiveItem().name;
 
 
         switch(record.data.action){
             case 'cobranzaFacturas':            
-                var store = Ext.getStore('Facturas');                
+                var store = Ext.getStore('Facturas');
 
                 view.push({
                     xtype: 'facturascontainer',
-                    title: me.idCliente
+                    title: idCliente,
+                    idCliente: idCliente,
+                    name: name
                     //opcion: record.data.action
                 });
 
                 params = {
-                    CardCode: me.idCliente
+                    CardCode: idCliente
                 };
                 
                 store.clearFilter();
@@ -110,11 +119,13 @@ Ext.define('APP.controller.phone.Cobranza', {
 
             case 'anticipo':
                 var store = Ext.getStore('Anticipos'),
-                    anticiposlist;                
+                    anticiposlist;                    
 
                 view.push({
                     xtype: 'facturascontainer',
-                    title: me.idCliente
+                    title: idCliente,
+                    idCliente: idCliente,
+                    name: name
                     //opcion: record.data.action
                 });
 
@@ -124,7 +135,7 @@ Ext.define('APP.controller.phone.Cobranza', {
                 anticiposlist.setMode('SINGLE');
 
                 params = {
-                    CardCode: me.idCliente
+                    CardCode: idCliente
                 };
                 
                 store.clearFilter();
@@ -139,54 +150,64 @@ Ext.define('APP.controller.phone.Cobranza', {
 
                 view.push({
                     xtype: 'visualizacioncobranzalist',
-                    title: me.idCliente
+                    title: idCliente,
+                    name: name,
+                    html: 'Visualizar Cobranza'
                     //opcion: record.data.action
                 });
         }
     },
 
-    agregaSaldoAMostrar: function (facturas) {
-        var me = this,
-            moneda,
-            saldoMostrado;
-
-        facturas.each(function (item, index, length) {
-            moneda = item.get('CodigoMoneda') + ' ';
-            //saldoMostrado = Imobile.core.FormatCurrency.currency(item.get('Saldo'), moneda);
-            saldoMostrado = Imobile.core.FormatCurrency.currency(item.get('TotalDocumento'), moneda);
-            item.set('saldoAMostrar', saldoMostrado);
-        });
-    },
-
     /**
-     * Muestra la lista de formas de pago.
+     * Muestra la vista "totalapagarcontainer".
      */
-    aplicaPago: function () {
-        view.push({
-            xtype: 'formasdepagolist',
-            title: me.idCliente
-        });
-    },
-
-    /**
-     * Responde al evento "tap" del botón "cancelar" de "totalapagarcontainer".
-     * Establece en el menú principal el item 1 como activo.
-     * @param btn Este botón.
-     */
-
-    cancelaPago: function (btn) {
+    muestraCobranza: function (btn) {
         var me = this,
-            view = me.getMain(),
-            navigationCobranza = view.getActiveItem(),
-            titulo = navigationCobranza.down('toolbar'),
-            totales = Ext.getStore('Totales'),
-            facturas = Ext.getStore('Facturas');
+            view = me.getMainCard(),
+            facturasContainer = view.getActiveItem().getActiveItem(),
+            facturaslist = facturasContainer.down('facturaslist'),
+            idCliente = facturasContainer.idCliente,
+            name = facturasContainer.name,
+            navigationCobranza,
+            i,
+            total = 0,
+            seleccion = facturaslist.getSelection(),            
+            moneda,// = seleccion[0].data.CodigoMoneda,
+            facturas = facturaslist.getStore(),//Ext.getStore('Facturas'),
+            aPagar,
+            pagado = 0,
+            barraTitulo = ({
+                xtype: 'toolbar',                
+                docked: 'top',
+                title: name
+            });        
 
-        navigationCobranza.remove(titulo, true); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.
-        totales.removeAll();
-        me.pagado = 0;
-        facturas.clearFilter();
-        view.setActiveItem(1);
+        if(seleccion.length > 0){ // Validamos que por lo menos se haya seleccionado una factura.
+            moneda = seleccion[0].data.CodigoMoneda + ' ';
+
+            for (i = 0; i < seleccion.length; i++) {
+                //total += seleccion[i].data.Saldo;
+                total += seleccion[i].data.TotalDocumento;
+                seleccion[i].data.aPagar = true;
+            }
+
+            facturas.clearFilter();
+            facturas.filter('aPagar', true);
+
+            aPagar = total;            
+
+            view.setActiveItem(2);            
+            navigationCobranza = view.getActiveItem();
+
+            navigationCobranza.getNavigationBar().setTitle(idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
+            navigationCobranza.add(barraTitulo);
+
+            me.getTotales().down('#aCobrar').setItems({xtype: 'container', html: APP.core.FormatCurrency.currency(aPagar, moneda)});
+            me.getTotales().down('#pagado').setItems({xtype: 'container', html: APP.core.FormatCurrency.currency(pagado, moneda)});
+            me.getTotales().down('#pendiente').setItems({xtype: 'container', html: APP.core.FormatCurrency.currency(aPagar - pagado, moneda)});
+        } else {
+            Ext.Msg.alert("Sin selección", "Seleccione al menos una factura para continuar.");
+        }
     },
 
     /**
@@ -196,32 +217,17 @@ Ext.define('APP.controller.phone.Cobranza', {
      */
     onAgregarPago: function (btn) {
         var me = this,
-            view = me.getMain().getActiveItem();
+            view = me.getMainCard().getActiveItem(),
+            idCliente = view.getNavigationBar().getTitle();
     
         view.push({
             xtype: 'formasdepagolist',
-            title: me.idCliente
+            title: idCliente,
+            idCliente: idCliente
             //opcion: me.getMenu().getActiveItem().opcion
         });
 
         view.getNavigationBar().down('#agregarPago').hide();
-    },
-
-    /**
-     * Valida la vista actual y si es el caso hace visible el botón "Agregar".
-     * Setea el título el toolbar.
-     * @param navigationview Este navigationview.
-     */
-    onPopNavigationCobranza: function (navigationview) {
-        var me = this,
-            barra = navigationview.getNavigationBar(),
-            view = navigationview.getActiveItem();
-
-        if (view.isXType('totalapagarcontainer')) {
-            barra.down('#agregarPago').show();
-        }
-
-        barra.setTitle(me.idCliente);
     },
 
     /**
@@ -234,12 +240,14 @@ Ext.define('APP.controller.phone.Cobranza', {
      */
     agregaPago: function (list, index, target, record) {
         var me = this,
-            view = list.up('navigationcobranza'); //NavigationCobranza
+            view = list.up('navigationcobranza'), //NavigationCobranza
+            idCliente = view.getActiveItem().idCliente;
 
         view.push({
             xtype: 'montoapagarform',
             //xtype: 'montoapagarformcontainer',
-            title: me.idCliente
+            title: idCliente,
+            idCliente: idCliente
             //datos: record.data,
             //opcion: list.opcion
         });
@@ -248,6 +256,11 @@ Ext.define('APP.controller.phone.Cobranza', {
         view.down('fieldset').setTitle(record.data.Nombre);
     },
 
+    /**
+    * Determina la vista del formulario del monto a pagar según la opción de pago que se haya elegido.
+    * @param opcion El código de la opción de la forma de pago.
+    * @param view La vista del formulario.
+    */
     determinaVistaMontoAPagar: function(opcion, view){
 
         switch (opcion) {
@@ -283,7 +296,6 @@ Ext.define('APP.controller.phone.Cobranza', {
                 ]);
                 break;
         }
-
     },
 
     /**
@@ -298,8 +310,10 @@ Ext.define('APP.controller.phone.Cobranza', {
             form = view.down('montoapagarform'),
             moneda,
             datos = view.down('formasdepagolist').getSelection()[0].data,
-            opcion = me.getMenu().down('cobranzalist').getSelection()[0].data.action,
-            pendiente = me.aPagar - me.pagado,
+            opcion = me.getMenuNav().down('cobranzalist').getSelection()[0].data.action,
+            aPagar = pagado = me.getTotales().down('#aCobrar').getAt(0).getHtml(),
+            pagado = me.getTotales().down('#pagado').getAt(0).getHtml(),
+            pendiente, //me.aPagar - me.pagado,
             forma = datos.Nombre,
             entrada = form.getValues().monto,
             codigo = datos.Codigo,
@@ -312,15 +326,19 @@ Ext.define('APP.controller.phone.Cobranza', {
             banco = valores.banco,
             numeroAutorizacion = valores.numeroAutorizacion,
             nombres = form.getInnerItems(),
-            modoEdicion = form.modo === 'edicion' ? true : false,
+            //modoEdicion = form.modo === 'edicion' ? true : false,
             permiteCambio = datos.PermiteCambio;
 
-            console.log(opcion);
+        pagado = APP.core.FormatCurrency.formatCurrencytoNumber(pagado);
+        aPagar = APP.core.FormatCurrency.formatCurrencytoNumber(aPagar);
+        pendiente = aPagar - pagado;
+
+            console.log(permiteCambio);
 
          if(opcion == 'cobranzaFacturas'){
-            moneda = Ext.getStore('Facturas').getAt(0).data.CodigoMoneda + ' '; //Estamos asumiendo que el código de moneda de todas las facturas es la local.            
+            moneda = Ext.getStore('Facturas').getAt(0).data.CodigoMoneda + ' '; //Estamos asumiendo que el código de moneda de todas las facturas es la local.
          } else {
-            moneda = Ext.getStore('Anticipos').getAt(0).data.CodigoMoneda + ' '; //Estamos asumiendo que el código de moneda de todas las facturas es la local.            
+            moneda = Ext.getStore('Anticipos').getAt(0).data.CodigoMoneda + ' '; //Estamos asumiendo que el código de moneda de todas las facturas es la local.
          }
 
 /*        console.log(moneda);
@@ -331,7 +349,7 @@ Ext.define('APP.controller.phone.Cobranza', {
 
             if (value === null) { 
                 esVacio = true;
-                me.mandaMensaje('Datos incompletos', 'Ingrese todos los datos.');
+                Ext.Msg.alert('Datos incompletos', 'Ingrese todos los datos.');
                 return false; // stop the iteration
             }
         });
@@ -341,7 +359,7 @@ Ext.define('APP.controller.phone.Cobranza', {
         } else {
             if (permiteCambio === 'false') {
                 if (entrada > pendiente) {
-                    me.mandaMensaje('Sin cambio', 'Esta forma de pago no permite dar cambio, disminuya la cantidad.');
+                    Ext.Msg.alert('Sin cambio', 'Esta forma de pago no permite dar cambio, disminuya la cantidad.');
                 } else {
                     //me.sumaCobros(forma, entrada, moneda, codigo, tipo, numeroCheque, numeroCuenta, banco, numeroAutorizacion, form);
                     me.sumaCobros(form, datos, moneda);
@@ -356,117 +374,11 @@ Ext.define('APP.controller.phone.Cobranza', {
     },
 
     /**
-     * Muestra la vista "totalapagarcontainer".
-     */
-    muestraCobranza: function () {
-        var me = this,
-            view = me.getMain(),
-            facturaslist = view.getActiveItem().down('facturaslist'),
-            navigationCobranza,
-            i,
-            total = 0,
-            seleccion = facturaslist.getSelection(),            
-            moneda,// = seleccion[0].data.CodigoMoneda,
-            facturas = Ext.getStore('Facturas'),
-            barraTitulo = ({
-                xtype: 'toolbar',
-                docked: 'top',
-                title: me.titulo
-            });        
-
-        if(seleccion.length > 0){ // Validamos que por lo menos se haya seleccionado una factura.
-            moneda = seleccion[0].data.CodigoMoneda + ' ';
-
-            for (i = 0; i < seleccion.length; i++) {
-                //total += seleccion[i].data.Saldo;
-                total += seleccion[i].data.TotalDocumento;
-                seleccion[i].data.aPagar = true;
-            }
-
-            facturas.clearFilter();
-            facturas.filter('aPagar', true);
-
-            me.aPagar = total;
-
-            view.setActiveItem(3);
-            navigationCobranza = view.getActiveItem();
-
-            navigationCobranza.getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
-            navigationCobranza.add(barraTitulo);
-
-            me.getTotales().down('#aCobrar').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.aPagar, moneda)});
-            me.getTotales().down('#pagado').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.pagado, moneda)});
-            me.getTotales().down('#pendiente').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.aPagar - me.pagado, moneda)});
-        } else {
-            me.mandaMensaje("Sin selección", "Seleccione al menos una factura para continuar.");
-        }
-    },
-
-    /**
-    * Elimina el pago de totalapagarlist. Primero valida preguntándole al usuario si realmente desea elminar el pago.
-    * @param list Ésta lista totalapagarlist.
-    * @param index El índice del ítem swipeado.
-    * @param target El elemento swipeado.
-    * @param record El record asociado al ítem.
-    */
-    eliminaPago: function (list, index, target, record){
-        var me = this,
-            totales = Ext.getStore('Totales');
-
-        Ext.Msg.confirm("Eliminar pago", "Se va a eliminar el pago, ¿está seguro?", function (e) {
-
-            if (e == 'yes') {
-                totales.removeAt(index);
-                me.pagado-= Imobile.core.FormatCurrency.formatCurrencytoNumber(record.data.monto);
-                me.actualizaCobranza(record.data.moneda);
-            }
-        });
-    },
-
-    editaPago: function(list, index, target, record){
-        var me = this
-            view = list.up('navigationcobranza'), //NavigationCobranza
-            valores = record.data;        
-
-        //me.agregaPago(list, index, target, record);        
-
-        view.push({
-            xtype: 'montoapagarform',
-            modo: 'edicion',
-            ind: record.data.id,
-            montoAnterior: record.data.monto,
-            //xtype: 'montoapagarformcontainer',
-            //title: me.idCliente,
-            datos: record.data
-        });
-
-        me.determinaVistaMontoAPagar(record.data.tipoFormaPago, view);
-
-        view.down('fieldset').setTitle(record.data.tipo);
-
-        view.getActiveItem().setValues(valores);
-
-        view.getNavigationBar().down('#agregarPago').hide();
-    },
-
-    /**
-    * Actualiza los campos "pagado" y "pendiente" del totalescontainer
-    * @moneda El código de moneda que se tiene que mostrar.
-    */
-    actualizaCobranza: function (moneda){
-        var me = this;
-
-        me.getTotales().down('#pagado').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.pagado, moneda)});
-        me.getTotales().down('#pendiente').setItems({xtype: 'container', html: Imobile.core.FormatCurrency.currency(me.aPagar - me.pagado, moneda)});
-    },
-
-    /**
      * Agrega el pago ingresado al store "Totales" o lo modifica si el pago es editado.
      * Suma cada uno de los saldos del store "Totales" y los muestra en "totalescontainer".
      * @param form La forma de pago.
      * @param moneda El código de moneda del pago.
      */
-//    sumaCobros: function (forma, entrada, moneda, codigo, tipoFormaPago, numeroCheque, numeroCuenta, banco, numeroAutorizacion, modoEdicion) {
     sumaCobros: function (form, datos, moneda) {
         var me = this,
             forma = datos.Nombre,
@@ -480,22 +392,12 @@ Ext.define('APP.controller.phone.Cobranza', {
             banco = valores.Banco,
             numeroAutorizacion = valores.NumeroAutorizacion,
             nombres = form.getInnerItems(),
-            modoEdicion = form.modo === 'edicion' ? true : false,
+            //modoEdicion = form.modo === 'edicion' ? true : false,
             permiteCambio = datos.PermiteCambio,
-            temp,
-            entradaMostrada = Imobile.core.FormatCurrency.currency(entrada, moneda),
+            monto,
+            entradaMostrada = APP.core.FormatCurrency.currency(entrada, moneda),
             ind = form.ind,
             store = Ext.getStore('Totales');
-            
-        if(modoEdicion){
-            var ind = store.find('id', ind);
-            pagoACambiar = store.getAt(ind);
-
-            pagoACambiar.set('monto', entradaMostrada);            
-            me.pagado-= Imobile.core.FormatCurrency.formatCurrencytoNumber(form.montoAnterior);
-            temp = entrada;
-
-        } else {
 
             store.add({
                 tipo: forma,
@@ -509,17 +411,52 @@ Ext.define('APP.controller.phone.Cobranza', {
                 moneda: moneda
             });
 
-            temp = Imobile.core.FormatCurrency.formatCurrencytoNumber(store.getAt(store.getCount() - 1).get('monto'));
-        }
+            monto = APP.core.FormatCurrency.formatCurrencytoNumber(store.getAt(store.getCount() - 1).get('monto'));
         
-        me.pagado += parseFloat(temp);
+        //me.pagado += parseFloat(temp);
 
         // store.each(function (item) {
         //     temp = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('monto'));
         //     me.pagado += parseFloat(temp);
         // });
 
-        me.actualizaCobranza(moneda);
+        me.actualizaCobranza(moneda, monto);
+    },
+
+    /**
+    * Actualiza los campos "pagado" y "pendiente" del totalescontainer
+    * @moneda El código de moneda que se tiene que mostrar.
+    */
+    actualizaCobranza: function (moneda, monto){
+        var me = this,
+            pagado = me.getTotales().down('#pagado').getAt(0).getHtml(),
+            aPagar = me.getTotales().down('#aCobrar').getAt(0).getHtml();
+
+        pagado = APP.core.FormatCurrency.formatCurrencytoNumber(pagado);
+        aPagar = APP.core.FormatCurrency.formatCurrencytoNumber(aPagar);
+        pagado += monto;
+
+        me.getTotales().down('#pagado').setItems({xtype: 'container', html: APP.core.FormatCurrency.currency(pagado, moneda)});
+        me.getTotales().down('#pendiente').setItems({xtype: 'container', html: APP.core.FormatCurrency.currency(aPagar - pagado, moneda)});
+    },
+
+    /**
+     * Valida la vista actual y si es el caso hace visible el botón "Agregar".
+     * Setea el título el toolbar.
+     * @param navigationview Este navigationview.
+     * @param old La vista que ha sido popeada
+     */
+    onPopNavigationCobranza: function (navigationview, old) {
+        var me = this,
+            barra = navigationview.getNavigationBar(),
+
+            view = navigationview.getActiveItem();
+
+        if (view.isXType('totalapagarcontainer')) {
+            barra.down('#agregarPago').show();
+        }
+
+        barra.setTitle(old.idCliente);        
     },
 
     /**
@@ -527,16 +464,17 @@ Ext.define('APP.controller.phone.Cobranza', {
      */
     onTerminarCobranza: function () {
         var me = this,
+            view = me.getMainCard().getActiveItem(),
+            idCliente = view.getNavigationBar().getTitle(),
             total = 0,
             store = Ext.getStore('Facturas'),
-            totales = Ext.getStore('Totales'),
+            totales = view.down('totalapagarlist').getStore(),// Ext.getStore('Totales'),
             array = store.getData().items,
             fecha = new Date(Ext.Date.now()),
             hora = fecha.getHours() + ':' + fecha.getMinutes() + ':' + fecha.getSeconds(),
-            fecha = Ext.Date.format(fecha, "d-m-Y"),
-            view = me.getMain().getActiveItem(),
+            fecha = Ext.Date.format(fecha, "d-m-Y"),            
             url,
-            msg = 'Se realizó el cobro exitosamente con folio '
+            msg = 'Se realizó el cobro exitosamente con folio ';            
         
         if (totales.getCount() > 0) {
             //var Folio = parseInt(localStorage.getItem("FolioInterno")) + 100;
@@ -551,10 +489,10 @@ Ext.define('APP.controller.phone.Cobranza', {
                 "Cobranza.Hora": hora,
                 "Cobranza.CodigoVendedor": localStorage.getItem("CodigoUsuario"),
                 "Cobranza.Tipo": 'C',
-                "Cobranza.CodigoCliente": me.idCliente
+                "Cobranza.CodigoCliente": idCliente
             };
 
-            if(me.getMenu().getActiveItem().opcion == 'anticipo'){
+            if(me.getMenuNav().getActiveItem().opcion == 'anticipo'){
                 params["Cobranza.Tipo"] = 'A';
                 msg = 'Se realizó el anticipo exitosamente con folio ';
             }
@@ -573,7 +511,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             totales.each(function (item, index) {                
                 params["Cobranza.CobranzaDetalles[" + index + "].NumeroLinea"] = index;
                 params["Cobranza.CobranzaDetalles[" + index + "].CodigoFormaPago"] = item.data.codigoFormaPago;
-                params["Cobranza.CobranzaDetalles[" + index + "].MontoNeto"] = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.data.monto);
+                params["Cobranza.CobranzaDetalles[" + index + "].MontoNeto"] = APP.core.FormatCurrency.formatCurrencytoNumber(item.data.monto);
                 //params["oCobranzaCobranzaDetalles[" + index + "].NoFacturaAplicada"] = 'Sin número'
 
                 switch (item.data.tipoFormaPago) {
@@ -602,7 +540,7 @@ Ext.define('APP.controller.phone.Cobranza', {
              msg = "Se acualizo la orden correctamente con folio: ";
              } */
 
-            url = "http://" + me.dirIP + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
+            url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
 
             Ext.data.JsonP.request({
                 url: url,
@@ -610,13 +548,13 @@ Ext.define('APP.controller.phone.Cobranza', {
                 callbackKey: 'callback',
                 success: function (response) {
                     if (response.Procesada) {
-                        me.getMain().setActiveItem(1);
+                        me.getMainCard().setActiveItem(0);
                         Ext.Msg.alert("Cobro procesado", msg + response.CodigoUnicoDocumento + ".");
                         store.removeAll();
                         totales.removeAll();                        
                         view.remove(view.down('toolbar'), true);
-                        me.pagado = 0;
-                        me.getMain().getActiveItem().pop();
+                        //me.pagado = 0;
+                        me.getMainCard().getActiveItem().pop();
                     } else {
                         Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);
                     }
@@ -628,4 +566,18 @@ Ext.define('APP.controller.phone.Cobranza', {
         }
     },
 
+    cancelaPago: function (btn) {
+        var me = this,
+            view = me.getMainCard(),
+            navigationCobranza = view.getActiveItem(),
+            titulo = navigationCobranza.down('toolbar'),
+            totales = Ext.getStore('Totales'),
+            facturas = Ext.getStore('Facturas');
+
+        navigationCobranza.remove(titulo, true); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.
+        totales.removeAll();
+        me.pagado = 0;
+        facturas.clearFilter();
+        view.setActiveItem(0);
+    },
 });

@@ -3,7 +3,7 @@
  * @extends Ext.data.Model
  * El modelo de la factura
  */
-Ext.define('Imobile.model.Factura', {
+Ext.define('APP.model.phone.Factura', {
     extend: 'Ext.data.Model',
     config: {
         fields: [{

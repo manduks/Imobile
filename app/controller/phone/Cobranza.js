@@ -151,8 +151,7 @@ Ext.define('APP.controller.phone.Cobranza', {
                 view.push({
                     xtype: 'visualizacioncobranzalist',
                     title: idCliente,
-                    name: name,
-                    html: 'Visualizar Cobranza'
+                    name: name,                    
                     //opcion: record.data.action
                 });
         }

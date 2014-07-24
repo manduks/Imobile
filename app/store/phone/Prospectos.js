@@ -3,12 +3,12 @@
  * @extends Ext.data.Store
  * Este es el store para prospectos
  */
-Ext.define('Imobile.store.Prospectos', {
+Ext.define('APP.store.phone.Prospectos', {
     extend: 'Ext.data.Store',
-    requires: ['Imobile.model.Prospecto'],
+    //requires: ['Imobile.model.Prospecto'],
 
     config: {
-        model: 'Imobile.model.Prospecto',
+        model: 'APP.model.phone.Prospecto',
         autoLoad: true
 /*        proxy: {
             url: "http://25.15.241.121:88/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",

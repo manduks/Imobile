@@ -73,8 +73,8 @@ Ext.define('APP.controller.phone.Menu', {
                 break;
             case 'prospectos':
                 this.getMenuNav().push({
-                    title:'prospectos',
-                    html:'prospectos'
+                    xtype: 'prospectoslist',
+                    title:'prospectos'              
                 });
                 break;
             case 'favoritos':

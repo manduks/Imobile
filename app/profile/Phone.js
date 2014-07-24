@@ -26,7 +26,9 @@ Ext.define('APP.profile.Phone',{
             'Moneda',
             'Factura',
             'Total',
-            'FormaDePago'
+            'FormaDePago',
+            'Prospecto',
+            'Transaccion'
         ],
         stores:[
             'Menu',
@@ -37,7 +39,9 @@ Ext.define('APP.profile.Phone',{
             'Facturas',
             'Anticipos',
             'Totales',
-            'FormasDePago'
+            'FormasDePago',
+            'Prospectos',
+            'Transacciones'
         ],
         views:[
             'MainCard',
@@ -75,11 +79,12 @@ Ext.define('APP.profile.Phone',{
             'cobranza.TotalesContainer',
             'cobranza.VisualizacionCobranzaList',
             'cobranza.TotalAPagarList',            
-
+            'prospectos.ProspectosList',
 
             'APP.form.phone.pedidos.EditarPedidoForm',
             'APP.form.phone.clientes.ClienteForm',
-            'APP.form.cobranza.MontoAPagarForm'
+            'APP.form.phone.cobranza.MontoAPagarForm',
+            'APP.form.phone.prospectos.ProspectosForm'
         ]
     },
 

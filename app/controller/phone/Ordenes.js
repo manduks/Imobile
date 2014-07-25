@@ -490,8 +490,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      */
     obtenerTipoCambio: function (moneda, record) {
         var me = this,             
-            form = me.getOpcionesOrden().down('editarpedidoform'),
-            tipoCambio = me.getOpcionesOrden().tipoCambio,
+            form = me.getOpcionesOrden().down('editarpedidoform'),            
             codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada,
             view = me.getNavigationOrden().getActiveItem();
 
@@ -507,13 +506,18 @@ Ext.define('APP.controller.phone.Ordenes', {
             callbackKey: 'callback',
             success: function (response) {
                 if (response.Procesada) {
-                    tipoCamio = parseFloat(response.Data[0]).toFixed(2);
+                    me.getOpcionesOrden().tipoCambio = parseFloat(response.Data[0]).toFixed(2);
+                    var tipoCambio = me.getOpcionesOrden().tipoCambio;
+                    console.log(tipoCambio);
+                    console.log(me.getOpcionesOrden().tipoCambio);
                     
-                    if (view.isXType('agregarproductosform')) {
+                    if (view.isXType('agregarproductosform')) {                        
                         me.ayudaAAgregar(view, 'monedaDiferente');
                         me.ayudaAAgregar(view, 'cantidad'); // Se modifica la cantidad sólo si el tipo de cambio es exitoso.
                     } else {
-                        codigoMonedaSeleccionada = moneda;                        
+                        codigoMonedaSeleccionada = moneda;
+                        console.log(codigoMonedaSeleccionada);
+                        console.log(me.getOpcionesOrden().codigoMonedaSeleccionada);
                         form.setValues({
                             CodigoMoneda: moneda,
                             tipoCambio: tipoCambio
@@ -719,6 +723,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                     if (moneda == codigoMonedaPredeterminada) {
                         me.mandaMensaje('Imposible agregar', 'No es posible agregar el producto a la orden debido a que la configuración de moneda actual es ' + me.codigoMonedaSeleccionada + '  y la moneda del producto es ' + moneda + '. Cambie primero la configuración de moneda a ' + moneda + '.');
                     } else {
+                        console.log(moneda, 'La moneda del producto es diferente a la seleccionada.');
                         me.obtenerTipoCambio(moneda); // Aquí esperamos a que obtenga el tipo de cambio y realizamos el cálculo del nuevo precio.
                     }
                 } else {
@@ -766,6 +771,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 break;
 
             case 'monedaDiferente':
+            console.log(tipoCambio, 'Tipo de cambio');
                 precio = APP.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento) * tipoCambio;
                 values.importe = precio * cantidad;
                 precio = APP.core.FormatCurrency.currency(precio, codigoMonedaSeleccionada);
@@ -1275,22 +1281,17 @@ Ext.define('APP.controller.phone.Ordenes', {
     onPopNavigationOrden: function (t, v) {        
         var me = this,            
             tabPanel = me.getOpcionesOrden(),
-            itemActivo = t.getActiveItem().getActiveItem(),
-            //idCliente = v.up('navigationorden').getNavigationBar().getTitle(), //t.getNavigationBar().getTitle(),
+            itemActivo = t.getActiveItem().getActiveItem(),            
             idCliente = tabPanel.idCliente,
             store = Ext.getStore('Ordenes');
             console.log(idCliente);
-        if (itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
-            console.log('primer caso');
+        if (itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {            
             t.getNavigationBar().down('#agregarProductos').show();
         }
 
-        if (itemActivo.isXType('partidacontainer') && v.isXType('agregarproductosform')) {
-            console.log('segundo caso');
+        if (itemActivo.isXType('partidacontainer') && v.isXType('agregarproductosform')) {            
             t.getNavigationBar().down('#agregarProductos').show();
-        }
-
-        //t.getNavigationBar().setTitle(idCliente);
+        }        
 
         if (store.getData().items.length <= 1) {
             me.getPartidaContainer().down('list').emptyTextCmp.show();
@@ -1298,14 +1299,11 @@ Ext.define('APP.controller.phone.Ordenes', {
             me.getPartidaContainer().down('list').emptyTextCmp.hide();
         }        
 
-        if (itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
-            console.log('tercer caso');
+        if (itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {            
             t.getActiveItem().setActiveItem(0);
             t.getNavigationBar().down('#agregarProductos').show();
             t.getNavigationBar().setTitle(idCliente);
-        }
-
-        //t.getNavigationBar().setTitle(idCliente);
+        }        
     },
 
     /**

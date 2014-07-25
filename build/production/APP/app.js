@@ -32325,7 +32325,7 @@ Ext.dom.Element.addMembers({getParent: function() {
     }
   return nombre;
 }, obtenerTipoCambio: function(moneda, record) {
-  var me = this, form = me.getOpcionesOrden().down('editarpedidoform'), tipoCambio = getOpcionesOrden().tipoCambio, codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada, view = me.getNavigationOrden().getActiveItem();
+  var me = this, form = me.getOpcionesOrden().down('editarpedidoform'), tipoCambio = me.getOpcionesOrden().tipoCambio, codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada, view = me.getNavigationOrden().getActiveItem();
   Ext.data.JsonP.request({url: "http://" + localStorage.getItem('dirIP') + "/iMobile/COK1_CL_Consultas/RegresarTipoCambio", params: {CodigoUsuario: localStorage.getItem('CodigoUsuario'), CodigoSociedad: '001', CodigoDispositivo: '004', Token: localStorage.getItem("Token"), Criterio: moneda}, callbackKey: 'callback', success: function(response) {
   if (response.Procesada) 
   {
@@ -33332,4 +33332,5 @@ Ext.application({name: 'APP', requires: ['Ext.MessageBox', 'Ext.field.Email', 'E
 }});
 
 // @tag full-page
-// @require /home/th3gr4bb3r/public_html/Imobile/app.js
+// @require C:\Users\Alí\Documents\GitHub\Imobile\app.js
+

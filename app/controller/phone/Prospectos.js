@@ -78,6 +78,6 @@ Ext.define('APP.controller.phone.Prospectos', {
                 padre.down('#total').setValue(suma).setDisabled(true);
                 break;
         }
-    },
+    }
 
 });

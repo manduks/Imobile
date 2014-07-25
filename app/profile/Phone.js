@@ -28,7 +28,8 @@ Ext.define('APP.profile.Phone',{
             'Total',
             'FormaDePago',
             'Prospecto',
-            'Transaccion'
+            'Transaccion',
+            'RutaCalendario'
         ],
         stores:[
             'Menu',
@@ -41,7 +42,8 @@ Ext.define('APP.profile.Phone',{
             'Totales',
             'FormasDePago',
             'Prospectos',
-            'Transacciones'
+            'Transacciones',
+            'RutasCalendario'
         ],
         views:[
             'MainCard',
@@ -82,6 +84,7 @@ Ext.define('APP.profile.Phone',{
             'prospectos.ProspectosList',
 
             'rutas.OpcionRutasList',
+            'rutas.RutasCalendario',
 
             'APP.form.phone.pedidos.EditarPedidoForm',
             'APP.form.phone.clientes.ClienteForm',

@@ -15,6 +15,10 @@ Ext.define('APP.controller.phone.Rutas', {
         control:{
             'container[id=rutascont] clienteslist': {
                 itemtap:'onSeleccionarCliente'
+            },
+
+            'opcionrutaslist': {
+                itemtap:'onCalendario'
             }
         }
     },
@@ -43,5 +47,9 @@ Ext.define('APP.controller.phone.Rutas', {
         });
         this.getMenuNav().add(barraTitulo);
 
+    },
+
+    onCalendario:function(){
+        this.getMenuNav().push({xtype:'rutascalendario'});
     }
 });

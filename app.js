@@ -23,7 +23,12 @@ Ext.application({
         'Ext.form.FieldSet',
         'Ext.data.proxy.JsonP',
         'Ext.field.Toggle',
+
         'Ext.ux.Fileup',
+
+        'Ext.ux.calendar.TouchCalendar',
+        'Ext.ux.calendar.TouchCalendarView',
+        'Ext.ux.calendar.TouchCalendarSimpleEvents',
 
         'APP.core.data.Store',
         'APP.core.FormatCurrency'

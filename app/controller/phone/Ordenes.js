@@ -61,7 +61,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             },
             'productosorden productosview': {
                 itemtap: 'onAgregarProducto'
-            },            
+            },
 
             'direccioneslist': {
                 itemtap: 'muestraDirecciones'
@@ -89,8 +89,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                 itemtap: 'onSeleccionarTransaccion'
             },
             'almacenlist': {
-                itemtap: 'onSeleccionarAlmacen'            
-            }    		
+                itemtap: 'onSeleccionarAlmacen'
+            }
     	}
     },
 
@@ -1251,7 +1251,7 @@ console.log(values);
                 "Orden.CodigoImpuesto": me.codigoImpuesto,
                 "Orden.RFCSocio": clienteSeleccionado.RFC,
                 "Orden.DireccionEntrega": me.direccionEntrega,
-                "Orden.DireccionFiscal": me.direccionFiscal,                
+                "Orden.DireccionFiscal": me.direccionFiscal
             };            
 
             Ext.Array.forEach(array, function (item, index, allItems) {

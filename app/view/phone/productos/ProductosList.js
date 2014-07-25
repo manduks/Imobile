@@ -3,7 +3,7 @@
  * @extends Ext.dataview.List
  * Esta es la lista para listar clientes de la cartera
  */
-Ext.define('Imobile.view.productos.ProductosList', {
+Ext.define('APP.view.phone.productos.ProductosList', {
     extend: 'Ext.dataview.List',
     xtype: 'productoslist',
     requires: ['Ext.field.Search', 'Ext.plugin.ListPaging', 'Ext.MessageBox'],

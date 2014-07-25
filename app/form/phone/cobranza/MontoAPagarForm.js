@@ -1,4 +1,4 @@
-Ext.define('APP.form.cobranza.MontoAPagarForm', {
+Ext.define('APP.form.phone.cobranza.MontoAPagarForm', {
     extend: 'Ext.form.Panel',
     xtype: 'montoapagarform',
     //requires: ['Ext.form.FieldSet', 'Ext.field.Email', 'Ext.field.Password'],

@@ -22,22 +22,30 @@ Ext.define('APP.profile.Phone',{
             'Menu',
             'Cliente',
             'Direccion',
+            'Producto',
             'Orden',
             'Moneda',
             'Factura',
             'Total',
-            'FormaDePago'
+            'FormaDePago',
+            'Prospecto',
+            'Transaccion',
+            'RutaCalendario'
         ],
         stores:[
             'Menu',
             'Clientes',
+            'Productos',
             'Direcciones',
             'Ordenes',
             'Monedas',
             'Facturas',
             'Anticipos',
             'Totales',
-            'FormasDePago'
+            'FormasDePago',
+            'Prospectos',
+            'Transacciones',
+            'RutasCalendario'
         ],
         views:[
             'MainCard',
@@ -65,6 +73,9 @@ Ext.define('APP.profile.Phone',{
             'ordenes.PartidaContainer',
             'ordenes.TplDirecciones',
             'ordenes.TransaccionList',
+            'productos.ProductosOrden',
+            'productos.ProductosView',
+            'productos.ProductosList',
             'cobranza.CobranzaList',
             'cobranza.FacturasContainer',
             'cobranza.FacturasList',
@@ -75,11 +86,16 @@ Ext.define('APP.profile.Phone',{
             'cobranza.TotalesContainer',
             'cobranza.VisualizacionCobranzaList',
             'cobranza.TotalAPagarList',            
+            'prospectos.ProspectosList',
 
+            'rutas.OpcionRutasList',
+            'rutas.RutasCalendario',
 
             'APP.form.phone.pedidos.EditarPedidoForm',
             'APP.form.phone.clientes.ClienteForm',
-            'APP.form.cobranza.MontoAPagarForm'
+            'APP.form.phone.productos.AgregarProductosForm',
+            'APP.form.phone.cobranza.MontoAPagarForm',
+            'APP.form.phone.prospectos.ProspectosForm'
         ]
     },
 

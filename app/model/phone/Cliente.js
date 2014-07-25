@@ -62,6 +62,10 @@ Ext.define('APP.model.phone.Cliente', {
             {
                 name: 'CodigoMoneda',
                 type: 'string'
+            },
+            {
+                name: 'NombreVendedor',
+                type: 'string'
             }
         ]
     }

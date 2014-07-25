@@ -1,4 +1,4 @@
-Ext.define('Imobile.form.prospectos.ProspectosForm', {
+Ext.define('APP.form.phone.prospectos.ProspectosForm', {
 	extend: 'Ext.form.Panel',
 	xtype: 'prospectosform',
 	requires:[

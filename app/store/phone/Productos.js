@@ -3,13 +3,13 @@
  * @extends Ext.data.Store
  * Este es el store para los productos
  */
-Ext.define('Imobile.store.Productos', {
-    extend: 'Imobile.core.data.Store',    
-    requires:['Imobile.model.Producto'],
+Ext.define('APP.store.phone.Productos', {
+    extend: 'APP.core.data.Store',    
+    //requires:['Imobile.model.Producto'],
     config: {
-        model:'Imobile.model.Producto',        
-        proxy: {
-            url: 'http://ferman.ddns.net:88/iMobile/COK1_CL_Articulo/ObtenerListaArticulosiMobile',
+        model:'APP.model.phone.Producto',
+        proxy: {            
+            url: 'http://'+ localStorage.getItem('dirIP') +'/iMobile/COK1_CL_Articulo/ObtenerListaArticulosiMobile',
             //url: 'http://25.15.241.121:88/iMobile/COK1_CL_Articulo/ObtenerListaArticulosiMobile',
                  
             type: 'jsonp',

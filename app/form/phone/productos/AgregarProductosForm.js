@@ -1,4 +1,4 @@
-Ext.define('Imobile.form.productos.AgregarProductosForm', {
+Ext.define('APP.form.phone.productos.AgregarProductosForm', {
 	extend: 'Ext.form.Panel',
 	xtype: 'agregarproductosform',
 	requires:[

@@ -3,7 +3,7 @@
  * @extends Ext.dataview.List
  * Esta es la lista para listar prospectos.
  */
-Ext.define('Imobile.view.prospectos.ProspectosList', {
+Ext.define('APP.view.phone.prospectos.ProspectosList', {
     extend: 'Ext.dataview.List',
     xtype: 'prospectoslist',
     requires: ['Ext.field.Search', 'Ext.plugin.ListPaging', 'Ext.SegmentedButton'],

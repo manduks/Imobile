@@ -73,8 +73,8 @@ Ext.define('APP.controller.phone.Menu', {
                 break;
             case 'prospectos':
                 this.getMenuNav().push({
-                    title:'prospectos',
-                    html:'prospectos'
+                    xtype: 'prospectoslist',
+                    title:'prospectos'              
                 });
                 break;
             case 'favoritos':
@@ -107,7 +107,7 @@ Ext.define('APP.controller.phone.Menu', {
 
         if( navigationview.getActiveItem().getId() == 'ordenescont' ||
             navigationview.getActiveItem().getId() == 'cobranzacont' ||
-            navigationview.getActiveItem().getId() == 'rutacont'
+            navigationview.getActiveItem().getId() == 'rutascont'
         ){
             titulo = view.down('toolbar');
 

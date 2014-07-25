@@ -74,7 +74,7 @@ Ext.define('APP.form.phone.pedidos.EditarPedidoForm', {
                         label:'Lista de Precios'
                     },{
                         xtype:'textfield',
-                        name:'CodigoVendedor',
+                        name:'NombreVendedor',
                         label:'Vendedor'
                     },{
                         xtype:'textfield',

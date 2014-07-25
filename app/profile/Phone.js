@@ -22,6 +22,7 @@ Ext.define('APP.profile.Phone',{
             'Menu',
             'Cliente',
             'Direccion',
+            'Producto',
             'Orden',
             'Moneda',
             'Factura',
@@ -33,6 +34,7 @@ Ext.define('APP.profile.Phone',{
         stores:[
             'Menu',
             'Clientes',
+            'Productos',
             'Direcciones',
             'Ordenes',
             'Monedas',

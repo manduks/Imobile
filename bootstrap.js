@@ -46,10 +46,97 @@ Ext.Loader.addClassPathMappings({
   "Ext.device.sqlite.SQLResultSet": "touch/src/device/sqlite/Sencha.js",
   "Ext.device.sqlite.SQLResultSetRowList": "touch/src/device/sqlite/Sencha.js",
   "Ext.device.sqlite.SQLTransaction": "touch/src/device/sqlite/Sencha.js",
-  "Ext.draw.engine.SvgContext.Gradient": "touch/src/draw/engine/SvgContext.js"
+  "Ext.draw.engine.SvgContext.Gradient": "touch/src/draw/engine/SvgContext.js",
+  "Ext.ux.Fileup": "src/ux/Fileup.js",
+  "Ext.ux.TouchCalendar": "src/ux/TouchCalendar.js",
+  "Ext.ux.calendar": "src/ux/calendar",
+  "Imobile": "app",
+  "TouchCalendarViewModel": "src/ux/calendar/TouchCalendarView.js"
 });
 Ext.ClassManager.addNameAlternateMappings({
-  "APP.view.Main": [],
+  "APP.controller.phone.Clientes": [],
+  "APP.controller.phone.Cobranza": [],
+  "APP.controller.phone.Configuracion": [],
+  "APP.controller.phone.Informes": [],
+  "APP.controller.phone.Login": [],
+  "APP.controller.phone.Menu": [],
+  "APP.controller.phone.Ordenes": [],
+  "APP.controller.phone.Prospectos": [],
+  "APP.controller.phone.Rutas": [],
+  "APP.core.FormatCurrency": [],
+  "APP.core.data.Store": [],
+  "APP.form.phone.clientes.ClienteForm": [],
+  "APP.form.phone.cobranza.MontoAPagarForm": [],
+  "APP.form.phone.pedidos.EditarPedidoForm": [],
+  "APP.form.phone.productos.AgregarProductosForm": [],
+  "APP.form.phone.prospectos.ProspectosForm": [],
+  "APP.model.phone.Cliente": [],
+  "APP.model.phone.Direccion": [],
+  "APP.model.phone.Factura": [],
+  "APP.model.phone.FormaDePago": [],
+  "APP.model.phone.Menu": [],
+  "APP.model.phone.Moneda": [],
+  "APP.model.phone.Orden": [],
+  "APP.model.phone.Producto": [],
+  "APP.model.phone.Prospecto": [],
+  "APP.model.phone.RutaCalendario": [],
+  "APP.model.phone.Total": [],
+  "APP.model.phone.Transaccion": [],
+  "APP.profile.Phone": [],
+  "APP.profile.Tablet": [],
+  "APP.store.phone.Anticipos": [],
+  "APP.store.phone.Clientes": [],
+  "APP.store.phone.Direcciones": [],
+  "APP.store.phone.Facturas": [],
+  "APP.store.phone.FormasDePago": [],
+  "APP.store.phone.Menu": [],
+  "APP.store.phone.Monedas": [],
+  "APP.store.phone.Ordenes": [],
+  "APP.store.phone.Productos": [],
+  "APP.store.phone.Prospectos": [],
+  "APP.store.phone.RutasCalendario": [],
+  "APP.store.phone.Totales": [],
+  "APP.store.phone.Transacciones": [],
+  "APP.view.phone.MainCard": [],
+  "APP.view.phone.clientes.ClientesList": [],
+  "APP.view.phone.cobranza.CobranzaList": [],
+  "APP.view.phone.cobranza.FacturasContainer": [],
+  "APP.view.phone.cobranza.FacturasList": [],
+  "APP.view.phone.cobranza.FormasDePagoList": [],
+  "APP.view.phone.cobranza.MontoAPagarFormContainer": [],
+  "APP.view.phone.cobranza.NavigationCobranza": [],
+  "APP.view.phone.cobranza.TotalAPagarContainer": [],
+  "APP.view.phone.cobranza.TotalAPagarList": [],
+  "APP.view.phone.cobranza.TotalesContainer": [],
+  "APP.view.phone.cobranza.VisualizacionCobranzaList": [],
+  "APP.view.phone.configuracion.ConfiguracionPanel": [],
+  "APP.view.phone.login.LoginForm": [],
+  "APP.view.phone.login.LoginPanel": [],
+  "APP.view.phone.menu.MenuList": [],
+  "APP.view.phone.menu.MenuNav": [],
+  "APP.view.phone.ordenes.AlmacenList": [],
+  "APP.view.phone.ordenes.ClienteContainer": [],
+  "APP.view.phone.ordenes.DireccionEntregaContainer": [],
+  "APP.view.phone.ordenes.DireccionEntregaList": [],
+  "APP.view.phone.ordenes.DireccionFiscalContainer": [],
+  "APP.view.phone.ordenes.DireccionFiscalList": [],
+  "APP.view.phone.ordenes.DireccionesContainer": [],
+  "APP.view.phone.ordenes.DireccionesList": [],
+  "APP.view.phone.ordenes.MonedasList": [],
+  "APP.view.phone.ordenes.NavigationOrden": [],
+  "APP.view.phone.ordenes.OpcionOrdenesList": [],
+  "APP.view.phone.ordenes.OpcionesOrdenPanel": [],
+  "APP.view.phone.ordenes.OrdenContainer": [],
+  "APP.view.phone.ordenes.OrdenList": [],
+  "APP.view.phone.ordenes.PartidaContainer": [],
+  "APP.view.phone.ordenes.TplDirecciones": [],
+  "APP.view.phone.ordenes.TransaccionList": [],
+  "APP.view.phone.productos.ProductosList": [],
+  "APP.view.phone.productos.ProductosOrden": [],
+  "APP.view.phone.productos.ProductosView": [],
+  "APP.view.phone.prospectos.ProspectosList": [],
+  "APP.view.phone.rutas.OpcionRutasList": [],
+  "APP.view.phone.rutas.RutasCalendario": [],
   "Ext.AbstractComponent": [],
   "Ext.AbstractManager": [],
   "Ext.AbstractPlugin": [],
@@ -749,8 +836,13 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.ActionOverFlowMenuButton": [],
   "Ext.ux.ApplicationMenu": [],
   "Ext.ux.ContextMenu": [],
+  "Ext.ux.Fileup": [],
   "Ext.ux.MenuButton": [],
   "Ext.ux.TabMenuButton": [],
+  "Ext.ux.TouchCalendar": [],
+  "Ext.ux.calendar.TouchCalendar": [],
+  "Ext.ux.calendar.TouchCalendarSimpleEvents": [],
+  "Ext.ux.calendar.TouchCalendarView": [],
   "Ext.ux.device.Analytics": [],
   "Ext.ux.device.Twitter": [],
   "Ext.ux.device.analytics.Abstract": [],
@@ -772,11 +864,197 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.viewport.Viewport": [],
   "Ext.viewport.WindowsPhone": [
     "Ext.viewport.WP"
-  ]
+  ],
+  "Imobile.controller.Main": [],
+  "Imobile.controller.tablet.Main": [],
+  "Imobile.form.CotizadorForm": [],
+  "Imobile.form.login.LoginForm": [],
+  "Imobile.model.DireccionFiscal": [],
+  "Imobile.model.Menu": [],
+  "Imobile.view.configuracion.ConfiguracionContainer": [],
+  "Imobile.view.configuracion.ConfiguracionList": [],
+  "Imobile.view.configuracion.InitializeContainer": [],
+  "Imobile.view.configuracion.ServidorContainer": [],
+  "Imobile.view.configuracion.SincronizarContainer": [],
+  "Imobile.view.favoritos.SeleccionadorProFav": [],
+  "Imobile.view.menu.Menu": [],
+  "Imobile.view.menu.MenuList": [],
+  "Imobile.view.tablet.Main": [],
+  "TouchCalendarViewModel": []
 });
 Ext.ClassManager.addNameAliasMappings({
-  "APP.view.Main": [
-    "widget.main"
+  "APP.controller.phone.Clientes": [],
+  "APP.controller.phone.Cobranza": [],
+  "APP.controller.phone.Configuracion": [],
+  "APP.controller.phone.Informes": [],
+  "APP.controller.phone.Login": [],
+  "APP.controller.phone.Menu": [],
+  "APP.controller.phone.Ordenes": [],
+  "APP.controller.phone.Prospectos": [],
+  "APP.controller.phone.Rutas": [],
+  "APP.core.FormatCurrency": [],
+  "APP.core.data.Store": [],
+  "APP.form.phone.clientes.ClienteForm": [
+    "widget.clienteform"
+  ],
+  "APP.form.phone.cobranza.MontoAPagarForm": [
+    "widget.montoapagarform"
+  ],
+  "APP.form.phone.pedidos.EditarPedidoForm": [
+    "widget.editarpedidoform"
+  ],
+  "APP.form.phone.productos.AgregarProductosForm": [
+    "widget.agregarproductosform"
+  ],
+  "APP.form.phone.prospectos.ProspectosForm": [
+    "widget.prospectosform"
+  ],
+  "APP.model.phone.Cliente": [],
+  "APP.model.phone.Direccion": [],
+  "APP.model.phone.Factura": [],
+  "APP.model.phone.FormaDePago": [],
+  "APP.model.phone.Menu": [],
+  "APP.model.phone.Moneda": [],
+  "APP.model.phone.Orden": [],
+  "APP.model.phone.Producto": [],
+  "APP.model.phone.Prospecto": [],
+  "APP.model.phone.RutaCalendario": [],
+  "APP.model.phone.Total": [],
+  "APP.model.phone.Transaccion": [],
+  "APP.profile.Phone": [],
+  "APP.profile.Tablet": [],
+  "APP.store.phone.Anticipos": [],
+  "APP.store.phone.Clientes": [],
+  "APP.store.phone.Direcciones": [],
+  "APP.store.phone.Facturas": [],
+  "APP.store.phone.FormasDePago": [],
+  "APP.store.phone.Menu": [],
+  "APP.store.phone.Monedas": [],
+  "APP.store.phone.Ordenes": [],
+  "APP.store.phone.Productos": [],
+  "APP.store.phone.Prospectos": [],
+  "APP.store.phone.RutasCalendario": [],
+  "APP.store.phone.Totales": [],
+  "APP.store.phone.Transacciones": [],
+  "APP.view.phone.MainCard": [
+    "widget.maincard"
+  ],
+  "APP.view.phone.clientes.ClientesList": [
+    "widget.clienteslist"
+  ],
+  "APP.view.phone.cobranza.CobranzaList": [
+    "widget.cobranzalist"
+  ],
+  "APP.view.phone.cobranza.FacturasContainer": [
+    "widget.facturascontainer"
+  ],
+  "APP.view.phone.cobranza.FacturasList": [
+    "widget.facturaslist"
+  ],
+  "APP.view.phone.cobranza.FormasDePagoList": [
+    "widget.formasdepagolist"
+  ],
+  "APP.view.phone.cobranza.MontoAPagarFormContainer": [
+    "widget.montoapagarformcontainer"
+  ],
+  "APP.view.phone.cobranza.NavigationCobranza": [
+    "widget.navigationcobranza"
+  ],
+  "APP.view.phone.cobranza.TotalAPagarContainer": [
+    "widget.totalapagarcontainer"
+  ],
+  "APP.view.phone.cobranza.TotalAPagarList": [
+    "widget.totalapagarlist"
+  ],
+  "APP.view.phone.cobranza.TotalesContainer": [
+    "widget.totalescontainer"
+  ],
+  "APP.view.phone.cobranza.VisualizacionCobranzaList": [
+    "widget.visualizacioncobranzalist"
+  ],
+  "APP.view.phone.configuracion.ConfiguracionPanel": [
+    "widget.configuracionpanel"
+  ],
+  "APP.view.phone.login.LoginForm": [
+    "widget.loginform"
+  ],
+  "APP.view.phone.login.LoginPanel": [
+    "widget.loginpanel"
+  ],
+  "APP.view.phone.menu.MenuList": [
+    "widget.menulist"
+  ],
+  "APP.view.phone.menu.MenuNav": [
+    "widget.menunav"
+  ],
+  "APP.view.phone.ordenes.AlmacenList": [
+    "widget.almacenlist"
+  ],
+  "APP.view.phone.ordenes.ClienteContainer": [
+    "widget.clientecontainer"
+  ],
+  "APP.view.phone.ordenes.DireccionEntregaContainer": [
+    "widget.direccionentregacontainer"
+  ],
+  "APP.view.phone.ordenes.DireccionEntregaList": [
+    "widget.direccionentregalist"
+  ],
+  "APP.view.phone.ordenes.DireccionFiscalContainer": [
+    "widget.direccionfiscalcontainer"
+  ],
+  "APP.view.phone.ordenes.DireccionFiscalList": [
+    "widget.direccionfiscallist"
+  ],
+  "APP.view.phone.ordenes.DireccionesContainer": [
+    "widget.direccionescontainer"
+  ],
+  "APP.view.phone.ordenes.DireccionesList": [
+    "widget.direccioneslist"
+  ],
+  "APP.view.phone.ordenes.MonedasList": [
+    "widget.monedaslist"
+  ],
+  "APP.view.phone.ordenes.NavigationOrden": [
+    "widget.navigationorden"
+  ],
+  "APP.view.phone.ordenes.OpcionOrdenesList": [
+    "widget.opcionordeneslist"
+  ],
+  "APP.view.phone.ordenes.OpcionesOrdenPanel": [
+    "widget.opcionesorden"
+  ],
+  "APP.view.phone.ordenes.OrdenContainer": [
+    "widget.ordencontainer"
+  ],
+  "APP.view.phone.ordenes.OrdenList": [
+    "widget.ordenlist"
+  ],
+  "APP.view.phone.ordenes.PartidaContainer": [
+    "widget.partidacontainer"
+  ],
+  "APP.view.phone.ordenes.TplDirecciones": [
+    "widget.tpldirecciones"
+  ],
+  "APP.view.phone.ordenes.TransaccionList": [
+    "widget.transaccionlist"
+  ],
+  "APP.view.phone.productos.ProductosList": [
+    "widget.productoslist"
+  ],
+  "APP.view.phone.productos.ProductosOrden": [
+    "widget.productosorden"
+  ],
+  "APP.view.phone.productos.ProductosView": [
+    "widget.productosview"
+  ],
+  "APP.view.phone.prospectos.ProspectosList": [
+    "widget.prospectoslist"
+  ],
+  "APP.view.phone.rutas.OpcionRutasList": [
+    "widget.opcionrutaslist"
+  ],
+  "APP.view.phone.rutas.RutasCalendario": [
+    "widget.rutascalendario"
   ],
   "Ext.AbstractComponent": [],
   "Ext.AbstractManager": [],
@@ -1689,8 +1967,21 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.ActionOverFlowMenuButton": [],
   "Ext.ux.ApplicationMenu": [],
   "Ext.ux.ContextMenu": [],
+  "Ext.ux.Fileup": [
+    "widget.fileupload"
+  ],
   "Ext.ux.MenuButton": [],
   "Ext.ux.TabMenuButton": [],
+  "Ext.ux.TouchCalendar": [
+    "widget.calendar"
+  ],
+  "Ext.ux.calendar.TouchCalendar": [
+    "widget.calendar"
+  ],
+  "Ext.ux.calendar.TouchCalendarSimpleEvents": [],
+  "Ext.ux.calendar.TouchCalendarView": [
+    "widget.touchcalendarview"
+  ],
   "Ext.ux.device.Analytics": [],
   "Ext.ux.device.Twitter": [],
   "Ext.ux.device.analytics.Abstract": [],
@@ -1718,7 +2009,43 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.viewport.Ios": [],
   "Ext.viewport.Viewport": [],
-  "Ext.viewport.WindowsPhone": []
+  "Ext.viewport.WindowsPhone": [],
+  "Imobile.controller.Main": [],
+  "Imobile.controller.tablet.Main": [],
+  "Imobile.form.CotizadorForm": [
+    "widget.cotizadorform"
+  ],
+  "Imobile.form.login.LoginForm": [
+    "widget.loginform"
+  ],
+  "Imobile.model.DireccionFiscal": [],
+  "Imobile.model.Menu": [],
+  "Imobile.view.configuracion.ConfiguracionContainer": [
+    "widget.configuracioncontainer"
+  ],
+  "Imobile.view.configuracion.ConfiguracionList": [
+    "widget.configuracionlist"
+  ],
+  "Imobile.view.configuracion.InitializeContainer": [
+    "widget.initializecontainer"
+  ],
+  "Imobile.view.configuracion.ServidorContainer": [
+    "widget.servidorcontainer"
+  ],
+  "Imobile.view.configuracion.SincronizarContainer": [
+    "widget.sincronizarcontainer"
+  ],
+  "Imobile.view.favoritos.SeleccionadorProFav": [
+    "widget.seleccionadorprofav"
+  ],
+  "Imobile.view.menu.Menu": [
+    "widget.menu"
+  ],
+  "Imobile.view.menu.MenuList": [
+    "widget.menulist"
+  ],
+  "Imobile.view.tablet.Main": [],
+  "TouchCalendarViewModel": []
 });
 
 

@@ -38,7 +38,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 tap: 'onAgregarPartida'
             },
             'navigationorden': {
-                pop: 'onPopNavigationOrden',
+                pop: 'onPopNavigationOrden'
                 //back: 'onBack',
                 //push: 'onPushNavigationOrden'
             },
@@ -1374,7 +1374,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 "Orden.CodigoImpuesto": codigoImpuesto,
                 "Orden.RFCSocio": clienteSeleccionado.RFC,
                 "Orden.DireccionEntrega": direccionEntrega,
-                "Orden.DireccionFiscal": direccionFiscal,                
+                "Orden.DireccionFiscal": direccionFiscal              
             };            
 
             Ext.Array.forEach(array, function (item, index, allItems) {

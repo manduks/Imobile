@@ -3,7 +3,7 @@
  * @extends Ext.dataview.List
  * Esta es la lista para el panel de productos (los cuadritos de colores)
  */
-Ext.define('Imobile.view.productos.ProductosView', {
+Ext.define('APP.view.phone.productos.ProductosView', {
     extend: 'Ext.dataview.DataView',
     xtype: 'productosview',
 

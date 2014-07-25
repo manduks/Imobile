@@ -80,7 +80,7 @@ Ext.define('APP.model.phone.Producto', {
                 type: 'string',
                 mapping: 'Imagen',
                 convert: function (Imagen) {
-                    return 'http://ferman.ddns.net:88/' + Imagen;
+                    return "http://" + localStorage.getItem("dirIP") + Imagen;                    
                     //return 'http://25.15.241.121:88' + Imagen;
                 }
             }

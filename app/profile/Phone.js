@@ -71,6 +71,9 @@ Ext.define('APP.profile.Phone',{
             'ordenes.PartidaContainer',
             'ordenes.TplDirecciones',
             'ordenes.TransaccionList',
+            'productos.ProductosOrden',
+            'productos.ProductosView',
+            'productos.ProductosList',
             'cobranza.CobranzaList',
             'cobranza.FacturasContainer',
             'cobranza.FacturasList',
@@ -87,6 +90,7 @@ Ext.define('APP.profile.Phone',{
 
             'APP.form.phone.pedidos.EditarPedidoForm',
             'APP.form.phone.clientes.ClienteForm',
+            'APP.form.phone.productos.AgregarProductosForm',
             'APP.form.phone.cobranza.MontoAPagarForm',
             'APP.form.phone.prospectos.ProspectosForm'
         ]

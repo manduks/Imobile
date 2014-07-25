@@ -3,7 +3,7 @@
  * @extends Ext.Toolbar
  * Es un seleccionador para elegir productos o favoritos
  */
-Ext.define('APP.view.productos.ProductosOrden', {
+Ext.define('APP.view.phone.productos.ProductosOrden', {
     extend: 'Ext.Container',
     xtype: 'productosorden',
     requires: ['Ext.Toolbar','Ext.SegmentedButton'],

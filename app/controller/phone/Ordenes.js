@@ -10,7 +10,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             mainCard:'maincard',
             navigationOrden:'navigationorden',
             partidaContainer:'partidacontainer',
-            opcionesOrden:'opcionesorden',
+            productosOrden: 'productosorden',
             ordenContainer:'ordencontainer',
             opcionesOrden: 'opcionesorden'
 
@@ -28,14 +28,13 @@ Ext.define('APP.controller.phone.Ordenes', {
             'opcionesorden': {
                 activeitemchange: 'cambiaItem'
             },
-
 			'productoslist #btnBuscarProductos': {
                 tap: 'onBuscaProductos'
             },
             'productoslist #buscarProductos': {
                 clearicontap: 'limpiaBusquedaProductos'
             },
-            'navigationOrden #agregarProductos': {
+            'navigationorden #agregarProductos': {
                 tap: 'onAgregarPartida'
             },
             'navigationorden': {
@@ -223,7 +222,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 this.getPartidaContainer().down('list').emptyTextCmp.show();
 
                 this.dameMonedaPredeterminada();
-
+                this.getOpcionesOrden().idCliente = menuNav.getNavigationBar().getTitle();
                 this.getNavigationOrden().add(barraTitulo);
                 break;
 
@@ -701,7 +700,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             me = this,
             ordenes = Ext.getStore('Ordenes'),
             productos = Ext.getStore('Productos'),
-            menu = me.getMain().getActiveItem(),     //NavigationOrden
+            menu = me.getNavigationOrden(),     //NavigationOrden
             form = btn.up('agregarproductosform'),
             values = form.getValues(),
             descripcion = values.NombreArticulo,
@@ -904,8 +903,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         var me = this,
             productos = Ext.getStore('Productos'),
             idCliente = me.getNavigationOrden().getNavigationBar().getTitle(),
-            valores = record.data;
-        //moneda,// = valores.ListaPrecios[0].CodigoMoneda,
+            valores = record.data;        
 
         Ext.data.JsonP.request({
             url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Articulo/ObtenerArticuloiMobile",
@@ -943,7 +941,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         var me = this,
             view = me.getNavigationOrden(),
             idCliente = view.getNavigationBar().getTitle(),
-            almacenes = localStorage.getItem("Almacenes"),
+            almacenes = me.getMenuNav().almacenes,//localStorage.getItem("Almacenes"),
             precio,
             form,
             cantidad,
@@ -965,10 +963,11 @@ Ext.define('APP.controller.phone.Ordenes', {
 
         view.push({
             xtype: 'agregarproductosform',
-            modo: 'agregar'
+            modo: 'agregar',
+            title: idCliente
         });
 
-        Ext.Array.forEach(almacenes, function (item, index) {
+        Ext.Array.forEach(almacenes, function (item, index) {            
             var predeterminado = item.Predeterminado;
 
             if (predeterminado) {
@@ -1213,8 +1212,9 @@ Ext.define('APP.controller.phone.Ordenes', {
      */
     onAgregarPartida: function (button) {
         var me = this,
-            view = me.getMain().getActiveItem(),
+            view = me.getNavigationOrden(),
             itemActivo = me.getOpcionesOrden().getActiveItem(),
+            idCliente = view.getNavigationBar().getTitle(),
             store = Ext.getStore('Productos');
 
         if (itemActivo.isXType('partidacontainer')) {
@@ -1222,12 +1222,13 @@ Ext.define('APP.controller.phone.Ordenes', {
             Ext.getStore('Productos').resetCurrentPage();
 
             store.setParams({
-                CardCode: me.idCliente,
+                CardCode: idCliente,
                 Criterio: ""
             });
 
             view.push({
-                xtype: 'productosorden'
+                xtype: 'productosorden',
+                title: idCliente
             });
 
             store.clearFilter();
@@ -1271,22 +1272,40 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param t Éste navigationview.
      * @param v La vista que ha sido popeada.
      */
-    onPopNavigationOrden: function (t, v) {
-        var me = this,
-            view = me.getNavigationOrden(),
+    onPopNavigationOrden: function (t, v) {        
+        var me = this,            
             tabPanel = me.getOpcionesOrden(),
             itemActivo = t.getActiveItem().getActiveItem(),
-            idCliente = tabPanel.idCliente;
-
+            //idCliente = v.up('navigationorden').getNavigationBar().getTitle(), //t.getNavigationBar().getTitle(),
+            idCliente = tabPanel.idCliente,
+            store = Ext.getStore('Ordenes');
+            console.log(idCliente);
         if (itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
-            view.getNavigationBar().down('#agregarProductos').show();
+            console.log('primer caso');
+            t.getNavigationBar().down('#agregarProductos').show();
         }
 
         if (itemActivo.isXType('partidacontainer') && v.isXType('agregarproductosform')) {
-            view.getNavigationBar().down('#agregarProductos').show();
+            console.log('segundo caso');
+            t.getNavigationBar().down('#agregarProductos').show();
         }
 
-        t.getNavigationBar().setTitle(idCliente);
+        //t.getNavigationBar().setTitle(idCliente);
+
+        if (store.getData().items.length <= 1) {
+            me.getPartidaContainer().down('list').emptyTextCmp.show();
+        } else {
+            me.getPartidaContainer().down('list').emptyTextCmp.hide();
+        }        
+
+        if (itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
+            console.log('tercer caso');
+            t.getActiveItem().setActiveItem(0);
+            t.getNavigationBar().down('#agregarProductos').show();
+            t.getNavigationBar().setTitle(idCliente);
+        }
+
+        //t.getNavigationBar().setTitle(idCliente);
     },
 
     /**
@@ -1528,7 +1547,7 @@ console.log(response);
         var me = this,
             view = me.getMainCard().getActiveItem(),
             value = view.down('agregarproductosform').getValues(),
-            almacenes = localStorage.getItem('Almacenes');
+            almacenes = me.getMenuNav().almacenes;//localStorage.getItem('Almacenes');
 
         view.push({
             xtype: 'almacenlist',
@@ -1541,7 +1560,7 @@ console.log(response);
     onSeleccionarAlmacen: function (t, index, target, record, e, eOpts) {
         var me = this,
             view = me.getMainCard().getActiveItem(),
-            almacenes = localStorage.getItem('Almacenes');
+            almacenes = me.getMenuNav().almacenes;//localStorage.getItem('Almacenes');
 
         Ext.Array.forEach(almacenes, function (item, index) {
             item.Predeterminado = false;

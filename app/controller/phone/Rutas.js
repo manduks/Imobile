@@ -49,7 +49,16 @@ Ext.define('APP.controller.phone.Rutas', {
 
     },
 
-    onCalendario:function(){
-        this.getMenuNav().push({xtype:'rutascalendario'});
+    onCalendario:function(list, index, target, record){
+        var opcion = record.get('action');
+
+        switch(opcion){
+            case 'calendario':
+                this.getMenuNav().push({xtype:'rutascalendario'});
+                break;
+            case 'registrar':
+                break;
+        }
+
     }
 });

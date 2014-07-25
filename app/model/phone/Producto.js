@@ -3,7 +3,7 @@
  * @extends Ext.data.Model
  * El modelo del cliente
  */
-Ext.define('Imobile.model.Producto', {
+Ext.define('APP.model.phone.Producto', {
     extend: 'Ext.data.Model',
     config: {
         fields: [
@@ -80,7 +80,7 @@ Ext.define('Imobile.model.Producto', {
                 type: 'string',
                 mapping: 'Imagen',
                 convert: function (Imagen) {
-                    return 'http://ferman.ddns.net:88/' + Imagen;
+                    return "http://" + localStorage.getItem("dirIP") + Imagen;                    
                     //return 'http://25.15.241.121:88' + Imagen;
                 }
             }

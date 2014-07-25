@@ -3,8 +3,8 @@
  * @extends Ext.Toolbar
  * Es un seleccionador para elegir productos o favoritos
  */
-Ext.define('Imobile.view.productos.ProductosOrden', {
-    extend: 'Imobile.view.favoritos.SeleccionadorProFav',
+Ext.define('APP.view.phone.productos.ProductosOrden', {
+    extend: 'Ext.Container',
     xtype: 'productosorden',
     requires: ['Ext.Toolbar','Ext.SegmentedButton'],
     config: {

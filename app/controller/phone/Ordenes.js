@@ -10,8 +10,10 @@ Ext.define('APP.controller.phone.Ordenes', {
             mainCard:'maincard',
             navigationOrden:'navigationorden',
             partidaContainer:'partidacontainer',
-            opcionesOrden:'opcionesorden',
-            ordenContainer:'ordencontainer'
+            productosOrden: 'productosorden',
+            ordenContainer:'ordencontainer',
+            opcionesOrden: 'opcionesorden'
+
         },
     	control:{
             'container[id=ordenescont] clienteslist': {
@@ -26,17 +28,19 @@ Ext.define('APP.controller.phone.Ordenes', {
             'opcionesorden': {
                 activeitemchange: 'cambiaItem'
             },
-
-
-
-
-
-
 			'productoslist #btnBuscarProductos': {
                 tap: 'onBuscaProductos'
             },
             'productoslist #buscarProductos': {
                 clearicontap: 'limpiaBusquedaProductos'
+            },
+            'navigationorden #agregarProductos': {
+                tap: 'onAgregarPartida'
+            },
+            'navigationorden': {
+                pop: 'onPopNavigationOrden',
+                //back: 'onBack',
+                //push: 'onPushNavigationOrden'
             },
             'agregarproductosform #agregar': {
                 tap: 'agregaProductos'
@@ -47,9 +51,6 @@ Ext.define('APP.controller.phone.Ordenes', {
             'agregarproductosform #almacenProducto': {
                 focus: 'onListAlmacen'
             },
-
-
-
             'productosorden #listaProductos': {
                 tap: 'mostrarListaProductos'
             },
@@ -61,7 +62,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             },
             'productosorden productosview': {
                 itemtap: 'onAgregarProducto'
-            },
+            },            
 
             'direccioneslist': {
                 itemtap: 'muestraDirecciones'
@@ -89,8 +90,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                 itemtap: 'onSeleccionarTransaccion'
             },
             'almacenlist': {
-                itemtap: 'onSeleccionarAlmacen'
-            }
+                itemtap: 'onSeleccionarAlmacen'            
+            }    		
     	}
     },
 
@@ -102,7 +103,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param target El elemento tapeado.
      * @param record El record asociado al ítem.
      */
-    alSelecionarCliente: function (list, index, target, record) {
+     alSelecionarCliente: function (list, index, target, record) {
 
         var name = record.get('NombreSocio'),
             idCliente = record.get('CodigoSocio'),
@@ -153,23 +154,28 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param barraTitulo El toolbar para agregar el nombre del cliente.
      */
     estableceDirecciones: function (view,barraTitulo,clienteSeleccionado) {
-        var me = this,
+        var me = this,            
             direcciones = Ext.getStore('Direcciones');
+
         direcciones.setData(clienteSeleccionado.Direcciones);
         direcciones.clearFilter();
         direcciones.filter('TipoDireccion', 'S');
 
         if (direcciones.getCount() > 0) {
             view.add(barraTitulo);
-            var direccionFiscal = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion fiscal y se lo asignamos a una variable global.
-            var codigoImpuesto = direcciones.getAt(0).data.CodigoImpuesto;
-            var tasaImpuesto = direcciones.getAt(0).data.Tasa;
+
+            me.getOpcionesOrden().direccionFiscal = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion fiscal y se lo asignamos a una propiedad del componente opcionesOrden
+            me.getOpcionesOrden().codigoImpuesto = direcciones.getAt(0).data.CodigoImpuesto;
+            me.getOpcionesOrden().tasaImpuesto = direcciones.getAt(0).data.Tasa;
+            me.getOpcionesOrden().tipoCambio = 1;
+            me.getOpcionesOrden().totalDeImpuesto = 0;
+
             direcciones.getAt(0).set('Predeterminado', true);
             direcciones.clearFilter();
             direcciones.filter('TipoDireccion', 'B');
 
             if (direcciones.getCount() > 0) {
-                var direccionEntrega = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una variable global.
+                me.getOpcionesOrden().direccionEntrega = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una propiedad del componente opcionesOrden
                 direcciones.getAt(0).set('Predeterminado', true);
             }
 
@@ -196,24 +202,27 @@ Ext.define('APP.controller.phone.Ordenes', {
     onOpcionOrdenes: function (list, index, target, record) {
 
         var me = this,
+            menuNav = me.getMenuNav(),
+            opcionesOrden = me.getOpcionesOrden(),
             opcion = record.get('action'),
+            name = list.up()
             barraTitulo = ({
                 xtype: 'toolbar',
                 docked: 'top',
-                title: record.get('title')
-            });
+                title: menuNav.down('toolbar').getTitle()
+            });            
 
         switch (opcion) {
             case 'orden':
-                me.actionOrden = 'crear';
+                opcionesOrden.actionOrden = 'crear';
                 this.getMainCard().getAt(1).setMasked(false);
-                this.getMainCard().setActiveItem(1); // Activamos el item 2 del menu principal navigationorden
+                this.getMainCard().setActiveItem(1); // Activamos el item 1 del menu principal navigationorden
                 this.getNavigationOrden().getNavigationBar().setTitle(list.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
                 this.getOpcionesOrden().setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 this.getPartidaContainer().down('list').emptyTextCmp.show();
 
                 this.dameMonedaPredeterminada();
-
+                this.getOpcionesOrden().idCliente = menuNav.getNavigationBar().getTitle();
                 this.getNavigationOrden().add(barraTitulo);
                 break;
 
@@ -222,7 +231,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                     return;
                 }
 
-                me.actionOrden = 'actualizar';
+                opcionesOrden.actionOrden = 'actualizar';
                 var store = Ext.getStore('Transacciones');
 
                 Ext.getStore('Transacciones').resetCurrentPage();
@@ -245,6 +254,103 @@ Ext.define('APP.controller.phone.Ordenes', {
     },
 
     /**
+     * Determina qué hacer al momento de cambiar el ítem del navigationorden:
+     *   - Cliente: Obtiene los datos del cliente desde el JSON y llena las direcciones asignando por defecto la primera que aparece.
+     * Aparece el botón Back y desaparece Agregar.
+     *   - Editar: Establece valores para el formulario de editar pedido aparece el botón Back y desaparece Agregar.
+     * @param tabPanel Este TabPanel
+     * @param value El nuevo ítem
+     * @param oldValue El ítem anterior
+     */
+    cambiaItem: function (tabPanel, value, oldValue) {
+        var me = this,
+            view = this.getNavigationOrden(),
+            boton = view.getNavigationBar().down('#agregarProductos'),
+            codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada,
+            codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
+            tipoCambio = me.getOpcionesOrden().tipoCambio,
+            clienteSeleccionado = this.getOpcionesOrden().clienteSeleccionado;
+
+        if (value.xtype == 'clientecontainer') {
+            boton.setText('Back').show(); // Disfrazamos de back al botón agregar
+            boton.setUi('back'); // Le ponemos el ícono de back
+
+            var form = value.down('clienteform'),
+                direcciones = Ext.getStore('Direcciones');
+
+            clienteSeleccionado.LimiteCredito = parseFloat(clienteSeleccionado.LimiteCredito).toFixed(2);
+            clienteSeleccionado.Saldo = parseFloat(clienteSeleccionado.Saldo).toFixed(2);
+
+            form.setValues(clienteSeleccionado);
+        }
+
+        if (value.xtype == 'editarpedidoform') {
+            if (codigoMonedaSeleccionada == codigoMonedaPredeterminada) {
+                clienteSeleccionado.tipoCambio = parseFloat(1).toFixed(2);;
+            } else {
+                clienteSeleccionado.tipoCambio = parseFloat(tipoCambio).toFixed(2);
+            }
+
+            clienteSeleccionado.LimiteCredito = parseFloat(clienteSeleccionado.LimiteCredito).toFixed(2);
+            clienteSeleccionado.Saldo = parseFloat(clienteSeleccionado.Saldo).toFixed(2);
+            clienteSeleccionado.CodigoMoneda = codigoMonedaSeleccionada;            
+            value.setValues(clienteSeleccionado);
+            boton.setText('Back').show();
+            boton.setUi('back');
+        }
+
+        if (value.xtype == 'partidacontainer') {
+            boton.setText('Agregar').show();
+            boton.setUi('normal');
+        }
+    },
+
+    /**
+    * Recorre el store de monedas y obtiene la predeterminada.
+    */
+    dameMonedaPredeterminada: function (){
+        var me = this,
+            storeMonedas = Ext.getStore('Monedas');
+
+        storeMonedas.load({
+            callback: function (records, operation) {
+                Ext.Array.each(records, function (item, index, ItSelf) {
+                    var predeterminada = item.get('Predeterminada');
+                    if (predeterminada) {
+                        me.getOpcionesOrden().codigoMonedaPredeterminada = codigoMonedaPredeterminada = item.get('CodigoMoneda') + ' ';
+                        me.getOpcionesOrden().codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaPredeterminada;
+                    }
+                });
+                me.actualizarTotales();
+            }
+        });
+    },
+
+    actualizarTotales: function () {
+        var me = this,
+            store = Ext.getStore('Ordenes'),
+            precioTotal = 0,
+            descuentoTotal = 0,
+            total = 0,
+            tax = 0,
+            codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
+
+        store.each(function (item) {
+            precioTotal += APP.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
+
+            // descuentoTotal += Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('descuento')) * item.get('cantidad');
+            tax += item.get('totalDeImpuesto');
+
+        });
+
+        this.getOrdenContainer().down('#descuento').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + codigoMonedaSeleccionada + '0.00</div>'}); //Imobile.core.FormatCurrency.currency(importe, '$')
+        this.getOrdenContainer().down('#subtotal').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + APP.core.FormatCurrency.currency(parseFloat(precioTotal), codigoMonedaSeleccionada)/*.toFixed(2)*/ + '</div>'});
+        this.getOrdenContainer().down('#tax').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + APP.core.FormatCurrency.currency(parseFloat(tax), codigoMonedaSeleccionada) + '</div>'});
+        this.getOrdenContainer().down('#total').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + APP.core.FormatCurrency.currency(parseFloat(precioTotal + tax), codigoMonedaSeleccionada) + '</div>' });
+    },
+
+
+    /**
      * Remueve todos los elementos del store de órdenes si el usuario lo confirma, en caso contrario muestra la vista
      * de la lista  órdenes sin eliminar nada.
      * @param newActiveItem El nuevo ítem activo dentro del contenedor.
@@ -258,6 +364,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             if (e == 'yes') {
                 var view = this.getMainCard().getActiveItem(),
                     titulo = view.down('toolbar');
+
                 ordenes.removeAll();
                 this.getMainCard().setActiveItem(0);
                 view.remove(titulo, true); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.
@@ -266,69 +373,6 @@ Ext.define('APP.controller.phone.Ordenes', {
             }
         },this);
     },
-
-    /**
-     * Determina qué hacer al momento de cambiar el ítem del navigationorden:
-     *   - Cliente: Obtiene los datos del cliente desde el JSON y llena las direcciones asignando por defecto la primera que aparece.
-     * Aparece el botón Back y desaparece Agregar.
-     *   - Editar: Establece valores para el formulario de editar pedido aparece el botón Back y desaparece Agregar.
-     * @param tabPanel Este TabPanel
-     * @param value El nuevo ítem
-     * @param oldValue El ítem anterior
-     */
-    cambiaItem: function (tabPanel, value, oldValue) {
-        var me = this,
-            view = this.getNavigationOrden(),//me.getMain().getActiveItem(),
-            boton = view.getNavigationBar().down('#agregarProductos');
-
-        if (value.xtype == 'clientecontainer') {
-            boton.setText('Back').show();
-            boton.setUi('back');
-
-            var form = value.down('clienteform'),
-                direcciones = Ext.getStore('Direcciones');
-
-            var clienteSeleccionado = this.getOpcionesOrden().clienteSeleccionado
-            clienteSeleccionado.LimiteCredito = parseFloat(clienteSeleccionado.LimiteCredito).toFixed(2);
-            clienteSeleccionado.Saldo = parseFloat(clienteSeleccionado.Saldo).toFixed(2);
-
-            form.setValues(clienteSeleccionado);
-        }
-
-        if (value.xtype == 'editarpedidoform') {
-            if (me.codigoMonedaSeleccinada == me.codigoMonedaPredeterminada) {
-                me.clienteSeleccionado.tipoCambio = parseFloat(1).toFixed(2);;
-            } else {
-                me.clienteSeleccionado.tipoCambio = parseFloat(me.tipoCambio).toFixed(2);
-            }
-
-            me.clienteSeleccionado.LimiteCredito = parseFloat(me.clienteSeleccionado.LimiteCredito).toFixed(2);
-            me.clienteSeleccionado.Saldo = parseFloat(me.clienteSeleccionado.Saldo).toFixed(2);
-            me.clienteSeleccionado.CodigoMoneda = me.codigoMonedaSeleccinada;
-            console.log(me.clienteSeleccionado);
-            value.setValues(me.clienteSeleccionado);
-            boton.setText('Back').show();
-            boton.setUi('back');
-        }
-
-        if (value.xtype == 'partidacontainer') {
-            boton.setText('Agregar').show();
-            boton.setUi('normal');
-        }
-    },
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Guarda el código de dirección de la dirección seleccionada, ya sea de entrega o fiscal.
@@ -340,7 +384,12 @@ Ext.define('APP.controller.phone.Ordenes', {
     seleccionaDireccion: function (list, index, target, record) {
         var me = this,
             direcciones = Ext.getStore('Direcciones'),
-            view = me.getMain().getActiveItem();
+            entrega = me.getOpcionesOrden().entrega,
+            direccionFiscal = me.getOpcionesOrden().direccionFiscal,
+            direccionEntrega = me.getOpcionesOrden().direccionEntrega,
+            codigoImpuesto = me.getOpcionesOrden().codigoImpuesto,
+            tasaImpuesto = me.getOpcionesOrden().tasaImpuesto,
+            view = me.getNavigationOrden();
 
         direcciones.each(function (item, index, length) {
             item.set('Predeterminado', false)
@@ -348,14 +397,28 @@ Ext.define('APP.controller.phone.Ordenes', {
 
         direcciones.getAt(index).set('Predeterminado', true);
 
-        if (me.entrega) {
-            me.direccionEntrega = record.data.CodigoDireccion;
+        if (entrega) {
+            direccionEntrega = record.data.CodigoDireccion;
         } else {
-            me.direccionFiscal = record.data.CodigoDireccion;
-            me.codigoImpuesto = record.data.CodigoImpuesto;
-            me.tasaImpuesto = record.data.Tasa;
+            direccionFiscal = record.data.CodigoDireccion;
+            codigoImpuesto = record.data.CodigoImpuesto;
+            tasaImpuesto = record.data.Tasa;
         }
         view.pop();
+    },
+
+    /**
+     * Muestra la lista de monedas.
+     */
+    muestraMonedas: function () {
+        var me = this,
+            view = me.getNavigationOrden();
+
+        view.push({
+            xtype: 'monedaslist'
+        });
+
+        view.getNavigationBar().down('#agregarProductos').hide()
     },
 
     /**
@@ -367,14 +430,16 @@ Ext.define('APP.controller.phone.Ordenes', {
      */
     seleccionaMoneda: function (list, index, target, record) {
         var me = this,
-            view = me.getMain().getActiveItem(),
+            view = me.getNavigationOrden(),
             moneda = record.get('CodigoMoneda') + ' ',
-            tabOpciones = me.getOpcionesOrden(),
-            form = tabOpciones.down('editarpedidoform');
+            opcionesOrden = me.getOpcionesOrden(),
+            codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada,
+            codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
+            form = opcionesOrden.down('editarpedidoform');
 
-        if ((me.codigoMonedaSeleccinada != moneda) && (me.codigoMonedaSeleccinada == me.codigoMonedaPredeterminada)) {
-            if (me.dameProductoConMonedaPredeterminada() != 'No hay') {
-                me.mandaMensaje('Error', 'No es posible cambiar la configuración debido a que la moneda del producto con código ' + me.dameProductoConMonedaPredeterminada() + ' es ' + me.codigoMonedaPredeterminada + '. Elimínelo primero de la orden.');
+        if ((codigoMonedaSeleccionada != moneda) && (codigoMonedaSeleccionada == codigoMonedaPredeterminada)) {
+            if (me.dameProductoConMonedaPredeterminada(codigoMonedaPredeterminada) != 'No hay') {
+                me.mandaMensaje('Error', 'No es posible cambiar la configuración debido a que la moneda del producto con código ' + me.dameProductoConMonedaPredeterminada() + ' es ' + codigoMonedaPredeterminada + '. Elimínelo primero de la orden.');
             } else {
                 me.obtenerTipoCambio(moneda, record);
 //                me.estableceMonedaPredeterminada(record);
@@ -382,20 +447,92 @@ Ext.define('APP.controller.phone.Ordenes', {
             }
         } else {
 
-            if (moneda != me.codigoMonedaSeleccinada) {
-                me.codigoMonedaSeleccinada = me.codigoMonedaPredeterminada;
+            if (moneda != codigoMonedaSeleccionada) {
+                codigoMonedaSeleccionada = codigoMonedaPredeterminada;
                 me.actualizaOrden(moneda);
                 //me.tipoCambio = 1;
                 form.setValues({
-                    CodigoMoneda: me.codigoMonedaSeleccinada,
+                    CodigoMoneda: codigoMonedaSeleccionada,
                     tipoCambio: parseFloat(1).toFixed(2)
                 });
-                me.estableceMonedaPredeterminada(record);
+                me.estableceMonedaPredeterminada(record); // Para pintar la palomita.
             }
             //me.actualizarTotales();
         }
 
         view.pop();
+    },
+
+    /**
+     * Obtiene el nombre del primer artículo encontrado cuyo codigo de moneda es la predeterminada.
+     * @return El nombre del artículo o 'No hay' si no existe ninguno.
+     */
+    dameProductoConMonedaPredeterminada: function (codigoMonedaPredeterminada) {
+        var me = this, i,
+            nombre = 'No hay',
+            ordenes = Ext.getStore('Ordenes');
+
+        for (i = 0; i < ordenes.getCount(); i++) {
+            console.log(ordenes.getAt(i).get('moneda'), 'moneda');
+            console.log(codigoMonedaPredeterminada, 'predeterminada');
+            if (ordenes.getAt(i).get('moneda') == codigoMonedaPredeterminada) {
+                nombre = ordenes.getAt(i).get('CodigoArticulo');
+                break;
+            }
+        }
+
+        return nombre;
+    },
+
+    /**
+     * Obtiene el tipo de cambio actual de acuerdo a la moneda que le pasan, este valor lo deja en la propiedad tipoCambio de opcionesOrden.
+     * @param moneda La divisa cuyo tipo de cambio se necesita.
+     */
+    obtenerTipoCambio: function (moneda, record) {
+        var me = this,             
+            form = me.getOpcionesOrden().down('editarpedidoform'),
+            tipoCambio = getOpcionesOrden().tipoCambio,
+            codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada,
+            view = me.getNavigationOrden().getActiveItem();
+
+        Ext.data.JsonP.request({
+            url: "http://" + localStorage.getItem('dirIP') + "/iMobile/COK1_CL_Consultas/RegresarTipoCambio",
+            params: {
+                CodigoUsuario: localStorage.getItem('CodigoUsuario'),
+                CodigoSociedad: '001',
+                CodigoDispositivo: '004',
+                Token: localStorage.getItem("Token"),
+                Criterio: moneda
+            },
+            callbackKey: 'callback',
+            success: function (response) {
+                if (response.Procesada) {
+                    tipoCamio = parseFloat(response.Data[0]).toFixed(2);
+                    
+                    if (view.isXType('agregarproductosform')) {
+                        me.ayudaAAgregar(view, 'monedaDiferente');
+                        me.ayudaAAgregar(view, 'cantidad'); // Se modifica la cantidad sólo si el tipo de cambio es exitoso.
+                    } else {
+                        codigoMonedaSeleccionada = moneda;                        
+                        form.setValues({
+                            CodigoMoneda: moneda,
+                            tipoCambio: tipoCambio
+                        });
+                        me.estableceMonedaPredeterminada(record); // Para pintar la palomita
+                        me.actualizaOrden(moneda);
+                        //me.actualizarTotales();
+                    }
+
+                } else {
+                    var error = response.Descripcion;
+                    me.mandaMensaje('Error', error);                    
+                    // form.setValues({
+                    //     CodigoMoneda: me.codigoMonedaSeleccionada,
+                    //     tipoCambio: me.tipoCambio
+                    // });
+                }
+            }
+        });        
     },
 
     /**
@@ -412,73 +549,42 @@ Ext.define('APP.controller.phone.Ordenes', {
     },
 
     /**
-     * Obtiene el nombre del primer artículo encontrado cuyo codigo de moneda es la predeterminada.
-     * @return El nombre del artículo o 'No hay' si no existe ninguno.
-     */
-    dameProductoConMonedaPredeterminada: function () {
-        var me = this, i,
-            nombre = 'No hay',
-            ordenes = Ext.getStore('Ordenes');
-
-        for (i = 0; i < ordenes.getCount(); i++) {
-            if (ordenes.getAt(i).get('moneda') == me.codigoMonedaPredeterminada) {
-                nombre = ordenes.getAt(i).get('CodigoArticulo');
-                break;
-            }
-        }
-
-        return nombre;
-    },
-
-    /**
      * Actualiza los valores de cada una de las partidas respecto al tipo de cambio realizado.
      * @param moneda La moneda seleccionada.
      */
     actualizaOrden: function (moneda) {
         var me = this, precio, importe,
+            codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
+            tipoCambio = me.getOpcionesOrden().tipoCambio,
             ordenes = Ext.getStore('Ordenes');
 
-        if(moneda == me.codigoMonedaPredeterminada){
+        if(moneda == codigoMonedaPredeterminada){
                 ordenes.each(function (item, index, length) {
-                    precio = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')) * me.tipoCambio;
-                    importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('importe')) * me.tipoCambio;
-                    precio = Imobile.core.FormatCurrency.currency(precio, moneda);
-                    importe = Imobile.core.FormatCurrency.currency(importe, moneda);
+                    precio = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')) * tipoCambio;
+                    importe = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('importe')) * tipoCambio;
+                    precio = APP.core.FormatCurrency.currency(precio, moneda);
+                    importe = APP.core.FormatCurrency.currency(importe, moneda);
 
                     item.set('Precio', precio);
                     item.set('importe', importe);
-                    item.set('totalDeImpuesto', item.get('totalDeImpuesto') * me.tipoCambio);
+                    item.set('totalDeImpuesto', item.get('totalDeImpuesto') * tipoCambio);
                 });
                 me.actualizarTotales();
 
             } else {
 
                 ordenes.each(function (item, index, length) {
-                    precio = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')) / me.tipoCambio;
-                    importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('importe')) / me.tipoCambio;
-                    precio = Imobile.core.FormatCurrency.currency(precio, moneda);
-                    importe = Imobile.core.FormatCurrency.currency(importe, moneda);
+                    precio = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')) / tipoCambio;
+                    importe = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('importe')) / tipoCambio;
+                    precio = APP.core.FormatCurrency.currency(precio, moneda);
+                    importe = APP.core.FormatCurrency.currency(importe, moneda);
 
                     item.set('Precio', precio);
                     item.set('importe', importe);
-                    item.set('totalDeImpuesto', item.get('totalDeImpuesto') / me.tipoCambio);
+                    item.set('totalDeImpuesto', item.get('totalDeImpuesto') / tipoCambio);
                 });
                 me.actualizarTotales();
             }
-    },
-
-    /**
-     * Muestra la lista de monedas.
-     */
-    muestraMonedas: function () {
-        var me = this,
-            view = me.getMain().getActiveItem();
-
-        view.push({
-            xtype: 'monedaslist'
-        });
-
-        view.getNavigationBar().down('#agregarProductos').hide()
     },
 
     /**
@@ -507,9 +613,6 @@ Ext.define('APP.controller.phone.Ordenes', {
         });
     },
 
-
-
-
     /**
      * Muestra la lista de direcciones según se haya elegido, fiscal o de entrega.
      * @param list Ésta lista.
@@ -519,17 +622,17 @@ Ext.define('APP.controller.phone.Ordenes', {
      */
     muestraDirecciones: function (list, index, target, record) {
         var me = this,
-            view = me.getMain().getActiveItem(),
-            direcciones = Ext.getStore('Direcciones');
+            view = me.getNavigationOrden(),            
+            direcciones = Ext.getStore('Direcciones');        
 
         direcciones.clearFilter();
 
         if (record.data.action == 'entrega') {
             direcciones.filter('TipoDireccion', 'B');
-            me.entrega = true;
+            me.getOpcionesOrden().entrega = true;
         } else {
             direcciones.filter('TipoDireccion', 'S');
-            me.entrega = false;
+            me.getOpcionesOrden().entrega = false;
         }
 
         view.push({
@@ -560,11 +663,31 @@ Ext.define('APP.controller.phone.Ordenes', {
 
         me.getProductosOrden().setItems({xtype: 'productosview'});
 
-        setTimeout(function () { //Función para esperar algunos milisegundos
+        setTimeout(function () { //Función para esperar algunos milisegundos y se pinten de colores los cuadros
             productos.each(function (item, index, length) {
                 item.set('color', me.dameColorAleatorio());
             })
         }, 100)
+    },
+
+    aleatorio: function (inferior, superior) {
+        var numPosibilidades = superior - inferior,
+            aleat = Math.random() * numPosibilidades,
+            aleat = Math.floor(aleat);
+
+        return parseInt(inferior) + aleat;
+    },
+
+    dameColorAleatorio: function () {
+        var hexadecimal = new Array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"),
+            color_aleatorio = "#",
+            posarray;
+
+        for (i = 0; i < 6; i++) {
+            posarray = this.aleatorio(0, hexadecimal.length)
+            color_aleatorio += hexadecimal[posarray]
+        }
+        return color_aleatorio
     },
 
 
@@ -577,22 +700,24 @@ Ext.define('APP.controller.phone.Ordenes', {
             me = this,
             ordenes = Ext.getStore('Ordenes'),
             productos = Ext.getStore('Productos'),
-            menu = me.getMain().getActiveItem(),     //NavigationOrden
+            menu = me.getNavigationOrden(),     //NavigationOrden
             form = btn.up('agregarproductosform'),
             values = form.getValues(),
             descripcion = values.NombreArticulo,
             cantidad = values.cantidad,
             moneda = values.moneda,
-            importe = values.importe;
+            importe = values.importe,
+            codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
+
 
         Ext.getStore('Productos').resetCurrentPage();
         if (Ext.isEmpty(descripcion) || Ext.isEmpty(cantidad)) {
             me.mandaMensaje("Campos inválidos o vacíos", "Verifique que el valor de los campos sea correcto o que no estén vacíos");
         } else {
             if (form.modo != 'edicion') {
-                if (moneda != me.codigoMonedaSeleccinada) {
-                    if (moneda == me.codigoMonedaPredeterminada) {
-                        me.mandaMensaje('Imposible agregar', 'No es posible agregar el producto a la orden debido a que la configuración de moneda actual es ' + me.codigoMonedaSeleccinada + '  y la moneda del producto es ' + moneda + '. Cambie primero la configuración de moneda a ' + moneda + '.');
+                if (moneda != codigoMonedaSeleccionada) {
+                    if (moneda == codigoMonedaPredeterminada) {
+                        me.mandaMensaje('Imposible agregar', 'No es posible agregar el producto a la orden debido a que la configuración de moneda actual es ' + me.codigoMonedaSeleccionada + '  y la moneda del producto es ' + moneda + '. Cambie primero la configuración de moneda a ' + moneda + '.');
                     } else {
                         me.obtenerTipoCambio(moneda); // Aquí esperamos a que obtenga el tipo de cambio y realizamos el cálculo del nuevo precio.
                     }
@@ -625,11 +750,14 @@ Ext.define('APP.controller.phone.Ordenes', {
             codigo = values.CodigoArticulo,
             indPro = productos.find('CodigoArticulo', codigo),
             productoAgregado = productos.getAt(indPro),
-            cantidadActual = productoAgregado.get('cantidad');
+            cantidadActual = productoAgregado.get('cantidad'),
+            totalDeImpuesto = me.getOpcionesOrden().totalDeImpuesto,
+            tipoCambio = me.getOpcionesOrden().tipoCambio,
+            codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
         
         switch (caso) {
             case 'monedaIgual':
-                values.totalDeImpuesto = me.totalDeImpuesto;
+                values.totalDeImpuesto = totalDeImpuesto;
                 values.Imagen = productoAgregado.get('Imagen');
                 values.nombreMostrado = Ext.String.ellipsis(descripcion, 25, false);
                 ordenes.add(values);
@@ -638,16 +766,16 @@ Ext.define('APP.controller.phone.Ordenes', {
                 break;
 
             case 'monedaDiferente':
-                precio = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento) * me.tipoCambio;
+                precio = APP.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento) * tipoCambio;
                 values.importe = precio * cantidad;
-                precio = Imobile.core.FormatCurrency.currency(precio, me.codigoMonedaSeleccinada);
+                precio = APP.core.FormatCurrency.currency(precio, codigoMonedaSeleccionada);
                 values.precioConDescuento = precio;
-                values.importe = Imobile.core.FormatCurrency.currency(values.importe, me.codigoMonedaSeleccinada);
-                values.totalDeImpuesto = me.totalDeImpuesto * me.tipoCambio;
+                values.importe = APP.core.FormatCurrency.currency(values.importe, codigoMonedaSeleccionada);
+                values.totalDeImpuesto = totalDeImpuesto * tipoCambio;
                 //values.descuento = values.descuento;
                 values.Imagen = productoAgregado.get('Imagen');
                 values.nombreMostrado = Ext.String.ellipsis(descripcion, 25, false);
-                values.TipoCambio = me.tipoCambio;
+                values.TipoCambio = tipoCambio;
                 ordenes.add(values);
                 menu.pop();
                 me.actualizarTotales();
@@ -659,23 +787,23 @@ Ext.define('APP.controller.phone.Ordenes', {
                     totaldeimpuesto,
                     moneda = values.moneda;
 
-                if (moneda != me.codigoMonedaSeleccinada) {
-                    precio = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento) * datosProducto.get('TipoCambio');
+                if (moneda != codigoMonedaSeleccionada) {
+                    precio = APP.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento) * datosProducto.get('TipoCambio');
                     importe = precio * cantidad;
-                    precio = Imobile.core.FormatCurrency.currency(precio, me.codigoMonedaSeleccinada);
-                    importe = Imobile.core.FormatCurrency.currency(importe, me.codigoMonedaSeleccinada);
-                    totaldeimpuesto = me.totalDeImpuesto * datosProducto.get('TipoCambio');
+                    precio = APP.core.FormatCurrency.currency(precio, codigoMonedaSeleccionada);
+                    importe = APP.core.FormatCurrency.currency(importe, codigoMonedaSeleccionada);
+                    totaldeimpuesto = totalDeImpuesto * datosProducto.get('TipoCambio');
                     datosProducto.set('Precio', precio);
                     datosProducto.set('cantidad', cantidad);
                     datosProducto.set('importe', importe);
-                    datosProducto.set('totalDeImpuesto', /*Imobile.core.FormatCurrency.currency(me.totalDeImpuesto, '$')*/ me.totalDeImpuesto);
+                    datosProducto.set('totalDeImpuesto', /*Imobile.core.FormatCurrency.currency(me.totalDeImpuesto, '$')*/ totalDeImpuesto);
                     //datosProducto.set('Imagen', cantidadProducto.get('Imagen'));
                     menu.pop();
                     me.actualizarTotales();
                 } else {
                     datosProducto.set('cantidad', cantidad);
                     datosProducto.set('importe', importe);
-                    datosProducto.set('totalDeImpuesto', /*Imobile.core.FormatCurrency.currency(me.totalDeImpuesto, '$')*/ me.totalDeImpuesto);
+                    datosProducto.set('totalDeImpuesto', /*Imobile.core.FormatCurrency.currency(me.totalDeImpuesto, '$')*/ totalDeImpuesto);
                     //datosProducto.set('Imagen', cantidadProducto.get('Imagen'));
                     menu.pop();
                     me.actualizarTotales();
@@ -694,25 +822,14 @@ Ext.define('APP.controller.phone.Ordenes', {
     },
 
     /**
-     * Valida si un producto está en la orden.
-     * @param codigo El código del producto a validar
-     * @return El índice del producto en la orden o -1 si no se encuentra.
-     */
-    estaEnOrden: function (codigo) {
-        var ordenes = Ext.getStore('Ordenes'),
-            ind = ordenes.find('CodigoArticulo', codigo);
-
-        return ind;
-    },
-
-    /**
      * Obtiene desde el backend la lista de clientes.
      */
     muestraClientes: function () {
-        Ext.getStore('Clientes').resetCurrentPage();
-
-        Ext.getStore('Clientes').clearFilter();
-        Ext.getStore('Clientes').load();
+        var clientes = Ext.getStore('Clientes');
+        
+        clientes.resetCurrentPage();
+        clientes.clearFilter();
+        clientes.load();
     },
 
     /**
@@ -725,33 +842,34 @@ Ext.define('APP.controller.phone.Ordenes', {
     onBuscaProductos: function (t, e, eOpts) {
         var me = this,
             store = Ext.getStore('Productos'),
+            idCliente = me.getNavigationOrden().getNavigationBar().getTitle(),
             value = t.up('toolbar').down('#buscarProductos').getValue();
 
 
-        Ext.getStore('Productos').resetCurrentPage();
+        store.resetCurrentPage();
 
         store.setParams({
             Criterio: value,
-            CardCode: me.idCliente
+            CardCode: idCliente
         });
+
         store.load();
     },
 
     limpiaBusquedaProductos: function (t, e, eOpts) {
         var me = this,
+            idCliente = me.getNavigationOrden().getNavigationBar().getTitle(),
             store = Ext.getStore('Productos');
 
-        Ext.getStore('Productos').resetCurrentPage();
+        store.resetCurrentPage();
 
         store.setParams({
             Criterio: '',
-            CardCode: me.idCliente
+            CardCode: idCliente
         });
 
         store.load();
     },
-
-
 
     /**
      * Filtra el store de productos por la variable DesplegarEnPanel.
@@ -762,7 +880,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             me = this;
 
         productos.clearFilter(); //Para limpiar todos los filtros por si tiene alguno el store
-        productos.filter('DesplegarEnPanel', esFavorito);
+        productos.filter('DesplegarEnPanel', desplegarEnPanel);
     },
 
     /**
@@ -774,10 +892,6 @@ Ext.define('APP.controller.phone.Ordenes', {
         Ext.Msg.alert(titulo, mensaje);
     },
 
-
-
-
-
     /**
      * Muestra el formulario para agregar un producto a la orden.
      * @param list Esta lista, productoslist.
@@ -788,31 +902,27 @@ Ext.define('APP.controller.phone.Ordenes', {
     onAgregarProducto: function (list, index, target, record, e) {
         var me = this,
             productos = Ext.getStore('Productos'),
-            valores = record.data;
-        //moneda,// = valores.ListaPrecios[0].CodigoMoneda,
+            idCliente = me.getNavigationOrden().getNavigationBar().getTitle(),
+            valores = record.data;        
 
         Ext.data.JsonP.request({
-            url: "http://" + me.dirIP + "/iMobile/COK1_CL_Articulo/ObtenerArticuloiMobile",
+            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Articulo/ObtenerArticuloiMobile",
             params: {
                 CodigoUsuario: localStorage.getItem("CodigoUsuario"),
                 CodigoSociedad: localStorage.getItem("CodigoSociedad"),
                 CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
-                Token: localStorage.getItem("Token"),
-                //ItemCode: valores.CodigoArticulo,
-                CardCode: me.idCliente,
-                //ListaPrecio: valores.ListaPrecios[0].CodigoLista,
-                //Cantidad: cantidad
+                Token: localStorage.getItem("Token"),                
+                CardCode: idCliente,                
                 Criterio: valores.CodigoArticulo
             },
             callbackKey: 'callback',
             success: function (response) {
                 var procesada = response.Procesada;
 
-
                 if (procesada) {
                     var ind = productos.find('CodigoArticulo', valores.CodigoArticulo),
                         productoSeleccionado = productos.getAt(ind);
-console.log(response.Data[0]);
+
                     productoSeleccionado.set(response.Data[0]);
 
                     me.llenaAgregarProductos(response.Data[0]); // Hacer un console.log de esta parte para manipular adecuadamente los datos, se supone que me regresa el artículo.
@@ -829,19 +939,23 @@ console.log(response.Data[0]);
     */
     llenaAgregarProductos: function (valores) {
         var me = this,
-            view = me.getMain().getActiveItem(),
-            almacenes = me.almacenes,
+            view = me.getNavigationOrden(),
+            idCliente = view.getNavigationBar().getTitle(),
+            almacenes = me.getMenuNav().almacenes,//localStorage.getItem("Almacenes"),
             precio,
             form,
             cantidad,
             valoresForm,
             desc,
             preciocondescuento,
-            totaldeimpuesto,
-            importe,            
+            importe,
+            codigoAlmacen,
+            sujetoImpuesto = me.getOpcionesOrden().sujetoImpuesto,
+            totalDeImPuesto = me.getOpcionesOrden().totalDeImpuesto,
+            tasaImpuesto = me.getOpcionesOrden().tasaImpuesto,
             moneda = valores.ListaPrecios[0].CodigoMoneda + ' ';
 
-        valores.Disponible = Ext.Number.toFixed(valores.Disponible, 2);        
+        valores.Disponible = Ext.Number.toFixed(valores.Disponible, 2);
 
         if (view.getActiveItem().xtype == 'agregarproductosform') {
             return;
@@ -849,15 +963,16 @@ console.log(response.Data[0]);
 
         view.push({
             xtype: 'agregarproductosform',
-            modo: 'agregar'
+            modo: 'agregar',
+            title: idCliente
         });
 
-        Ext.Array.forEach(almacenes, function (item, index) {
+        Ext.Array.forEach(almacenes, function (item, index) {            
             var predeterminado = item.Predeterminado;
 
             if (predeterminado) {
                 valores.NombreAlmacen = item.NombreAlmacen;
-                me.CodigoAlmacen = item.CodigoAlmacen;
+                codigoAlmacen = item.CodigoAlmacen;
             }
         });
 
@@ -866,12 +981,12 @@ console.log(response.Data[0]);
         form.setValues(valores);
 
         //Se establece el valor de cantidad, precio y moneda
-        precio = Imobile.core.FormatCurrency.currency(valores.ListaPrecios[0].Precio, moneda);
+        precio = APP.core.FormatCurrency.currency(valores.ListaPrecios[0].Precio, moneda);
         cantidad = 1;
 
         //Se calcula descuento
         Ext.data.JsonP.request({
-            url: "http://" + me.dirIP + "/iMobile/COK1_CL_Consultas/ObtenerPrecioEspecialiMobile",
+            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/ObtenerPrecioEspecialiMobile",
 
             params: {
                 CodigoUsuario: localStorage.getItem("CodigoUsuario"),
@@ -879,7 +994,7 @@ console.log(response.Data[0]);
                 CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
                 Token: localStorage.getItem("Token"),
                 ItemCode: valores.CodigoArticulo,
-                CardCode: me.idCliente,
+                CardCode: idCliente,
                 ListaPrecio: valores.ListaPrecios[0].CodigoLista,
                 Cantidad: cantidad
             },
@@ -887,31 +1002,30 @@ console.log(response.Data[0]);
             callbackKey: 'callback',
             success: function (response) {
                 var procesada = response.Procesada,
-                    precio2 = Imobile.core.FormatCurrency.formatCurrencytoNumber(precio);
+                    precio2 = APP.core.FormatCurrency.formatCurrencytoNumber(precio);
 
                 if (precio2 == 0) {
                     desc = 0;
                 } else {
-                    console.log(precio2);
-                    console.log(response.Data[0]);
+/*                    console.log(precio2);
+                    console.log(response.Data[0]);*/
                     desc = (precio2 - response.Data[0]).toFixed(2);
-                    console.log(desc);
+                    // console.log(desc);
                     desc = (desc * 100 / precio2);
-                    console.log(desc);
+                    // console.log(desc);
                 }
 
                 if (procesada) {
 
                     //Se establece precio con descuento
                     preciocondescuento = response.Data[0];
-                    me.sujetoImpuesto = valores.SujetoImpuesto;
+                    sujetoImpuesto = valores.SujetoImpuesto;
                     //Se valida si el producto es sujeto de impuesto
-                    if (me.sujetoImpuesto) {
+                    if (sujetoImpuesto) {
                         //Se calcula total de impuesto
-                        totaldeimpuesto = preciocondescuento * me.tasaImpuesto / 100;
-                        me.totalDeImpuesto = totaldeimpuesto;                        
+                        totalDeImpuesto = preciocondescuento * tasaImpuesto / 100;
                     } else {
-                        me.totalDeImpuesto = 0;
+                        totalDeImpuesto = 0;
                     }
 
                     //Se calcula importe
@@ -923,9 +1037,9 @@ console.log(response.Data[0]);
                         cantidad: cantidad,
                         moneda: moneda,
                         PorcentajeDescuento: desc + '%',
-                        importe: Imobile.core.FormatCurrency.currency(importe, moneda),
-                        precioConDescuento: Imobile.core.FormatCurrency.currency(preciocondescuento, moneda),
-                        CodigoAlmacen: me.CodigoAlmacen
+                        importe: APP.core.FormatCurrency.currency(importe, moneda),
+                        precioConDescuento: APP.core.FormatCurrency.currency(preciocondescuento, moneda),
+                        CodigoAlmacen: codigoAlmacen
                     });
 
                     form.getValues();
@@ -948,15 +1062,16 @@ console.log(response.Data[0]);
      */
     editarPartida: function (list, index, target, record) {
         var me = this,
-            view = me.getMain().getActiveItem(),
+            view = me.getNavigationOrden(),
             form,
             field,
             valuesForm,
             values = record.data,
             id = record.data.id,
             ordenes = Ext.getStore('Ordenes'),
-            ind = ordenes.find('id', id);
-console.log(values);
+            ind = ordenes.find('id', id),
+            codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
+
         if (view.getActiveItem().xtype == 'agregarproductosform') {
             return
         }
@@ -971,10 +1086,10 @@ console.log(values);
         field = form.down('fieldset');
 
         field.setTitle('Editar producto');
-        field.down('#descripcion').setDisabled(true);
+        //field.down('#descripcion').setDisabled(true);
         view.getNavigationBar().down('#agregarProductos').hide();
 
-        if (values.moneda != me.codigoMonedaSeleccinada) {
+        if (values.moneda != codigoMonedaSeleccionada) {
             valuesForm = me.ponValoresOriginalesAAgregarProductoForm(values); // Por si la moneda del producto es diferente a la del documento.            
             form.setValues(valuesForm);
             form.setValues({
@@ -989,13 +1104,14 @@ console.log(values);
     /**
     * Establece los valores originales a agregarproductosform, esta funcion se llama cuando la moneda del documento es distinta a la
     * moneda del producto.
-    * @param values
-    * @return 
+    * @param values Los valores a cambiar en el form.
+    * @return Un nuevo objeto con los nuevos valores
     */
     ponValoresOriginalesAAgregarProductoForm: function (values) {
         var me = this,
             precio, importe, newObject, totaldeimpuesto, precioConDescuento, descuento,
             moneda = values.moneda,
+            tipoCambio = me.getOpcionesOrden().tipoCambio,
 
             newObject = {
                 Precio: values.Precio,
@@ -1014,43 +1130,42 @@ console.log(values);
                 moneda: values.moneda,
                 precioConDescuento: values.precioConDescuento
             };
-            console.log(moneda);
+/*            console.log(moneda);
             console.log(me.codigoMonedaPredeterminada);
-            console.log(me.codigoMonedaSeleccinada);
-            console.log(values.TipoCambio);
+            console.log(me.codigoMonedaSeleccionada);
+            console.log(values.TipoCambio);*/
 
         if (!values.esOrdenRecuperada) {
-//            if (moneda == 'USD' && me.codigoMonedaSeleccinada == '$') {
-            if (moneda != me.codigoMonedaPredeterminada && me.codigoMonedaSeleccinada == me.codigoMonedaPredeterminada) {
-                descuento = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.PorcentajeDescuento);
-                precio = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.Precio);
+            if (moneda != me.codigoMonedaPredeterminada && me.codigoMonedaSeleccionada == me.codigoMonedaPredeterminada) {
+                descuento = APP.core.FormatCurrency.formatCurrencytoNumber(values.PorcentajeDescuento);
+                precio = APP.core.FormatCurrency.formatCurrencytoNumber(values.Precio);
                 precio = precio * 100 / (100 - descuento);
                 precio = precio / values.TipoCambio;
                 precio = parseFloat(precio.toFixed(2));
-                importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.importe) / values.TipoCambio;
-                precioConDescuento = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento);
+                importe = APP.core.FormatCurrency.formatCurrencytoNumber(values.importe) / values.TipoCambio;
+                precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento);
                 
                 newObject.totalDeImpuesto = newObject.totalDeImpuesto / values.TipoCambio;
 
-                console.log(precio, 'El precio es');
+                //console.log(precio, 'El precio es');
             }            
         } else {            
             console.log(values);
-            precio = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento);
-            precioConDescuento = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento);
-            importe = precioConDescuento * values.cantidad;//Imobile.core.FormatCurrency.formatCurrencytoNumber(values.importe);
+            precio = APP.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento);
+            precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento);
+            importe = precioConDescuento * values.cantidad;//APP.core.FormatCurrency.formatCurrencytoNumber(values.importe);
 
             console.log(precio);
             console.log(precioConDescuento);
-            me.tipoCambio = Imobile.core.FormatCurrency.formatCurrencytoNumber(values.Precio) / precioConDescuento;
-            console.log(me.tipoCambio);
-            //newObject.importe = Imobile.core.FormatCurrency.currency(importe, moneda);
-            newObject.precioConDescuento = Imobile.core.FormatCurrency.currency(precioConDescuento, moneda);
+            tipoCambio = APP.core.FormatCurrency.formatCurrencytoNumber(values.Precio) / precioConDescuento;
+            //console.log(tipoCambio);
+            //newObject.importe = APP.core.FormatCurrency.currency(importe, moneda);
+            newObject.precioConDescuento = APP.core.FormatCurrency.currency(precioConDescuento, moneda);
         }
 
         totalDeImpuesto = values.totalDeImpuesto;
-        newObject.importe = Imobile.core.FormatCurrency.currency(importe, moneda);
-        newObject.Precio = Imobile.core.FormatCurrency.currency(precio, moneda);
+        newObject.importe = APP.core.FormatCurrency.currency(importe, moneda);
+        newObject.Precio = APP.core.FormatCurrency.currency(precio, moneda);
 
         return newObject;
     },
@@ -1063,18 +1178,19 @@ console.log(values);
      */
     actualizaCantidad: function (numberField, newValue, oldValue) {
         var me = this,
-            view = me.getMain().getActiveItem(),
+            view = me.getNavigationOrden(),
             valoresForm = view.getActiveItem().getValues(),
-            preciocondescuento = Imobile.core.FormatCurrency.formatCurrencytoNumber(valoresForm.precioConDescuento) * newValue,
-            importe = preciocondescuento;
+            preciocondescuento = APP.core.FormatCurrency.formatCurrencytoNumber(valoresForm.precioConDescuento) * newValue,
+            importe = preciocondescuento,
+            sujetoImpuesto = me.getOpcionesOrden().sujetoImpuesto,
+            totalDeImpuesto = me.getOpcionesOrden().totalDeImpuesto;
 
-        if (me.sujetoImpuesto) {
-            totaldeimpuesto = preciocondescuento * me.tasaImpuesto / 100;
-            me.totalDeImpuesto = totaldeimpuesto;
+        if (sujetoImpuesto) {
+            totalDeImpuesto = preciocondescuento * me.tasaImpuesto / 100;            
         }
 
         view.getActiveItem().setValues({
-            importe: Imobile.core.FormatCurrency.currency(importe, valoresForm.moneda)
+            importe: APP.core.FormatCurrency.currency(importe, valoresForm.moneda)
         });
     },
 
@@ -1082,36 +1198,12 @@ console.log(values);
      * Manda un mensaje con el codigo de las direcciones tanto de entrega como fiscal.
      */
     guardaDatosDeCliente: function (button) {
-        var me = this;
-
-        me.mandaMensaje('Códigos de dirección', 'Entrega: ' + me.direccionEntrega + '\nFiscal: ' + me.direccionFiscal);
-    },
-
-
-
-    /**
-    * Recorre el store de monedas y obtiene la predeterminada.
-    */
-    dameMonedaPredeterminada: function (){
         var me = this,
-            storeMonedas = Ext.getStore('Monedas');
+            direccionEntrega = me.getOpcionesOrden().direccionEntrega,
+            direccionFiscal = me.getOpcionesOrden().direccionFiscal;
 
-        storeMonedas.load({
-            callback: function (records, operation) {
-                Ext.Array.each(records, function (item, index, ItSelf) {
-                    var predeterminada = item.get('Predeterminada');
-                    if (predeterminada) {
-                        me.codigoMonedaPredeterminada = item.get('CodigoMoneda') + ' ';
-                        me.codigoMonedaSeleccinada = me.codigoMonedaPredeterminada;
-                    }
-                });
-                me.actualizarTotales();
-            }
-        });
+        me.mandaMensaje('Códigos de dirección', 'Entrega: ' + direccionEntrega + '\nFiscal: ' + direccionFiscal);
     },
-
-
-
 
     /**
      * Determina la siguiente vista productosorden o partidacontainer dependiendo del ítem activo, si no está en
@@ -1120,8 +1212,9 @@ console.log(values);
      */
     onAgregarPartida: function (button) {
         var me = this,
-            view = me.getMain().getActiveItem(),
+            view = me.getNavigationOrden(),
             itemActivo = me.getOpcionesOrden().getActiveItem(),
+            idCliente = view.getNavigationBar().getTitle(),
             store = Ext.getStore('Productos');
 
         if (itemActivo.isXType('partidacontainer')) {
@@ -1129,12 +1222,13 @@ console.log(values);
             Ext.getStore('Productos').resetCurrentPage();
 
             store.setParams({
-                CardCode: me.idCliente,
+                CardCode: idCliente,
                 Criterio: ""
             });
 
             view.push({
-                xtype: 'productosorden'
+                xtype: 'productosorden',
+                title: idCliente
             });
 
             store.clearFilter();
@@ -1178,30 +1272,50 @@ console.log(values);
      * @param t Éste navigationview.
      * @param v La vista que ha sido popeada.
      */
-    onPopNavigationOrden: function (t, v) {
-        var me = this,
-            view = me.getMain().getActiveItem(),
+    onPopNavigationOrden: function (t, v) {        
+        var me = this,            
             tabPanel = me.getOpcionesOrden(),
-            itemActivo = t.getActiveItem().getActiveItem();
-
+            itemActivo = t.getActiveItem().getActiveItem(),
+            //idCliente = v.up('navigationorden').getNavigationBar().getTitle(), //t.getNavigationBar().getTitle(),
+            idCliente = tabPanel.idCliente,
+            store = Ext.getStore('Ordenes');
+            console.log(idCliente);
         if (itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
-            view.getNavigationBar().down('#agregarProductos').show();
+            console.log('primer caso');
+            t.getNavigationBar().down('#agregarProductos').show();
         }
 
         if (itemActivo.isXType('partidacontainer') && v.isXType('agregarproductosform')) {
-            view.getNavigationBar().down('#agregarProductos').show();
+            console.log('segundo caso');
+            t.getNavigationBar().down('#agregarProductos').show();
         }
 
-        t.getNavigationBar().setTitle(me.idCliente);
+        //t.getNavigationBar().setTitle(idCliente);
+
+        if (store.getData().items.length <= 1) {
+            me.getPartidaContainer().down('list').emptyTextCmp.show();
+        } else {
+            me.getPartidaContainer().down('list').emptyTextCmp.hide();
+        }        
+
+        if (itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
+            console.log('tercer caso');
+            t.getActiveItem().setActiveItem(0);
+            t.getNavigationBar().down('#agregarProductos').show();
+            t.getNavigationBar().setTitle(idCliente);
+        }
+
+        //t.getNavigationBar().setTitle(idCliente);
     },
 
     /**
      * Confirma si se desea terminar la orden de venta.
      */
     confirmaTerminarOrden: function (newActiveItem, t, oldActiveItem, eOpts) {
-        var me = this;
+        var me = this,
+            opcionesOrden = me.getOpcionesOrden();
 
-        if (me.actionOrden == 'crear') {
+        if (opcionesOrden.actionOrden == 'crear') {
             Ext.Msg.confirm("Terminar orden", "¿Desea terminar la orden de venta?", function (e) {
 
                 if (e == 'yes') {
@@ -1213,7 +1327,7 @@ console.log(values);
         } else {
             Ext.Msg.confirm("Actualizar orden", "¿Desea actualizar la orden de venta?", function (e) {
 
-                if (e == 'yes') {                    
+                if (e == 'yes') {
                     me.onTerminarOrden();
                 } else {
                     me.getOpcionesOrden().setActiveItem(0);
@@ -1228,14 +1342,23 @@ console.log(values);
      */
     onTerminarOrden: function () {
         var me = this,
+            menuNav = getMenuNav();
             total = 0,
             store = Ext.getStore('Ordenes'),
             array = store.getData().items,
             url, msg,
-            clienteSeleccionado = me.clienteSeleccionado;
+            clienteSeleccionado = me.getOpcionesOrden().clienteSeleccionado,
+            idCliente = me.getNavigationOrden().getNavigationBar().getTitle,
+            titulo = me.getNavigationOrden().down('toolbar').getTitle(),
+            codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada,
+            codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
+            codigoImpuesto = me.getOpcionesOrden().codigoImpuesto,
+            direccionEntrega = me.getOpcionesOrden().direccionEntrega,
+            direccionFiscal = me.getOpcionesOrden().direccionFiscal,
+            tipoCambio = me.getOpcionesOrden().tipoCambio;
 
-        me.getMain().getActiveItem().getMasked().setMessage('Enviando orden...');
-        me.getMain().getActiveItem().setMasked(true);
+        me.getMainCard().getActiveItem().getMasked().setMessage('Enviando orden...');
+        me.getMainCard().getActiveItem().setMasked(true);
 
         if (array.length > 0) {
             var params = {
@@ -1243,28 +1366,28 @@ console.log(values);
                 CodigoSociedad: localStorage.getItem("CodigoSociedad"),
                 CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
                 Token: localStorage.getItem("Token"),
-                "Orden.CodigoSocio": me.idCliente,
-                "Orden.NombreSocio": me.titulo,
+                "Orden.CodigoSocio": idCliente,
+                "Orden.NombreSocio": titulo,
                 "Orden.FechaCreacion": Ext.DateExtras.dateFormat(new Date(), 'Y-m-d'),
                 "Orden.FechaEntrega": Ext.DateExtras.dateFormat(new Date(), 'Y-m-d'),
-                "Orden.CodigoMoneda": me.codigoMonedaSeleccinada.trim(),
-                "Orden.CodigoImpuesto": me.codigoImpuesto,
+                "Orden.CodigoMoneda": codigoMonedaSeleccionada.trim(),
+                "Orden.CodigoImpuesto": codigoImpuesto,
                 "Orden.RFCSocio": clienteSeleccionado.RFC,
-                "Orden.DireccionEntrega": me.direccionEntrega,
-                "Orden.DireccionFiscal": me.direccionFiscal
+                "Orden.DireccionEntrega": direccionEntrega,
+                "Orden.DireccionFiscal": direccionFiscal,                
             };            
 
             Ext.Array.forEach(array, function (item, index, allItems) {
                 var moneda = item.get('moneda'),
-                    precio = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')),
-                    precioConDescuento = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento'));
+                    precio = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')),
+                    precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento'));
                     //importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
 
-                if(moneda != me.codigoMonedaPredeterminada){ // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
-                    precioConDescuento *= me.tipoCambio;
-                    precio /= me.tipoCambio;
+                if(moneda != codigoMonedaPredeterminada){ // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
+                    precioConDescuento *= tipoCambio;
+                    precio /= tipoCambio;
                     precio = parseFloat(precio.toFixed(2));
-                    console.log('moneda diferente ' + moneda + 'p ' + me.codigoMonedaPredeterminada + 'p');
+                    console.log('moneda diferente ' + moneda + 'p ' + codigoMonedaPredeterminada + 'p');
                 }
 
                 importe = precioConDescuento * item.get('cantidad');
@@ -1277,18 +1400,18 @@ console.log(values);
                 params["Orden.Partidas[" + index + "].Linea"] = index;
                 params["Orden.Partidas[" + index + "].Moneda"] = moneda.trim();//item.get('moneda').trim();
                 params["Orden.Partidas[" + index + "].Importe"] = importe;//Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
-                params["Orden.Partidas[" + index + "].PorcentajeDescuento"] = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('PorcentajeDescuento'));
+                params["Orden.Partidas[" + index + "].PorcentajeDescuento"] = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('PorcentajeDescuento'));
                 params["Orden.Partidas[" + index + "].tipoCambio"] = item.get('TipoCambio');
             });
 
             params["Orden.TotalDocumento"] = parseFloat(total.toFixed(2));
 
-            if (me.actionOrden == 'crear') {
-                url = "http://" + me.dirIP + "/iMobile/COK1_CL_OrdenVenta/AgregarOrdenMobile";
+            if (menuNav.actionOrden == 'crear') {
+                url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_OrdenVenta/AgregarOrdenMobile";
                 msg = "Se agrego la orden correctamente con folio: ";
             } else {
-                params["Orden.NumeroDocumento"] = me.NumeroDocumento;
-                url = "http://" + me.dirIP + "/iMobile/COK1_CL_OrdenVenta/ActualizarOrdenVentaiMobile";
+                params["Orden.NumeroDocumento"] = me.getOpcionesOrden().NumeroDocumento;
+                url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_OrdenVenta/ActualizarOrdenVentaiMobile";
                 msg = "Se acualizo la orden correctamente con folio: ";
             }
 
@@ -1300,22 +1423,22 @@ console.log(values);
                 callbackKey: 'callback',
                 success: function (response) {                    
                     if (response.Procesada) {
-                        me.getMain().getActiveItem().setMasked(false);
-                        me.getMain().setActiveItem(1);
+                        me.getMainCard().getActiveItem().setMasked(false);
+                        me.getMainCard().setActiveItem(1);
                         Ext.Msg.alert("Orden Procesada", msg + response.CodigoUnicoDocumento);
                         store.clearData();
                         me.getNavigationOrden().remove(me.getNavigationOrden().down('toolbar'), true);
                         me.getMenu().remove(me.getMenu().down('toolbar'), true);
-                        me.getMain().getActiveItem().pop();
+                        me.getMainCard().getActiveItem().pop();
                     } else {
-                        me.getMain().getActiveItem().setMasked(false);
+                        me.getMainCard().getActiveItem().setMasked(false);
                         Ext.Msg.alert("Orden No Procesada", "No se proceso la orden correctamente: " + response.Descripcion);
                         me.getOpcionesOrden().setActiveItem(0);
                     }
                 }
             });
         } else {
-            me.getMain().getActiveItem().setMasked(false);
+            me.getMainCard().getActiveItem().setMasked(false);
             me.getOpcionesOrden().setActiveItem(0);
             Ext.Msg.alert("Productos", "Selecciona al menos un Producto");
         }
@@ -1323,7 +1446,10 @@ console.log(values);
 
     onSeleccionarTransaccion: function (t, index, target, record, e, eOpts) {
         var me = this,
-            view = me.getMenu(),
+            view = me.getMenuNav(),
+            codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada(),
+            codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada(),
+            idCliente = me.getMenuNav().getNavigationBar().getTitle(),
             store = Ext.getStore('Ordenes'),
             barraTitulo = ({
             xtype: 'toolbar',
@@ -1331,10 +1457,10 @@ console.log(values);
             title: 'titulo'
         });
 
-        me.getMain().getAt(2).setMasked(false);
+        me.getMainCard().getAt(2).setMasked(false);
 
         Ext.data.JsonP.request({
-            url: "http://" + me.dirIP + "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaiMobile",
+            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaiMobile",
             params: {
                 CodigoUsuario: localStorage.getItem("CodigoUsuario"),
                 CodigoSociedad: localStorage.getItem("CodigoSociedad"),
@@ -1347,8 +1473,8 @@ console.log(values);
                 var response = response.Data[0],
                     partidas = response.Partidas;
                 
-                me.codigoMonedaSeleccinada = response.CodigoMoneda + ' ';
-                me.NumeroDocumento = record.get('NumeroDocumento');
+                me.codigoMonedaSeleccionada = response.CodigoMoneda + ' ';
+                me.getOpcionesOrden().NumeroDocumento = record.get('NumeroDocumento');
 console.log(response);
                 if (partidas.length < 2) {
                     me.getPartidaContainer().down('list').emptyTextCmp.show();
@@ -1369,22 +1495,22 @@ console.log(response);
                     console.log(me.tipoCambio);*/
                     //importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
 /*                    console.log(precioConDescuento, "Precio con descuento");
-                    if(moneda != me.codigoMonedaSeleccinada){ // Si la moneda del artículo es diferente a la seleccionada hay que hacer una conversión.
+                    if(moneda != me.codigoMonedaSeleccionada){ // Si la moneda del artículo es diferente a la seleccionada hay que hacer una conversión.
                         precioConDescuento *= me.tipoCambio;
                         precio /= me.tipoCambio;
-                        console.log('moneda diferente ' + moneda + 'p ' + me.codigoMonedaSeleccinada + 'p');
+                        console.log('moneda diferente ' + moneda + 'p ' + me.codigoMonedaSeleccionada + 'p');
                     }*/
 
-                    //importe = Imobile.core.FormatCurrency.currency(precioConDescuento * item.Cantidad, me.codigoMonedaSeleccinada) ;//get('cantidad');
+                    //importe = Imobile.core.FormatCurrency.currency(precioConDescuento * item.Cantidad, me.codigoMonedaSeleccionada) ;//get('cantidad');
                 //total += precioConDescuento * item.get('cantidad') + item.get('totalDeImpuesto');
 
                     partidas[index].cantidad = partidas[index].Cantidad;
-                    partidas[index].importe = Imobile.core.FormatCurrency.currency(importe, me.codigoMonedaSeleccinada);
+                    partidas[index].importe = APP.core.FormatCurrency.currency(importe, codigoMonedaSeleccionada);
                     partidas[index].totalDeImpuesto = partidas[index].TotalImpuesto;
-                    partidas[index].Imagen = 'http://' + me.dirIP + partidas[index].Imagen;
+                    partidas[index].Imagen = 'http://' + localStorage.getItem("dirIP") + partidas[index].Imagen;
                     partidas[index].moneda = partidas[index].Moneda + ' ';
-                    partidas[index].precioConDescuento = Imobile.core.FormatCurrency.currency(precioConDescuento, me.codigoMonedaSeleccinada);
-                    partidas[index].Precio = Imobile.core.FormatCurrency.currency(precio, me.codigoMonedaSeleccinada);
+                    partidas[index].precioConDescuento = APP.core.FormatCurrency.currency(precioConDescuento, codigoMonedaSeleccionada);
+                    partidas[index].Precio = APP.core.FormatCurrency.currency(precio, codigoMonedaSeleccionada);
                     partidas[index].nombreMostrado = Ext.String.ellipsis(partidas[index].NombreArticulo, 25, false);
                     //partidas[index].CodigoAlmacen = partidas[index].CodigoAlmacen;
                     partidas[index].PorcentajeDescuento = partidas[index].PorcentajeDescuento + '%';
@@ -1393,9 +1519,9 @@ console.log(response);
                     console.log(partidas[index]);
                 });
 
-                if(me.codigoMonedaSeleccinada != me.codigoMonedaPredeterminada){
+                if(me.codigoMonedaSeleccionada != codigoMonedaPredeterminada){
                     var monedas = Ext.getStore('Monedas'),
-                        indMoneda = monedas.find('CodigoMoneda', me.codigoMonedaSeleccinada.trim());
+                        indMoneda = monedas.find('CodigoMoneda', codigoMonedaSeleccionada.trim());
                         console.log(monedas.getAt(indMoneda));
 
                     me.estableceMonedaPredeterminada(monedas.getAt(indMoneda));
@@ -1403,37 +1529,15 @@ console.log(response);
                                 
                 store.setData(partidas);
                 Ext.getStore('Productos').setData(partidas);                
-                me.getMain().setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
-                me.getMain().getActiveItem().getNavigationBar().setTitle(me.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
-                me.getMain().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
+                me.getMainCard().setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
+                me.getMainCard().getActiveItem().getNavigationBar().setTitle(idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
+                me.getMainCard().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 me.actualizarTotales();
-                barraTitulo.title = me.titulo;
-                me.getMain().getActiveItem().add(barraTitulo);
+                barraTitulo.title = view.down('toolbar').getTitle();
+                me.getMainCard().getActiveItem().add(barraTitulo);
             }
         });
 
-    },
-
-    actualizarTotales: function () {
-        var me = this,
-            store = Ext.getStore('Ordenes'),
-            precioTotal = 0,
-            descuentoTotal = 0,
-            total = 0,
-            tax = 0;
-
-        store.each(function (item) {
-            precioTotal += Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
-
-            // descuentoTotal += Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('descuento')) * item.get('cantidad');
-            tax += item.get('totalDeImpuesto');
-
-        });
-
-        this.getOrdenContainer().down('#descuento').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + this.codigoMonedaSeleccinada + '0.00</div>'}); //Imobile.core.FormatCurrency.currency(importe, '$')
-        this.getOrdenContainer().down('#subtotal').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + APP.core.FormatCurrency.currency(parseFloat(precioTotal), this.codigoMonedaSeleccinada)/*.toFixed(2)*/ + '</div>'});
-        this.getOrdenContainer().down('#tax').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + APP.core.FormatCurrency.currency(parseFloat(tax), this.codigoMonedaSeleccinada) + '</div>'});
-        this.getOrdenContainer().down('#total').setItems({xtype: 'container', html: '<div style="top: 6px; position: relative;">' + APP.core.FormatCurrency.currency(parseFloat(precioTotal + tax), this.codigoMonedaSeleccinada) + '</div>' });
     },
 
     /**
@@ -1441,31 +1545,33 @@ console.log(response);
      */
     onListAlmacen: function (t, e, eOpts) {
         var me = this,
-            view = me.getMain().getActiveItem(),
-            value = view.down('agregarproductosform').getValues();
+            view = me.getMainCard().getActiveItem(),
+            value = view.down('agregarproductosform').getValues(),
+            almacenes = me.getMenuNav().almacenes;//localStorage.getItem('Almacenes');
 
         view.push({
             xtype: 'almacenlist',
             codigoArticulo: value.CodigoArticulo
         });
 
-        view.down('almacenlist').setData(me.almacenes);
+        view.down('almacenlist').setData(almacenes);
     },
 
     onSeleccionarAlmacen: function (t, index, target, record, e, eOpts) {
         var me = this,
-            view = me.getMain().getActiveItem();
+            view = me.getMainCard().getActiveItem(),
+            almacenes = me.getMenuNav().almacenes;//localStorage.getItem('Almacenes');
 
-        Ext.Array.forEach(me.almacenes, function (item, index) {
+        Ext.Array.forEach(almacenes, function (item, index) {
             item.Predeterminado = false;
         });
 
-        me.almacenes[index].Predeterminado = true;
-        console.log(me.almacenes[index]);
+        almacenes[index].Predeterminado = true;
+        console.log(almacenes[index]);
         //me.CodigoAlmacen = me.almacenes[index].CodigoAlmacen; //record.get('CodigoAlmacen');
 
         Ext.data.JsonP.request({
-            url: "http://" + me.dirIP + "/iMobile/COK1_CL_Consultas/ObtenerDisponibleiMobile",
+            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/ObtenerDisponibleiMobile",
             params: {
                 CodigoUsuario: localStorage.getItem('CodigoUsuario'),
                 CodigoSociedad: '001',
@@ -1496,54 +1602,8 @@ console.log(response);
         });
     },
 
-    /**
-     * Obtiene el tipo de cambio actual de acuerdo a la moneda que le pasan, este valor lo deja en la variable global tipoCambio.
-     * @param moneda La divisa cuyo tipo de cambio se necesita.
-     */
-    obtenerTipoCambio: function (moneda, record) {
-        var me = this,             
-            form = me.getOpcionesOrden().down('editarpedidoform'),            
-            view = me.getNavigationOrden().getActiveItem();
-
-        Ext.data.JsonP.request({
-            url: "http://" + me.dirIP + "/iMobile/COK1_CL_Consultas/RegresarTipoCambio",
-            params: {
-                CodigoUsuario: localStorage.getItem('CodigoUsuario'),
-                CodigoSociedad: '001',
-                CodigoDispositivo: '004',
-                Token: localStorage.getItem("Token"),
-                Criterio: moneda
-            },
-            callbackKey: 'callback',
-            success: function (response) {
-                if (response.Procesada) {
-                    me.tipoCambio = parseFloat(response.Data[0]).toFixed(2);
-                    
-                    if (view.isXType('agregarproductosform')) {
-                        me.ayudaAAgregar(view, 'monedaDiferente');
-                        me.ayudaAAgregar(view, 'cantidad'); // Se modifica la cantidad sólo si el tipo de cambio es exitoso.
-                    } else {
-                        me.codigoMonedaSeleccinada = moneda;
-                        //me.codigoMonedaPredeterminada = moneda;
-                        form.setValues({
-                            CodigoMoneda: moneda,
-                            tipoCambio: me.tipoCambio
-                        });
-                        me.estableceMonedaPredeterminada(record); // Para pintar la palomita
-                        me.actualizaOrden(moneda);
-                        //me.actualizarTotales();
-                    }
-
-                } else {
-                    var error = response.Descripcion;
-                    me.mandaMensaje('Error', error);                    
-                    // form.setValues({
-                    //     CodigoMoneda: me.codigoMonedaSeleccinada,
-                    //     tipoCambio: me.tipoCambio
-                    // });
-                }
-            }
-        });        
+    launch: function (){
+        var me = this;        
+        Ext.getStore('Productos').on('load', me.estableceCantidadAProductos);
     }
-
 });

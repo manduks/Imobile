@@ -1362,59 +1362,88 @@
 // @include icon('user');
 // 
 .login-background{
-	background-image:url('../images/bg4.jpg');
-	background-size: cover;
+  background-image:url('../images/bg4.jpg');
+  background-size: cover;
 }
 .imobile-version{
-	font-size: 18px;
-	color:#FFF;
-	text-align: center;
+  font-size: 18px;
+  color:#FFF;
+  text-align: center;
 }
 .imobile-sincronization-info{
-	//text-align: center;
-	font-size: 12px;
-	line-height: 16px;
-	color: #444;
-	text-shadow: rgba(255, 255, 255, 0.3) 0 1px 0;
-	padding: 10px;
-	width: 90%;
-	margin: 0 auto;
+  //text-align: center;
+  font-size: 12px;
+  line-height: 16px;
+  color: #444;
+  text-shadow: rgba(255, 255, 255, 0.3) 0 1px 0;
+  padding: 10px;
+  width: 90%;
+  margin: 0 auto;
 }
 .imobile-sincronization-info-last{
-	text-align: center;
-	font-size: 12px;
-	line-height: 16px;
-	color: #444;
-	text-shadow: rgba(255, 255, 255, 0.3) 0 1px 0;
-	padding: 10px;
-	width: 90%;
-	margin: 0 auto;
+  text-align: center;
+  font-size: 12px;
+  line-height: 16px;
+  color: #444;
+  text-shadow: rgba(255, 255, 255, 0.3) 0 1px 0;
+  padding: 10px;
+  width: 90%;
+  margin: 0 auto;
 }
 .imobile-status-sincronization{
-	.pending{
-		h2{
-			text-align: center;
-		}
-		ul{
-			li{
-				font-size: 80%;
-				padding: 5px;
-				//border-bottom:1px #CCC dashed;
-				color: #444;
-				text-shadow: rgba(255, 255, 255, 0.3) 0 1px 0;
-				b{
-					float: right;
-				}
-			}
-		}
-	}
+  .pending{
+    h2{
+      text-align: center;
+    }
+    ul{
+      li{
+        font-size: 80%;
+        padding: 5px;
+        //border-bottom:1px #CCC dashed;
+        color: #444;
+        text-shadow: rgba(255, 255, 255, 0.3) 0 1px 0;
+        b{
+          float: right;
+        }
+      }
+    }
+  }
 }
 
 
 .partida{
-  background-color: white;
-  border-bottom: solid 5px gray;
-  height: 120px;
+  background-color: white     ;
+  border-bottom: solid 3px gray;
+  //height: 120px;
+  width: 100%;
+  height: 99px;
+  text-align: left;
+  //vertical-align: middle;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  section span {
+    //display: inline;
+    width: 31.5%;
+    //height: 99px;
+    float: left;
+    margin: 2px;
+    padding: 0 1 0 1;
+    //text-align: center;
+    //vertical-align: middle;
+    font-size: 85%;
+    //background: #CCCCCC;
+  }
+
+  #imagen {   
+    //background: #CCC5FC;
+    text-align: center; 
+    //line-height: 99px;  
+  }
+
+  img {
+    padding: 10% 0 0 0; 
+  }
 }
 
 .factura{

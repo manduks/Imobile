@@ -45,7 +45,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             },
             'montoapagarform #pagar': {
                 tap: 'onPagar'
-            },/*,
+            }/*,
             'totalapagarlist':{
                 itemtap: 'editaPago',
                 itemswipe: 'eliminaPago'
@@ -151,7 +151,7 @@ Ext.define('APP.controller.phone.Cobranza', {
                 view.push({
                     xtype: 'visualizacioncobranzalist',
                     title: idCliente,
-                    name: name,                    
+                    name: name
                     //opcion: record.data.action
                 });
         }

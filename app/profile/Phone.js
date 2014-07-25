@@ -83,6 +83,8 @@ Ext.define('APP.profile.Phone',{
             'cobranza.TotalAPagarList',            
             'prospectos.ProspectosList',
 
+            'rutas.OpcionRutasList',
+
             'APP.form.phone.pedidos.EditarPedidoForm',
             'APP.form.phone.clientes.ClienteForm',
             'APP.form.phone.cobranza.MontoAPagarForm',

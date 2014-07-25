@@ -165,11 +165,8 @@ Ext.define('Ext.ux.calendar.TouchCalendarSimpleEvents', {
 					var cell = this.calendar.getDateCell(date); // get the table cell for the current date
 					var store = this.calendar.eventStore;
 
-                    console.log(this);
-                    console.log(this.calendar);
-                    console.log(store);
 
-					if (cell) {
+                    if (cell) {
 						store.clearFilter();
 						
 						// if we only want to show a single dot per day then use findBy for better performance

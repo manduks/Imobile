@@ -10,7 +10,9 @@ Ext.define('APP.controller.phone.Rutas', {
             navigationOrden:'navigationorden',
             partidaContainer:'partidacontainer',
             opcionesOrden:'opcionesorden',
-            ordenContainer:'ordencontainer'
+            ordenContainer:'ordencontainer',
+            rutasCalendario:'rutascalendario'
+
         },
         control:{
             'container[id=rutascont] clienteslist': {
@@ -19,6 +21,11 @@ Ext.define('APP.controller.phone.Rutas', {
 
             'opcionrutaslist': {
                 itemtap:'onCalendario'
+            },
+            'rutascalendario':{
+                selectionchange:function(record,e,x,y){
+                    this.getMenuNav().push({xtype:'rutascalendario',viewMode:'day'});
+                }
             }
         }
     },
@@ -49,7 +56,16 @@ Ext.define('APP.controller.phone.Rutas', {
 
     },
 
-    onCalendario:function(){
-        this.getMenuNav().push({xtype:'rutascalendario'});
+    onCalendario:function(list, index, target, record){
+        var opcion = record.get('action');
+
+        switch(opcion){
+            case 'calendario':
+                this.getMenuNav().push({xtype:'rutascalendario'});
+                break;
+            case 'registrar':
+                break;
+        }
+
     }
 });

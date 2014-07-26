@@ -200,12 +200,11 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param record EL record asociado a este ítem.
      */
     onOpcionOrdenes: function (list, index, target, record) {
-
         var me = this,
             menuNav = me.getMenuNav(),
             opcionesOrden = me.getOpcionesOrden(),
             opcion = record.get('action'),
-            name = list.up()
+            idCliente = menuNav.getNavigationBar().getTitle(),
             barraTitulo = ({
                 xtype: 'toolbar',
                 docked: 'top',
@@ -217,12 +216,12 @@ Ext.define('APP.controller.phone.Ordenes', {
                 opcionesOrden.actionOrden = 'crear';
                 this.getMainCard().getAt(1).setMasked(false);
                 this.getMainCard().setActiveItem(1); // Activamos el item 1 del menu principal navigationorden
-                this.getNavigationOrden().getNavigationBar().setTitle(list.idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
+                this.getNavigationOrden().getNavigationBar().setTitle(idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
                 this.getOpcionesOrden().setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 this.getPartidaContainer().down('list').emptyTextCmp.show();
 
                 this.dameMonedaPredeterminada();
-                this.getOpcionesOrden().idCliente = menuNav.getNavigationBar().getTitle();
+                this.getOpcionesOrden().idCliente = idCliente;
                 this.getNavigationOrden().add(barraTitulo);
                 break;
 
@@ -362,16 +361,22 @@ Ext.define('APP.controller.phone.Ordenes', {
         Ext.Msg.confirm("Eliminar orden", "Se va a eliminar la orden, todos los productos agregados se perderán ¿está seguro?", function (e) {
 
             if (e == 'yes') {
-                var view = this.getMainCard().getActiveItem(),
-                    titulo = view.down('toolbar');
+                var view = me.getMainCard().getActiveItem(),
+                    titulo = view.down('toolbar'),
+                    name = titulo.getTitle().getTitle();
 
                 ordenes.removeAll();
-                this.getMainCard().setActiveItem(0);
-                view.remove(titulo, true); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.
+                me.getMainCard().setActiveItem(0);
+                view.remove(titulo, false); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.
+                console.log(name);
+                //me.getMenuNav().down('toolbar').setTitle(name);
+                me.getMenuNav().remove(me.getMenuNav().down('toolbar'));
+                me.getMenuNav().add(titulo);
+
             } else {
                 tabPanel.setActiveItem(0);
             }
-        },this);
+        });
     },
 
     /**
@@ -1278,28 +1283,28 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param t Éste navigationview.
      * @param v La vista que ha sido popeada.
      */
-    onPopNavigationOrden: function (t, v) {        
-        var me = this,            
+    onPopNavigationOrden: function (t, v) {
+        var me = this,
             tabPanel = me.getOpcionesOrden(),
-            itemActivo = t.getActiveItem().getActiveItem(),            
+            itemActivo = t.getActiveItem().getActiveItem(),
             idCliente = tabPanel.idCliente,
             store = Ext.getStore('Ordenes');
             console.log(idCliente);
-        if (itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {            
+        if (itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
             t.getNavigationBar().down('#agregarProductos').show();
         }
 
-        if (itemActivo.isXType('partidacontainer') && v.isXType('agregarproductosform')) {            
+        if (itemActivo.isXType('partidacontainer') && v.isXType('agregarproductosform')) {
             t.getNavigationBar().down('#agregarProductos').show();
-        }        
+        }
 
         if (store.getData().items.length <= 1) {
             me.getPartidaContainer().down('list').emptyTextCmp.show();
         } else {
             me.getPartidaContainer().down('list').emptyTextCmp.hide();
-        }        
+        }
 
-        if (itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {            
+        if (itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
             t.getActiveItem().setActiveItem(0);
             t.getNavigationBar().down('#agregarProductos').show();
             t.getNavigationBar().setTitle(idCliente);

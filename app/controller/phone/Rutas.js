@@ -24,6 +24,7 @@ Ext.define('APP.controller.phone.Rutas', {
             },
             'rutascalendario':{
                 selectionchange:function(record,e,x,y){
+                    console.log(e);
                     this.getMenuNav().push({xtype:'rutascalendario',viewMode:'day'});
                 }
             }

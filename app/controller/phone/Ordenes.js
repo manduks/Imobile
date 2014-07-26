@@ -491,7 +491,7 @@ Ext.define('APP.controller.phone.Ordenes', {
     obtenerTipoCambio: function (moneda, record) {
         var me = this,             
             form = me.getOpcionesOrden().down('editarpedidoform'),
-            tipoCambio = getOpcionesOrden().tipoCambio,
+            tipoCambio = me.getOpcionesOrden().tipoCambio,
             codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada,
             view = me.getNavigationOrden().getActiveItem();
 

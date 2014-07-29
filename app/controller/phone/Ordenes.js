@@ -231,6 +231,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                 }
 
                 opcionesOrden.actionOrden = 'actualizar';
+                this.getOpcionesOrden().idCliente = idCliente;
+
                 var store = Ext.getStore('Transacciones');
 
                 Ext.getStore('Transacciones').resetCurrentPage();
@@ -1397,14 +1399,16 @@ Ext.define('APP.controller.phone.Ordenes', {
                 var moneda = item.get('moneda'),
                     precio = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')),
                     precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento'));
+                    console.log(precioConDescuento);
                     //importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
 
                 if(moneda != codigoMonedaPredeterminada){ // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
-                    precioConDescuento *= tipoCambio;
+                    precioConDescuento /= tipoCambio;
                     //precio /= tipoCambio;
                     precio = parseFloat(precio.toFixed(2));
                     console.log('moneda diferente ' + moneda + 'p ' + codigoMonedaPredeterminada + 'p');
                 }
+console.log(precioConDescuento);
 
                 importe = precioConDescuento * item.get('cantidad');
                 total += precioConDescuento * item.get('cantidad') + item.get('totalDeImpuesto');
@@ -1415,9 +1419,9 @@ Ext.define('APP.controller.phone.Ordenes', {
                 params["Orden.Partidas[" + index + "].CodigoAlmacen"] = item.get('CodigoAlmacen');
                 params["Orden.Partidas[" + index + "].Linea"] = index;
                 params["Orden.Partidas[" + index + "].Moneda"] = moneda.trim();//item.get('moneda').trim();
-                params["Orden.Partidas[" + index + "].Importe"] = importe;//Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
+                params["Orden.Partidas[" + index + "].Importe"] = parseFloat(importe.toFixed(2));//Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
                 params["Orden.Partidas[" + index + "].PorcentajeDescuento"] = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('PorcentajeDescuento'));
-                params["Orden.Partidas[" + index + "].tipoCambio"] = item.get('TipoCambio');
+                params["Orden.Partidas[" + index + "].TipoCambio"] = item.get('TipoCambio');
             });
 
             params["Orden.TotalDocumento"] = parseFloat(total.toFixed(2));
@@ -1433,7 +1437,7 @@ Ext.define('APP.controller.phone.Ordenes', {
 
             console.log(params);
 
-            Ext.data.JsonP.request({
+/*            Ext.data.JsonP.request({
                 url: url,
                 params: params,
                 callbackKey: 'callback',
@@ -1459,7 +1463,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                         me.getOpcionesOrden().setActiveItem(0);
                     });                
                 }
-            });
+            });*/
         } else {
             me.getMainCard().getActiveItem().setMasked(false);
             me.getOpcionesOrden().setActiveItem(0);
@@ -1480,7 +1484,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             title: 'titulo'
         });
 
-        me.getMainCard().getAt(2).setMasked(false);
+        me.getMainCard().getAt(1).setMasked(false);
 
         Ext.data.JsonP.request({
             url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaiMobile",
@@ -1552,7 +1556,7 @@ console.log(response);
                                 
                 store.setData(partidas);
                 Ext.getStore('Productos').setData(partidas);                
-                me.getMainCard().setActiveItem(2); // Activamos el item 2 del menu principal navigationorden
+                me.getMainCard().setActiveItem(1); // Activamos el item 1 del menu principal navigationorden
                 me.getMainCard().getActiveItem().getNavigationBar().setTitle(idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
                 me.getMainCard().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
                 me.actualizarTotales();

@@ -26,6 +26,8 @@ Ext.define('APP.core.data.Store', {
     setParams: function (params, resetParams) {
         var me = this;
 
+        alert(localStorage.getItem("CodigoUsuario") + localStorage.getItem("NombreUsuario") + 'setparams');
+
         params.Token = localStorage.getItem("Token");
         params.CodigoUsuario = localStorage.getItem("CodigoUsuario");
         params.CodigoSociedad = localStorage.getItem("CodigoSociedad");

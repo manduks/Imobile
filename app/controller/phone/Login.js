@@ -48,6 +48,7 @@ Ext.define('APP.controller.phone.Login', {
                     localStorage.setItem("NombreUsuario", response.Usuario.Nombre);
                     localStorage.setItem("Contrasenia", response.Usuario.Contrasenia);
                     localStorage.setItem("NombreDispositivo", response.ConfiguracionDispositivo.Nombre);
+                    alert(localStorage.getItem("CodigoUsuario") + localStorage.getItem("NombreUsuario") + 'successs')
                     //localStorage.setItem("Almacenes", response.ConfiguracionDispositivo.Almacenes);
                     //console.log(response.ConfiguracionDispositivo.Almacenes);
                     almacenes = response.ConfiguracionDispositivo.Almacenes;

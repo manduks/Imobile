@@ -23,6 +23,12 @@ Ext.define('APP.controller.phone.Menu', {
     onMenuTap:function(list,index,target,record){
 
         var action = record.data.action;
+        var params= {
+            Token: localStorage.getItem("Token"),
+            CodigoUsuario: localStorage.getItem("CodigoUsuario"),
+                CodigoSociedad: localStorage.getItem("CodigoSociedad"),
+                CodigoDispositivo: localStorage.getItem("CodigoDispositivo")
+        };
         switch(action){
             case 'ordenes':
                 this.getMenuNav().push({
@@ -35,6 +41,9 @@ Ext.define('APP.controller.phone.Menu', {
                     }]
 
                 });
+                var store = Ext.getStore('Clientes');
+                store.setParams(params);
+                store.load();
                 break;
             case 'rutas':
                 this.getMenuNav().push({

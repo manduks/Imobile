@@ -12,7 +12,8 @@ Ext.define('APP.controller.phone.Ordenes', {
             partidaContainer:'partidacontainer',
             productosOrden: 'productosorden',
             ordenContainer:'ordencontainer',
-            opcionesOrden: 'opcionesorden'
+            opcionesOrden: 'opcionesorden',
+            transaccionList: 'transaccionlist'
 
         },
     	control:{
@@ -92,9 +93,12 @@ Ext.define('APP.controller.phone.Ordenes', {
             'transaccionlist #btnBuscarTransaccion':{
                 tap: 'onBuscarTransaccion'
             },
+            'transaccionlist #buscarTransacciones':{                              
+                clearicontap: 'limpiaBusquedaTransacciones'
+            },
             'almacenlist': {
                 itemtap: 'onSeleccionarAlmacen'            
-            }    		
+            }
     	}
     },
 
@@ -241,7 +245,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                 Ext.getStore('Transacciones').resetCurrentPage();
 
                 store.setParams({
-                    CardCode: idCliente
+                    CardCode: idCliente,
+                    CardName: ''
                 });
 
                 store.load();
@@ -1323,6 +1328,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param v La vista que ha sido popeada.
      */
     onPopNavigationOrden: function (t, v) {
+        console.log(this.getOpcionesOrden());
         var me = this,
             tabPanel = me.getOpcionesOrden(),
             itemActivo = t.getActiveItem().getActiveItem(),
@@ -1565,21 +1571,6 @@ console.log(moneda, 'Moneda del producto actual');
                         importe /= tipoCambio;
                     }
 
-/*                    console.log(precio);
-                    console.log(precioConDescuento);
-                    me.tipoCambio = precio / precioConDescuento;
-                    console.log(me.tipoCambio);*/
-                    //importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
-/*                    console.log(precioConDescuento, "Precio con descuento");
-                    if(moneda != me.codigoMonedaSeleccionada){ // Si la moneda del artículo es diferente a la seleccionada hay que hacer una conversión.
-                        precioConDescuento *= me.tipoCambio;
-                        precio /= me.tipoCambio;
-                        console.log('moneda diferente ' + moneda + 'p ' + me.codigoMonedaSeleccionada + 'p');
-                    }*/
-
-                    //importe = Imobile.core.FormatCurrency.currency(precioConDescuento * item.Cantidad, me.codigoMonedaSeleccionada) ;//get('cantidad');
-                //total += precioConDescuento * item.get('cantidad') + item.get('totalDeImpuesto');
-
                     partidas[index].cantidad = partidas[index].Cantidad;
                     partidas[index].importe = APP.core.FormatCurrency.currency(importe, codigoMonedaSeleccionada);
                     partidas[index].totalDeImpuesto = partidas[index].TotalImpuesto;
@@ -1619,16 +1610,38 @@ console.log(moneda, 'Moneda del producto actual');
     },
 
     onBuscarTransaccion: function (button){
+        console.log('Buscando transaccción...');
         var me = this,
             store = Ext.getStore('Transacciones'),
-            //folio = me.getNavigationOrden().getNavigationBar().getTitle(),
+            idCliente = me.getMenuNav().getNavigationBar().getTitle(),
             value = button.up('toolbar').down('#buscarTransacciones').getValue();
+
+            //console.log(idCliente, 'El id del cliente');
 
         store.resetCurrentPage();
 
         store.setParams({
-            Criterio: value
-            //CardCode: idCliente
+            Criterio: value,
+            CardCode: idCliente,
+            CardName: ''
+        });
+
+        store.load();
+    },
+
+    limpiaBusquedaTransacciones: function() {
+        var me = this,
+            store = me.getTransaccionList().getStore(),
+            idCliente = me.getMenuNav().getNavigationBar().getTitle();
+
+        console.log('Limpiando transacciones...');
+
+        store.resetCurrentPage();
+
+        store.setParams({
+            Criterio: '',
+            CardCode: idCliente,
+            CardName: ''
         });
 
         store.load();

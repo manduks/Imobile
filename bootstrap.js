@@ -876,7 +876,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.viewport.WindowsPhone": [
     "Ext.viewport.WP"
   ],
-  "Imobile.controller.Main": [],
   "Imobile.controller.tablet.Main": [],
   "Imobile.form.CotizadorForm": [],
   "Imobile.form.login.LoginForm": [],
@@ -2032,7 +2031,6 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.viewport.Ios": [],
   "Ext.viewport.Viewport": [],
   "Ext.viewport.WindowsPhone": [],
-  "Imobile.controller.Main": [],
   "Imobile.controller.tablet.Main": [],
   "Imobile.form.CotizadorForm": [
     "widget.cotizadorform"

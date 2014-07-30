@@ -21,7 +21,7 @@ Ext.define('APP.view.phone.login.LoginPanel',{
             }, {
                 xtype: 'loginform',
                 baseCls: '',
-                flex: 2
+                flex: 9
             }, {
                 xtype: 'container'
             }]

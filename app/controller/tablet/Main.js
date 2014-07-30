@@ -1,5 +1,5 @@
-Ext.define('Imobile.controller.tablet.Main',{
-    extend:'Imobile.controller.Main',
+Ext.define('APP.controller.tablet.Main',{
+    //extend:'APP.controller.Main',
     config:{
         control:{
         }

@@ -63,6 +63,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "APP.controller.phone.Ordenes": [],
   "APP.controller.phone.Prospectos": [],
   "APP.controller.phone.Rutas": [],
+  "APP.controller.tablet.Main": [],
   "APP.core.FormatCurrency": [],
   "APP.core.data.Store": [],
   "APP.form.phone.clientes.ClienteForm": [],
@@ -137,6 +138,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "APP.view.phone.prospectos.ProspectosList": [],
   "APP.view.phone.rutas.OpcionRutasList": [],
   "APP.view.phone.rutas.RutasCalendario": [],
+  "APP.view.tablet.Main": [],
   "Ext.AbstractComponent": [],
   "Ext.AbstractManager": [],
   "Ext.AbstractPlugin": [],
@@ -866,7 +868,6 @@ Ext.ClassManager.addNameAlternateMappings({
     "Ext.viewport.WP"
   ],
   "Imobile.controller.Main": [],
-  "Imobile.controller.tablet.Main": [],
   "Imobile.form.CotizadorForm": [],
   "Imobile.form.login.LoginForm": [],
   "Imobile.model.DireccionFiscal": [],
@@ -879,7 +880,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "Imobile.view.favoritos.SeleccionadorProFav": [],
   "Imobile.view.menu.Menu": [],
   "Imobile.view.menu.MenuList": [],
-  "Imobile.view.tablet.Main": [],
   "TouchCalendarViewModel": []
 });
 Ext.ClassManager.addNameAliasMappings({
@@ -892,6 +892,7 @@ Ext.ClassManager.addNameAliasMappings({
   "APP.controller.phone.Ordenes": [],
   "APP.controller.phone.Prospectos": [],
   "APP.controller.phone.Rutas": [],
+  "APP.controller.tablet.Main": [],
   "APP.core.FormatCurrency": [],
   "APP.core.data.Store": [],
   "APP.form.phone.clientes.ClienteForm": [
@@ -1056,6 +1057,7 @@ Ext.ClassManager.addNameAliasMappings({
   "APP.view.phone.rutas.RutasCalendario": [
     "widget.rutascalendario"
   ],
+  "APP.view.tablet.Main": [],
   "Ext.AbstractComponent": [],
   "Ext.AbstractManager": [],
   "Ext.AbstractPlugin": [],
@@ -2011,7 +2013,6 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.viewport.Viewport": [],
   "Ext.viewport.WindowsPhone": [],
   "Imobile.controller.Main": [],
-  "Imobile.controller.tablet.Main": [],
   "Imobile.form.CotizadorForm": [
     "widget.cotizadorform"
   ],
@@ -2044,7 +2045,6 @@ Ext.ClassManager.addNameAliasMappings({
   "Imobile.view.menu.MenuList": [
     "widget.menulist"
   ],
-  "Imobile.view.tablet.Main": [],
   "TouchCalendarViewModel": []
 });
 

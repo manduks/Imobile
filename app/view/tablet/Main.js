@@ -1,4 +1,4 @@
-Ext.define('Imobile.view.tablet.Main',{
+Ext.define('APP.view.tablet.Main',{
     //extend:'Imobile.view.Main',
     config: {
         layout:'card',

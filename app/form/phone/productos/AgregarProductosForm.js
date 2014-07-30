@@ -8,7 +8,7 @@ Ext.define('APP.form.phone.productos.AgregarProductosForm', {
         'Ext.field.Spinner',
         'Ext.field.Hidden'
 	],
-	config:{
+	config:{        
 		padding:'10 15 15 15',
         scrollable: 'vertical',
 		items:[

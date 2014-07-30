@@ -332,8 +332,6 @@ Ext.define('APP.controller.phone.Cobranza', {
         aPagar = APP.core.FormatCurrency.formatCurrencytoNumber(aPagar);
         pendiente = aPagar - pagado;
 
-            console.log(permiteCambio);
-
          if(opcion == 'cobranzaFacturas'){
             moneda = Ext.getStore('Facturas').getAt(0).data.CodigoMoneda + ' '; //Estamos asumiendo que el código de moneda de todas las facturas es la local.
          } else {
@@ -348,7 +346,7 @@ Ext.define('APP.controller.phone.Cobranza', {
 
             if (value === null) { 
                 esVacio = true;
-                Ext.Msg.alert('Datos incompletos', 'Ingrese todos los datos.');
+                Ext.Msg.alert('Datos erróneos', 'Ingrese datos numéricos.');
                 return false; // stop the iteration
             }
         });

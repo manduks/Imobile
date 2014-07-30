@@ -16,11 +16,17 @@ Ext.define('APP.view.phone.ordenes.TransaccionList', {
         items: [{
             xtype: 'toolbar',
             docked: 'top',
-            layout:'fit',
+            layout:'hbox',
             items: [{
                 xtype: 'searchfield',
-                itemId: 'busca',
-                placeHolder: ' Buscar transaccion...'
+                itemId: 'buscarTransacciones',
+                placeHolder: ' Buscar transaccion...',
+                flex: 8
+            },{
+                xtype: 'button',
+                iconCls: 'search',
+                itemId: 'btnBuscarTransaccion',
+                flex: 0.5
             }]
         }],
         plugins: [{

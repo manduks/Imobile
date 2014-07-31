@@ -92,6 +92,8 @@ Ext.define('APP.controller.phone.Menu', {
             case 'salir':
                 Ext.Viewport.removeAll(true);
                 Ext.Viewport.add(Ext.create('APP.view.phone.login.LoginPanel'));
+/*                Ext.Viewport.removeAll();
+                Ext.Viewport.add('APP.view.phone.login.LoginPanel');*/
                 break;
 
         }

@@ -24,8 +24,9 @@ Ext.define('APP.controller.phone.Rutas', {
             },
             'rutascalendario':{
                 selectionchange:function(record,e,x,y){
-                    console.log(e);
-                    this.getMenuNav().push({xtype:'rutascalendario',viewMode:'day'});
+                    console.log(this.getRutasCalendario().getValue());
+                    console.log(record.getValue());
+                    this.getRutasCalendario().setViewMode("day");
                 }
             }
         }
@@ -62,7 +63,9 @@ Ext.define('APP.controller.phone.Rutas', {
 
         switch(opcion){
             case 'calendario':
-                this.getMenuNav().push({xtype:'rutascalendario'});
+                this.getMenuNav().push({
+                    xtype:'rutascalendario'
+                });
                 break;
             case 'registrar':
                 break;

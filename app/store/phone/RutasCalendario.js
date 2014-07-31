@@ -12,8 +12,8 @@ Ext.define('APP.store.phone.RutasCalendario', {
         data: [{
             event: 'Sencha Con',
             location: 'Austin, Texas',
-            start: new Date(2014, 6, 23),
-            end: new Date(2014, 6, 27)
+            start: new Date(2014, 6, 23,11,33,30,0),
+            end: new Date(2014, 6, 27,12,33,30,0)
         }]
     }
 });

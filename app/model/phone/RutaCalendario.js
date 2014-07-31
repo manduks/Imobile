@@ -14,12 +14,12 @@ Ext.define('APP.model.phone.RutaCalendario', {
             type: 'string'
         },{
             name: 'start',
-            type: 'date',
-            dateFormat: 'c'
+            type: 'date'//,
+            //dateFormat: 'c'
         },{
             name: 'end',
-            type: 'date',
-            dateFormat: 'c'
+            type: 'date'//,
+            //dateFormat: 'c'
         }]
     }
 });

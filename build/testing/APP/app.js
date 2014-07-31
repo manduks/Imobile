@@ -81316,6 +81316,8 @@ Ext.define('APP.controller.phone.Menu', {
             case 'salir':
                 Ext.Viewport.removeAll(true);
                 Ext.Viewport.add(Ext.create('APP.view.phone.login.LoginPanel'));
+/*                Ext.Viewport.removeAll();
+                Ext.Viewport.add('APP.view.phone.login.LoginPanel');*/
                 break;
 
         }
@@ -82736,6 +82738,10 @@ Ext.define('APP.controller.phone.Ordenes', {
      */
     onPopNavigationOrden: function (t, v) {
         console.log(this.getOpcionesOrden());
+        if(this.getOpcionesOrden() == undefined){
+            return;
+        }
+
         var me = this,
             tabPanel = me.getOpcionesOrden(),
             itemActivo = t.getActiveItem().getActiveItem(),
@@ -82928,6 +82934,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
             idCliente = me.getMenuNav().getNavigationBar().getTitle(),
             store = Ext.getStore('Ordenes'),
+            productos = Ext.getStore('Productos'),
             barraTitulo = ({
             xtype: 'toolbar',
             docked: 'top',
@@ -83010,7 +83017,24 @@ console.log(moneda, 'Moneda del producto actual');
 //                }
                                 
                 store.setData(partidas);
-                Ext.getStore('Productos').setData(partidas);
+
+                store.each(function (item, index, length) {
+                    codigo = item.get('CodigoArticulo');
+                    //cantidad = item.get('cantidad');
+                    ind = productos.find('CodigoArticulo', codigo);
+                    if (ind != -1) { // Validamos que el elemento de la orden esté en los elementos actuales del store.
+                        // cantidadActual = productos.getAt(ind).get('cantidad');
+                        // productos.getAt(ind).setData(item);//('cantidad', cantidadActual + cantidad);
+                    } else {
+                        productos.add(item);
+                    }
+                });
+
+                //productos.removeAll();
+                //productos.setData(partidas);
+
+
+
                 me.getMainCard().setActiveItem(1); // Activamos el item 1 del menu principal navigationorden
                 me.getMainCard().getActiveItem().getNavigationBar().setTitle(idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
                 me.getMainCard().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
@@ -83018,7 +83042,8 @@ console.log(moneda, 'Moneda del producto actual');
                 barraTitulo.title = view.down('toolbar').getTitle();
                 me.getMainCard().getActiveItem().add(barraTitulo);
 
-                console.log(Ext.getStore('Productos').getData());
+                console.log(productos.getData());
+                console.log(productos.getCount());
             }
         });
 

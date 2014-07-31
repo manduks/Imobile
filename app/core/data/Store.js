@@ -19,7 +19,10 @@ Ext.define('APP.core.data.Store', {
                 me.params.CodigoDispositivo = localStorage.getItem("CodigoDispositivo");
                 me.params.Elementos = 50;
 
-                store.getProxy().setUrl('http://'+localStorage.getItem("dirIP")+store.getProxy().getUrl());
+                if (store.getProxy().getUrl().search('http') == -1) {
+                    store.getProxy().setUrl('http://' + localStorage.getItem("dirIP") + store.getProxy().getUrl());
+                }
+
                 if (me.resetParams) {
                     store.getProxy().setExtraParams(me.params);
                     me.resetParams = false;
@@ -48,7 +51,7 @@ Ext.define('APP.core.data.Store', {
         return obj3;
     },
 
-    resetCurrentPage: function() {
+    resetCurrentPage: function () {
         var me = this;
         me.currentPage = 1;
     }

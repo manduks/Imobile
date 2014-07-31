@@ -1589,10 +1589,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             idCliente = me.getMenuNav().getNavigationBar().getTitle(),
             value = button.up('toolbar').down('#buscarTransacciones').getValue();
 
-        //
-
         store.resetCurrentPage();
-
         store.setParams({
             Criterio: value,
             CardCode: idCliente,

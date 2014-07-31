@@ -1031,7 +1031,7 @@ Ext.define('APP.controller.phone.Ordenes', {
 
                 if (precio2 == 0) {
                     desc = 0;
-                } else {/*                                        
+                } else {                                        
                     desc = (precio2 - response.Data[0]).toFixed(2);
                 // 
                     desc = (desc * 100 / precio2);
@@ -1159,7 +1159,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 id: values.id,
                 moneda: values.moneda,
                 precioConDescuento: values.precioConDescuento
-            };/*                                                
+            };
 
         if (!values.esOrdenRecuperada) {
             if (moneda != codigoMonedaPredeterminada && codigoMonedaSeleccionada == codigoMonedaPredeterminada) {                

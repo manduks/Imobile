@@ -527,7 +527,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                         me.ayudaAAgregar(view, 'monedaDiferente');
                         me.ayudaAAgregar(view, 'cantidad'); // Se modifica la cantidad sólo si el tipo de cambio es exitoso.
                     } else {
-                        me.getOpcionesOrden().codigoMonedaSeleccionada = moneda;                        
+                        me.getOpcionesOrden().codigoMonedaSeleccionada = moneda;
                         form.setValues({
                             CodigoMoneda: moneda,
                             tipoCambio: tipoCambio
@@ -569,13 +569,15 @@ Ext.define('APP.controller.phone.Ordenes', {
     actualizaOrden: function (moneda) {
         var me = this, precio, importe,
             codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
-            tipoCambio = me.getOpcionesOrden().tipoCambio,
+            //tipoCambio = me.getOpcionesOrden().tipoCambio,
             ordenes = Ext.getStore('Ordenes');
 
         if(moneda == codigoMonedaPredeterminada){
             ordenes.each(function (item, index, length) {                
                 if(item.get('esOrdenRecuperada')){
                     tipoCambio = item.get('TipoCambio');
+                } else {
+                    tipoCambio = me.getOpcionesOrden().tipoCambio;
                 }
 
                 precio = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * tipoCambio;
@@ -591,10 +593,14 @@ Ext.define('APP.controller.phone.Ordenes', {
 
         } else {
 
-            ordenes.each(function (item, index, length) {                                
+            ordenes.each(function (item, index, length) {
+                console.log(item.get('esOrdenRecuperada'), 'Recuperada');                
                 if(item.get('esOrdenRecuperada')){
                     tipoCambio = item.get('TipoCambio');
+                } else {
+                    tipoCambio = me.getOpcionesOrden().tipoCambio;
                 }
+                console.log(tipoCambio, 'Tipo Cambio');
                 precio = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) / tipoCambio;
                 importe = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('importe')) / tipoCambio;
                 precio = APP.core.FormatCurrency.currency(precio, moneda);

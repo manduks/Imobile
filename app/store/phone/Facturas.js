@@ -11,7 +11,7 @@ Ext.define('APP.store.phone.Facturas', {
         model: 'APP.model.phone.Factura',        
         proxy: {
             //url: 'http://ferman.ddns.net:88/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile',
-            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile",
+            url: "/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile",
             //url: 'http://25.15.241.121:88/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile',
             type: 'jsonp',
             callbackKey: 'callback',

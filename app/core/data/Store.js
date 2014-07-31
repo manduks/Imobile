@@ -13,6 +13,13 @@ Ext.define('APP.core.data.Store', {
                     extraParams = store.getProxy().getExtraParams();
                 me.params.auth_token = localStorage.getItem("Token");
                 me.params.idioma = localStorage.getItem("idioma");
+                me.params.Token = localStorage.getItem("Token");
+                me.params.CodigoUsuario = localStorage.getItem("CodigoUsuario");
+                me.params.CodigoSociedad = localStorage.getItem("CodigoSociedad");
+                me.params.CodigoDispositivo = localStorage.getItem("CodigoDispositivo");
+                me.params.Elementos = 50;
+
+                store.getProxy().setUrl('http://'+localStorage.getItem("dirIP")+store.getProxy().getUrl());
                 if (me.resetParams) {
                     store.getProxy().setExtraParams(me.params);
                     me.resetParams = false;
@@ -25,14 +32,6 @@ Ext.define('APP.core.data.Store', {
 
     setParams: function (params, resetParams) {
         var me = this;
-
-        alert(localStorage.getItem("CodigoUsuario") + localStorage.getItem("NombreUsuario") + 'setparams');
-
-        params.Token = localStorage.getItem("Token");
-        params.CodigoUsuario = localStorage.getItem("CodigoUsuario");
-        params.CodigoSociedad = localStorage.getItem("CodigoSociedad");
-        params.CodigoDispositivo = localStorage.getItem("CodigoDispositivo");
-        params.Elementos = 50;
 
         me.params = params;
         me.resetParams = resetParams;

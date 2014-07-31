@@ -10,7 +10,7 @@ Ext.define('APP.store.phone.Transacciones', {
     config: {
         model:'APP.model.phone.Transaccion',
         proxy: {            
-            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile",
+            url: "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile",
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {

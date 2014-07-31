@@ -10,7 +10,7 @@ Ext.define('APP.store.phone.Clientes', {
     config: {
         model: 'APP.model.phone.Cliente',
         proxy: {
-            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",
+            url: "/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {

@@ -61,10 +61,10 @@ Ext.define('APP.form.phone.productos.AgregarProductosForm', {
                         name:'cantidad',
                         label:'Cantidad',
                         disabled: false,
-                        minValue: 0,
-                        itemId: 'cantidad'
+                        minValue: 0.1,
+                        itemId: 'cantidad',
                         //maxValue: 100,
-                        //stepValue: .1,
+                        stepValue: .1
                         //ui: 'spinner'
                     },{
                         xtype:'textfield',

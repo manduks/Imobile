@@ -23,6 +23,8 @@ Ext.application({
         'Ext.form.FieldSet',
         'Ext.data.proxy.JsonP',
         'Ext.field.Toggle',
+        'Ext.Img',
+        'APP.store.phone.RutasCalendario',
 
         'Ext.ux.Fileup',
 

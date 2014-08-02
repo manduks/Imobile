@@ -6,11 +6,17 @@ Ext.define('APP.controller.phone.Login', {
 
     config: {
         refs: {
-            loginForm:'loginpanel loginform'
+            loginForm:'loginpanel loginform',
+            servidorLogin:'loginpanel loginform textfield[name=servidor]',
+            idiomaLogin:'loginpanel loginform textfield[name=idioma]',
+            loginPanel:'loginpanel'
         },
         control: {
             'loginform button[action=login]': {
                 tap: 'onLoginUser'
+            },
+            'loginpanel image[id=configloginbutton]':{
+                tap:'showConfigOptions'
             }
         }
     },
@@ -66,5 +72,22 @@ Ext.define('APP.controller.phone.Login', {
             },
             scope:this
         });
+    },
+
+    showConfigOptions:function(x){
+        var form = this.getLoginForm(),
+            server = this.getServidorLogin(),
+            idioma = this.getIdiomaLogin();
+
+        if(server.isHidden()){
+            server.setHidden(false);
+            idioma.setHidden(false);
+        }
+        else{
+            server.setHidden(true);
+            idioma.setHidden(true);
+        }
     }
+
+
 });

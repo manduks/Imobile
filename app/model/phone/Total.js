@@ -22,7 +22,7 @@ Ext.define('APP.model.phone.Total', {
             name: 'NumeroCheque',
             type: 'string'
         },{
-            name: 'NumeroCuenta',
+            name: 'NumeroTarjeta',
             type: 'string'
         },{
             name: 'Banco',

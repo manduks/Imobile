@@ -468,7 +468,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             totales = view.down('totalapagarlist').getStore(),// Ext.getStore('Totales'),
             array = store.getData().items,
             fecha = new Date(Ext.Date.now()),
-            hora = fecha.getHours() + ':' + fecha.getMinutes() + ':' + fecha.getSeconds(),
+            hora = me.daFormatoAHora(fecha.getHours(), fecha.getMinutes(), fecha.getSeconds());
             fecha = Ext.Date.format(fecha, "d-m-Y"),            
             url,
             msg = 'Se realizó el cobro exitosamente con folio ';            
@@ -503,6 +503,7 @@ Ext.define('APP.controller.phone.Cobranza', {
 
                 params["Cobranza.CobranzaFacturas[" + index + "].NumeroFactura"] = item.data.NumeroDocumento;//get('NumeroDocumento');
                 params["Cobranza.CobranzaFacturas[" + index + "].Monto"] = item.get('TotalDocumento');//item.get('Saldo');
+                params["Cobranza.CobranzaFacturas[" + index + "].NumeroLinea"] = index;
             });
 
             totales.each(function (item, index) {                
@@ -527,6 +528,7 @@ Ext.define('APP.controller.phone.Cobranza', {
                         break;
                 }
             });
+console.log(params);
             //params["Orden.TotalDocumento"] = parseFloat(total).toFixed(2);
 
             /*            if(me.actionOrden == 'crear'){
@@ -539,7 +541,7 @@ Ext.define('APP.controller.phone.Cobranza', {
 
             url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
 
-            Ext.data.JsonP.request({
+/*            Ext.data.JsonP.request({
                 url: url,
                 params: params,
                 callbackKey: 'callback',
@@ -556,11 +558,18 @@ Ext.define('APP.controller.phone.Cobranza', {
                         Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);
                     }
                 }
-            });
+            });*/
 
         } else {            
             Ext.Msg.alert("Sin pago", "Agrega por lo menos un pago.");
         }
+    },
+
+    daFormatoAHora: function(horas, minutos, segundos){        
+        var m = hoy.getMonth() + 1;
+        var mes = (m < 10) ? '0' + m : m;
+
+        return 0;//horas + ':' + minutos + ':' + segundos,
     },
 
     cancelaPago: function (btn) {

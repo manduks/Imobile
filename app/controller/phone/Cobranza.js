@@ -395,7 +395,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             entradaMostrada = APP.core.FormatCurrency.currency(entrada, moneda),
             ind = form.ind,
             store = Ext.getStore('Totales');
-
+console.log(numeroTarjeta, 'Número de la Tarjeta');
             store.add({
                 tipo: forma,
                 monto: entradaMostrada,
@@ -468,7 +468,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             totales = view.down('totalapagarlist').getStore(),// Ext.getStore('Totales'),
             array = store.getData().items,
             fecha = new Date(Ext.Date.now()),
-            hora = me.daFormatoAHora(fecha.getHours(), fecha.getMinutes(), fecha.getSeconds());
+            hora = me.daFormatoAHora(fecha.getHours(), fecha.getMinutes(), fecha.getSeconds()),
             fecha = Ext.Date.format(fecha, "d-m-Y"),            
             url,
             msg = 'Se realizó el cobro exitosamente con folio ';            
@@ -541,7 +541,7 @@ console.log(params);
 
             url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
 
-/*            Ext.data.JsonP.request({
+            Ext.data.JsonP.request({
                 url: url,
                 params: params,
                 callbackKey: 'callback',
@@ -558,18 +558,26 @@ console.log(params);
                         Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);
                     }
                 }
-            });*/
+            });
 
         } else {            
             Ext.Msg.alert("Sin pago", "Agrega por lo menos un pago.");
         }
     },
 
-    daFormatoAHora: function(horas, minutos, segundos){        
-        var m = hoy.getMonth() + 1;
-        var mes = (m < 10) ? '0' + m : m;
+    daFormatoAHora: function(horas, minutos, segundos){
+        var me = this,
+            hr = me.agregaCero(horas),
+            min = me.agregaCero(minutos),
+            seg = me.agregaCero(segundos);        
 
-        return 0;//horas + ':' + minutos + ':' + segundos,
+        return hr + ':' + min + ':' + seg;
+    },
+
+    agregaCero: function (n){
+        var m = (n < 10) ? '0' + n : n;
+
+        return m;
     },
 
     cancelaPago: function (btn) {

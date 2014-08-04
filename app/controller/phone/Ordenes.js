@@ -231,6 +231,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                 this.dameMonedaPredeterminada();
                 this.getOpcionesOrden().idCliente = idCliente;
                 this.getNavigationOrden().add(barraTitulo);
+                me.getOpcionesOrden().getAt(3).setDisabled(false);
+
                 break;
 
             case 'visualizar':
@@ -258,6 +260,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 });
 
                 me.dameMonedaPredeterminada();
+                me.getOpcionesOrden().getAt(3).setDisabled(true);
 
                 break;
         }
@@ -296,6 +299,9 @@ Ext.define('APP.controller.phone.Ordenes', {
         }
 
         if (value.xtype == 'editarpedidoform') {
+            value.setDisabled(true);
+            value.down('#moneda').setDisabled(false);
+
             if (codigoMonedaSeleccionada == codigoMonedaPredeterminada) {
                 clienteSeleccionado.tipoCambio = parseFloat(1).toFixed(2);;
             } else {
@@ -1436,19 +1442,22 @@ Ext.define('APP.controller.phone.Ordenes', {
             Ext.Array.forEach(array, function (item, index, allItems) {
                 var moneda = item.get('moneda'),
                     precio = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')),
-                    precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento'));
+                    precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')),
+                    importe;
                     //importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
+
 
 /*                if(moneda != codigoMonedaSeleccionada){ // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
                     //precioConDescuento /= tipoCambio;
-<<<<<<< HEAD
                     //precio /= tipoCambio;
-                    precio = parseFloat(precio.toFixed(2));
-=======
+                    precio = parseFloat(precio.toFixed(2));*/
+
+                if(moneda != codigoMonedaSeleccionada) { // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
+                    //precioConDescuento *= tipoCambio;
                     precio *= tipoCambio;
+                    moneda = codigoMonedaSeleccionada;
                     //precio = parseFloat(precio.toFixed(2));
->>>>>>> 1ed6f15a6bd77d998b88961e694a41a254c54834
-                }*/
+                }
 
                 importe = precioConDescuento * item.get('cantidad');
                 total += precioConDescuento * item.get('cantidad') + item.get('totalDeImpuesto');
@@ -1474,7 +1483,6 @@ Ext.define('APP.controller.phone.Ordenes', {
                 url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_OrdenVenta/ActualizarOrdenVentaiMobile";
                 msg = "Se acualizo la orden correctamente con folio: ";
             }
-
 
             Ext.data.JsonP.request({
                 url: url,

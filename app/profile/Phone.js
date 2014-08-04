@@ -90,12 +90,17 @@ Ext.define('APP.profile.Phone',{
 
             'rutas.OpcionRutasList',
             'rutas.RutasCalendario',
+            'rutas.RutasCalendarioCont',
+            'rutas.RutasCalendarioDia',
+            'rutas.RutasMapa',
 
             'APP.form.phone.pedidos.EditarPedidoForm',
             'APP.form.phone.clientes.ClienteForm',
             'APP.form.phone.productos.AgregarProductosForm',
             'APP.form.phone.cobranza.MontoAPagarForm',
-            'APP.form.phone.prospectos.ProspectosForm'
+            'APP.form.phone.prospectos.ProspectosForm',
+
+            'APP.form.phone.rutas.RutasForm'
         ]
     },
 

@@ -10,10 +10,15 @@ Ext.define('APP.store.phone.RutasCalendario', {
     config: {
         model: 'APP.model.phone.RutaCalendario',
         data: [{
-            event: 'Sencha Con',
+            title: 'Senca Con Title',
             location: 'Austin, Texas',
-            start: new Date(2014, 6, 23,11,33,30,0),
-            end: new Date(2014, 6, 27,12,33,30,0)
+            start: new Date(2014, 6, 23,11,0),
+            end: new Date(2014, 6, 27,12,0)
+        },{
+            title: 'Senca Con Title 2',
+            location: 'Austin, Texas',
+            start: new Date(2014, 6, 23,12,0),
+            end: new Date(2014, 6, 27,12,0)
         }]
     }
 });

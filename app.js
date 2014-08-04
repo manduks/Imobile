@@ -24,6 +24,8 @@ Ext.application({
         'Ext.data.proxy.JsonP',
         'Ext.field.Toggle',
         'Ext.Img',
+        'Ext.Map',
+
         'APP.store.phone.RutasCalendario',
 
         'Ext.ux.Fileup',
@@ -31,6 +33,9 @@ Ext.application({
         'Ext.ux.calendar.TouchCalendar',
         'Ext.ux.calendar.TouchCalendarView',
         'Ext.ux.calendar.TouchCalendarSimpleEvents',
+
+        'Ext.ux.timepicker.Time',
+        'Ext.ux.timepicker.TimePicker',
 
         'APP.core.data.Store',
         'APP.core.FormatCurrency'

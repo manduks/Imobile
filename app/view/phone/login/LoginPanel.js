@@ -18,7 +18,9 @@ Ext.define('APP.view.phone.login.LoginPanel',{
                 xtype:'image',
                 id:'configloginbutton',
                 src:'resources/images/engine.png',
-                margin:'10 10 0 0',
+                margin:'10 0 0 0',
+                width:50,
+                right:0,
                 height:30
             },{
                 xtype:'container',

@@ -29,6 +29,7 @@ Ext.define('APP.view.phone.ordenes.OpcionesOrdenPanel', {
             },
             {
                 title: 'Editar',
+                itemId: 'editarPedido',
                 iconCls: 'fa fa-pencil-square-o',
                 xtype: 'editarpedidoform'
             },

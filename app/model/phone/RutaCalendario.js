@@ -7,19 +7,19 @@ Ext.define('APP.model.phone.RutaCalendario', {
     extend: 'Ext.data.Model',
     config: {
         fields: [{
-            name: 'event',
+            name: 'title',
             type: 'string'
         },{
             name: 'location',
             type: 'string'
         },{
             name: 'start',
-            type: 'date'//,
-            //dateFormat: 'c'
+            type: 'date',
+            dateFormat: 'c'
         },{
             name: 'end',
-            type: 'date'//,
-            //dateFormat: 'c'
+            type: 'date',
+            dateFormat: 'c'
         }]
     }
 });

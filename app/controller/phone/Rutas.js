@@ -11,8 +11,10 @@ Ext.define('APP.controller.phone.Rutas', {
             partidaContainer:'partidacontainer',
             opcionesOrden:'opcionesorden',
             ordenContainer:'ordencontainer',
-            rutasCalendario:'rutascalendario'
-
+            rutasCalendario:'rutascalendario',
+            rutasCalendarioCont:'rutascalendariocont',
+            rutasCalendarioDia:'rutascalendariodia',
+            rutasMapa:'rutasmapa'
         },
         control:{
             'container[id=rutascont] clienteslist': {
@@ -23,11 +25,10 @@ Ext.define('APP.controller.phone.Rutas', {
                 itemtap:'onCalendario'
             },
             'rutascalendario':{
-                selectionchange:function(record,e,x,y){
-                    console.log(this.getRutasCalendario().getValue());
-                    console.log(record.getValue());
-                    this.getRutasCalendario().setViewMode("day");
-                }
+                selectionchange:'onCalendarioDia'
+            },
+            'rutascalendariocont button[action=agregar]':{
+                tap:'showForm'
             }
         }
     },
@@ -71,5 +72,34 @@ Ext.define('APP.controller.phone.Rutas', {
                 break;
         }
 
+    },
+
+    onCalendarioDia:function(calendar, nd, od){
+
+        calendar.eventStore.clearFilter();
+        calendar.eventStore.filterBy(function(record){
+        var startDate = Ext.Date.clearTime(record.get('start'), true).getTime(), endDate = Ext.Date.clearTime(record.get('end'), true).getTime();
+            return (startDate <= nd) && (endDate >= nd);
+        }, this);
+
+
+        this.getMenuNav().push({
+            xtype:'rutascalendariocont',
+            nd:nd
+        });
+
+        this.getRutasCalendarioDia().getStore().setData(calendar.eventStore.getRange());
+        console.log(this.getRutasCalendarioDia().getStore());
+    },
+
+    showForm:function(b){
+
+        this.getMenuNav().push({
+            xtype:'rutasform',
+            flex:1,
+            nd:this.getRutasCalendarioCont().nd
+        })
     }
+
+
 });

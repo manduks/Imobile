@@ -10,9 +10,9 @@ Ext.define('APP.view.phone.ordenes.ClienteContainer', {
     config: {
         layout: 'fit',
         items: [{
-            padding: 10,
+            padding: 7,
             xtype: 'clienteform',
-            flex: 6
+            flex: 1
         }]
     }
 });

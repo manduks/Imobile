@@ -18,25 +18,19 @@ Ext.define('APP.view.phone.login.LoginForm', {
         },{
             xtype: 'passwordfield',
             name: 'password',
+            margin:'5 0',
             placeHolder: 'Contraseña',
             value: '12345'
         },{
-            xtype: 'selectfield',
+            xtype: 'textfield',
             name:'servidor',
-            margin:'10 0',
-            options: [{
-                text: 'ddns',
-                value: 'ferman.ddns.net:88'
-            },{
-                text: 'hamachi',
-                value: '25.15.241.121:88'
-            },{
-                text: 'Server Fake 2',
-                value: 'fake2'
-            }]
+            hidden:true,
+            margin:'5 0',
+            value: 'ferman.ddns.net:88'
         },{
             xtype: 'selectfield',
             name:'idioma',
+            hidden:true,
             options: [{
                 text: 'Español',
                 value: 'es'
@@ -45,14 +39,12 @@ Ext.define('APP.view.phone.login.LoginForm', {
                 value: 'en'
             }]
         },{
-            xtype:'component',
-            height:10
-        },{
             xtype: 'button',
             action:'login',
             text: 'Login',
             ui: 'btn-login-ui',
             itemId: 'login',
+            margin:'5 0',
             handler: function(btn) {
                 var form = btn.up('formpanel');
 

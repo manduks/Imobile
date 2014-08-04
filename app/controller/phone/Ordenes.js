@@ -192,6 +192,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             view.pop();
             direcciones.removeAll();
         }
+
     },
 
     /**
@@ -295,7 +296,6 @@ Ext.define('APP.controller.phone.Ordenes', {
             clienteSeleccionado.Saldo = parseFloat(clienteSeleccionado.Saldo).toFixed(2);
 
             form.setValues(clienteSeleccionado);
-            direcciones.load();
         }
 
         if (value.xtype == 'editarpedidoform') {

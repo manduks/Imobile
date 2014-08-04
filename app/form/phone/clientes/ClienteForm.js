@@ -19,13 +19,17 @@ Ext.define('APP.form.phone.clientes.ClienteForm', {
             {
                 xtype: 'fieldset',
                 itemId: 'datosCliente',
+                instructions: 'Datos del Cliente',
                 defaults: {
                     disabled: true,
                     clearIcon: true,
                     autoCapitalize: true,
                     labelWidth: '45%'
                 },
-                //layout: 'fit',
+                layout : {
+                    type  : 'vbox',
+                    align : 'stretch'
+                },
                 flex: 1,
                 items: [
                     {
@@ -69,10 +73,8 @@ Ext.define('APP.form.phone.clientes.ClienteForm', {
                         label: 'Saldo'
                     },
                     {
-                        xtype: 'selectfield',
-                        name: 'entrega',
-                        label: 'Dirección de entrega',
-                        store: 'Direcciones'
+                        xtype: 'direccioneslist',
+                        height: 80
                     }
                 ]
             }

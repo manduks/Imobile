@@ -9,7 +9,7 @@ Ext.define('APP.form.phone.pedidos.EditarPedidoForm', {
 	],
 	config:{
 		//padding:'15 15 15 15',
-		items:[{        
+		items:[/*{        
                 xtype:'container',
                 padding: '0 0 0 200',
                 defaults:{
@@ -32,7 +32,7 @@ Ext.define('APP.form.phone.pedidos.EditarPedidoForm', {
                         // }
                     }
                 ]
-            },
+            },*/
             {
                 xtype:'fieldset',
                 itemId:'datos',

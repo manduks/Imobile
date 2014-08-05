@@ -135,7 +135,9 @@ Ext.define('APP.controller.phone.Cobranza', {
                 anticiposlist.setMode('SINGLE');
 
                 params = {
-                    CardCode: idCliente
+                    CardCode: idCliente,
+                    CardName: '',
+                    Criterio: ''
                 };
                 
                 store.clearFilter();

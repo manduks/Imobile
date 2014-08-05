@@ -1460,6 +1460,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 total += precioConDescuento * item.get('cantidad') + item.get('totalDeImpuesto');
 
                 params["Orden.Partidas[" + index + "].CodigoArticulo"] = item.get('CodigoArticulo');
+                params["Orden.Partidas[" + index + "].NombreArticulo"] = item.get('NombreArticulo');
                 params["Orden.Partidas[" + index + "].Cantidad"] = item.get('cantidad');
                 params["Orden.Partidas[" + index + "].Precio"] = precio;//Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio'));
                 params["Orden.Partidas[" + index + "].CodigoAlmacen"] = item.get('CodigoAlmacen');
@@ -1481,7 +1482,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 msg = "Se acualizo la orden correctamente con folio: ";
             }
             
-            
+console.log(params);
             Ext.data.JsonP.request({
                 url: url,
                 params: params,
@@ -1579,6 +1580,10 @@ Ext.define('APP.controller.phone.Ordenes', {
                     }
 
                     //importe = precioConDescuento * item.Cantidad,
+
+/*                    if(partidas.[index]){
+
+                    }*/
 
                     partidas[index].cantidad = partidas[index].Cantidad;
                     partidas[index].importe = APP.core.FormatCurrency.currency(importe, codigoMonedaSeleccionada);

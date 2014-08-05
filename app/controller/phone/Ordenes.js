@@ -4,19 +4,19 @@
 Ext.define('APP.controller.phone.Ordenes', {
     extend: 'Ext.app.Controller',
 
-    config:{
-        refs:{
-            menuNav:'menunav',
-            mainCard:'maincard',
-            navigationOrden:'navigationorden',
-            partidaContainer:'partidacontainer',
+    config: {
+        refs: {
+            menuNav: 'menunav',
+            mainCard: 'maincard',
+            navigationOrden: 'navigationorden',
+            partidaContainer: 'partidacontainer',
             productosOrden: 'productosorden',
-            ordenContainer:'ordencontainer',
+            ordenContainer: 'ordencontainer',
             opcionesOrden: 'opcionesorden',
             transaccionList: 'transaccionlist'
 
         },
-    	control:{
+        control: {
             'container[id=ordenescont] clienteslist': {
                 itemtap: 'alSelecionarCliente'
             },
@@ -29,7 +29,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             'opcionesorden': {
                 activeitemchange: 'cambiaItem'
             },
-			'productoslist #btnBuscarProductos': {
+            'productoslist #btnBuscarProductos': {
                 tap: 'onBuscaProductos'
             },
             'productoslist #buscarProductos': {
@@ -91,16 +91,16 @@ Ext.define('APP.controller.phone.Ordenes', {
             'transaccionlist': {
                 itemtap: 'onSeleccionarTransaccion'
             },
-            'transaccionlist #btnBuscarTransaccion':{
+            'transaccionlist #btnBuscarTransaccion': {
                 tap: 'onBuscarTransaccion'
             },
-            'transaccionlist #buscarTransacciones':{
+            'transaccionlist #buscarTransacciones': {
                 clearicontap: 'limpiaBusquedaTransacciones'
             },
             'almacenlist': {
                 itemtap: 'onSeleccionarAlmacen'
             }
-    	}
+        }
     },
 
     /**
@@ -111,7 +111,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param target El elemento tapeado.
      * @param record El record asociado al ítem.
      */
-     alSelecionarCliente: function (list, index, target, record) {
+    alSelecionarCliente: function (list, index, target, record) {
 
         var name = record.get('NombreSocio'),
             idCliente = record.get('CodigoSocio'),
@@ -146,12 +146,12 @@ Ext.define('APP.controller.phone.Ordenes', {
                 this.getOpcionesOrden().clienteSeleccionado = clienteSeleccionado;
 
                 if (procesada) {
-                    this.estableceDirecciones(this.getMenuNav(),barraTitulo,clienteSeleccionado);
+                    this.estableceDirecciones(this.getMenuNav(), barraTitulo, clienteSeleccionado);
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }
             },
-            scope:this
+            scope: this
         });
     },
 
@@ -161,7 +161,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param view La vista actual.
      * @param barraTitulo El toolbar para agregar el nombre del cliente.
      */
-    estableceDirecciones: function (view,barraTitulo,clienteSeleccionado) {
+    estableceDirecciones: function (view, barraTitulo, clienteSeleccionado) {
         var me = this,
             direcciones = Ext.getStore('Direcciones');
 
@@ -227,7 +227,25 @@ Ext.define('APP.controller.phone.Ordenes', {
                 this.getMainCard().setActiveItem(1); // Activamos el item 1 del menu principal navigationorden
                 this.getNavigationOrden().getNavigationBar().setTitle(idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
                 this.getOpcionesOrden().setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
-                this.getPartidaContainer().down('list').emptyTextCmp.show();
+                //this.getPartidaContainer().down('list').emptyTextCmp.show();
+                var list = this.getOpcionesOrden().down('partidacontainer').down('panel').bodyElement;
+                console.log(list);
+                list.createChild('<div style="margin-top: -100px; background-color: gray;">' +
+                    '<div style="display: table; text-align: left; font-size: 10px; z-index: 0;">' +
+                    '<div style="display: table-row;">' +
+                    '<div id="cliente_id" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Transacción: Orden de Venta</div>' +
+                    '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Fecha: ' + Ext.DateExtras.dateFormat(new Date(), 'd/m/Y') +'</div>' +
+                    '</div>' +
+                    '<div style="display: table-row;">' +
+                    '<div id="codigo_id" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Código de Dispositivo: '+localStorage.getItem("CodigoDispositivo")+'</div>' +
+                    '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Código de Usuario: '+localStorage.getItem("CodigoUsuario")+'</div>' +
+                    '</div>' +
+                    '<div style="display: table-row;">' +
+                    '<div id="codigo_dispositivo" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Nombre de Dispositivo: '+localStorage.getItem("NombreDispositivo")+'</div>' +
+                    '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Nombre de Usuario: '+localStorage.getItem("NombreUsuario")+'</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>');
 
                 this.dameMonedaPredeterminada();
                 this.getOpcionesOrden().idCliente = idCliente;
@@ -303,7 +321,8 @@ Ext.define('APP.controller.phone.Ordenes', {
             value.down('#moneda').setDisabled(false);
 
             if (codigoMonedaSeleccionada == codigoMonedaPredeterminada) {
-                clienteSeleccionado.tipoCambio = parseFloat(1).toFixed(2);;
+                clienteSeleccionado.tipoCambio = parseFloat(1).toFixed(2);
+                ;
             } else {
                 clienteSeleccionado.tipoCambio = parseFloat(tipoCambio).toFixed(2);
             }
@@ -323,9 +342,9 @@ Ext.define('APP.controller.phone.Ordenes', {
     },
 
     /**
-    * Recorre el store de monedas y obtiene la predeterminada.
-    */
-    dameMonedaPredeterminada: function (){
+     * Recorre el store de monedas y obtiene la predeterminada.
+     */
+    dameMonedaPredeterminada: function () {
         var me = this,
             storeMonedas = Ext.getStore('Monedas');
 
@@ -376,22 +395,35 @@ Ext.define('APP.controller.phone.Ordenes', {
     onEliminarOrden: function (newActiveItem, tabPanel) {
         var me = this,
             ordenes = Ext.getStore('Ordenes');
-        Ext.Msg.confirm("Eliminar orden", "Se va a eliminar la orden, todos los productos agregados se perderán ¿está seguro?", function (e) {
 
-            if (e == 'yes') {
-                var view = me.getMainCard().getActiveItem(),
-                    titulo = view.down('toolbar'),
-                    name = titulo.getTitle().getTitle();
+        Ext.Msg.show({
+            title: 'Eliminar orden',
+            message: 'Se va a eliminar la orden, todos los productos agregados se perderán ¿está seguro?',
+            width: 300,
+            buttons: [{
+                itemId : 'no',
+                text   : 'No'
+            },{
+                itemId : 'yes',
+                text   : 'Si',
+                ui     : 'action'
+            }],
+            fn: function (buttonId) {
+                if (buttonId == 'yes') {
+                    var view = me.getMainCard().getActiveItem(),
+                        titulo = view.down('toolbar'),
+                        name = titulo.getTitle().getTitle();
 
-                ordenes.removeAll();
-                me.getMainCard().setActiveItem(0);
-                view.remove(titulo, false); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.                
-                //me.getMenuNav().down('toolbar').setTitle(name);
-                me.getMenuNav().remove(me.getMenuNav().down('toolbar'));
-                me.getMenuNav().add(titulo);
+                    ordenes.removeAll();
+                    me.getMainCard().setActiveItem(0);
+                    view.remove(titulo, false); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.
+                    //me.getMenuNav().down('toolbar').setTitle(name);
+                    me.getMenuNav().remove(me.getMenuNav().down('toolbar'));
+                    me.getMenuNav().add(titulo);
 
-            } else {
-                tabPanel.setActiveItem(0);
+                } else {
+                    tabPanel.setActiveItem(0);
+                }
             }
         });
     },
@@ -470,7 +502,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         } else {
 
             if (moneda != codigoMonedaSeleccionada) {
-                if(opcionesOrden.tipoCambio == 1){ // Cuando el documento de la orden recuperada viene en USD y se agrega un producto con USD, al realizar cambio de divisa por MPX se precisa el tipo de cambio para actualizar los valores de la orden.
+                if (opcionesOrden.tipoCambio == 1) { // Cuando el documento de la orden recuperada viene en USD y se agrega un producto con USD, al realizar cambio de divisa por MPX se precisa el tipo de cambio para actualizar los valores de la orden.
                     me.obtenerTipoCambio(codigoMonedaSeleccionada, record);
                     console.log('entré');
                 } else {
@@ -541,8 +573,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                         me.ayudaAAgregar(view, 'monedaDiferente');
                         me.ayudaAAgregar(view, 'cantidad'); // Se modifica la cantidad sólo si el tipo de cambio es exitoso.
                     } else {
-                        
-                        if(record.get('CodigoMoneda') + ' ' == codigoMonedaPredeterminada){ // Si el record es de la moneda predeterminada se pinta 1.00 en el tipo de cambio.
+
+                        if (record.get('CodigoMoneda') + ' ' == codigoMonedaPredeterminada) { // Si el record es de la moneda predeterminada se pinta 1.00 en el tipo de cambio.
                             me.getOpcionesOrden().codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaPredeterminada;
                             console.log('En la moneda predeterminada');
                             form.setValues({
@@ -552,7 +584,7 @@ Ext.define('APP.controller.phone.Ordenes', {
 
                             me.actualizaOrden(record.get('CodigoMoneda') + ' ');
 
-                        } else{
+                        } else {
                             me.getOpcionesOrden().codigoMonedaSeleccionada = moneda;
                             console.log('Los dolarucos');
                             form.setValues({
@@ -599,12 +631,12 @@ Ext.define('APP.controller.phone.Ordenes', {
     actualizaOrden: function (moneda) {
         var me = this, precio, importe,
             codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
-            //tipoCambio = me.getOpcionesOrden().tipoCambio,
+        //tipoCambio = me.getOpcionesOrden().tipoCambio,
             ordenes = Ext.getStore('Ordenes');
 
-        if(moneda == codigoMonedaPredeterminada){
+        if (moneda == codigoMonedaPredeterminada) {
             ordenes.each(function (item, index, length) {
-                if(item.get('esOrdenRecuperada')){
+                if (item.get('esOrdenRecuperada')) {
                     tipoCambio = item.get('TipoCambio');
                 } else {
                     tipoCambio = me.getOpcionesOrden().tipoCambio;
@@ -625,7 +657,7 @@ Ext.define('APP.controller.phone.Ordenes', {
 
             ordenes.each(function (item, index, length) {
                 console.log(item.get('esOrdenRecuperada'), 'Recuperada');
-                if(item.get('esOrdenRecuperada')){
+                if (item.get('esOrdenRecuperada')) {
                     tipoCambio = item.get('TipoCambio');
                 } else {
                     tipoCambio = me.getOpcionesOrden().tipoCambio;
@@ -662,9 +694,9 @@ Ext.define('APP.controller.phone.Ordenes', {
                 me.actualizarTotales();
 
                 if (ordenes.getData().items.length < 2) {
-                    me.getPartidaContainer().down('list').emptyTextCmp.show();
+                    //me.getPartidaContainer().down('list').emptyTextCmp.show();
                 } else {
-                    me.getPartidaContainer().down('list').emptyTextCmp.hide();
+                    //me.getPartidaContainer().down('list').emptyTextCmp.hide();
                 }
             }
         });
@@ -765,7 +797,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             moneda = values.moneda,
             importe = values.importe,
             modo = me.getOpcionesOrden().modoForm;
-            codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
+        codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
 
 
         Ext.getStore('Productos').resetCurrentPage();
@@ -809,9 +841,9 @@ Ext.define('APP.controller.phone.Ordenes', {
             codigo = values.CodigoArticulo,
             indPro = productos.find('CodigoArticulo', codigo);
 
-            var productoAgregado = productos.getAt(indPro);
+        var productoAgregado = productos.getAt(indPro);
 
-            var cantidadActual = productoAgregado.get('cantidad'),
+        var cantidadActual = productoAgregado.get('cantidad'),
             totalDeImpuesto = me.getOpcionesOrden().totalDeImpuesto,
             tipoCambio = me.getOpcionesOrden().tipoCambio,
             codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
@@ -986,7 +1018,7 @@ Ext.define('APP.controller.phone.Ordenes', {
 
                     productoSeleccionado.set(response.Data[0]);
 
-                me.llenaAgregarProductos(response.Data[0]); // Hacer un
+                    me.llenaAgregarProductos(response.Data[0]); // Hacer un
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }
@@ -995,9 +1027,9 @@ Ext.define('APP.controller.phone.Ordenes', {
     },
 
     /**
-    * Establece los valores del agregarproductosform
-    * @param valores Los valores para el formulario.
-    */
+     * Establece los valores del agregarproductosform
+     * @param valores Los valores para el formulario.
+     */
     llenaAgregarProductos: function (valores) {
         var me = this,
             view = me.getNavigationOrden(),
@@ -1046,7 +1078,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         precio = APP.core.FormatCurrency.currency(valores.ListaPrecios[0].Precio, moneda);
         cantidad = 1;
 
-        view.setMasked({xtype:'loadmask',message:'Cargando Datos...'});
+        view.setMasked({xtype: 'loadmask', message: 'Cargando Datos...'});
         //Se calcula descuento
         Ext.data.JsonP.request({
             url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/ObtenerPrecioEspecialiMobile",
@@ -1071,9 +1103,9 @@ Ext.define('APP.controller.phone.Ordenes', {
                     desc = 0;
                 } else {
                     desc = (precio2 - response.Data[0]).toFixed(2);
-                //
+                    //
                     desc = (desc * 100 / precio2);
-                //
+                    //
                 }
 
                 if (procesada) {
@@ -1169,11 +1201,11 @@ Ext.define('APP.controller.phone.Ordenes', {
     },
 
     /**
-    * Establece los valores originales a agregarproductosform, esta funcion se llama cuando la moneda del documento es distinta a la
-    * moneda del producto.
-    * @param values Los valores a cambiar en el form.
-    * @return Un nuevo objeto con los nuevos valores
-    */
+     * Establece los valores originales a agregarproductosform, esta funcion se llama cuando la moneda del documento es distinta a la
+     * moneda del producto.
+     * @param values Los valores a cambiar en el form.
+     * @return Un nuevo objeto con los nuevos valores
+     */
     ponValoresOriginalesAAgregarProductoForm: function (values) {
         var me = this,
             precio, importe, newObject, totaldeimpuesto, precioConDescuento, descuento,
@@ -1212,7 +1244,7 @@ Ext.define('APP.controller.phone.Ordenes', {
 
                 newObject.totalDeImpuesto = newObject.totalDeImpuesto / values.TipoCambio;
 
-            //
+                //
             }
         } else {
             precio = APP.core.FormatCurrency.formatCurrencytoNumber(values.Precio);
@@ -1220,7 +1252,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             importe = APP.core.FormatCurrency.formatCurrencytoNumber(values.importe) / values.TipoCambio; //precioConDescuento * values.cantidad; 
 
 
-        //
+            //
             //newObject.importe = APP.core.FormatCurrency.currency(importe, moneda);
             newObject.precioConDescuento = APP.core.FormatCurrency.currency(precioConDescuento, moneda);
         }
@@ -1257,7 +1289,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         });
     },
 
-    actualizaCantidadK: function (numberfield){
+    actualizaCantidadK: function (numberfield) {
         this.actualizaCantidad(numberfield.getValue());
     },
 
@@ -1340,7 +1372,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param v La vista que ha sido popeada.
      */
     onPopNavigationOrden: function (t, v) {
-        if(this.getOpcionesOrden() == undefined){
+        if (this.getOpcionesOrden() == undefined) {
             return;
         }
 
@@ -1358,9 +1390,9 @@ Ext.define('APP.controller.phone.Ordenes', {
         }
 
         if (store.getData().items.length <= 1) {
-            me.getPartidaContainer().down('list').emptyTextCmp.show();
+            //me.getPartidaContainer().down('list').emptyTextCmp.show();
         } else {
-            me.getPartidaContainer().down('list').emptyTextCmp.hide();
+            //me.getPartidaContainer().down('list').emptyTextCmp.hide();
         }
 
         if (itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
@@ -1444,15 +1476,15 @@ Ext.define('APP.controller.phone.Ordenes', {
                     precio = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')),
                     precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')),
                     importe;
-                    //importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
+                //importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
 
 
-/*                if(moneda != codigoMonedaSeleccionada){ // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
-                    //precioConDescuento /= tipoCambio;
-                    //precio /= tipoCambio;
-                    precio = parseFloat(precio.toFixed(2));*/
+                /*                if(moneda != codigoMonedaSeleccionada){ // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
+                 //precioConDescuento /= tipoCambio;
+                 //precio /= tipoCambio;
+                 precio = parseFloat(precio.toFixed(2));*/
 
-                if(moneda != codigoMonedaSeleccionada) { // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
+                if (moneda != codigoMonedaSeleccionada) { // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
                     //precioConDescuento *= tipoCambio;
                     precio *= tipoCambio;
                     moneda = codigoMonedaSeleccionada;
@@ -1497,7 +1529,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                         me.getNavigationOrden().remove(me.getNavigationOrden().down('toolbar'), true);
                         me.getMenuNav().remove(me.getMenuNav().down('toolbar'), true);
 
-                        if(opcionesOrden.actionOrden == 'crear'){
+                        if (opcionesOrden.actionOrden == 'crear') {
                             me.getMainCard().getActiveItem().pop();
                         } else {
                             me.getMainCard().getActiveItem().pop(2);
@@ -1510,8 +1542,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                     }
                 },
 
-                failure:function(){
-                    Ext.Msg.alert('Problemas de conexión', 'El servidor está tardando demasiado en responder. Intente más tarde.',function(){
+                failure: function () {
+                    Ext.Msg.alert('Problemas de conexión', 'El servidor está tardando demasiado en responder. Intente más tarde.', function () {
                         me.getMainCard().getActiveItem().setMasked(false);
                         me.getOpcionesOrden().setActiveItem(0);
                     });
@@ -1533,10 +1565,10 @@ Ext.define('APP.controller.phone.Ordenes', {
             store = Ext.getStore('Ordenes'),
             productos = Ext.getStore('Productos'),
             barraTitulo = ({
-            xtype: 'toolbar',
-            docked: 'top',
-            title: 'titulo'
-        });
+                xtype: 'toolbar',
+                docked: 'top',
+                title: 'titulo'
+            });
 
         me.getMainCard().getAt(1).setMasked(false);
 
@@ -1559,9 +1591,9 @@ Ext.define('APP.controller.phone.Ordenes', {
                 me.getOpcionesOrden().NumeroDocumento = record.get('NumeroDocumento');
 
                 if (partidas.length < 2) {
-                    me.getPartidaContainer().down('list').emptyTextCmp.show();
+                    //me.getPartidaContainer().down('list').emptyTextCmp.show();
                 } else {
-                    me.getPartidaContainer().down('list').emptyTextCmp.hide();
+                    //me.getPartidaContainer().down('list').emptyTextCmp.hide();
                 }
 
                 partidas.forEach(function (item, index) {
@@ -1572,11 +1604,11 @@ Ext.define('APP.controller.phone.Ordenes', {
                         importe = item.Importe,
                         tipoCambio = item.TipoCambio;
 
-                    if(codigoMonedaSeleccionada == codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ //Si Orden viene en MXP y producto en USD. El importe siempre viene en MXP
+                    if (codigoMonedaSeleccionada == codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada) { //Si Orden viene en MXP y producto en USD. El importe siempre viene en MXP
                         precioConDescuento *= tipoCambio;
                     }
 
-                    if(codigoMonedaSeleccionada != codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ // Si orden viene en USD y producto en USD
+                    if (codigoMonedaSeleccionada != codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada) { // Si orden viene en USD y producto en USD
                         importe /= tipoCambio;
                     }
 
@@ -1597,10 +1629,10 @@ Ext.define('APP.controller.phone.Ordenes', {
                 });
 
 //                if(codigoMonedaSeleccionada != codigoMonedaPredeterminada){
-                    var monedas = Ext.getStore('Monedas'),
-                        indMoneda = monedas.find('CodigoMoneda', codigoMonedaSeleccionada.trim());
+                var monedas = Ext.getStore('Monedas'),
+                    indMoneda = monedas.find('CodigoMoneda', codigoMonedaSeleccionada.trim());
 
-                    me.estableceMonedaPredeterminada(monedas.getAt(indMoneda));
+                me.estableceMonedaPredeterminada(monedas.getAt(indMoneda));
 //                }
 
                 store.setData(partidas);
@@ -1621,7 +1653,6 @@ Ext.define('APP.controller.phone.Ordenes', {
                 //productos.setData(partidas);
 
 
-
                 me.getMainCard().setActiveItem(1); // Activamos el item 1 del menu principal navigationorden
                 me.getMainCard().getActiveItem().getNavigationBar().setTitle(idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
                 me.getMainCard().getActiveItem().down('opcionesorden').setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
@@ -1634,7 +1665,7 @@ Ext.define('APP.controller.phone.Ordenes', {
 
     },
 
-    onBuscarTransaccion: function (button){
+    onBuscarTransaccion: function (button) {
         var me = this,
             store = Ext.getStore('Transacciones'),
             idCliente = me.getMenuNav().getNavigationBar().getTitle(),
@@ -1650,7 +1681,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         store.load();
     },
 
-    limpiaBusquedaTransacciones: function() {
+    limpiaBusquedaTransacciones: function () {
         var me = this,
             store = me.getTransaccionList().getStore(),
             idCliente = me.getMenuNav().getNavigationBar().getTitle();
@@ -1713,30 +1744,30 @@ Ext.define('APP.controller.phone.Ordenes', {
             success: function (response) {
 
                 var procesada = response.Procesada,
-                valor = {
-                    Disponible: 'Disponible',
-                    NombreAlmacen: record.get('NombreAlmacen'),
-                    CodigoAlmacen: record.get('CodigoAlmacen')
-                };
+                    valor = {
+                        Disponible: 'Disponible',
+                        NombreAlmacen: record.get('NombreAlmacen'),
+                        CodigoAlmacen: record.get('CodigoAlmacen')
+                    };
 
-                if(procesada){
+                if (procesada) {
                     valor.Disponible = parseFloat(response.Data[0]).toFixed(2);
                 } else {
                     valor.Disponible = 'Error al obtener disponible';
                 }
 
-                    view.down('agregarproductosform').setValues(valor);
-                    view.pop();
+                view.down('agregarproductosform').setValues(valor);
+                view.pop();
             }
         });
     },
 
-    launch: function (){
+    launch: function () {
         var me = this;
         Ext.getStore('Productos').on('load', me.estableceCantidadAProductos);
     },
 
-    onKeyupActualizaCantidad: function (t){
+    onKeyupActualizaCantidad: function (t) {
         var me = this;
 
         me.actualizaCantidad(null, t.getValue(), null);

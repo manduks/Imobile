@@ -127,6 +127,7 @@
 /Applications/XAMPP/xamppfiles/htdocs/Imobiler/phonegap/platforms/android/assets/www/resources/images/bubbles.png \
 /Applications/XAMPP/xamppfiles/htdocs/Imobiler/phonegap/platforms/android/assets/www/resources/images/cart.png \
 /Applications/XAMPP/xamppfiles/htdocs/Imobiler/phonegap/platforms/android/assets/www/resources/images/clock.png \
+/Applications/XAMPP/xamppfiles/htdocs/Imobiler/phonegap/platforms/android/assets/www/resources/images/engine.png \
 /Applications/XAMPP/xamppfiles/htdocs/Imobiler/phonegap/platforms/android/assets/www/resources/images/graph.png \
 /Applications/XAMPP/xamppfiles/htdocs/Imobiler/phonegap/platforms/android/assets/www/resources/images/iMobile.png \
 /Applications/XAMPP/xamppfiles/htdocs/Imobiler/phonegap/platforms/android/assets/www/resources/images/iMobilei.png \

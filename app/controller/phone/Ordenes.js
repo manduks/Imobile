@@ -1135,7 +1135,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
 
         if (view.getActiveItem().xtype == 'agregarproductosform') {
-            return
+            return;
         }
 
         view.push({
@@ -1531,6 +1531,7 @@ console.log(params);
             idCliente = me.getMenuNav().getNavigationBar().getTitle(),
             store = Ext.getStore('Ordenes'),
             productos = Ext.getStore('Productos'),
+            index,
             barraTitulo = ({
             xtype: 'toolbar',
             docked: 'top',
@@ -1563,27 +1564,30 @@ console.log(params);
                     me.getPartidaContainer().down('list').emptyTextCmp.hide();
                 }
 
-                partidas.forEach(function (item, index) {                    
+//                partidas.forEach(function (item, index) {
+                for(index = 0; index < partidas.length; index++){
 
-                    var moneda = item.Moneda + ' ',
+                    var item = partidas[index],
+                        moneda = item.Moneda + ' ',
                         precio = item.Precio,
                         precioConDescuento = item.PrecioDescuento,
                         importe = item.Importe,
                         tipoCambio = item.TipoCambio;
 
-                    if(codigoMonedaSeleccionada == codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ //Si Orden viene en MXP y producto en USD. El importe siempre viene en MXP
-                        precioConDescuento *= tipoCambio;
+                    if(codigoMonedaSeleccionada == codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ //Si Orden viene en MXP y producto en USD. El importe siempre venía en MXP
+                        console.log('Orden en MXP y producto en USD');
                     }
 
-                    if(codigoMonedaSeleccionada != codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ // Si orden viene en USD y producto en USD
-                        importe /= tipoCambio;
+/*                    if(codigoMonedaSeleccionada != codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ // Si orden viene en USD y producto en USD
+                        console.log('Orden en USD y producto en USD');
+                    }*/
+
+                   if(codigoMonedaSeleccionada != codigoMonedaPredeterminada && moneda == codigoMonedaPredeterminada){ // Si orden viene en USD y producto en MXP
+                        me.mandaMensaje('Moneda Diferente', 'No se pudo recuperar la Orden de Venta pues alguna partida viene en una moneda diferente a la del documento y está en moneda extranjera.');
+                        return;
                     }
 
                     //importe = precioConDescuento * item.Cantidad,
-
-/*                    if(partidas.[index]){
-
-                    }*/
 
                     partidas[index].cantidad = partidas[index].Cantidad;
                     partidas[index].importe = APP.core.FormatCurrency.currency(importe, codigoMonedaSeleccionada);
@@ -1597,7 +1601,7 @@ console.log(params);
                     partidas[index].PorcentajeDescuento = partidas[index].PorcentajeDescuento + '%';
                     partidas[index].esOrdenRecuperada = true;
                     
-                });
+                };
 
 //                if(codigoMonedaSeleccionada != codigoMonedaPredeterminada){
                     var monedas = Ext.getStore('Monedas'),
@@ -1613,17 +1617,10 @@ console.log(params);
                     //cantidad = item.get('cantidad');
                     ind = productos.find('CodigoArticulo', codigo);
                     if (ind != -1) { // Validamos que el elemento de la orden esté en los elementos actuales del store.
-                        // cantidadActual = productos.getAt(ind).get('cantidad');
-                        // productos.getAt(ind).setData(item);//('cantidad', cantidadActual + cantidad);
                     } else {
-                        productos.add(item);
+                        productos.add(item); // Si no está lo agregamos.
                     }
                 });
-
-                //productos.removeAll();
-                //productos.setData(partidas);
-
-
 
                 me.getMainCard().setActiveItem(1); // Activamos el item 1 del menu principal navigationorden
                 me.getMainCard().getActiveItem().getNavigationBar().setTitle(idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
@@ -1631,7 +1628,6 @@ console.log(params);
                 me.actualizarTotales();
                 barraTitulo.title = view.down('toolbar').getTitle();
                 me.getMainCard().getActiveItem().add(barraTitulo);
-                                
             }
         });
 

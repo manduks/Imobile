@@ -424,21 +424,13 @@ Ext.define('APP.controller.phone.Ordenes', {
      */
     onEliminarOrden: function (newActiveItem, tabPanel) {
         var me = this,
-            ordenes = Ext.getStore('Ordenes');
+            ordenes = Ext.getStore('Ordenes'),
+            titulo = 'Eliminar orden',
+            mensaje = 'Se va a eliminar la orden, todos los productos agregados se perderán ¿está seguro?',
+            ancho = 300;
 
-        Ext.Msg.show({
-            title: 'Eliminar orden',
-            message: 'Se va a eliminar la orden, todos los productos agregados se perderán ¿está seguro?',
-            width: 300,
-            buttons: [{
-                itemId : 'no',
-                text   : 'No'
-            },{
-                itemId : 'yes',
-                text   : 'Si',
-                ui     : 'action'
-            }],
-            fn: function (buttonId) {
+        me.confirma(titulo, mensaje, ancho, 
+            function (buttonId) {
                 if (buttonId == 'yes') {
                     var view = me.getMainCard().getActiveItem(),
                         titulo = view.down('toolbar'),
@@ -450,11 +442,36 @@ Ext.define('APP.controller.phone.Ordenes', {
                     //me.getMenuNav().down('toolbar').setTitle(name);
                     me.getMenuNav().remove(me.getMenuNav().down('toolbar'));
                     me.getMenuNav().add(titulo);
+                    me.actualizarTotales();
 
                 } else {
                     tabPanel.setActiveItem(0);
                 }
             }
+        );
+    },
+
+    /**
+    * Muestra un mensaje de confirmación con dos botones, si y no y ejecuta la función que le pasan.
+    * @param titulo El título de la casilla del mensaje.
+    * @param mensaje El cuerpo del mensaje.
+    * @param ancho El ancho de la casilla del mensaje.
+    * @param funcion La función a ejecutar.
+    */
+    confirma: function (titulo, mensaje, ancho, funcion){
+        Ext.Msg.show({
+            title: titulo,
+            message: mensaje,
+            width: ancho,
+            buttons: [{
+                itemId : 'no',
+                text   : 'No'
+            },{
+                itemId : 'yes',
+                text   : 'Si',
+                ui     : 'action'
+            }],
+            fn: funcion
         });
     },
 
@@ -714,21 +731,27 @@ console.log(clienteSeleccionado, 'El cliente');
      */
     eliminaPartida: function (list, index, target, record) {
         var me = this,
-            ordenes = Ext.getStore('Ordenes');
-        Ext.Msg.confirm("Eliminar producto de la orden", "Se va a eliminar el producto de la orden, ¿está seguro?", function (e) {
+            ordenes = Ext.getStore('Ordenes'),
+            titulo = "Eliminar producto de la orden",
+            mensaje = "Se va a eliminar el producto de la orden, ¿está seguro?",
+            ancho = 300;
 
-            if (e == 'yes') {
-                var ind = ordenes.find('id', record.data.id);
-                ordenes.removeAt(ind);
-                me.actualizarTotales();
+        me.confirma(titulo, mensaje, ancho, 
+            function (buttonId) {
+                if (buttonId == 'yes') {
+                    var ind = ordenes.find('id', record.data.id);
+                        ordenes.removeAt(ind);
 
-                if (ordenes.getData().items.length < 2) {
-                    //me.getPartidaContainer().down('list').emptyTextCmp.show();
-                } else {
-                    //me.getPartidaContainer().down('list').emptyTextCmp.hide();
+                    me.actualizarTotales();
+
+                    if (ordenes.getData().items.length < 2) {
+                        //me.getPartidaContainer().down('list').emptyTextCmp.show();
+                    } else {
+                        //me.getPartidaContainer().down('list').emptyTextCmp.hide();
+                    }
                 }
             }
-        });
+        );
     },
 
     /**
@@ -1438,28 +1461,29 @@ console.log(clienteSeleccionado, 'El cliente');
      */
     confirmaTerminarOrden: function (newActiveItem, t, oldActiveItem, eOpts) {
         var me = this,
-            opcionesOrden = me.getOpcionesOrden();
+            opcionesOrden = me.getOpcionesOrden(),
+            titulo,
+            mensaje,
+            ancho = 300;
 
         if (opcionesOrden.actionOrden == 'crear') {
-            Ext.Msg.confirm("Terminar orden", "¿Desea terminar la orden de venta?", function (e) {
+            titulo = "Terminar orden";
+            mensaje = "¿Desea terminar la orden de venta?";
 
-                if (e == 'yes') {
-                    me.onTerminarOrden();
-                } else {
-                    me.getOpcionesOrden().setActiveItem(0);
-                }
-            });
         } else {
-            Ext.Msg.confirm("Actualizar orden", "¿Desea actualizar la orden de venta?", function (e) {
-
-                if (e == 'yes') {
-                    me.onTerminarOrden();
-                } else {
-                    me.getOpcionesOrden().setActiveItem(0);
-                }
-            });
+            titulo = "Actualizar orden";
+            mensaje = "¿Desea actualizar la orden de venta?";
         }
 
+        me.confirma(titulo, mensaje, ancho, 
+            function (buttonId) {
+                if (buttonId == 'yes') {
+                    me.onTerminarOrden();    
+                } else {
+                    me.getOpcionesOrden().setActiveItem(0);
+                }
+            }
+        );
     },
 
     /**

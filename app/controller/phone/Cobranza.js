@@ -9,7 +9,8 @@ Ext.define('APP.controller.phone.Cobranza', {
             menuNav:'menunav',
             mainCard:'maincard',
             navigationCobranza:'navigationcobranza',
-            totales: 'totalescontainer'
+            totales: 'totalescontainer',
+            facturasList: 'facturaslist'
         },
     	control:{
 
@@ -228,6 +229,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             //opcion: me.getMenu().getActiveItem().opcion
         });
 
+        view.getActiveItem().getStore().load();
         view.getNavigationBar().down('#agregarPago').hide();
     },
 
@@ -397,7 +399,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             entradaMostrada = APP.core.FormatCurrency.currency(entrada, moneda),
             ind = form.ind,
             store = Ext.getStore('Totales');
-console.log(numeroTarjeta, 'Número de la Tarjeta');
+
             store.add({
                 tipo: forma,
                 monto: entradaMostrada,
@@ -466,7 +468,7 @@ console.log(numeroTarjeta, 'Número de la Tarjeta');
             view = me.getMainCard().getActiveItem(),
             idCliente = view.getNavigationBar().getTitle(),
             total = 0,
-            store = Ext.getStore('Facturas'),
+            store = me.getFacturasList().getStore(),//Ext.getStore('Facturas'),
             totales = view.down('totalapagarlist').getStore(),// Ext.getStore('Totales'),
             array = store.getData().items,
             fecha = new Date(Ext.Date.now()),
@@ -493,21 +495,21 @@ console.log(numeroTarjeta, 'Número de la Tarjeta');
 
             if(me.getMenuNav().getActiveItem().opcion == 'anticipo'){
                 params["Cobranza.Tipo"] = 'A';
-                params["Cobranza.NumeroPedido"] = 'A';
+                params["Cobranza.NumeroPedido"] = array[0].data.Folio;
                 msg = 'Se realizó el anticipo exitosamente con folio ';
+            } else {
+                Ext.Array.forEach(array, function (item, index, allItems) {
+                    //console.log(item, 'terminar cobranza');
+                    //total += (Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad')) + item.get('totalDeImpuesto');
+
+                    params["Cobranza.CobranzaFacturas[" + index + "].NumeroFactura"] = item.data.Folio;//get('NumeroDocumento');
+                    params["Cobranza.CobranzaFacturas[" + index + "].Monto"] = item.get('TotalDocumento');//item.get('Saldo');
+                    params["Cobranza.CobranzaFacturas[" + index + "].NumeroLinea"] = index;
+                });
             }
 
             //console.log(params);
             //localStorage.setItem("FolioInterno", Folio);
-
-            Ext.Array.forEach(array, function (item, index, allItems) {
-                //console.log(item, 'terminar cobranza');
-                //total += (Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad')) + item.get('totalDeImpuesto');
-
-                params["Cobranza.CobranzaFacturas[" + index + "].NumeroFactura"] = item.data.Folio;//get('NumeroDocumento');
-                params["Cobranza.CobranzaFacturas[" + index + "].Monto"] = item.get('TotalDocumento');//item.get('Saldo');
-                params["Cobranza.CobranzaFacturas[" + index + "].NumeroLinea"] = index;
-            });
 
             totales.each(function (item, index) {
                 //Limpiamos los valores que no aparecen en todas las formas de pago.
@@ -538,21 +540,11 @@ console.log(numeroTarjeta, 'Número de la Tarjeta');
                         params["Cobranza.CobranzaDetalles[" + index + "].NumeroTarjeta"] = item.data.NumeroTarjeta; 
                         break;
                 }
-
-                console.log(params["Cobranza.CobranzaDetalles[" + index + "].Banco"]);
+                
             });
 console.log(params);
-            //params["Orden.TotalDocumento"] = parseFloat(total).toFixed(2);
 
-            /*            if(me.actionOrden == 'crear'){
-             url = "http://" + me.dirIP + "/iMobile/COK1_CL_OrdenVenta/AgregarOrdenMobile";
-             msg = "Se agrego la orden correctamente con folio: ";
-             } else {
-             url = "http://" + me.dirIP + "iMobile/COK1_CL_OrdenVenta/ActualizarOrdenVentaiMobile";
-             msg = "Se acualizo la orden correctamente con folio: ";
-             } */
-
-            url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
+/*            url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
 
             Ext.data.JsonP.request({
                 url: url,
@@ -572,7 +564,7 @@ console.log(params);
                     }
                 }
             });
-
+*/
         } else {            
             Ext.Msg.alert("Sin pago", "Agrega por lo menos un pago.");
         }

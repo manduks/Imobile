@@ -1,2 +1,2 @@
 // @tag full-page
-// @require /Applications/XAMPP/xamppfiles/htdocs/Imobiler/app.js
+// @require /home/th3gr4bb3r/public_html/Imobile/app.js

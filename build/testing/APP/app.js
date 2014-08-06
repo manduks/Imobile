@@ -36239,6 +36239,838 @@ Ext.define('Ext.Ajax', {
 });
 
 /**
+ * Provides a cross browser class for retrieving location information.
+ *
+ * Based on the [Geolocation API Specification](http://dev.w3.org/geo/api/spec-source.html)
+ *
+ * When instantiated, by default this class immediately begins tracking location information,
+ * firing a {@link #locationupdate} event when new location information is available.  To disable this
+ * location tracking (which may be battery intensive on mobile devices), set {@link #autoUpdate} to `false`.
+ *
+ * When this is done, only calls to {@link #updateLocation} will trigger a location retrieval.
+ *
+ * A {@link #locationerror} event is raised when an error occurs retrieving the location, either due to a user
+ * denying the application access to it, or the browser not supporting it.
+ *
+ * The below code shows a GeoLocation making a single retrieval of location information.
+ *
+ *     var geo = Ext.create('Ext.util.Geolocation', {
+ *         autoUpdate: false,
+ *         listeners: {
+ *             locationupdate: function(geo) {
+ *                 alert('New latitude: ' + geo.getLatitude());
+ *             },
+ *             locationerror: function(geo, bTimeout, bPermissionDenied, bLocationUnavailable, message) {
+ *                 if(bTimeout){
+ *                     alert('Timeout occurred.');
+ *                 } else {
+ *                     alert('Error occurred.');
+ *                 }
+ *             }
+ *         }
+ *     });
+ *     geo.updateLocation();
+ */
+Ext.define('Ext.util.Geolocation', {
+    extend: 'Ext.Evented',
+    alternateClassName: ['Ext.util.GeoLocation'],
+
+    config: {
+        /**
+         * @event locationerror
+         * Raised when a location retrieval operation failed.
+         *
+         * In the case of calling updateLocation, this event will be raised only once.
+         *
+         * If {@link #autoUpdate} is set to `true`, this event could be raised repeatedly.
+         * The first error is relative to the moment {@link #autoUpdate} was set to `true`
+         * (or this {@link Ext.util.Geolocation} was initialized with the {@link #autoUpdate} config option set to `true`).
+         * Subsequent errors are relative to the moment when the device determines that it's position has changed.
+         * @param {Ext.util.Geolocation} this
+         * @param {Boolean} timeout
+         * Boolean indicating a timeout occurred
+         * @param {Boolean} permissionDenied
+         * Boolean indicating the user denied the location request
+         * @param {Boolean} locationUnavailable
+         * Boolean indicating that the location of the device could not be determined.
+         * For instance, one or more of the location providers used in the location acquisition
+         * process reported an internal error that caused the process to fail entirely.
+         * @param {String} message An error message describing the details of the error encountered.
+         *
+         * This attribute is primarily intended for debugging and should not be used
+         * directly in an application user interface.
+         */
+
+        /**
+         * @event locationupdate
+         * Raised when a location retrieval operation has been completed successfully.
+         * @param {Ext.util.Geolocation} this
+         * Retrieve the current location information from the GeoLocation object by using the read-only
+         * properties: {@link #latitude}, {@link #longitude}, {@link #accuracy}, {@link #altitude}, {@link #altitudeAccuracy}, {@link #heading}, and {@link #speed}.
+         */
+
+        /**
+         * @cfg {Boolean} autoUpdate
+         * When set to `true`, continually monitor the location of the device (beginning immediately)
+         * and fire {@link #locationupdate} and {@link #locationerror} events.
+         */
+        autoUpdate: true,
+
+        /**
+         * @cfg {Number} frequency
+         * The frequency of each update if {@link #autoUpdate} is set to `true`.
+         */
+        frequency: 10000,
+
+        /**
+         * Read-only property representing the last retrieved
+         * geographical coordinate specified in degrees.
+         * @type Number
+         * @readonly
+         */
+        latitude: null,
+
+        /**
+         * Read-only property representing the last retrieved
+         * geographical coordinate specified in degrees.
+         * @type Number
+         * @readonly
+         */
+        longitude: null,
+
+        /**
+         * Read-only property representing the last retrieved
+         * accuracy level of the latitude and longitude coordinates,
+         * specified in meters.
+         *
+         * This will always be a non-negative number.
+         *
+         * This corresponds to a 95% confidence level.
+         * @type Number
+         * @readonly
+         */
+        accuracy: null,
+
+        /**
+         * Read-only property representing the last retrieved
+         * height of the position, specified in meters above the ellipsoid
+         * [WGS84](http://dev.w3.org/geo/api/spec-source.html#ref-wgs).
+         * @type Number
+         * @readonly
+         */
+        altitude: null,
+
+        /**
+         * Read-only property representing the last retrieved
+         * accuracy level of the altitude coordinate, specified in meters.
+         *
+         * If altitude is not null then this will be a non-negative number.
+         * Otherwise this returns `null`.
+         *
+         * This corresponds to a 95% confidence level.
+         * @type Number
+         * @readonly
+         */
+        altitudeAccuracy: null,
+
+        /**
+         * Read-only property representing the last retrieved
+         * direction of travel of the hosting device,
+         * specified in non-negative degrees between 0 and 359,
+         * counting clockwise relative to the true north.
+         *
+         * If speed is 0 (device is stationary), then this returns `NaN`.
+         * @type Number
+         * @readonly
+         */
+        heading: null,
+
+        /**
+         * Read-only property representing the last retrieved
+         * current ground speed of the device, specified in meters per second.
+         *
+         * If this feature is unsupported by the device, this returns `null`.
+         *
+         * If the device is stationary, this returns 0,
+         * otherwise it returns a non-negative number.
+         * @type Number
+         * @readonly
+         */
+        speed: null,
+
+        /**
+         * Read-only property representing when the last retrieved
+         * positioning information was acquired by the device.
+         * @type Date
+         * @readonly
+         */
+        timestamp: null,
+
+        //PositionOptions interface
+        /**
+         * @cfg {Boolean} allowHighAccuracy
+         * When set to `true`, provide a hint that the application would like to receive
+         * the best possible results. This may result in slower response times or increased power consumption.
+         * The user might also deny this capability, or the device might not be able to provide more accurate
+         * results than if this option was set to `false`.
+         */
+        allowHighAccuracy: false,
+
+        /**
+         * @cfg {Number} timeout
+         * The maximum number of milliseconds allowed to elapse between a location update operation
+         * and the corresponding {@link #locationupdate} event being raised.  If a location was not successfully
+         * acquired before the given timeout elapses (and no other internal errors have occurred in this interval),
+         * then a {@link #locationerror} event will be raised indicating a timeout as the cause.
+         *
+         * Note that the time that is spent obtaining the user permission is **not** included in the period
+         * covered by the timeout.  The `timeout` attribute only applies to the location acquisition operation.
+         *
+         * In the case of calling `updateLocation`, the {@link #locationerror} event will be raised only once.
+         *
+         * If {@link #autoUpdate} is set to `true`, the {@link #locationerror} event could be raised repeatedly.
+         * The first timeout is relative to the moment {@link #autoUpdate} was set to `true`
+         * (or this {@link Ext.util.Geolocation} was initialized with the {@link #autoUpdate} config option set to `true`).
+         * Subsequent timeouts are relative to the moment when the device determines that it's position has changed.
+         */
+
+        timeout: Infinity,
+
+        /**
+         * @cfg {Number} maximumAge
+         * This option indicates that the application is willing to accept cached location information whose age
+         * is no greater than the specified time in milliseconds. If `maximumAge` is set to 0, an attempt to retrieve
+         * new location information is made immediately.
+         *
+         * Setting the `maximumAge` to Infinity returns a cached position regardless of its age.
+         *
+         * If the device does not have cached location information available whose age is no
+         * greater than the specified `maximumAge`, then it must acquire new location information.
+         *
+         * For example, if location information no older than 10 minutes is required, set this property to 600000.
+         */
+        maximumAge: 0,
+
+        // @private
+        provider : undefined
+    },
+
+    updateMaximumAge: function() {
+        if (this.watchOperation) {
+            this.updateWatchOperation();
+        }
+    },
+
+    updateTimeout: function() {
+        if (this.watchOperation) {
+            this.updateWatchOperation();
+        }
+    },
+
+    updateAllowHighAccuracy: function() {
+        if (this.watchOperation) {
+            this.updateWatchOperation();
+        }
+    },
+
+    applyProvider: function(config) {
+        if (Ext.feature.has.Geolocation) {
+            if (!config) {
+                if (navigator && navigator.geolocation) {
+                    config = navigator.geolocation;
+                }
+                else if (window.google) {
+                    config = google.gears.factory.create('beta.geolocation');
+                }
+            }
+        }
+        else {
+            this.fireEvent('locationerror', this, false, false, true, 'This device does not support Geolocation.');
+        }
+        return config;
+    },
+
+    updateAutoUpdate: function(newAutoUpdate, oldAutoUpdate) {
+        var me = this,
+            provider = me.getProvider();
+
+        if (oldAutoUpdate && provider) {
+            clearInterval(me.watchOperationId);
+            me.watchOperationId = null;
+        }
+
+        if (newAutoUpdate) {
+            if (!provider) {
+                me.fireEvent('locationerror', me, false, false, true, null);
+                return;
+            }
+
+            try {
+                me.updateWatchOperation();
+            }
+            catch(e) {
+                me.fireEvent('locationerror', me, false, false, true, e.message);
+            }
+        }
+    },
+
+    // @private
+    updateWatchOperation: function() {
+        var me = this,
+            provider = me.getProvider();
+
+        // The native watchPosition method is currently broken in iOS5...
+
+        if (me.watchOperationId) {
+            clearInterval(me.watchOperationId);
+        }
+
+        function pollPosition() {
+            provider.getCurrentPosition(
+                Ext.bind(me.fireUpdate, me),
+                Ext.bind(me.fireError, me),
+                me.parseOptions()
+            );
+        }
+
+        pollPosition();
+        me.watchOperationId = setInterval(pollPosition, this.getFrequency());
+    },
+
+    /**
+     * Executes a onetime location update operation,
+     * raising either a {@link #locationupdate} or {@link #locationerror} event.
+     *
+     * Does not interfere with or restart ongoing location monitoring.
+     * @param {Function} callback
+     * A callback method to be called when the location retrieval has been completed.
+     *
+     * Will be called on both success and failure.
+     *
+     * The method will be passed one parameter, {@link Ext.util.Geolocation}
+     * (**this** reference), set to `null` on failure.
+     *
+     *     geo.updateLocation(function (geo) {
+     *         alert('Latitude: ' + (geo !== null ? geo.latitude : 'failed'));
+     *     });
+     *
+     * @param {Object} [scope]
+     * The scope (**this** reference) in which the handler function is executed.
+     *
+     * **If omitted, defaults to the object which fired the event.**
+     *
+     * <!--positonOptions undocumented param, see W3C spec-->
+     */
+    updateLocation: function(callback, scope, positionOptions) {
+        var me = this,
+            provider = me.getProvider();
+
+        var failFunction = function(message, error) {
+            if (error) {
+                me.fireError(error);
+            }
+            else {
+                me.fireEvent('locationerror', me, false, false, true, message);
+            }
+            if (callback) {
+                callback.call(scope || me, null, me); //last parameter for legacy purposes
+            }
+        };
+
+        if (!provider) {
+            failFunction(null);
+            return;
+        }
+
+        try {
+            provider.getCurrentPosition(
+                //success callback
+                function(position) {
+                    me.fireUpdate(position);
+                    if (callback) {
+                        callback.call(scope || me, me, me); //last parameter for legacy purposes
+                    }
+                },
+                //error callback
+                function(error) {
+                    failFunction(null, error);
+                },
+                positionOptions || me.parseOptions()
+            );
+        }
+        catch(e) {
+            failFunction(e.message);
+        }
+    },
+
+    // @private
+    fireUpdate: function(position) {
+        var me = this,
+            coords = position.coords;
+
+        this.position = position;
+
+        me.setConfig({
+            timestamp: position.timestamp,
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+            accuracy: coords.accuracy,
+            altitude: coords.altitude,
+            altitudeAccuracy: coords.altitudeAccuracy,
+            heading: coords.heading,
+            speed: coords.speed
+        });
+
+        me.fireEvent('locationupdate', me);
+    },
+
+    // @private
+    fireError: function(error) {
+        var errorCode = error.code;
+        this.fireEvent('locationerror', this,
+            errorCode == error.TIMEOUT,
+            errorCode == error.PERMISSION_DENIED,
+            errorCode == error.POSITION_UNAVAILABLE,
+            error.message == undefined ? null : error.message
+        );
+    },
+
+    // @private
+    parseOptions: function() {
+        var timeout = this.getTimeout(),
+            ret = {
+                maximumAge: this.getMaximumAge(),
+                enableHighAccuracy: this.getAllowHighAccuracy()
+            };
+
+        //Google doesn't like Infinity
+        if (timeout !== Infinity) {
+            ret.timeout = timeout;
+        }
+        return ret;
+    },
+
+    destroy : function() {
+        this.setAutoUpdate(false);
+    }
+});
+
+/**
+ * Wraps a Google Map in an Ext.Component using the [Google Maps API](http://code.google.com/apis/maps/documentation/v3/introduction.html).
+ *
+ * To use this component you must include an additional JavaScript file from Google:
+ *
+ *     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+ *
+ * ## Example
+ *
+ *     Ext.Viewport.add({
+ *         xtype: 'map',
+ *         useCurrentLocation: true
+ *     });
+ *
+ * @aside example maps
+ */
+Ext.define('Ext.Map', {
+    extend: 'Ext.Container',
+    xtype : 'map',
+                                       
+
+    isMap: true,
+
+    config: {
+        /**
+         * @event maprender
+         * Fired when Map initially rendered.
+         * @param {Ext.Map} this
+         * @param {google.maps.Map} map The rendered google.map.Map instance
+         */
+
+        /**
+         * @event centerchange
+         * Fired when map is panned around.
+         * @param {Ext.Map} this
+         * @param {google.maps.Map} map The rendered google.map.Map instance
+         * @param {google.maps.LatLng} center The current LatLng center of the map
+         */
+
+        /**
+         * @event typechange
+         * Fired when display type of the map changes.
+         * @param {Ext.Map} this
+         * @param {google.maps.Map} map The rendered google.map.Map instance
+         * @param {Number} mapType The current display type of the map
+         */
+
+        /**
+         * @event zoomchange
+         * Fired when map is zoomed.
+         * @param {Ext.Map} this
+         * @param {google.maps.Map} map The rendered google.map.Map instance
+         * @param {Number} zoomLevel The current zoom level of the map
+         */
+
+        /**
+         * @cfg {String} baseCls
+         * The base CSS class to apply to the Map's element
+         * @accessor
+         */
+        baseCls: Ext.baseCSSPrefix + 'map',
+
+        /**
+         * @cfg {Boolean/Ext.util.Geolocation} useCurrentLocation
+         * Pass in true to center the map based on the geolocation coordinates or pass a
+         * {@link Ext.util.Geolocation GeoLocation} config to have more control over your GeoLocation options
+         * @accessor
+         */
+        useCurrentLocation: false,
+
+        /**
+         * @cfg {google.maps.Map} map
+         * The wrapped map.
+         * @accessor
+         */
+        map: null,
+
+        /**
+         * @cfg {Ext.util.Geolocation} geo
+         * Geolocation provider for the map.
+         * @accessor
+         */
+        geo: null,
+
+        /**
+         * @cfg {Object} mapOptions
+         * MapOptions as specified by the Google Documentation:
+         * [http://code.google.com/apis/maps/documentation/v3/reference.html](http://code.google.com/apis/maps/documentation/v3/reference.html)
+         * @accessor
+         */
+        mapOptions: {},
+
+        /**
+         * @cfg {Object} mapListeners
+         * Listeners for any Google Maps events specified by the Google Documentation:
+         * [http://code.google.com/apis/maps/documentation/v3/reference.html](http://code.google.com/apis/maps/documentation/v3/reference.html)
+         *
+         * @accessor
+         */
+        mapListeners: null
+    },
+
+    constructor: function() {
+        this.callParent(arguments);
+        // this.element.setVisibilityMode(Ext.Element.OFFSETS);
+
+        if (!(window.google || {}).maps) {
+            this.setHtml('Google Maps API is required');
+        }
+    },
+
+    initialize: function() {
+        this.callParent();
+        this.initMap();
+
+        this.on({
+            painted: 'doResize',
+            scope: this
+        });
+        this.innerElement.on('touchstart', 'onTouchStart', this);
+    },
+
+    initMap: function() {
+        var map = this.getMap();
+        if(!map) {
+            var gm = (window.google || {}).maps;
+            if(!gm) return null;
+
+            var element = this.mapContainer,
+                mapOptions = this.getMapOptions(),
+                event = gm.event,
+                me = this;
+
+            //Remove the API Required div
+            if (element.dom.firstChild) {
+                Ext.fly(element.dom.firstChild).destroy();
+            }
+
+            if (Ext.os.is.iPad) {
+                Ext.merge({
+                    navigationControlOptions: {
+                        style: gm.NavigationControlStyle.ZOOM_PAN
+                    }
+                }, mapOptions);
+            }
+
+            mapOptions.mapTypeId = mapOptions.mapTypeId || gm.MapTypeId.ROADMAP;
+            mapOptions.center = mapOptions.center || new gm.LatLng(37.381592, -122.135672); // Palo Alto
+
+            if (mapOptions.center && mapOptions.center.latitude && !Ext.isFunction(mapOptions.center.lat)) {
+                mapOptions.center = new gm.LatLng(mapOptions.center.latitude, mapOptions.center.longitude);
+            }
+
+            mapOptions.zoom = mapOptions.zoom || 12;
+
+            map = new gm.Map(element.dom, mapOptions);
+            this.setMap(map);
+
+            event.addListener(map, 'zoom_changed', Ext.bind(me.onZoomChange, me));
+            event.addListener(map, 'maptypeid_changed', Ext.bind(me.onTypeChange, me));
+            event.addListener(map, 'center_changed', Ext.bind(me.onCenterChange, me));
+            event.addListenerOnce(map, 'tilesloaded', Ext.bind(me.onTilesLoaded, me));
+            this.addMapListeners();
+        }
+        return this.getMap();
+    },
+
+    // added for backwards compatibility for touch < 2.3
+    renderMap: function() {
+        this.initMap();
+    },
+
+    getElementConfig: function() {
+        return {
+            reference: 'element',
+            className: 'x-container',
+            children: [{
+                reference: 'innerElement',
+                className: 'x-inner',
+                children: [{
+                    reference: 'mapContainer',
+                    className: Ext.baseCSSPrefix + 'map-container'
+                }]
+            }]
+        };
+    },
+
+    onTouchStart: function(e) {
+        e.makeUnpreventable();
+    },
+
+    applyMapOptions: function(options) {
+        return Ext.merge({}, this.options, options);
+    },
+
+    updateMapOptions: function(newOptions) {
+        var gm = (window.google || {}).maps,
+            map = this.getMap();
+
+        if (gm && map) {
+            map.setOptions(newOptions);
+        }
+    },
+
+    doMapCenter: function() {
+        this.setMapCenter(this.getMapOptions().center);
+    },
+
+    getMapOptions: function() {
+        return Ext.merge({}, this.options || this.getInitialConfig('mapOptions'));
+    },
+
+    updateUseCurrentLocation: function(useCurrentLocation) {
+        this.setGeo(useCurrentLocation);
+        if (!useCurrentLocation) {
+            this.setMapCenter();
+        }
+    },
+
+    applyGeo: function(config) {
+        return Ext.factory(config, Ext.util.Geolocation, this.getGeo());
+    },
+
+    updateGeo: function(newGeo, oldGeo) {
+        var events = {
+            locationupdate : 'onGeoUpdate',
+            locationerror : 'onGeoError',
+            scope : this
+        };
+
+        if (oldGeo) {
+            oldGeo.un(events);
+        }
+
+        if (newGeo) {
+            newGeo.on(events);
+            newGeo.updateLocation();
+        }
+    },
+
+    doResize: function() {
+        var gm = (window.google || {}).maps,
+            map = this.getMap();
+
+        if (gm && map) {
+            gm.event.trigger(map, "resize");
+        }
+    },
+
+	// @private
+	onTilesLoaded: function() {
+		this.fireEvent('maprender', this, this.getMap());
+	},
+
+    // @private
+    addMapListeners: function() {
+        var gm = (window.google || {}).maps,
+            map = this.getMap(),
+            mapListeners = this.getMapListeners();
+
+
+        if (gm) {
+            var event = gm.event,
+                me = this,
+                listener, scope, fn, callbackFn, handle;
+            if (Ext.isSimpleObject(mapListeners)) {
+                for (var eventType in mapListeners) {
+                    listener = mapListeners[eventType];
+                    if (Ext.isSimpleObject(listener)) {
+                        scope = listener.scope;
+                        fn = listener.fn;
+                    } else if (Ext.isFunction(listener)) {
+                        scope = null;
+                        fn = listener;
+                    }
+
+                    if (fn) {
+                        callbackFn = function() {
+                            this.fn.apply(this.scope, [me]);
+                            if(this.handle) {
+                                event.removeListener(this.handle);
+                                delete this.handle;
+                                delete this.fn;
+                                delete this.scope;
+                            }
+                        };
+                        handle = event.addListener(map, eventType, Ext.bind(callbackFn, callbackFn));
+                        callbackFn.fn = fn;
+                        callbackFn.scope = scope;
+                        if(listener.single === true) callbackFn.handle = handle;
+                    }
+                }
+            }
+        }
+    },
+
+    // @private
+    onGeoUpdate: function(geo) {
+        if (geo) {
+            this.setMapCenter(new google.maps.LatLng(geo.getLatitude(), geo.getLongitude()));
+        }
+    },
+
+    // @private
+    onGeoError: Ext.emptyFn,
+
+    /**
+     * Moves the map center to the designated coordinates hash of the form:
+     *
+     *     { latitude: 37.381592, longitude: -122.135672 }
+     *
+     * or a google.maps.LatLng object representing to the target location.
+     *
+     * @param {Object/google.maps.LatLng} coordinates Object representing the desired Latitude and
+     * longitude upon which to center the map.
+     */
+    setMapCenter: function(coordinates) {
+        var me = this,
+            map = me.getMap(),
+            mapOptions = me.getMapOptions(),
+            gm = (window.google || {}).maps;
+        if (gm) {
+            if (!coordinates) {
+                if (map && map.getCenter) {
+                    coordinates = map.getCenter();
+                }
+                else if (mapOptions.hasOwnProperty('center')) {
+                    coordinates = mapOptions.center;
+                }
+                else {
+                    coordinates = new gm.LatLng(37.381592, -122.135672); // Palo Alto
+                }
+            }
+
+            if (coordinates && !(coordinates instanceof gm.LatLng) && 'longitude' in coordinates) {
+                coordinates = new gm.LatLng(coordinates.latitude, coordinates.longitude);
+            }
+
+            if (!map) {
+                mapOptions.center = mapOptions.center || coordinates;
+                me.renderMap();
+                map = me.getMap();
+            }
+
+            if (map && coordinates instanceof gm.LatLng) {
+                map.panTo(coordinates);
+            }
+            else {
+                this.options = Ext.apply(this.getMapOptions(), {
+                    center: coordinates
+                });
+            }
+        }
+    },
+
+    // @private
+    onZoomChange : function() {
+        var mapOptions = this.getMapOptions(),
+            map = this.getMap(),
+            zoom;
+
+        zoom = (map && map.getZoom) ? map.getZoom() : mapOptions.zoom || 10;
+
+        this.options = Ext.apply(mapOptions, {
+            zoom: zoom
+        });
+
+        this.fireEvent('zoomchange', this, map, zoom);
+    },
+
+    // @private
+    onTypeChange : function() {
+        var mapOptions = this.getMapOptions(),
+            map = this.getMap(),
+            mapTypeId;
+
+        mapTypeId = (map && map.getMapTypeId) ? map.getMapTypeId() : mapOptions.mapTypeId;
+
+        this.options = Ext.apply(mapOptions, {
+            mapTypeId: mapTypeId
+        });
+
+        this.fireEvent('typechange', this, map, mapTypeId);
+    },
+
+    // @private
+    onCenterChange: function() {
+        var mapOptions = this.getMapOptions(),
+            map = this.getMap(),
+            center;
+
+        center = (map && map.getCenter) ? map.getCenter() : mapOptions.center;
+
+        this.options = Ext.apply(mapOptions, {
+            center: center
+        });
+
+        this.fireEvent('centerchange', this, map, center);
+
+    },
+
+    // @private
+    destroy: function() {
+        Ext.destroy(this.getGeo());
+        var map = this.getMap();
+
+        if (map && (window.google || {}).maps) {
+            google.maps.event.clearInstanceListeners(map);
+        }
+
+        this.callParent();
+    }
+}, function() {
+});
+
+/**
  * @class Ext.ComponentQuery
  * @extends Object
  * @singleton
@@ -69773,6 +70605,850 @@ Ext.define('Ext.field.Select', {
 });
 
 /**
+ * A date picker component which shows a Date Picker on the screen. This class extends from {@link Ext.picker.Picker}
+ * and {@link Ext.Sheet} so it is a popup.
+ *
+ * This component has no required configurations.
+ *
+ * ## Examples
+ *
+ *     @example miniphone preview
+ *     var datePicker = Ext.create('Ext.picker.Date');
+ *     Ext.Viewport.add(datePicker);
+ *     datePicker.show();
+ *
+ * You may want to adjust the {@link #yearFrom} and {@link #yearTo} properties:
+ *
+ *     @example miniphone preview
+ *     var datePicker = Ext.create('Ext.picker.Date', {
+ *         yearFrom: 2000,
+ *         yearTo  : 2015
+ *     });
+ *     Ext.Viewport.add(datePicker);
+ *     datePicker.show();
+ *
+ * You can set the value of the {@link Ext.picker.Date} to the current date using `new Date()`:
+ *
+ *     @example miniphone preview
+ *     var datePicker = Ext.create('Ext.picker.Date', {
+ *         value: new Date()
+ *     });
+ *     Ext.Viewport.add(datePicker);
+ *     datePicker.show();
+ *
+ * And you can hide the titles from each of the slots by using the {@link #useTitles} configuration:
+ *
+ *     @example miniphone preview
+ *     var datePicker = Ext.create('Ext.picker.Date', {
+ *         useTitles: false
+ *     });
+ *     Ext.Viewport.add(datePicker);
+ *     datePicker.show();
+ */
+Ext.define('Ext.picker.Date', {
+    extend: 'Ext.picker.Picker',
+    xtype: 'datepicker',
+    alternateClassName: 'Ext.DatePicker',
+                                                          
+
+    /**
+     * @event change
+     * Fired when the value of this picker has changed and the done button is pressed.
+     * @param {Ext.picker.Date} this This Picker
+     * @param {Date} value The date value
+     */
+
+    config: {
+        /**
+         * @cfg {Number} yearFrom
+         * The start year for the date picker. If {@link #yearFrom} is greater than
+         * {@link #yearTo} then the order of years will be reversed.
+         * @accessor
+         */
+        yearFrom: 1980,
+
+        /**
+         * @cfg {Number} [yearTo=new Date().getFullYear()]
+         * The last year for the date picker. If {@link #yearFrom} is greater than
+         * {@link #yearTo} then the order of years will be reversed.
+         * @accessor
+         */
+        yearTo: new Date().getFullYear(),
+
+        /**
+         * @cfg {String} monthText
+         * The label to show for the month column.
+         * @accessor
+         */
+        monthText: 'Month',
+
+        /**
+         * @cfg {String} dayText
+         * The label to show for the day column.
+         * @accessor
+         */
+        dayText: 'Day',
+
+        /**
+         * @cfg {String} yearText
+         * The label to show for the year column.
+         * @accessor
+         */
+        yearText: 'Year',
+
+        /**
+         * @cfg {Array} slotOrder
+         * An array of strings that specifies the order of the slots.
+         * @accessor
+         */
+        slotOrder: ['month', 'day', 'year'],
+
+        /**
+         * @cfg {Object/Date} value
+         * Default value for the field and the internal {@link Ext.picker.Date} component. Accepts an object of 'year',
+         * 'month' and 'day' values, all of which should be numbers, or a {@link Date}.
+         *
+         * Examples:
+         *
+         * - `{year: 1989, day: 1, month: 5}` = 1st May 1989
+         * - `new Date()` = current date
+         * @accessor
+         */
+
+        /**
+         * @cfg {Array} slots
+         * @hide
+         * @accessor
+         */
+
+        /**
+         * @cfg {String/Mixed} doneButton
+         * Can be either:
+         *
+         * - A {String} text to be used on the Done button.
+         * - An {Object} as config for {@link Ext.Button}.
+         * - `false` or `null` to hide it.
+         * @accessor
+         */
+        doneButton: true
+    },
+
+    platformConfig: [{
+        theme: ['Windows'],
+        doneButton: {
+            iconCls: 'check2',
+            ui: 'round',
+            text: ''
+        }
+    }],
+
+    initialize: function() {
+        this.callParent();
+
+        this.on({
+            scope: this,
+            delegate: '> slot',
+            slotpick: this.onSlotPick
+        });
+
+        this.on({
+            scope: this,
+            show: this.onSlotPick
+        });
+    },
+
+    setValue: function(value, animated) {
+        if (Ext.isDate(value)) {
+            value = {
+                day  : value.getDate(),
+                month: value.getMonth() + 1,
+                year : value.getFullYear()
+            };
+        }
+
+        this.callParent([value, animated]);
+        this.onSlotPick();
+    },
+
+    getValue: function(useDom) {
+        var values = {},
+            items = this.getItems().items,
+            ln = items.length,
+            daysInMonth, day, month, year, item, i;
+
+        for (i = 0; i < ln; i++) {
+            item = items[i];
+            if (item instanceof Ext.picker.Slot) {
+                values[item.getName()] = item.getValue(useDom);
+            }
+        }
+
+        //if all the slots return null, we should not return a date
+        if (values.year === null && values.month === null && values.day === null) {
+            return null;
+        }
+
+        year = Ext.isNumber(values.year) ? values.year : 1;
+        month = Ext.isNumber(values.month) ? values.month : 1;
+        day = Ext.isNumber(values.day) ? values.day : 1;
+
+        if (month && year && month && day) {
+            daysInMonth = this.getDaysInMonth(month, year);
+        }
+        day = (daysInMonth) ? Math.min(day, daysInMonth): day;
+
+        return new Date(year, month - 1, day);
+    },
+
+    /**
+     * Updates the yearFrom configuration
+     */
+    updateYearFrom: function() {
+        if (this.initialized) {
+            this.createSlots();
+        }
+    },
+
+    /**
+     * Updates the yearTo configuration
+     */
+    updateYearTo: function() {
+        if (this.initialized) {
+            this.createSlots();
+        }
+    },
+
+    /**
+     * Updates the monthText configuration
+     */
+    updateMonthText: function(newMonthText, oldMonthText) {
+        var innerItems = this.getInnerItems,
+            ln = innerItems.length,
+            item, i;
+
+        //loop through each of the current items and set the title on the correct slice
+        if (this.initialized) {
+            for (i = 0; i < ln; i++) {
+                item = innerItems[i];
+
+                if ((typeof item.title == "string" && item.title == oldMonthText) || (item.title.html == oldMonthText)) {
+                    item.setTitle(newMonthText);
+                }
+            }
+        }
+    },
+
+    /**
+     * Updates the {@link #dayText} configuration.
+     */
+    updateDayText: function(newDayText, oldDayText) {
+        var innerItems = this.getInnerItems,
+            ln = innerItems.length,
+            item, i;
+
+        //loop through each of the current items and set the title on the correct slice
+        if (this.initialized) {
+            for (i = 0; i < ln; i++) {
+                item = innerItems[i];
+
+                if ((typeof item.title == "string" && item.title == oldDayText) || (item.title.html == oldDayText)) {
+                    item.setTitle(newDayText);
+                }
+            }
+        }
+    },
+
+    /**
+     * Updates the yearText configuration
+     */
+    updateYearText: function(yearText) {
+        var innerItems = this.getInnerItems,
+            ln = innerItems.length,
+            item, i;
+
+        //loop through each of the current items and set the title on the correct slice
+        if (this.initialized) {
+            for (i = 0; i < ln; i++) {
+                item = innerItems[i];
+
+                if (item.title == this.yearText) {
+                    item.setTitle(yearText);
+                }
+            }
+        }
+    },
+
+    // @private
+    constructor: function() {
+        this.callParent(arguments);
+        this.createSlots();
+    },
+
+    /**
+     * Generates all slots for all years specified by this component, and then sets them on the component
+     * @private
+     */
+    createSlots: function() {
+        var me        = this,
+            slotOrder = me.getSlotOrder(),
+            yearsFrom = me.getYearFrom(),
+            yearsTo   = me.getYearTo(),
+            years     = [],
+            days      = [],
+            months    = [],
+            reverse   = yearsFrom > yearsTo,
+            ln, i, daysInMonth;
+
+        while (yearsFrom) {
+            years.push({
+                text  : yearsFrom,
+                value : yearsFrom
+            });
+
+            if (yearsFrom === yearsTo) {
+                break;
+            }
+
+            if (reverse) {
+                yearsFrom--;
+            } else {
+                yearsFrom++;
+            }
+        }
+
+        daysInMonth = me.getDaysInMonth(1, new Date().getFullYear());
+
+        for (i = 0; i < daysInMonth; i++) {
+            days.push({
+                text  : i + 1,
+                value : i + 1
+            });
+        }
+
+        for (i = 0, ln = Ext.Date.monthNames.length; i < ln; i++) {
+            months.push({
+                text  : Ext.Date.monthNames[i],
+                value : i + 1
+            });
+        }
+
+        var slots = [];
+
+        slotOrder.forEach(function (item) {
+            slots.push(me.createSlot(item, days, months, years));
+        });
+
+        me.setSlots(slots);
+    },
+
+    /**
+     * Returns a slot config for a specified date.
+     * @private
+     */
+    createSlot: function(name, days, months, years) {
+        switch (name) {
+            case 'year':
+                return {
+                    name: 'year',
+                    align: 'center',
+                    data: years,
+                    title: this.getYearText(),
+                    flex: 3
+                };
+            case 'month':
+                return {
+                    name: name,
+                    align: 'right',
+                    data: months,
+                    title: this.getMonthText(),
+                    flex: 4
+                };
+            case 'day':
+                return {
+                    name: 'day',
+                    align: 'center',
+                    data: days,
+                    title: this.getDayText(),
+                    flex: 2
+                };
+        }
+    },
+
+    onSlotPick: function() {
+        var value = this.getValue(true),
+            slot = this.getDaySlot(),
+            year = value.getFullYear(),
+            month = value.getMonth(),
+            days = [],
+            daysInMonth, i;
+
+        if (!value || !Ext.isDate(value) || !slot) {
+            return;
+        }
+
+        this.callParent(arguments);
+
+        //get the new days of the month for this new date
+        daysInMonth = this.getDaysInMonth(month + 1, year);
+        for (i = 0; i < daysInMonth; i++) {
+            days.push({
+                text: i + 1,
+                value: i + 1
+            });
+        }
+
+        // We don't need to update the slot days unless it has changed
+        if (slot.getStore().getCount() == days.length) {
+            return;
+        }
+
+        slot.getStore().setData(days);
+
+        // Now we have the correct amount of days for the day slot, lets update it
+        var store = slot.getStore(),
+            viewItems = slot.getViewItems(),
+            valueField = slot.getValueField(),
+            index, item;
+
+        index = store.find(valueField, value.getDate());
+        if (index == -1) {
+            return;
+        }
+
+        item = Ext.get(viewItems[index]);
+
+        slot.selectedIndex = index;
+        slot.scrollToItem(item);
+        slot.setValue(slot.getValue(true));
+    },
+
+    getDaySlot: function() {
+        var innerItems = this.getInnerItems(),
+            ln = innerItems.length,
+            i, slot;
+
+        if (this.daySlot) {
+            return this.daySlot;
+        }
+
+        for (i = 0; i < ln; i++) {
+            slot = innerItems[i];
+            if (slot.isSlot && slot.getName() == "day") {
+                this.daySlot = slot;
+                return slot;
+            }
+        }
+
+        return null;
+    },
+
+    // @private
+    getDaysInMonth: function(month, year) {
+        var daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        return month == 2 && this.isLeapYear(year) ? 29 : daysInMonth[month-1];
+    },
+
+    // @private
+    isLeapYear: function(year) {
+        return !!((year & 3) === 0 && (year % 100 || (year % 400 === 0 && year)));
+    },
+
+    onDoneButtonTap: function() {
+        var oldValue = this._value,
+            newValue = this.getValue(true),
+            testValue = newValue;
+
+        if (Ext.isDate(newValue)) {
+            testValue = newValue.toDateString();
+        }
+        if (Ext.isDate(oldValue)) {
+            oldValue = oldValue.toDateString();
+        }
+
+        if (testValue != oldValue) {
+            this.fireEvent('change', this, newValue);
+        }
+
+        this.hide();
+        Ext.util.InputBlocker.unblockInputs();
+    }
+});
+
+/**
+ * @aside guide forms
+ *
+ * This is a specialized field which shows a {@link Ext.picker.Date} when tapped. If it has a predefined value,
+ * or a value is selected in the {@link Ext.picker.Date}, it will be displayed like a normal {@link Ext.field.Text}
+ * (but not selectable/changable).
+ *
+ *     Ext.create('Ext.field.DatePicker', {
+ *         label: 'Birthday',
+ *         value: new Date()
+ *     });
+ *
+ * {@link Ext.field.DatePicker} fields are very simple to implement, and have no required configurations.
+ *
+ * ## Examples
+ *
+ * It can be very useful to set a default {@link #value} configuration on {@link Ext.field.DatePicker} fields. In
+ * this example, we set the {@link #value} to be the current date. You can also use the {@link #setValue} method to
+ * update the value at any time.
+ *
+ *     @example miniphone preview
+ *     Ext.create('Ext.form.Panel', {
+ *         fullscreen: true,
+ *         items: [
+ *             {
+ *                 xtype: 'fieldset',
+ *                 items: [
+ *                     {
+ *                         xtype: 'datepickerfield',
+ *                         label: 'Birthday',
+ *                         name: 'birthday',
+ *                         value: new Date()
+ *                     }
+ *                 ]
+ *             },
+ *             {
+ *                 xtype: 'toolbar',
+ *                 docked: 'bottom',
+ *                 items: [
+ *                     { xtype: 'spacer' },
+ *                     {
+ *                         text: 'setValue',
+ *                         handler: function() {
+ *                             var datePickerField = Ext.ComponentQuery.query('datepickerfield')[0];
+ *
+ *                             var randomNumber = function(from, to) {
+ *                                 return Math.floor(Math.random() * (to - from + 1) + from);
+ *                             };
+ *
+ *                             datePickerField.setValue({
+ *                                 month: randomNumber(0, 11),
+ *                                 day  : randomNumber(0, 28),
+ *                                 year : randomNumber(1980, 2011)
+ *                             });
+ *                         }
+ *                     },
+ *                     { xtype: 'spacer' }
+ *                 ]
+ *             }
+ *         ]
+ *     });
+ *
+ * When you need to retrieve the date from the {@link Ext.field.DatePicker}, you can either use the {@link #getValue} or
+ * {@link #getFormattedValue} methods:
+ *
+ *     @example preview
+ *     Ext.create('Ext.form.Panel', {
+ *         fullscreen: true,
+ *         items: [
+ *             {
+ *                 xtype: 'fieldset',
+ *                 items: [
+ *                     {
+ *                         xtype: 'datepickerfield',
+ *                         label: 'Birthday',
+ *                         name: 'birthday',
+ *                         value: new Date()
+ *                     }
+ *                 ]
+ *             },
+ *             {
+ *                 xtype: 'toolbar',
+ *                 docked: 'bottom',
+ *                 items: [
+ *                     {
+ *                         text: 'getValue',
+ *                         handler: function() {
+ *                             var datePickerField = Ext.ComponentQuery.query('datepickerfield')[0];
+ *                             Ext.Msg.alert(null, datePickerField.getValue());
+ *                         }
+ *                     },
+ *                     { xtype: 'spacer' },
+ *                     {
+ *                         text: 'getFormattedValue',
+ *                         handler: function() {
+ *                             var datePickerField = Ext.ComponentQuery.query('datepickerfield')[0];
+ *                             Ext.Msg.alert(null, datePickerField.getFormattedValue());
+ *                         }
+ *                     }
+ *                 ]
+ *             }
+ *         ]
+ *     });
+ *
+ *
+ */
+Ext.define('Ext.field.DatePicker', {
+    extend: 'Ext.field.Select',
+    alternateClassName: 'Ext.form.DatePicker',
+    xtype: 'datepickerfield',
+               
+                          
+                        
+      
+
+    /**
+     * @event change
+     * Fires when a date is selected
+     * @param {Ext.field.DatePicker} this
+     * @param {Date} newDate The new date
+     * @param {Date} oldDate The old date
+     */
+
+    config: {
+        ui: 'select',
+
+        /**
+         * @cfg {Object/Ext.picker.Date} picker
+         * An object that is used when creating the internal {@link Ext.picker.Date} component or a direct instance of {@link Ext.picker.Date}.
+         * @accessor
+         */
+        picker: true,
+
+        /**
+         * @cfg {Boolean}
+         * @hide
+         * @accessor
+         */
+        clearIcon: false,
+
+        /**
+         * @cfg {Object/Date} value
+         * Default value for the field and the internal {@link Ext.picker.Date} component. Accepts an object of 'year',
+         * 'month' and 'day' values, all of which should be numbers, or a {@link Date}.
+         *
+         * Example: {year: 1989, day: 1, month: 5} = 1st May 1989 or new Date()
+         * @accessor
+         */
+
+        /**
+         * @cfg {Boolean} destroyPickerOnHide
+         * Whether or not to destroy the picker widget on hide. This save memory if it's not used frequently,
+         * but increase delay time on the next show due to re-instantiation.
+         * @accessor
+         */
+        destroyPickerOnHide: false,
+
+        /**
+         * @cfg {String} [dateFormat=Ext.util.Format.defaultDateFormat] The format to be used when displaying the date in this field.
+         * Accepts any valid date format. You can view formats over in the {@link Ext.Date} documentation.
+         */
+        dateFormat: null,
+
+        /**
+         * @cfg {Object}
+         * @hide
+         */
+        component: {
+            useMask: true
+        }
+    },
+
+    initialize: function() {
+        var me = this,
+            component = me.getComponent();
+
+        me.callParent();
+
+        component.on({
+            scope: me,
+            masktap: 'onMaskTap'
+        });
+
+
+        component.doMaskTap = Ext.emptyFn;
+
+        if (Ext.browser.is.AndroidStock2) {
+            component.input.dom.disabled = true;
+        }
+    },
+
+    syncEmptyCls: Ext.emptyFn,
+
+    applyValue: function(value) {
+        if (!Ext.isDate(value) && !Ext.isObject(value)) {
+            return null;
+        }
+
+        if (Ext.isObject(value)) {
+            return new Date(value.year, value.month - 1, value.day);
+        }
+
+        return value;
+    },
+
+    updateValue: function(newValue, oldValue) {
+        var me     = this,
+            picker = me._picker;
+
+        if (picker && picker.isPicker) {
+            picker.setValue(newValue);
+        }
+
+        // Ext.Date.format expects a Date
+        if (newValue !== null) {
+            me.getComponent().setValue(Ext.Date.format(newValue, me.getDateFormat() || Ext.util.Format.defaultDateFormat));
+        } else {
+            me.getComponent().setValue('');
+        }
+
+        if (newValue !== oldValue) {
+            me.fireEvent('change', me, newValue, oldValue);
+        }
+    },
+
+    /**
+     * Updates the date format in the field.
+     * @private
+     */
+    updateDateFormat: function(newDateFormat, oldDateFormat) {
+        var value = this.getValue();
+        if (newDateFormat != oldDateFormat && Ext.isDate(value)) {
+            this.getComponent().setValue(Ext.Date.format(value, newDateFormat || Ext.util.Format.defaultDateFormat));
+        }
+    },
+
+    /**
+     * Returns the {@link Date} value of this field.
+     * If you wanted a formatted date use the {@link #getFormattedValue} method.
+     * @return {Date} The date selected
+     */
+    getValue: function() {
+        if (this._picker && this._picker instanceof Ext.picker.Date) {
+            return this._picker.getValue();
+        }
+
+        return this._value;
+    },
+
+    /**
+     * Returns the value of the field formatted using the specified format. If it is not specified, it will default to
+     * {@link #dateFormat} and then {@link Ext.util.Format#defaultDateFormat}.
+     * @param {String} format The format to be returned.
+     * @return {String} The formatted date.
+     */
+    getFormattedValue: function(format) {
+        var value = this.getValue();
+        return (Ext.isDate(value)) ? Ext.Date.format(value, format || this.getDateFormat() || Ext.util.Format.defaultDateFormat) : value;
+    },
+
+    applyPicker: function(picker, pickerInstance) {
+        if (pickerInstance && pickerInstance.isPicker) {
+            picker = pickerInstance.setConfig(picker);
+        }
+
+        return picker;
+    },
+
+    getPicker: function() {
+        var picker = this._picker,
+            value = this.getValue();
+
+        if (picker && !picker.isPicker) {
+            picker = Ext.factory(picker, Ext.picker.Date);
+            if (value != null) {
+                picker.setValue(value);
+            }
+        }
+
+        picker.on({
+            scope: this,
+            change: 'onPickerChange',
+            hide  : 'onPickerHide'
+        });
+
+        this._picker = picker;
+
+        return picker;
+    },
+
+    /**
+     * @private
+     * Listener to the tap event of the mask element. Shows the internal DatePicker component when the button has been tapped.
+     */
+    onMaskTap: function() {
+        if (this.getDisabled()) {
+            return false;
+        }
+
+        this.onFocus();
+
+        return false;
+    },
+
+    /**
+     * Called when the picker changes its value.
+     * @param {Ext.picker.Date} picker The date picker.
+     * @param {Object} value The new value from the date picker.
+     * @private
+     */
+    onPickerChange: function(picker, value) {
+        var me = this,
+            oldValue = me.getValue();
+
+        me.setValue(value);
+        me.fireEvent('select', me, value);
+        me.onChange(me, value, oldValue);
+    },
+
+    /**
+     * Override this or change event will be fired twice. change event is fired in updateValue
+     * for this field. TOUCH-2861
+     */
+    onChange: Ext.emptyFn,
+
+    /**
+     * Destroys the picker when it is hidden, if
+     * {@link Ext.field.DatePicker#destroyPickerOnHide destroyPickerOnHide} is set to `true`.
+     * @private
+     */
+    onPickerHide: function() {
+        var me     = this,
+            picker = me.getPicker();
+
+        if (me.getDestroyPickerOnHide() && picker) {
+            picker.destroy();
+            me._picker = me.getInitialConfig().picker || true;
+        }
+    },
+
+    reset: function() {
+        this.setValue(this.originalValue);
+    },
+
+    onFocus: function(e) {
+        var component = this.getComponent();
+        this.fireEvent('focus', this, e);
+
+        if (Ext.os.is.Android4) {
+            component.input.dom.focus();
+        }
+        component.input.dom.blur();
+
+        if (this.getReadOnly()) {
+            return false;
+        }
+
+        this.isFocused = true;
+
+        this.getPicker().show();
+    },
+
+    // @private
+    destroy: function() {
+        var picker = this._picker;
+
+        if (picker && picker.isPicker) {
+            picker.destroy();
+        }
+
+        this.callParent(arguments);
+    }
+});
+
+/**
  * @aside guide forms
  *
  * The Email field creates an HTML5 email input and is usually created inside a form. Because it creates an HTML email
@@ -78494,19 +80170,19 @@ Ext.define('APP.model.phone.RutaCalendario', {
     extend: 'Ext.data.Model',
     config: {
         fields: [{
-            name: 'event',
+            name: 'title',
             type: 'string'
         },{
             name: 'location',
             type: 'string'
         },{
             name: 'start',
-            type: 'date'//,
-            //dateFormat: 'c'
+            type: 'date',
+            dateFormat: 'c'
         },{
             name: 'end',
-            type: 'date'//,
-            //dateFormat: 'c'
+            type: 'date',
+            dateFormat: 'c'
         }]
     }
 });
@@ -78523,10 +80199,15 @@ Ext.define('APP.store.phone.RutasCalendario', {
     config: {
         model: 'APP.model.phone.RutaCalendario',
         data: [{
-            event: 'Sencha Con',
+            title: 'Senca Con Title',
             location: 'Austin, Texas',
-            start: new Date(2014, 6, 23,11,33,30,0),
-            end: new Date(2014, 6, 27,12,33,30,0)
+            start: new Date(2014, 6, 23,11,0),
+            end: new Date(2014, 6, 27,12,0)
+        },{
+            title: 'Senca Con Title 2',
+            location: 'Austin, Texas',
+            start: new Date(2014, 6, 23,12,0),
+            end: new Date(2014, 6, 27,12,0)
         }]
     }
 });
@@ -80638,6 +82319,231 @@ Ext.define('Ext.ux.calendar.TouchCalendarSimpleEvents', {
 });
 
 /**
+ * Created by th3gr4bb3r on 8/3/14.
+ */
+/**
+ * The picker with hours and minutes slots
+ */
+Ext.define('Ext.ux.timepicker.Time', {
+    extend:'Ext.picker.Picker',
+    xtype:'timepicker',
+
+
+    config:{
+        /**
+         * @cfg {Number} increment The number of minutes between each minute value in the list.
+         * Defaults to: 5
+         */
+        increment:5,
+
+
+        /**
+         * @cfg {Number} start value of hours
+         */
+        minHours:0,
+
+
+        /**
+         * @cfg {Number} end value of hours.
+         */
+        maxHours:23,
+
+
+        /**
+         * @cfg {String} title to show above hour slot
+         * Note: for titles to show set the {useTitle} config to true.
+         */
+        hoursTitle:'Hours',
+
+
+        /**
+         * @cfg {String} title to show above hour slot
+         * Note: for this to show set the {useTitle} config to true.
+         */
+        minutesTitle:'Minutes',
+
+
+        /**
+         * @cfg {boolean} show/hide title headers.
+         * Note: defaults to false (framework default 'Ext.picker.Picker')
+         */
+
+
+        slots: []
+    },
+
+
+    /**
+     *
+     * @param value
+     * @param animated
+     */
+    setValue:function (value, animated) {
+        var increment = this.getInitialConfig().increment,
+            modulo;
+
+
+        if (Ext.isDate(value)) {
+            value = {
+                hours:value.getHours(),
+                minutes:value.getMinutes()
+            };
+        }
+
+
+        //Round minutes
+        modulo = value.minutes % increment;
+        if (modulo > 0) {
+            value.minutes = Math.round(value.minutes / increment) * increment;
+        }
+        this.callParent([value, animated]);
+    },
+
+
+    /**
+     * @override
+     * @returns {Date} A date object containing the selected hours and minutes. Year, month, day default to the current date..
+     */
+    getValue:function () {
+        var value = this.callParent(arguments),
+            date = new Date();
+        value = new Date(date.getFullYear(), date.getMonth(), date.getDate(), value.hours, value.minutes);
+        return value;
+    },
+
+
+    applySlots:function (slots) {
+        var me = this,
+            hours = me.createHoursSlot(),
+            minutes = me.createMinutesSlot();
+
+
+        return [hours, minutes];
+    },
+
+
+    createHoursSlot:function () {
+        var me = this,
+            initialConfig = me.getInitialConfig(),
+            title = initialConfig.hoursTitle ,
+            minHours = initialConfig.minHours,
+            maxHours = initialConfig.maxHours,
+            hours = [],
+            slot;
+
+
+        for (var i = minHours; i <= maxHours; i++) {
+            var text = (i < 10) ? ('0' + i) : i; //Add leading zero
+            hours.push({text:text, value:i});
+        }
+
+
+        slot = {
+            name:'hours',
+            align:'center',
+            title:title,
+            data:hours,
+            flex:1
+        };
+
+
+        return slot;
+    },
+
+
+    createMinutesSlot:function () {
+        var me = this,
+            initialConfig = me.getInitialConfig(),
+            title = initialConfig.minutesTitle ,
+            increment = initialConfig.increment,
+            minutes = [],
+            slot;
+
+
+        for (var j = 0; j < 60; j += increment) {
+            var text;
+            text = (j < 10) ? ('0' + j) : j; //Add leading zero
+            minutes.push({text:text, value:j});
+        }
+
+
+        slot = {
+            name:'minutes',
+            align:'center',
+            title:title,
+            data:minutes,
+            flex:1
+        };
+        return slot;
+    }
+});
+
+/**
+ * Created by th3gr4bb3r on 8/3/14.
+ */
+/**
+ * TimePickerfield. Extends from datepickerfield
+ */
+Ext.define('Ext.ux.timepicker.TimePicker', {
+    extend:'Ext.field.DatePicker',
+    xtype:'timepickerfield',
+
+
+                                        
+
+
+    config:{
+        dateFormat:'H:i', //Default format show time only
+        picker:true
+    },
+
+
+    /**
+     * @override
+     * @param value
+     * Source copied, small modification
+     */
+    applyValue:function (value) {
+        if (!Ext.isDate(value) && !Ext.isObject(value)) {
+            value = null;
+        }
+
+
+        // Begin modified section
+        if (Ext.isObject(value)) {
+            var date = new Date(),
+                year = value.year || date.getFullYear(), // Defaults to current year if year was not supplied etc..
+                month = value.month || date.getMonth(),
+                day = value.day || date.getDate();
+
+
+            value = new Date(year, month, day, value.hours, value.minutes); //Added hour and minutes
+        }
+        // End modfied section!
+        return value;
+    },
+
+
+    applyPicker:function (picker) {
+        picker = Ext.factory(picker, 'Ext.ux.timepicker.Time');
+        picker.setHidden(true); // Do not show picker on creeation
+        Ext.Viewport.add(picker);
+        return picker;
+    },
+
+
+    updatePicker:function (picker) {
+        picker.on({
+            scope:this,
+            change:'onPickerChange',
+            hide:'onPickerHide'
+        });
+        picker.setValue(this.getValue());
+        return picker;
+    }
+});
+
+/**
  * @class Core.data.Store
  * @extends Ext.data.Store
  * store genereico para aplicacion
@@ -81718,19 +83624,19 @@ Ext.define('APP.controller.phone.Clientes', {
 Ext.define('APP.controller.phone.Ordenes', {
     extend: 'Ext.app.Controller',
 
-    config:{
-        refs:{
-            menuNav:'menunav',
-            mainCard:'maincard',
-            navigationOrden:'navigationorden',
-            partidaContainer:'partidacontainer',
+    config: {
+        refs: {
+            menuNav: 'menunav',
+            mainCard: 'maincard',
+            navigationOrden: 'navigationorden',
+            partidaContainer: 'partidacontainer',
             productosOrden: 'productosorden',
-            ordenContainer:'ordencontainer',
+            ordenContainer: 'ordencontainer',
             opcionesOrden: 'opcionesorden',
             transaccionList: 'transaccionlist'
 
         },
-    	control:{
+        control: {
             'container[id=ordenescont] clienteslist': {
                 itemtap: 'alSelecionarCliente'
             },
@@ -81743,7 +83649,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             'opcionesorden': {
                 activeitemchange: 'cambiaItem'
             },
-			'productoslist #btnBuscarProductos': {
+            'productoslist #btnBuscarProductos': {
                 tap: 'onBuscaProductos'
             },
             'productoslist #buscarProductos': {
@@ -81805,16 +83711,16 @@ Ext.define('APP.controller.phone.Ordenes', {
             'transaccionlist': {
                 itemtap: 'onSeleccionarTransaccion'
             },
-            'transaccionlist #btnBuscarTransaccion':{
+            'transaccionlist #btnBuscarTransaccion': {
                 tap: 'onBuscarTransaccion'
             },
-            'transaccionlist #buscarTransacciones':{
+            'transaccionlist #buscarTransacciones': {
                 clearicontap: 'limpiaBusquedaTransacciones'
             },
             'almacenlist': {
                 itemtap: 'onSeleccionarAlmacen'
             }
-    	}
+        }
     },
 
     /**
@@ -81825,7 +83731,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param target El elemento tapeado.
      * @param record El record asociado al ítem.
      */
-     alSelecionarCliente: function (list, index, target, record) {
+    alSelecionarCliente: function (list, index, target, record) {
 
         var name = record.get('NombreSocio'),
             idCliente = record.get('CodigoSocio'),
@@ -81860,12 +83766,12 @@ Ext.define('APP.controller.phone.Ordenes', {
                 this.getOpcionesOrden().clienteSeleccionado = clienteSeleccionado;
 
                 if (procesada) {
-                    this.estableceDirecciones(this.getMenuNav(),barraTitulo,clienteSeleccionado);
+                    this.estableceDirecciones(this.getMenuNav(), barraTitulo, clienteSeleccionado);
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }
             },
-            scope:this
+            scope: this
         });
     },
 
@@ -81875,7 +83781,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param view La vista actual.
      * @param barraTitulo El toolbar para agregar el nombre del cliente.
      */
-    estableceDirecciones: function (view,barraTitulo,clienteSeleccionado) {
+    estableceDirecciones: function (view, barraTitulo, clienteSeleccionado) {
         var me = this,
             direcciones = Ext.getStore('Direcciones');
 
@@ -81927,7 +83833,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             menuNav = me.getMenuNav(),
             opcionesOrden = me.getOpcionesOrden(),
             opcion = record.get('action'),
-            idCliente = menuNav.getNavigationBar().getTitle(),
+            idCliente = menuNav.getNavigationBar().getTitle(), i,
             barraTitulo = ({
                 xtype: 'toolbar',
                 docked: 'top',
@@ -81936,17 +83842,45 @@ Ext.define('APP.controller.phone.Ordenes', {
 
         switch (opcion) {
             case 'orden':
+                var editarPedido = me.getOpcionesOrden().down('#editarPedido'),
+                    establecerCampo = opcionesOrden.down('#datos');
+
+                editarPedido.setDisabled(false);  // Se habilita el botón editar del tabpanel, el detalle es que habilita también todos los campos del form.
+
+                for(i = 0; i < establecerCampo.getItems().length; i++){
+                    establecerCampo.getAt(i).setDisabled(true); // Desabilitamos todos los campos del formulario.
+                }
+
+                establecerCampo.down('#moneda').setDisabled(false); // Habilitamos sólo el campo moneda.
+
                 opcionesOrden.actionOrden = 'crear';
                 this.getMainCard().getAt(1).setMasked(false);
                 this.getMainCard().setActiveItem(1); // Activamos el item 1 del menu principal navigationorden
                 this.getNavigationOrden().getNavigationBar().setTitle(idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
                 this.getOpcionesOrden().setActiveItem(0); //Establecemos como activo el item 0 del tabpanel.
-                this.getPartidaContainer().down('list').emptyTextCmp.show();
+                //this.getPartidaContainer().down('list').emptyTextCmp.show();
+                /*var list = this.getOpcionesOrden().down('partidacontainer').down('panel').bodyElement;
+                console.log(list);
+                list.createChild('<div style="margin-top: -100px; background-color: gray;">' +
+                    '<div style="display: table; text-align: left; font-size: 10px; z-index: 0;">' +
+                    '<div style="display: table-row;">' +
+                    '<div id="cliente_id" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Transacción: Orden de Venta</div>' +
+                    '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Fecha: ' + Ext.DateExtras.dateFormat(new Date(), 'd/m/Y') +'</div>' +
+                    '</div>' +
+                    '<div style="display: table-row;">' +
+                    '<div id="codigo_id" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Código de Dispositivo: '+localStorage.getItem("CodigoDispositivo")+'</div>' +
+                    '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Código de Usuario: '+localStorage.getItem("CodigoUsuario")+'</div>' +
+                    '</div>' +
+                    '<div style="display: table-row;">' +
+                    '<div id="codigo_dispositivo" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Nombre de Dispositivo: '+localStorage.getItem("NombreDispositivo")+'</div>' +
+                    '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Nombre de Usuario: '+localStorage.getItem("NombreUsuario")+'</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>');*/
 
                 this.dameMonedaPredeterminada();
                 this.getOpcionesOrden().idCliente = idCliente;
-                this.getNavigationOrden().add(barraTitulo);
-                me.getOpcionesOrden().getAt(3).setDisabled(false);
+                this.getNavigationOrden().add(barraTitulo);                
 
                 break;
 
@@ -81975,7 +83909,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 });
 
                 me.dameMonedaPredeterminada();
-                me.getOpcionesOrden().getAt(3).setDisabled(true);
+                me.getOpcionesOrden().down('#editarPedido').setDisabled(true);
 
                 break;
         }
@@ -82012,12 +83946,10 @@ Ext.define('APP.controller.phone.Ordenes', {
             form.setValues(clienteSeleccionado);
         }
 
-        if (value.xtype == 'editarpedidoform') {
-            value.setDisabled(true);
-            value.down('#moneda').setDisabled(false);
-
+        if (value.xtype == 'editarpedidoform') {                        
             if (codigoMonedaSeleccionada == codigoMonedaPredeterminada) {
-                clienteSeleccionado.tipoCambio = parseFloat(1).toFixed(2);;
+                clienteSeleccionado.tipoCambio = parseFloat(1).toFixed(2);
+                ;
             } else {
                 clienteSeleccionado.tipoCambio = parseFloat(tipoCambio).toFixed(2);
             }
@@ -82027,7 +83959,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             clienteSeleccionado.CodigoMoneda = codigoMonedaSeleccionada;
             value.setValues(clienteSeleccionado);
             boton.setText('Back').show();
-            boton.setUi('back');
+            boton.setUi('back');            
         }
 
         if (value.xtype == 'partidacontainer') {
@@ -82037,9 +83969,9 @@ Ext.define('APP.controller.phone.Ordenes', {
     },
 
     /**
-    * Recorre el store de monedas y obtiene la predeterminada.
-    */
-    dameMonedaPredeterminada: function (){
+     * Recorre el store de monedas y obtiene la predeterminada.
+     */
+    dameMonedaPredeterminada: function () {
         var me = this,
             storeMonedas = Ext.getStore('Monedas');
 
@@ -82090,22 +84022,35 @@ Ext.define('APP.controller.phone.Ordenes', {
     onEliminarOrden: function (newActiveItem, tabPanel) {
         var me = this,
             ordenes = Ext.getStore('Ordenes');
-        Ext.Msg.confirm("Eliminar orden", "Se va a eliminar la orden, todos los productos agregados se perderán ¿está seguro?", function (e) {
 
-            if (e == 'yes') {
-                var view = me.getMainCard().getActiveItem(),
-                    titulo = view.down('toolbar'),
-                    name = titulo.getTitle().getTitle();
+        Ext.Msg.show({
+            title: 'Eliminar orden',
+            message: 'Se va a eliminar la orden, todos los productos agregados se perderán ¿está seguro?',
+            width: 300,
+            buttons: [{
+                itemId : 'no',
+                text   : 'No'
+            },{
+                itemId : 'yes',
+                text   : 'Si',
+                ui     : 'action'
+            }],
+            fn: function (buttonId) {
+                if (buttonId == 'yes') {
+                    var view = me.getMainCard().getActiveItem(),
+                        titulo = view.down('toolbar'),
+                        name = titulo.getTitle().getTitle();
 
-                ordenes.removeAll();
-                me.getMainCard().setActiveItem(0);
-                view.remove(titulo, false); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.                
-                //me.getMenuNav().down('toolbar').setTitle(name);
-                me.getMenuNav().remove(me.getMenuNav().down('toolbar'));
-                me.getMenuNav().add(titulo);
+                    ordenes.removeAll();
+                    me.getMainCard().setActiveItem(0);
+                    view.remove(titulo, false); // Remueve el título de la vista, si no, al volver a entrar aparecerá sobre el actual.
+                    //me.getMenuNav().down('toolbar').setTitle(name);
+                    me.getMenuNav().remove(me.getMenuNav().down('toolbar'));
+                    me.getMenuNav().add(titulo);
 
-            } else {
-                tabPanel.setActiveItem(0);
+                } else {
+                    tabPanel.setActiveItem(0);
+                }
             }
         });
     },
@@ -82185,8 +84130,7 @@ Ext.define('APP.controller.phone.Ordenes', {
 
             if (moneda != codigoMonedaSeleccionada) {
                 if(opcionesOrden.tipoCambio == 1){ // Cuando el documento de la orden recuperada viene en USD y se agrega un producto con USD, al realizar cambio de divisa por MPX se precisa el tipo de cambio para actualizar los valores de la orden.
-                    me.obtenerTipoCambio(codigoMonedaSeleccionada, record);
-                    console.log('entré');
+                    me.obtenerTipoCambio(codigoMonedaSeleccionada, record);                    
                 } else {
                     me.getOpcionesOrden().codigoMonedaSeleccionada = codigoMonedaPredeterminada;
                     codigoMonedaSeleccionada = codigoMonedaPredeterminada;
@@ -82255,10 +84199,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                         me.ayudaAAgregar(view, 'monedaDiferente');
                         me.ayudaAAgregar(view, 'cantidad'); // Se modifica la cantidad sólo si el tipo de cambio es exitoso.
                     } else {
-                        
                         if(record.get('CodigoMoneda') + ' ' == codigoMonedaPredeterminada){ // Si el record es de la moneda predeterminada se pinta 1.00 en el tipo de cambio.
-                            me.getOpcionesOrden().codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaPredeterminada;
-                            console.log('En la moneda predeterminada');
+                            me.getOpcionesOrden().codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaPredeterminada;                            
                             form.setValues({
                                 CodigoMoneda: me.getOpcionesOrden().codigoMonedaSeleccionada,
                                 tipoCambio: parseFloat(1).toFixed(2)
@@ -82267,8 +84209,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                             me.actualizaOrden(record.get('CodigoMoneda') + ' ');
 
                         } else{
-                            me.getOpcionesOrden().codigoMonedaSeleccionada = moneda;
-                            console.log('Los dolarucos');
+                            me.getOpcionesOrden().codigoMonedaSeleccionada = moneda;                            
                             form.setValues({
                                 CodigoMoneda: moneda,
                                 tipoCambio: tipoCambio
@@ -82313,12 +84254,12 @@ Ext.define('APP.controller.phone.Ordenes', {
     actualizaOrden: function (moneda) {
         var me = this, precio, importe,
             codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
-            //tipoCambio = me.getOpcionesOrden().tipoCambio,
+        //tipoCambio = me.getOpcionesOrden().tipoCambio,
             ordenes = Ext.getStore('Ordenes');
 
-        if(moneda == codigoMonedaPredeterminada){
+        if (moneda == codigoMonedaPredeterminada) {
             ordenes.each(function (item, index, length) {
-                if(item.get('esOrdenRecuperada')){
+                if (item.get('esOrdenRecuperada')) {
                     tipoCambio = item.get('TipoCambio');
                 } else {
                     tipoCambio = me.getOpcionesOrden().tipoCambio;
@@ -82336,15 +84277,12 @@ Ext.define('APP.controller.phone.Ordenes', {
             me.actualizarTotales();
 
         } else {
-
-            ordenes.each(function (item, index, length) {
-                console.log(item.get('esOrdenRecuperada'), 'Recuperada');
+            ordenes.each(function (item, index, length) {                
                 if(item.get('esOrdenRecuperada')){
                     tipoCambio = item.get('TipoCambio');
                 } else {
                     tipoCambio = me.getOpcionesOrden().tipoCambio;
-                }
-                console.log(tipoCambio, 'Tipo Cambio');
+                }                
                 precio = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) / tipoCambio;
                 importe = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('importe')) / tipoCambio;
                 precio = APP.core.FormatCurrency.currency(precio, moneda);
@@ -82376,9 +84314,9 @@ Ext.define('APP.controller.phone.Ordenes', {
                 me.actualizarTotales();
 
                 if (ordenes.getData().items.length < 2) {
-                    me.getPartidaContainer().down('list').emptyTextCmp.show();
+                    //me.getPartidaContainer().down('list').emptyTextCmp.show();
                 } else {
-                    me.getPartidaContainer().down('list').emptyTextCmp.hide();
+                    //me.getPartidaContainer().down('list').emptyTextCmp.hide();
                 }
             }
         });
@@ -82479,7 +84417,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             moneda = values.moneda,
             importe = values.importe,
             modo = me.getOpcionesOrden().modoForm;
-            codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
+        codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
 
 
         Ext.getStore('Productos').resetCurrentPage();
@@ -82490,8 +84428,8 @@ Ext.define('APP.controller.phone.Ordenes', {
             if (modo != 'edicion') {
                 if (moneda != codigoMonedaSeleccionada) {
                     if (moneda == codigoMonedaPredeterminada) {
-                        me.mandaMensaje('Imposible agregar', 'No es posible agregar el producto a la orden debido a que la configuración de moneda actual es ' + me.codigoMonedaSeleccionada + '  y la moneda del producto es ' + moneda + '. Cambie primero la configuración de moneda a ' + moneda + '.');
-                    } else {
+                        me.mandaMensaje('Imposible agregar', 'No es posible agregar el producto a la orden debido a que la configuración de moneda actual es ' + codigoMonedaSeleccionada + '  y la moneda del producto es ' + moneda + '.');
+                    } else {                        
                         me.obtenerTipoCambio(moneda); // Aquí esperamos a que obtenga el tipo de cambio y realizamos el cálculo del nuevo precio.
                     }
                 } else {
@@ -82523,9 +84461,9 @@ Ext.define('APP.controller.phone.Ordenes', {
             codigo = values.CodigoArticulo,
             indPro = productos.find('CodigoArticulo', codigo);
 
-            var productoAgregado = productos.getAt(indPro);
+        var productoAgregado = productos.getAt(indPro);
 
-            var cantidadActual = productoAgregado.get('cantidad'),
+        var cantidadActual = productoAgregado.get('cantidad'),
             totalDeImpuesto = me.getOpcionesOrden().totalDeImpuesto,
             tipoCambio = me.getOpcionesOrden().tipoCambio,
             codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
@@ -82700,7 +84638,7 @@ Ext.define('APP.controller.phone.Ordenes', {
 
                     productoSeleccionado.set(response.Data[0]);
 
-                me.llenaAgregarProductos(response.Data[0]); // Hacer un
+                    me.llenaAgregarProductos(response.Data[0]); // Hacer un
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }
@@ -82709,9 +84647,9 @@ Ext.define('APP.controller.phone.Ordenes', {
     },
 
     /**
-    * Establece los valores del agregarproductosform
-    * @param valores Los valores para el formulario.
-    */
+     * Establece los valores del agregarproductosform
+     * @param valores Los valores para el formulario.
+     */
     llenaAgregarProductos: function (valores) {
         var me = this,
             view = me.getNavigationOrden(),
@@ -82760,7 +84698,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         precio = APP.core.FormatCurrency.currency(valores.ListaPrecios[0].Precio, moneda);
         cantidad = 1;
 
-        view.setMasked({xtype:'loadmask',message:'Cargando Datos...'});
+        view.setMasked({xtype: 'loadmask', message: 'Cargando Datos...'});
         //Se calcula descuento
         Ext.data.JsonP.request({
             url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/ObtenerPrecioEspecialiMobile",
@@ -82785,9 +84723,9 @@ Ext.define('APP.controller.phone.Ordenes', {
                     desc = 0;
                 } else {
                     desc = (precio2 - response.Data[0]).toFixed(2);
-                //
+                    //
                     desc = (desc * 100 / precio2);
-                //
+                    //
                 }
 
                 if (procesada) {
@@ -82850,7 +84788,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
 
         if (view.getActiveItem().xtype == 'agregarproductosform') {
-            return
+            return;
         }
 
         view.push({
@@ -82883,11 +84821,11 @@ Ext.define('APP.controller.phone.Ordenes', {
     },
 
     /**
-    * Establece los valores originales a agregarproductosform, esta funcion se llama cuando la moneda del documento es distinta a la
-    * moneda del producto.
-    * @param values Los valores a cambiar en el form.
-    * @return Un nuevo objeto con los nuevos valores
-    */
+     * Establece los valores originales a agregarproductosform, esta funcion se llama cuando la moneda del documento es distinta a la
+     * moneda del producto.
+     * @param values Los valores a cambiar en el form.
+     * @return Un nuevo objeto con los nuevos valores
+     */
     ponValoresOriginalesAAgregarProductoForm: function (values) {
         var me = this,
             precio, importe, newObject, totaldeimpuesto, precioConDescuento, descuento,
@@ -82926,7 +84864,7 @@ Ext.define('APP.controller.phone.Ordenes', {
 
                 newObject.totalDeImpuesto = newObject.totalDeImpuesto / values.TipoCambio;
 
-            //
+                //
             }
         } else {
             precio = APP.core.FormatCurrency.formatCurrencytoNumber(values.Precio);
@@ -82934,7 +84872,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             importe = APP.core.FormatCurrency.formatCurrencytoNumber(values.importe) / values.TipoCambio; //precioConDescuento * values.cantidad; 
 
 
-        //
+            //
             //newObject.importe = APP.core.FormatCurrency.currency(importe, moneda);
             newObject.precioConDescuento = APP.core.FormatCurrency.currency(precioConDescuento, moneda);
         }
@@ -82971,7 +84909,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         });
     },
 
-    actualizaCantidadK: function (numberfield){
+    actualizaCantidadK: function (numberfield) {
         this.actualizaCantidad(numberfield.getValue());
     },
 
@@ -83054,7 +84992,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param v La vista que ha sido popeada.
      */
     onPopNavigationOrden: function (t, v) {
-        if(this.getOpcionesOrden() == undefined){
+        if (this.getOpcionesOrden() == undefined) {
             return;
         }
 
@@ -83063,22 +85001,26 @@ Ext.define('APP.controller.phone.Ordenes', {
             itemActivo = t.getActiveItem().getActiveItem(),
             idCliente = tabPanel.idCliente,
             store = Ext.getStore('Ordenes');
-        if (itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
-            t.getNavigationBar().down('#agregarProductos').show();
-        }
 
-        if (itemActivo.isXType('partidacontainer') && v.isXType('agregarproductosform')) {
-            t.getNavigationBar().down('#agregarProductos').show();
-        }
+
+        // if (itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
+        //     t.getNavigationBar().down('#agregarProductos').show();
+    //     
+        // }
+
+        // if (itemActivo.isXType('partidacontainer') && v.isXType('agregarproductosform')) {
+        //     t.getNavigationBar().down('#agregarProductos').show();
+    //     
+        // }
 
         if (store.getData().items.length <= 1) {
-            me.getPartidaContainer().down('list').emptyTextCmp.show();
+            //me.getPartidaContainer().down('list').emptyTextCmp.show();
         } else {
-            me.getPartidaContainer().down('list').emptyTextCmp.hide();
+            //me.getPartidaContainer().down('list').emptyTextCmp.hide();
         }
 
-        if (itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
-            t.getActiveItem().setActiveItem(0);
+        if (itemActivo.isXType('partidacontainer') || itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {            
+            //t.getActiveItem().setActiveItem(0);
             t.getNavigationBar().down('#agregarProductos').show();
             t.getNavigationBar().setTitle(idCliente);
         }
@@ -83150,7 +85092,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                 "Orden.CodigoImpuesto": codigoImpuesto,
                 "Orden.RFCSocio": clienteSeleccionado.RFC,
                 "Orden.DireccionEntrega": direccionEntrega,
-                "Orden.DireccionFiscal": direccionFiscal
+                "Orden.DireccionFiscal": direccionFiscal,
+                "Orden.TipoCambio": tipoCambio
             };
 
             Ext.Array.forEach(array, function (item, index, allItems) {
@@ -83158,15 +85101,15 @@ Ext.define('APP.controller.phone.Ordenes', {
                     precio = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')),
                     precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')),
                     importe;
-                    //importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
+                //importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
 
 
-/*                if(moneda != codigoMonedaSeleccionada){ // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
-                    //precioConDescuento /= tipoCambio;
-                    //precio /= tipoCambio;
-                    precio = parseFloat(precio.toFixed(2));*/
+                /*                if(moneda != codigoMonedaSeleccionada){ // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
+                 //precioConDescuento /= tipoCambio;
+                 //precio /= tipoCambio;
+                 precio = parseFloat(precio.toFixed(2));*/
 
-                if(moneda != codigoMonedaSeleccionada) { // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
+                if (moneda != codigoMonedaSeleccionada) { // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
                     //precioConDescuento *= tipoCambio;
                     precio *= tipoCambio;
                     moneda = codigoMonedaSeleccionada;
@@ -83177,6 +85120,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 total += precioConDescuento * item.get('cantidad') + item.get('totalDeImpuesto');
 
                 params["Orden.Partidas[" + index + "].CodigoArticulo"] = item.get('CodigoArticulo');
+                params["Orden.Partidas[" + index + "].NombreArticulo"] = item.get('NombreArticulo');
                 params["Orden.Partidas[" + index + "].Cantidad"] = item.get('cantidad');
                 params["Orden.Partidas[" + index + "].Precio"] = precio;//Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio'));
                 params["Orden.Partidas[" + index + "].CodigoAlmacen"] = item.get('CodigoAlmacen');
@@ -83211,7 +85155,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                         me.getNavigationOrden().remove(me.getNavigationOrden().down('toolbar'), true);
                         me.getMenuNav().remove(me.getMenuNav().down('toolbar'), true);
 
-                        if(opcionesOrden.actionOrden == 'crear'){
+                        if (opcionesOrden.actionOrden == 'crear') {
                             me.getMainCard().getActiveItem().pop();
                         } else {
                             me.getMainCard().getActiveItem().pop(2);
@@ -83224,8 +85168,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                     }
                 },
 
-                failure:function(){
-                    Ext.Msg.alert('Problemas de conexión', 'El servidor está tardando demasiado en responder. Intente más tarde.',function(){
+                failure: function () {
+                    Ext.Msg.alert('Problemas de conexión', 'El servidor está tardando demasiado en responder. Intente más tarde.', function () {
                         me.getMainCard().getActiveItem().setMasked(false);
                         me.getOpcionesOrden().setActiveItem(0);
                     });
@@ -83246,11 +85190,12 @@ Ext.define('APP.controller.phone.Ordenes', {
             idCliente = me.getMenuNav().getNavigationBar().getTitle(),
             store = Ext.getStore('Ordenes'),
             productos = Ext.getStore('Productos'),
+            index,
             barraTitulo = ({
-            xtype: 'toolbar',
-            docked: 'top',
-            title: 'titulo'
-        });
+                xtype: 'toolbar',
+                docked: 'top',
+                title: 'titulo'
+            });
 
         me.getMainCard().getAt(1).setMasked(false);
 
@@ -83273,25 +85218,34 @@ Ext.define('APP.controller.phone.Ordenes', {
                 me.getOpcionesOrden().NumeroDocumento = record.get('NumeroDocumento');
 
                 if (partidas.length < 2) {
-                    me.getPartidaContainer().down('list').emptyTextCmp.show();
+                    //me.getPartidaContainer().down('list').emptyTextCmp.show();
                 } else {
-                    me.getPartidaContainer().down('list').emptyTextCmp.hide();
+                    //me.getPartidaContainer().down('list').emptyTextCmp.hide();
                 }
 
-                partidas.forEach(function (item, index) {
 
-                    var moneda = item.Moneda + ' ',
+//                partidas.forEach(function (item, index) {
+                for(index = 0; index < partidas.length; index++){
+
+                    var item = partidas[index],
+                        moneda = item.Moneda + ' ',
                         precio = item.Precio,
                         precioConDescuento = item.PrecioDescuento,
                         importe = item.Importe,
                         tipoCambio = item.TipoCambio;
 
-                    if(codigoMonedaSeleccionada == codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ //Si Orden viene en MXP y producto en USD. El importe siempre viene en MXP
-                        precioConDescuento *= tipoCambio;
+
+                    if(codigoMonedaSeleccionada == codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ //Si Orden viene en MXP y producto en USD. El importe siempre venía en MXP
+                        console.log('Orden en MXP y producto en USD');
                     }
 
-                    if(codigoMonedaSeleccionada != codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ // Si orden viene en USD y producto en USD
-                        importe /= tipoCambio;
+/*                    if(codigoMonedaSeleccionada != codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ // Si orden viene en USD y producto en USD
+                        console.log('Orden en USD y producto en USD');
+                    }*/
+
+                   if(codigoMonedaSeleccionada != codigoMonedaPredeterminada && moneda == codigoMonedaPredeterminada){ // Si orden viene en USD y producto en MXP
+                        me.mandaMensaje('Moneda Diferente', 'No se pudo recuperar la Orden de Venta pues alguna partida viene en una moneda diferente a la del documento y está en moneda extranjera.');
+                        return;
                     }
 
                     //importe = precioConDescuento * item.Cantidad,
@@ -83307,14 +85261,14 @@ Ext.define('APP.controller.phone.Ordenes', {
                     //partidas[index].CodigoAlmacen = partidas[index].CodigoAlmacen;
                     partidas[index].PorcentajeDescuento = partidas[index].PorcentajeDescuento + '%';
                     partidas[index].esOrdenRecuperada = true;
-
-                });
+                    
+                };
 
 //                if(codigoMonedaSeleccionada != codigoMonedaPredeterminada){
-                    var monedas = Ext.getStore('Monedas'),
-                        indMoneda = monedas.find('CodigoMoneda', codigoMonedaSeleccionada.trim());
+                var monedas = Ext.getStore('Monedas'),
+                    indMoneda = monedas.find('CodigoMoneda', codigoMonedaSeleccionada.trim());
 
-                    me.estableceMonedaPredeterminada(monedas.getAt(indMoneda));
+                me.estableceMonedaPredeterminada(monedas.getAt(indMoneda));
 //                }
 
                 store.setData(partidas);
@@ -83324,17 +85278,10 @@ Ext.define('APP.controller.phone.Ordenes', {
                     //cantidad = item.get('cantidad');
                     ind = productos.find('CodigoArticulo', codigo);
                     if (ind != -1) { // Validamos que el elemento de la orden esté en los elementos actuales del store.
-                        // cantidadActual = productos.getAt(ind).get('cantidad');
-                        // productos.getAt(ind).setData(item);//('cantidad', cantidadActual + cantidad);
                     } else {
-                        productos.add(item);
+                        productos.add(item); // Si no está lo agregamos.
                     }
                 });
-
-                //productos.removeAll();
-                //productos.setData(partidas);
-
-
 
                 me.getMainCard().setActiveItem(1); // Activamos el item 1 del menu principal navigationorden
                 me.getMainCard().getActiveItem().getNavigationBar().setTitle(idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
@@ -83342,13 +85289,12 @@ Ext.define('APP.controller.phone.Ordenes', {
                 me.actualizarTotales();
                 barraTitulo.title = view.down('toolbar').getTitle();
                 me.getMainCard().getActiveItem().add(barraTitulo);
-
             }
         });
 
     },
 
-    onBuscarTransaccion: function (button){
+    onBuscarTransaccion: function (button) {
         var me = this,
             store = Ext.getStore('Transacciones'),
             idCliente = me.getMenuNav().getNavigationBar().getTitle(),
@@ -83364,7 +85310,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         store.load();
     },
 
-    limpiaBusquedaTransacciones: function() {
+    limpiaBusquedaTransacciones: function () {
         var me = this,
             store = me.getTransaccionList().getStore(),
             idCliente = me.getMenuNav().getNavigationBar().getTitle();
@@ -83427,30 +85373,30 @@ Ext.define('APP.controller.phone.Ordenes', {
             success: function (response) {
 
                 var procesada = response.Procesada,
-                valor = {
-                    Disponible: 'Disponible',
-                    NombreAlmacen: record.get('NombreAlmacen'),
-                    CodigoAlmacen: record.get('CodigoAlmacen')
-                };
+                    valor = {
+                        Disponible: 'Disponible',
+                        NombreAlmacen: record.get('NombreAlmacen'),
+                        CodigoAlmacen: record.get('CodigoAlmacen')
+                    };
 
-                if(procesada){
+                if (procesada) {
                     valor.Disponible = parseFloat(response.Data[0]).toFixed(2);
                 } else {
                     valor.Disponible = 'Error al obtener disponible';
                 }
 
-                    view.down('agregarproductosform').setValues(valor);
-                    view.pop();
+                view.down('agregarproductosform').setValues(valor);
+                view.pop();
             }
         });
     },
 
-    launch: function (){
+    launch: function () {
         var me = this;
         Ext.getStore('Productos').on('load', me.estableceCantidadAProductos);
     },
 
-    onKeyupActualizaCantidad: function (t){
+    onKeyupActualizaCantidad: function (t) {
         var me = this;
 
         me.actualizaCantidad(null, t.getValue(), null);
@@ -83470,8 +85416,10 @@ Ext.define('APP.controller.phone.Rutas', {
             partidaContainer:'partidacontainer',
             opcionesOrden:'opcionesorden',
             ordenContainer:'ordencontainer',
-            rutasCalendario:'rutascalendario'
-
+            rutasCalendario:'rutascalendario',
+            rutasCalendarioCont:'rutascalendariocont',
+            rutasCalendarioDia:'rutascalendariodia',
+            rutasMapa:'rutasmapa'
         },
         control:{
             'container[id=rutascont] clienteslist': {
@@ -83482,11 +85430,10 @@ Ext.define('APP.controller.phone.Rutas', {
                 itemtap:'onCalendario'
             },
             'rutascalendario':{
-                selectionchange:function(record,e,x,y){
-                    console.log(this.getRutasCalendario().getValue());
-                    console.log(record.getValue());
-                    this.getRutasCalendario().setViewMode("day");
-                }
+                selectionchange:'onCalendarioDia'
+            },
+            'rutascalendariocont button[action=agregar]':{
+                tap:'showForm'
             }
         }
     },
@@ -83530,7 +85477,36 @@ Ext.define('APP.controller.phone.Rutas', {
                 break;
         }
 
+    },
+
+    onCalendarioDia:function(calendar, nd, od){
+
+        calendar.eventStore.clearFilter();
+        calendar.eventStore.filterBy(function(record){
+        var startDate = Ext.Date.clearTime(record.get('start'), true).getTime(), endDate = Ext.Date.clearTime(record.get('end'), true).getTime();
+            return (startDate <= nd) && (endDate >= nd);
+        }, this);
+
+
+        this.getMenuNav().push({
+            xtype:'rutascalendariocont',
+            nd:nd
+        });
+
+        this.getRutasCalendarioDia().getStore().setData(calendar.eventStore.getRange());
+        console.log(this.getRutasCalendarioDia().getStore());
+    },
+
+    showForm:function(b){
+
+        this.getMenuNav().push({
+            xtype:'rutasform',
+            flex:1,
+            nd:this.getRutasCalendarioCont().nd
+        })
     }
+
+
 });
 
 /**
@@ -83670,7 +85646,9 @@ Ext.define('APP.controller.phone.Cobranza', {
                 anticiposlist.setMode('SINGLE');
 
                 params = {
-                    CardCode: idCliente
+                    CardCode: idCliente,
+                    CardName: '',
+                    Criterio: ''
                 };
                 
                 store.clearFilter();
@@ -84164,7 +86142,58 @@ Ext.define('APP.controller.phone.Informes', {
 Ext.define('APP.controller.phone.Configuracion', {
     extend: 'Ext.app.Controller',
 
-    config:{}
+    config: {
+        refs:{
+            fileUpload:'configuracionpanel fileupload',
+            imagenCmp:'configuracionpanel component[id=imagencmp]'
+        },
+        control:{
+            'configuracionpanel fileupload': {
+                loadsuccess: function(data,reader){
+                    var imagecmp = this.getImagenCmp(),
+                        imagesize = this.sizeString(data) / 1024 / 1024;
+
+                    console.log(imagesize);
+
+                    if(data.indexOf("data:image/") >= 0){
+                        if(imagesize < 10){
+                            localStorage.setItem("imagenorden",data);
+                            imagecmp.setHtml("<img src='" + data + "' style='width:100%;'>");
+                        }
+                        else{
+                            Ext.Msg.alert("Error","La imagen debe de ser menor de 4 megas");
+                        }
+                    }
+                    else{
+                        Ext.Msg.alert("Error","No es una imagen válida");
+                        return false;
+                    }
+
+                }
+            },
+            'configuracionpanel':{
+                activate:function(){
+                    var imagen = localStorage.getItem("imagenorden");
+                    if(imagen){
+                        var imagecmp = this.getImagenCmp();
+                        imagecmp.setHtml("<img src='" + imagen + "' style='width:100%;'>");
+
+                    }
+
+                }
+            }
+        }
+    },
+    sizeString:function(str){
+        var s = str.length;
+        for (var i=str.length-1; i>=0; i--) {
+            var code = str.charCodeAt(i);
+            if (code > 0x7f && code <= 0x7ff) s++;
+            else if (code > 0x7ff && code <= 0xffff) s+=2;
+            if (code >= 0xDC00 && code <= 0xDFFF) i--; //trail surrogate
+        }
+        return s;
+    }
 });
 
 /**
@@ -84299,7 +86328,13 @@ Ext.define('APP.view.phone.ordenes.OrdenList', {
     xtype: 'ordenlist',
     requires: [],
     config: {
+        styleHtmlContent:true,
+        styleHtmlCls:'testHtml',
+        overItemCls:'testOver',
+        selectedItemCls:'testSelect',
+        pressedCls:'testPress',
         itemCls: 'partida',
+        height:"100%",
         itemTpl: ['<section>',
             '<span id="imagen"><img src="{Imagen}" width="60px" height="60px"></span>',
             '<span>',
@@ -84312,22 +86347,7 @@ Ext.define('APP.view.phone.ordenes.OrdenList', {
             '<p style="margin: 0px;">Desc: {PorcentajeDescuento}</p>',
             '<p style="margin: 0px;"><b>Total: {importe}</b></p>',
             '</span></section>'].join(''),
-        store: 'Ordenes',
-        emptyText://'<img src="'+localStorage.getItem('image')+'" width="50px" height="50px" />' +
-            '<div style="display: table; text-align: left; font-size: 10px; z-index: 0;">' +
-            '<div style="display: table-row;">' +
-            '<div id="cliente_id" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Transacción: Orden de Venta</div>' +
-            '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Fecha: ' + Ext.DateExtras.dateFormat(new Date(), 'd/m/Y') +'</div>' +
-            '</div>' +
-            '<div style="display: table-row;">' +
-            '<div id="codigo_id" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Código de Dispositivo: '+localStorage.getItem("CodigoDispositivo")+'</div>' +
-            '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Código de Usuario: '+localStorage.getItem("CodigoUsuario")+'</div>' +
-            '</div>' +
-            '<div style="display: table-row;">' +
-            '<div id="codigo_dispositivo" style="display: table-cell;  padding-left: 10px; padding-right: 10px;">Nombre de Dispositivo: '+localStorage.getItem("NombreDispositivo")+'</div>' +
-            '<div style="display: table-cell;  padding-left: 15px; padding-right: 5px;">Nombre de Usuario: '+localStorage.getItem("NombreUsuario")+'</div>' +
-            '</div>' +
-            '</div>'
+        store: 'Ordenes'
     },
 
     onItemDisclosure: function (record, listItem, index, e) {
@@ -84422,16 +86442,21 @@ Ext.define('APP.view.phone.ordenes.PartidaContainer', {
             directionLock: true
         },
         layout: 'fit',
-        items: [{
-            style:{
-                background: 'gray'
+        items: [
+            {
+                xtype: 'panel',
+                flex: 7,
+                items: {
+                    xtype: 'ordenlist',
+                    flex: 1,
+                    layout: 'fit'
+                }
             },
-            xtype: 'ordenlist',
-            flex: 7
-        },{
-            xtype: 'ordencontainer',
-            flex: 1
-        }]
+            {
+                xtype: 'ordencontainer',
+                flex: 1
+            }
+        ]
     }
 });
 
@@ -84571,7 +86596,7 @@ Ext.define('APP.form.phone.pedidos.EditarPedidoForm', {
 	  
 	config:{
 		//padding:'15 15 15 15',
-		items:[{        
+		items:[/*{        
                 xtype:'container',
                 padding: '0 0 0 200',
                 defaults:{
@@ -84594,7 +86619,7 @@ Ext.define('APP.form.phone.pedidos.EditarPedidoForm', {
                         // }
                     }
                 ]
-            },
+            },*/
             {
                 xtype:'fieldset',
                 itemId:'datos',
@@ -84692,6 +86717,7 @@ Ext.define('APP.view.phone.ordenes.OpcionesOrdenPanel', {
             },
             {
                 title: 'Editar',
+                itemId: 'editarPedido',
                 iconCls: 'fa fa-pencil-square-o',
                 xtype: 'editarpedidoform'
             },
@@ -84946,7 +86972,8 @@ Ext.define('APP.view.phone.configuracion.ConfiguracionPanel', {
                 flex: 1
             },
             items: [{
-                xtype: 'component'
+                xtype: 'component',
+                id:'imagencmp'
             }]
         },{
             itemId: 'fileLoadBtn',
@@ -85046,7 +87073,11 @@ Ext.define('APP.view.phone.clientes.ClientesList', {
             xclass: 'Ext.plugin.ListPaging',
             autoPaging: true,
             loadMoreText: 'Ver Más...'
-        }]
+        }],
+        masked: {
+            xtype: 'loadmask',
+            message: 'Cargando...'
+        }
     }
 });
 
@@ -85661,6 +87692,116 @@ Ext.define('APP.view.phone.rutas.RutasCalendario', {
     }
 });
 
+/**
+ * @class Imobile.view.clientes.OpcionClienteList
+ * @extends Ext.dataview.List
+ * Esta es la lista de las opciones que tiene un cliente
+ */
+Ext.define('APP.view.phone.rutas.RutasCalendarioCont', {
+    extend: 'Ext.Container',
+    xtype: 'rutascalendariocont',
+    initialize : function() {
+        this.callParent();
+        this.setItems([{
+            xtype:'button',
+            action:'agregar',
+            text: 'Agregar'
+        },{
+            xtype:'container',
+            html:"<div style='text-align:center; padding:3px; color:#1F83FB;'>" + Ext.util.Format.date(this.nd,"l d/m/y") + "</div>"
+        },{
+            xtype:'rutascalendariodia',
+            flex:1
+        }]);
+
+
+    },
+    config:{
+        layout:{
+            type:'vbox',
+            align:'stretch'
+        }
+    }
+});
+
+/**
+ * @class Imobile.view.clientes.OpcionClienteList
+ * @extends Ext.dataview.List
+ * Esta es la lista de las opciones que tiene un cliente
+ */
+Ext.define('APP.view.phone.rutas.RutasCalendarioDia', {
+    extend: 'Ext.dataview.List',
+    xtype: 'rutascalendariodia',
+    config: {
+        itemTpl:new Ext.XTemplate(
+            '<tpl>',
+            '<div style="padding:0 3px;">{[this.dateParser(values.start)]} - {[this.dateParser(values.end)]} {title}</div>',
+            '</tpl>',{
+                dateParser: function(data){
+                    console.log(data);
+                    return Ext.util.Format.date(data,"H:i");
+                }
+            }
+        ),
+        store: new Ext.data.Store({
+            model: 'APP.model.phone.RutaCalendario',
+            data: []
+        })
+    }
+});
+
+/**
+ * @class Imobile.view.clientes.OpcionClienteList
+ * @extends Ext.dataview.List
+ * Esta es la lista de las opciones que tiene un cliente
+ */
+Ext.define('APP.view.phone.rutas.RutasMapa', {
+    extend: 'Ext.Container',
+    xtype: 'rutasmapa',
+
+    config: {
+        layout: {
+            type: 'fit'
+        },
+        items: [
+            {
+                xtype: 'map',
+                mapOptions: {
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    zoom: 14
+                },
+                useCurrentLocation: true
+            }
+        ]
+    },
+
+    initialize: function(){
+        var me = this;
+        me.callParent(arguments);
+        this.initMap();
+    },
+
+    initMap: function(){
+
+        var mapPanel = this.down('map');
+        var gMap = mapPanel.getMap();
+
+        var geo = Ext.create('Ext.util.Geolocation');
+        geo.updateLocation(function (g) {
+            var marker = new google.maps.Marker({
+                map: gMap,
+                animation: google.maps.Animation.DROP,
+                position: new google.maps.LatLng(g._latitude, g._longitude)
+            });
+        },this);
+
+
+
+
+
+    }
+});
+
 Ext.define('APP.form.phone.productos.AgregarProductosForm', {
 	extend: 'Ext.form.Panel',
 	xtype: 'agregarproductosform',
@@ -86067,6 +88208,149 @@ Ext.define('APP.form.phone.prospectos.ProspectosForm', {
 });
 
 /**
+ * Created with JetBrains PhpStorm.
+ * User: Waldix
+ * Date: 16/04/14
+ * Time: 12:23
+ * To change this template use File | Settings | File Templates.
+ */
+Ext.define('APP.form.phone.rutas.RutasForm', {
+    extend: 'Ext.form.Panel',
+    xtype: 'rutasform',
+    initialize : function() {
+        this.callParent();
+        this.setItems([{
+            xtype:'fieldset',
+            scrollable: {
+                direction: 'vertical',
+                directionLock: true
+            },
+            defaults:{
+                labelWidth:'30%',
+                required:true,
+                labelCls: 'labels',
+                inputCls: 'labels'
+            },
+            items:[{
+                xtype:'container',
+                layout:{
+                    type:'hbox',
+                    align:'stretch'
+                },
+                items:[{
+                    xtype:'button',
+                    action:'showrutasform',
+                    text:'Rutas',
+                    flex:1
+                },{
+                    xtype:'button',
+                    action:'showactividadesform',
+                    text:'Actividades',
+                    flex:1
+                }]
+            },{
+                xtype: 'textfield',
+                name: 'titulo',
+                label:'Título'
+            },{
+                xtype:'fieldset',
+                title:'Empieza',
+                layout:{
+                    type:'hbox',
+                    align:'stretch'
+                },
+                items:[{
+                    xtype:'datepickerfield',
+                    value:new Date(),
+                    border:0,
+                    name:'empiezafecha',
+                    readOnly:true
+                },{
+                    xtype: 'timepickerfield',
+                    name: 'empiezahora',
+                    value: new Date()
+                }]
+            },{
+                xtype:'fieldset',
+                title:'Termina',
+                layout:{
+                    type:'hbox',
+                    align:'stretch'
+                },
+                items:[{
+                    xtype:'datepickerfield',
+                    value:new Date(),
+                    name:'terminafecha'
+                },{
+                    xtype: 'timepickerfield',
+                    name: 'terminahora',
+                    value: new Date()
+                }]
+
+            },{
+                xtype: 'checkboxfield',
+                name: 'repetir',
+                label: 'Repetir'
+            },{
+                xtype:'container',
+                id:'rutasrepetir',
+                hidden:true,
+                items:[{
+                    xtype: 'checkboxfield',
+                    name: 'lunes',
+                    label: 'Lunes'
+                },{
+                    xtype: 'checkboxfield',
+                    name: 'martes',
+                    label: 'Martes'
+                },{
+                    xtype: 'checkboxfield',
+                    name: 'miercoles',
+                    label: 'Miercoles'
+                },{
+                    xtype: 'checkboxfield',
+                    name: 'jueves',
+                    label: 'Jueves'
+                },{
+                    xtype: 'checkboxfield',
+                    name: 'viernes',
+                    label: 'Viernes'
+                },{
+                    xtype: 'checkboxfield',
+                    name: 'sabado',
+                    label: 'Sabado'
+                },{
+                    xtype: 'checkboxfield',
+                    name: 'domingo',
+                    label: 'Domingo'
+                }]
+            },{
+                xtype: 'textareafield',
+                name: 'notas',
+                label: 'Notas',
+                labelAlign:'top'
+            },{
+                xtype:'rutasmapa',
+                useCurrentLocation: true,
+                height:400,
+                width:'98%'
+            },{
+                xtype:'container',
+                items:[{
+                    xtype:'button',
+                    margin:'10',
+                    text:'Guardar',
+                    action:'guardar'
+                }]
+            }]
+        }]);
+    },
+    config: {
+        layout:'fit'
+    }
+});
+
+/**
  * Created by th3gr4bb3r on 7/21/14.
  */
 Ext.define('APP.store.phone.Menu',{
@@ -86460,12 +88744,17 @@ Ext.define('APP.profile.Phone',{
 
             'rutas.OpcionRutasList',
             'rutas.RutasCalendario',
+            'rutas.RutasCalendarioCont',
+            'rutas.RutasCalendarioDia',
+            'rutas.RutasMapa',
 
             'APP.form.phone.pedidos.EditarPedidoForm',
             'APP.form.phone.clientes.ClienteForm',
             'APP.form.phone.productos.AgregarProductosForm',
             'APP.form.phone.cobranza.MontoAPagarForm',
-            'APP.form.phone.prospectos.ProspectosForm'
+            'APP.form.phone.prospectos.ProspectosForm',
+
+            'APP.form.phone.rutas.RutasForm'
         ]
     },
 
@@ -86504,6 +88793,8 @@ Ext.application({
                                
                            
                   
+                  
+
                                           
 
                         
@@ -86511,6 +88802,9 @@ Ext.application({
                                         
                                             
                                                     
+
+                                 
+                                       
 
                               
                                  

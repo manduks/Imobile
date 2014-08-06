@@ -36935,6 +36935,247 @@ Ext.define('Ext.Decorator', {
 });
 
 /**
+ * This is a simple way to add an image of any size to your application and have it participate in the layout system
+ * like any other component. This component typically takes between 1 and 3 configurations - a {@link #src}, and
+ * optionally a {@link #height} and a {@link #width}:
+ *
+ *     @example miniphone
+ *     var img = Ext.create('Ext.Img', {
+ *         src: 'http://www.sencha.com/assets/images/sencha-avatar-64x64.png',
+ *         height: 64,
+ *         width: 64
+ *     });
+ *     Ext.Viewport.add(img);
+ *
+ * It's also easy to add an image into a panel or other container using its xtype:
+ *
+ *     @example miniphone
+ *     Ext.create('Ext.Panel', {
+ *         fullscreen: true,
+ *         layout: 'hbox',
+ *         items: [
+ *             {
+ *                 xtype: 'image',
+ *                 src: 'http://www.sencha.com/assets/images/sencha-avatar-64x64.png',
+ *                 flex: 1
+ *             },
+ *             {
+ *                 xtype: 'panel',
+ *                 flex: 2,
+ *                 html: 'Sencha Inc.<br/>1700 Seaport Boulevard Suite 120, Redwood City, CA'
+ *             }
+ *         ]
+ *     });
+ *
+ * Here we created a panel which contains an image (a profile picture in this case) and a text area to allow the user
+ * to enter profile information about themselves. In this case we used an {@link Ext.layout.HBox hbox layout} and
+ * flexed the image to take up one third of the width and the text area to take two thirds of the width. See the
+ * {@link Ext.layout.HBox hbox docs} for more information on flexing items.
+ */
+Ext.define('Ext.Img', {
+    extend: 'Ext.Component',
+    xtype: ['image', 'img'],
+
+    /**
+     * @event tap
+     * Fires whenever the component is tapped
+     * @param {Ext.Img} this The Image instance
+     * @param {Ext.EventObject} e The event object
+     */
+
+    /**
+     * @event load
+     * Fires when the image is loaded
+     * @param {Ext.Img} this The Image instance
+     * @param {Ext.EventObject} e The event object
+     */
+
+    /**
+     * @event error
+     * Fires if an error occured when trying to load the image
+     * @param {Ext.Img} this The Image instance
+     * @param {Ext.EventObject} e The event object
+     */
+
+    config: {
+        /**
+         * @cfg {String} src The source of this image
+         * @accessor
+         */
+        src: null,
+
+        /**
+         * @cfg
+         * @inheritdoc
+         */
+        baseCls : Ext.baseCSSPrefix + 'img',
+
+        /**
+         * @cfg {String} imageCls The CSS class to be used when {@link #mode} is not set to 'background'
+         * @accessor
+         */
+        imageCls : Ext.baseCSSPrefix + 'img-image',
+
+        /**
+         * @cfg {String} backgroundCls The CSS class to be used when {@link #mode} is set to 'background'
+         * @accessor
+         */
+        backgroundCls : Ext.baseCSSPrefix + 'img-background',
+
+        /**
+         * @cfg {String} mode If set to 'background', uses a background-image CSS property instead of an
+         * `<img>` tag to display the image.
+         */
+        mode: 'background'
+    },
+
+    beforeInitialize: function() {
+        var me = this;
+        me.onLoad = Ext.Function.bind(me.onLoad, me);
+        me.onError = Ext.Function.bind(me.onError, me);
+    },
+
+    initialize: function() {
+        var me = this;
+        me.callParent();
+
+        me.relayEvents(me.renderElement, '*');
+
+        me.element.on({
+            tap: 'onTap',
+            scope: me
+        });
+    },
+
+    hide: function() {
+        this.callParent(arguments);
+        this.hiddenSrc = this.hiddenSrc || this.getSrc();
+        this.setSrc(null);
+    },
+
+    show: function() {
+        this.callParent(arguments);
+        if (this.hiddenSrc) {
+            this.setSrc(this.hiddenSrc);
+            delete this.hiddenSrc;
+        }
+    },
+
+    updateMode: function(mode) {
+        var me            = this,
+            imageCls      = me.getImageCls(),
+            backgroundCls = me.getBackgroundCls();
+
+        if (mode === 'background') {
+            if (me.imageElement) {
+                me.imageElement.destroy();
+                delete me.imageElement;
+                me.updateSrc(me.getSrc());
+            }
+
+            me.replaceCls(imageCls, backgroundCls);
+        } else {
+            me.imageElement = me.element.createChild({ tag: 'img' });
+
+            me.replaceCls(backgroundCls, imageCls);
+        }
+    },
+
+    updateImageCls : function (newCls, oldCls) {
+        this.replaceCls(oldCls, newCls);
+    },
+
+    updateBackgroundCls : function (newCls, oldCls) {
+        this.replaceCls(oldCls, newCls);
+    },
+
+    onTap: function(e) {
+        this.fireEvent('tap', this, e);
+    },
+
+    onAfterRender: function() {
+        this.updateSrc(this.getSrc());
+    },
+
+    /**
+     * @private
+     */
+    updateSrc: function(newSrc) {
+        var me = this,
+            dom;
+
+        if (me.getMode() === 'background') {
+            dom = this.imageObject || new Image();
+        }
+        else {
+            dom = me.imageElement.dom;
+        }
+
+        this.imageObject = dom;
+
+        dom.setAttribute('src', Ext.isString(newSrc) ? newSrc : '');
+        dom.addEventListener('load', me.onLoad, false);
+        dom.addEventListener('error', me.onError, false);
+    },
+
+    detachListeners: function() {
+        var dom = this.imageObject;
+
+        if (dom) {
+            dom.removeEventListener('load', this.onLoad, false);
+            dom.removeEventListener('error', this.onError, false);
+        }
+    },
+
+    onLoad : function(e) {
+        this.detachListeners();
+
+        if (this.getMode() === 'background') {
+            this.element.dom.style.backgroundImage = 'url("' + this.imageObject.src + '")';
+        }
+
+        this.fireEvent('load', this, e);
+    },
+
+    onError : function(e) {
+        this.detachListeners();
+
+        // Attempt to set the src even though the error event fired.
+        if (this.getMode() === 'background') {
+            this.element.dom.style.backgroundImage = 'url("' + this.imageObject.src + '")';
+        }
+
+        this.fireEvent('error', this, e);
+    },
+
+    doSetWidth: function(width) {
+        var sizingElement = (this.getMode() === 'background') ? this.element : this.imageElement;
+
+        sizingElement.setWidth(width);
+
+        this.callParent(arguments);
+    },
+
+    doSetHeight: function(height) {
+        var sizingElement = (this.getMode() === 'background') ? this.element : this.imageElement;
+
+        sizingElement.setHeight(height);
+
+        this.callParent(arguments);
+    },
+
+    destroy: function() {
+        this.detachListeners();
+
+        Ext.destroy(this.imageObject, this.imageElement);
+        delete this.imageObject;
+        delete this.imageElement;
+
+        this.callParent();
+    }
+});
+
+/**
  * A simple label component which allows you to insert content using {@link #html} configuration.
  *
  *     @example miniphone
@@ -78245,6 +78486,52 @@ Ext.define('Ext.viewport.Viewport', {
  */
 
 /**
+ * @class Imobile.model..Cliente
+ * @extends Ext.data.Model
+ * El modelo del cliente
+ */
+Ext.define('APP.model.phone.RutaCalendario', {
+    extend: 'Ext.data.Model',
+    config: {
+        fields: [{
+            name: 'event',
+            type: 'string'
+        },{
+            name: 'location',
+            type: 'string'
+        },{
+            name: 'start',
+            type: 'date'//,
+            //dateFormat: 'c'
+        },{
+            name: 'end',
+            type: 'date'//,
+            //dateFormat: 'c'
+        }]
+    }
+});
+
+/**
+ * @class Imobile.store.Clientes
+ * @extends Ext.data.Store
+ * Este es el store para los clientes
+ */
+Ext.define('APP.store.phone.RutasCalendario', {
+    //extend: 'APP.core.data.Store',
+    extend: 'Ext.data.Store',
+
+    config: {
+        model: 'APP.model.phone.RutaCalendario',
+        data: [{
+            event: 'Sencha Con',
+            location: 'Austin, Texas',
+            start: new Date(2014, 6, 23,11,33,30,0),
+            end: new Date(2014, 6, 27,12,33,30,0)
+        }]
+    }
+});
+
+/**
  * @filename Fileup.js
  *
  * @name File uploading component
@@ -80281,8 +80568,8 @@ Ext.define('Ext.ux.calendar.TouchCalendarSimpleEvents', {
 					var cell = this.calendar.getDateCell(date); // get the table cell for the current date
 					var store = this.calendar.eventStore;
 
-                    if (cell) {
 
+                    if (cell) {
 						store.clearFilter();
 						
 						// if we only want to show a single dot per day then use findBy for better performance
@@ -80365,6 +80652,16 @@ Ext.define('APP.core.data.Store', {
                     extraParams = store.getProxy().getExtraParams();
                 me.params.auth_token = localStorage.getItem("Token");
                 me.params.idioma = localStorage.getItem("idioma");
+                me.params.Token = localStorage.getItem("Token");
+                me.params.CodigoUsuario = localStorage.getItem("CodigoUsuario");
+                me.params.CodigoSociedad = localStorage.getItem("CodigoSociedad");
+                me.params.CodigoDispositivo = localStorage.getItem("CodigoDispositivo");
+                me.params.Elementos = 50;
+
+                if (store.getProxy().getUrl().search('http') == -1) {
+                    store.getProxy().setUrl('http://' + localStorage.getItem("dirIP") + store.getProxy().getUrl());
+                }
+
                 if (me.resetParams) {
                     store.getProxy().setExtraParams(me.params);
                     me.resetParams = false;
@@ -80377,12 +80674,6 @@ Ext.define('APP.core.data.Store', {
 
     setParams: function (params, resetParams) {
         var me = this;
-
-        params.Token = localStorage.getItem("Token");
-        params.CodigoUsuario = localStorage.getItem("CodigoUsuario");
-        params.CodigoSociedad = localStorage.getItem("CodigoSociedad");
-        params.CodigoDispositivo = localStorage.getItem("CodigoDispositivo");
-        params.Elementos = 50;
 
         me.params = params;
         me.resetParams = resetParams;
@@ -80399,7 +80690,7 @@ Ext.define('APP.core.data.Store', {
         return obj3;
     },
 
-    resetCurrentPage: function() {
+    resetCurrentPage: function () {
         var me = this;
         me.currentPage = 1;
     }
@@ -80875,7 +81166,7 @@ Ext.define('APP.model.phone.Total', {
             name: 'NumeroCheque',
             type: 'string'
         },{
-            name: 'NumeroCuenta',
+            name: 'NumeroTarjeta',
             type: 'string'
         },{
             name: 'Banco',
@@ -81023,32 +81314,6 @@ Ext.define('APP.model.phone.Transaccion', {
 });
 
 /**
- * @class Imobile.model..Cliente
- * @extends Ext.data.Model
- * El modelo del cliente
- */
-Ext.define('APP.model.phone.RutaCalendario', {
-    extend: 'Ext.data.Model',
-    config: {
-        fields: [{
-            name: 'event',
-            type: 'string'
-        },{
-            name: 'location',
-            type: 'string'
-        },{
-            name: 'start',
-            type: 'date'//,
-            //dateFormat: 'c'
-        },{
-            name: 'end',
-            type: 'date'//,
-            //dateFormat: 'c'
-        }]
-    }
-});
-
-/**
  * Created by th3gr4bb3r on 7/21/14.
  */
 Ext.define('APP.view.phone.login.LoginForm', {
@@ -81068,25 +81333,19 @@ Ext.define('APP.view.phone.login.LoginForm', {
         },{
             xtype: 'passwordfield',
             name: 'password',
+            margin:'5 0',
             placeHolder: 'Contraseña',
             value: '12345'
         },{
-            xtype: 'selectfield',
+            xtype: 'textfield',
             name:'servidor',
-            margin:'10 0',
-            options: [{
-                text: 'ddns',
-                value: 'ferman.ddns.net:88'
-            },{
-                text: 'hamachi',
-                value: '25.15.241.121:88'
-            },{
-                text: 'Server Fake 2',
-                value: 'fake2'
-            }]
+            hidden:true,
+            margin:'5 0',
+            value: 'ferman.ddns.net:88'
         },{
             xtype: 'selectfield',
             name:'idioma',
+            hidden:true,
             options: [{
                 text: 'Español',
                 value: 'es'
@@ -81095,14 +81354,12 @@ Ext.define('APP.view.phone.login.LoginForm', {
                 value: 'en'
             }]
         },{
-            xtype:'component',
-            height:10
-        },{
             xtype: 'button',
             action:'login',
             text: 'Login',
             ui: 'btn-login-ui',
             itemId: 'login',
+            margin:'5 0',
             handler: function(btn) {
                 var form = btn.up('formpanel');
 
@@ -81133,26 +81390,47 @@ Ext.define('APP.view.phone.login.LoginPanel',{
     extend:'Ext.Panel',
     xtype:'loginpanel',
     config: {
-        layout:'fit',
+        layout:'card',
+        activeItem:0,
         items: [{
-            xtype: 'container',
+            xtype:'container',
             baseCls: 'login-background',
             layout: {
                 type: 'vbox',
                 align: 'stretch'
             },
-            defaults: {
-                flex: 1
-            },
-            items: [{
-                xtype: 'container'
-            }, {
-                xtype: 'loginform',
-                baseCls: '',
-                flex: 2
-            }, {
-                xtype: 'container'
+            items:[{
+                xtype:'image',
+                id:'configloginbutton',
+                src:'resources/images/engine.png',
+                margin:'10 0 0 0',
+                width:50,
+                right:0,
+                height:30
+            },{
+                xtype:'container',
+                flex:1,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                defaults: {
+                    flex: 1
+                },
+                items: [{
+                    xtype: 'container'
+                },{
+                    xtype: 'loginform',
+                    baseCls: '',
+                    flex: 3
+                },{
+                    xtype: 'container'
+                }]
             }]
+
+        },{
+            xtype:'panel',
+            html:'1111'
         }]
     }
 });
@@ -81165,11 +81443,17 @@ Ext.define('APP.controller.phone.Login', {
 
     config: {
         refs: {
-            loginForm:'loginpanel loginform'
+            loginForm:'loginpanel loginform',
+            servidorLogin:'loginpanel loginform textfield[name=servidor]',
+            idiomaLogin:'loginpanel loginform textfield[name=idioma]',
+            loginPanel:'loginpanel'
         },
         control: {
             'loginform button[action=login]': {
                 tap: 'onLoginUser'
+            },
+            'loginpanel image[id=configloginbutton]':{
+                tap:'showConfigOptions'
             }
         }
     },
@@ -81214,6 +81498,8 @@ Ext.define('APP.controller.phone.Login', {
                     Ext.Viewport.add(Ext.create('APP.view.phone.MainCard'));
                     Ext.Viewport.getActiveItem().getAt(0).almacenes = almacenes;
 
+                    APP.core.data.Store.ProxyUrlClient = localStorage.getItem("dirIP");
+
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }
@@ -81225,7 +81511,24 @@ Ext.define('APP.controller.phone.Login', {
             },
             scope:this
         });
+    },
+
+    showConfigOptions:function(x){
+        var form = this.getLoginForm(),
+            server = this.getServidorLogin(),
+            idioma = this.getIdiomaLogin();
+
+        if(server.isHidden()){
+            server.setHidden(false);
+            idioma.setHidden(false);
+        }
+        else{
+            server.setHidden(true);
+            idioma.setHidden(true);
+        }
     }
+
+
 });
 
 /**
@@ -81233,13 +81536,13 @@ Ext.define('APP.controller.phone.Login', {
  */
 Ext.define('APP.controller.phone.Menu', {
     extend: 'Ext.app.Controller',
-    config:{
-        refs:{
-            loginForm:'menunav menulist',
-            menuNav:'menunav',
-            clientesList:'clienteslist'
+    config: {
+        refs: {
+            loginForm: 'menunav menulist',
+            menuNav: 'menunav',
+            clientesList: 'clienteslist'
         },
-        control:{
+        control: {
             'menunav': {
                 back: 'onBackMenu'
             },
@@ -81250,67 +81553,73 @@ Ext.define('APP.controller.phone.Menu', {
 
         }
     },
-    onMenuTap:function(list,index,target,record){
+    onMenuTap: function (list, index, target, record) {
 
         var action = record.data.action;
-        switch(action){
+        switch (action) {
             case 'ordenes':
                 this.getMenuNav().push({
-                    xtype:'container',
-                    layout:'fit',
-                    id:'ordenescont',
-                    items:[{
-                        xtype: 'clienteslist',
-                        title:'Ordenes'
-                    }]
+                    xtype: 'container',
+                    layout: 'fit',
+                    id: 'ordenescont',
+                    items: [
+                        {
+                            xtype: 'clienteslist',
+                            title: 'Ordenes'
+                        }
+                    ]
 
                 });
                 break;
             case 'rutas':
                 this.getMenuNav().push({
-                    xtype:'container',
-                    layout:'fit',
-                    id:'rutascont',
-                    items:[{
-                        xtype: 'clienteslist',
-                        title:'Rutas'
-                    }]
+                    xtype: 'container',
+                    layout: 'fit',
+                    id: 'rutascont',
+                    items: [
+                        {
+                            xtype: 'clienteslist',
+                            title: 'Rutas'
+                        }
+                    ]
                 });
                 break;
             case 'cobranza':
                 this.getMenuNav().push({
-                    xtype:'container',
-                    layout:'fit',
-                    id:'cobranzacont',
-                    items:[{
-                        xtype: 'clienteslist',
-                        title:'Cobranza'
-                    }]
+                    xtype: 'container',
+                    layout: 'fit',
+                    id: 'cobranzacont',
+                    items: [
+                        {
+                            xtype: 'clienteslist',
+                            title: 'Cobranza'
+                        }
+                    ]
 
                 });
                 break;
             case 'informes':
                 this.getMenuNav().push({
-                    title:'informes',
-                    html:'informes'
+                    title: 'informes',
+                    html: 'informes'
                 });
                 break;
             case 'configuracion':
                 this.getMenuNav().push({
-                    xtype:'configuracionpanel',
-                    title:'Configuración'
+                    xtype: 'configuracionpanel',
+                    title: 'Configuración'
                 });
                 break;
             case 'prospectos':
                 this.getMenuNav().push({
                     xtype: 'prospectoslist',
-                    title:'prospectos'              
+                    title: 'prospectos'
                 });
                 break;
             case 'favoritos':
                 this.getMenuNav().push({
-                    title:'favoritos',
-                    html:'favoritos'
+                    title: 'favoritos',
+                    html: 'favoritos'
                 });
                 break;
             case 'salir':
@@ -81323,9 +81632,9 @@ Ext.define('APP.controller.phone.Menu', {
         }
     },
 
-    onBackMenu: function(navigationview){
-        
-        var me =this,
+    onBackMenu: function (navigationview) {
+
+        var me = this,
             store = this.getClientesList().getStore(),
             view = this.getMenuNav(),
             titulo,
@@ -81337,10 +81646,10 @@ Ext.define('APP.controller.phone.Menu', {
                 Token: localStorage.getItem("Token")
             };
 
-        if( navigationview.getActiveItem().getId() == 'ordenescont' ||
+        if (navigationview.getActiveItem().getId() == 'ordenescont' ||
             navigationview.getActiveItem().getId() == 'cobranzacont' ||
             navigationview.getActiveItem().getId() == 'rutascont'
-        ){
+            ) {
             titulo = view.down('toolbar');
 
             view.remove(titulo, true);
@@ -81452,7 +81761,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                 tap: 'agregaProductos'
             },
             'agregarproductosform #cantidad': {
-                change: 'actualizaCantidad'
+                //change: 'actualizaCantidad'
+                keyup: 'actualizaCantidadK'
             },
             'agregarproductosform #almacenProducto': {
                 focus: 'onListAlmacen'
@@ -81468,7 +81778,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             },
             'productosorden productosview': {
                 itemtap: 'onAgregarProducto'
-            },            
+            },
 
             'direccioneslist': {
                 itemtap: 'muestraDirecciones'
@@ -81498,11 +81808,11 @@ Ext.define('APP.controller.phone.Ordenes', {
             'transaccionlist #btnBuscarTransaccion':{
                 tap: 'onBuscarTransaccion'
             },
-            'transaccionlist #buscarTransacciones':{                              
+            'transaccionlist #buscarTransacciones':{
                 clearicontap: 'limpiaBusquedaTransacciones'
             },
             'almacenlist': {
-                itemtap: 'onSeleccionarAlmacen'            
+                itemtap: 'onSeleccionarAlmacen'
             }
     	}
     },
@@ -81566,7 +81876,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param barraTitulo El toolbar para agregar el nombre del cliente.
      */
     estableceDirecciones: function (view,barraTitulo,clienteSeleccionado) {
-        var me = this,            
+        var me = this,
             direcciones = Ext.getStore('Direcciones');
 
         direcciones.setData(clienteSeleccionado.Direcciones);
@@ -81596,6 +81906,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             view.pop();
             direcciones.removeAll();
         }
+
     },
 
     /**
@@ -81621,7 +81932,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 xtype: 'toolbar',
                 docked: 'top',
                 title: menuNav.down('toolbar').getTitle()
-            });            
+            });
 
         switch (opcion) {
             case 'orden':
@@ -81635,6 +81946,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                 this.dameMonedaPredeterminada();
                 this.getOpcionesOrden().idCliente = idCliente;
                 this.getNavigationOrden().add(barraTitulo);
+                me.getOpcionesOrden().getAt(3).setDisabled(false);
+
                 break;
 
             case 'visualizar':
@@ -81662,6 +81975,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 });
 
                 me.dameMonedaPredeterminada();
+                me.getOpcionesOrden().getAt(3).setDisabled(true);
 
                 break;
         }
@@ -81699,6 +82013,9 @@ Ext.define('APP.controller.phone.Ordenes', {
         }
 
         if (value.xtype == 'editarpedidoform') {
+            value.setDisabled(true);
+            value.down('#moneda').setDisabled(false);
+
             if (codigoMonedaSeleccionada == codigoMonedaPredeterminada) {
                 clienteSeleccionado.tipoCambio = parseFloat(1).toFixed(2);;
             } else {
@@ -81707,7 +82024,7 @@ Ext.define('APP.controller.phone.Ordenes', {
 
             clienteSeleccionado.LimiteCredito = parseFloat(clienteSeleccionado.LimiteCredito).toFixed(2);
             clienteSeleccionado.Saldo = parseFloat(clienteSeleccionado.Saldo).toFixed(2);
-            clienteSeleccionado.CodigoMoneda = codigoMonedaSeleccionada;            
+            clienteSeleccionado.CodigoMoneda = codigoMonedaSeleccionada;
             value.setValues(clienteSeleccionado);
             boton.setText('Back').show();
             boton.setUi('back');
@@ -81898,7 +82215,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
             ordenes = Ext.getStore('Ordenes');
 
-        for (i = 0; i < ordenes.getCount(); i++) {                        
+        for (i = 0; i < ordenes.getCount(); i++) {
             if (ordenes.getAt(i).get('moneda') == codigoMonedaPredeterminada) {
                 nombre = ordenes.getAt(i).get('CodigoArticulo');
                 break;
@@ -81913,8 +82230,8 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param moneda La divisa cuyo tipo de cambio se necesita.
      */
     obtenerTipoCambio: function (moneda, record) {
-        var me = this,             
-            form = me.getOpcionesOrden().down('editarpedidoform'),            
+        var me = this,
+            form = me.getOpcionesOrden().down('editarpedidoform'),
             codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada,
             codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
             view = me.getNavigationOrden().getActiveItem();
@@ -81933,7 +82250,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 if (response.Procesada) {
                     me.getOpcionesOrden().tipoCambio = parseFloat(response.Data[0]).toFixed(2);
                     var tipoCambio = me.getOpcionesOrden().tipoCambio;
-                    
+
                     if (view.isXType('agregarproductosform')) {
                         me.ayudaAAgregar(view, 'monedaDiferente');
                         me.ayudaAAgregar(view, 'cantidad'); // Se modifica la cantidad sólo si el tipo de cambio es exitoso.
@@ -81966,14 +82283,14 @@ Ext.define('APP.controller.phone.Ordenes', {
 
                 } else {
                     var error = response.Descripcion;
-                    me.mandaMensaje('Error', error);                    
+                    me.mandaMensaje('Error', error);
                     // form.setValues({
                     //     CodigoMoneda: me.codigoMonedaSeleccionada,
                     //     tipoCambio: me.tipoCambio
                     // });
                 }
             }
-        });        
+        });
     },
 
     /**
@@ -81983,7 +82300,7 @@ Ext.define('APP.controller.phone.Ordenes', {
     estableceMonedaPredeterminada: function (record) {
         var store = Ext.getStore('Monedas');
 
-        store.each(function (item, index, length) {            
+        store.each(function (item, index, length) {
             item.set('Predeterminada', false);
         });
         record.set('Predeterminada', true);
@@ -82000,7 +82317,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             ordenes = Ext.getStore('Ordenes');
 
         if(moneda == codigoMonedaPredeterminada){
-            ordenes.each(function (item, index, length) {                
+            ordenes.each(function (item, index, length) {
                 if(item.get('esOrdenRecuperada')){
                     tipoCambio = item.get('TipoCambio');
                 } else {
@@ -82021,7 +82338,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         } else {
 
             ordenes.each(function (item, index, length) {
-                console.log(item.get('esOrdenRecuperada'), 'Recuperada');                
+                console.log(item.get('esOrdenRecuperada'), 'Recuperada');
                 if(item.get('esOrdenRecuperada')){
                     tipoCambio = item.get('TipoCambio');
                 } else {
@@ -82076,8 +82393,8 @@ Ext.define('APP.controller.phone.Ordenes', {
      */
     muestraDirecciones: function (list, index, target, record) {
         var me = this,
-            view = me.getNavigationOrden(),            
-            direcciones = Ext.getStore('Direcciones');        
+            view = me.getNavigationOrden(),
+            direcciones = Ext.getStore('Direcciones');
 
         direcciones.clearFilter();
 
@@ -82169,19 +82486,19 @@ Ext.define('APP.controller.phone.Ordenes', {
 //        if (Ext.isEmpty(descripcion) || Ext.isEmpty(cantidad)) {
         if (cantidad <= 0 || Ext.isEmpty(cantidad)) {
             me.mandaMensaje("Campos inválidos o vacíos", "Verifique que el valor de los campos sea correcto o que no estén vacíos");
-        } else {            
+        } else {
             if (modo != 'edicion') {
                 if (moneda != codigoMonedaSeleccionada) {
                     if (moneda == codigoMonedaPredeterminada) {
                         me.mandaMensaje('Imposible agregar', 'No es posible agregar el producto a la orden debido a que la configuración de moneda actual es ' + me.codigoMonedaSeleccionada + '  y la moneda del producto es ' + moneda + '. Cambie primero la configuración de moneda a ' + moneda + '.');
-                    } else {                        
+                    } else {
                         me.obtenerTipoCambio(moneda); // Aquí esperamos a que obtenga el tipo de cambio y realizamos el cálculo del nuevo precio.
                     }
                 } else {
                     me.ayudaAAgregar(form, 'cantidad');
                     me.ayudaAAgregar(form, 'monedaIgual');
                 }
-            } else {                
+            } else {
                 me.ayudaAAgregar(form, 'cantidad');
                 me.ayudaAAgregar(form, 'edicion');
             }
@@ -82192,7 +82509,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      * Función auxiliar para agregar los productos a la orden, en sí ésta hace toda la chamba de acuerdo al flujo en turno.
      */
 
-    ayudaAAgregar: function (form, caso) {        
+    ayudaAAgregar: function (form, caso) {
         var values, descripcion, cantidad, ordenes, codigo, indPro, productoAgregado, cantidadActual, precio,
             me = this,
             ordenes = Ext.getStore('Ordenes'),
@@ -82204,7 +82521,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             moneda = values.moneda,
             importe = values.importe,
             codigo = values.CodigoArticulo,
-            indPro = productos.find('CodigoArticulo', codigo);            
+            indPro = productos.find('CodigoArticulo', codigo);
 
             var productoAgregado = productos.getAt(indPro);
 
@@ -82212,7 +82529,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             totalDeImpuesto = me.getOpcionesOrden().totalDeImpuesto,
             tipoCambio = me.getOpcionesOrden().tipoCambio,
             codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
-        
+
         switch (caso) {
             case 'monedaIgual':
                 values.totalDeImpuesto = totalDeImpuesto;
@@ -82223,7 +82540,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 me.actualizarTotales();
                 break;
 
-            case 'monedaDiferente':            
+            case 'monedaDiferente':
                 precio = APP.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento) * tipoCambio;
                 values.importe = precio * cantidad;
                 precio = APP.core.FormatCurrency.currency(precio, codigoMonedaSeleccionada);
@@ -82284,7 +82601,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      */
     muestraClientes: function () {
         var clientes = Ext.getStore('Clientes');
-        
+
         clientes.resetCurrentPage();
         clientes.clearFilter();
         clientes.load();
@@ -82361,7 +82678,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         var me = this,
             productos = Ext.getStore('Productos'),
             idCliente = me.getNavigationOrden().getNavigationBar().getTitle(),
-            valores = record.data;        
+            valores = record.data;
 
         Ext.data.JsonP.request({
             url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Articulo/ObtenerArticuloiMobile",
@@ -82369,8 +82686,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                 CodigoUsuario: localStorage.getItem("CodigoUsuario"),
                 CodigoSociedad: localStorage.getItem("CodigoSociedad"),
                 CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
-                Token: localStorage.getItem("Token"),                
-                CardCode: idCliente,                
+                Token: localStorage.getItem("Token"),
+                CardCode: idCliente,
                 Criterio: valores.CodigoArticulo
             },
             callbackKey: 'callback',
@@ -82383,13 +82700,13 @@ Ext.define('APP.controller.phone.Ordenes', {
 
                     productoSeleccionado.set(response.Data[0]);
 
-                me.llenaAgregarProductos(response.Data[0]); // Hacer un 
+                me.llenaAgregarProductos(response.Data[0]); // Hacer un
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }
             }
         });
-    },    
+    },
 
     /**
     * Establece los valores del agregarproductosform
@@ -82426,7 +82743,7 @@ Ext.define('APP.controller.phone.Ordenes', {
 
         me.getOpcionesOrden().modoForm = 'agregar';
 
-        Ext.Array.forEach(almacenes, function (item, index) {            
+        Ext.Array.forEach(almacenes, function (item, index) {
             var predeterminado = item.Predeterminado;
 
             if (predeterminado) {
@@ -82443,6 +82760,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         precio = APP.core.FormatCurrency.currency(valores.ListaPrecios[0].Precio, moneda);
         cantidad = 1;
 
+        view.setMasked({xtype:'loadmask',message:'Cargando Datos...'});
         //Se calcula descuento
         Ext.data.JsonP.request({
             url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/ObtenerPrecioEspecialiMobile",
@@ -82465,11 +82783,11 @@ Ext.define('APP.controller.phone.Ordenes', {
 
                 if (precio2 == 0) {
                     desc = 0;
-                } else {                                        
+                } else {
                     desc = (precio2 - response.Data[0]).toFixed(2);
-                // 
+                //
                     desc = (desc * 100 / precio2);
-                // 
+                //
                 }
 
                 if (procesada) {
@@ -82501,11 +82819,12 @@ Ext.define('APP.controller.phone.Ordenes', {
 
                     form.getValues();
 
-                    me.actualizaCantidad(null, cantidad, null);
+                    me.actualizaCantidad(cantidad);
 
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }
+                view.setMasked(false);
             }
         });
     },
@@ -82527,7 +82846,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             id = record.data.id,
             ordenes = Ext.getStore('Ordenes'),
             ind = ordenes.find('id', id),
-            idCliente = view.getNavigationBar().getTitle(),            
+            idCliente = view.getNavigationBar().getTitle(),
             codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
 
         if (view.getActiveItem().xtype == 'agregarproductosform') {
@@ -82538,7 +82857,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             xtype: 'agregarproductosform',
             title: idCliente
         });
-        
+
         me.getOpcionesOrden().modoForm = 'edicion'; // Para visualizar el modo del form, edición o agregar.
         me.getOpcionesOrden().ind = ind; // Para guardar el índice de la orden que se va a editar.
         form = view.getActiveItem();
@@ -82548,13 +82867,13 @@ Ext.define('APP.controller.phone.Ordenes', {
         //field.down('#descripcion').setDisabled(true);
         view.getNavigationBar().down('#agregarProductos').hide();
 
-        if (values.moneda != codigoMonedaSeleccionada) {                                    
+        if (values.moneda != codigoMonedaSeleccionada) {
             valuesForm = me.ponValoresOriginalesAAgregarProductoForm(values); // Por si la moneda del producto es diferente a la del documento.
             form.setValues(valuesForm);
             form.setValues({
                 importe: valuesForm.importe
             });
-        } else {            
+        } else {
             var precio = APP.core.FormatCurrency.formatCurrencytoNumber(values.Precio);
             values.Precio = APP.core.FormatCurrency.currency(precio, codigoMonedaSeleccionada);
 
@@ -82596,7 +82915,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             };
 
         if (!values.esOrdenRecuperada) {
-            if (moneda != codigoMonedaPredeterminada && codigoMonedaSeleccionada == codigoMonedaPredeterminada) {                
+            if (moneda != codigoMonedaPredeterminada && codigoMonedaSeleccionada == codigoMonedaPredeterminada) {
                 descuento = APP.core.FormatCurrency.formatCurrencytoNumber(values.PorcentajeDescuento);
                 precio = APP.core.FormatCurrency.formatCurrencytoNumber(values.Precio);
                 //precio = precio * 100 / (100 - descuento);
@@ -82604,17 +82923,17 @@ Ext.define('APP.controller.phone.Ordenes', {
                 //precio = parseFloat(precio.toFixed(2));
                 importe = APP.core.FormatCurrency.formatCurrencytoNumber(values.importe) / values.TipoCambio;
                 precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento) / values.TipoCambio;
-                
+
                 newObject.totalDeImpuesto = newObject.totalDeImpuesto / values.TipoCambio;
 
             //
-            }            
-        } else {            
+            }
+        } else {
             precio = APP.core.FormatCurrency.formatCurrencytoNumber(values.Precio);
             precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento) / values.TipoCambio;
             importe = APP.core.FormatCurrency.formatCurrencytoNumber(values.importe) / values.TipoCambio; //precioConDescuento * values.cantidad; 
-                        
-            
+
+
         //
             //newObject.importe = APP.core.FormatCurrency.currency(importe, moneda);
             newObject.precioConDescuento = APP.core.FormatCurrency.currency(precioConDescuento, moneda);
@@ -82634,7 +82953,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param newValue El nuevo valor
      * @param oldValue El valor original
      */
-    actualizaCantidad: function (numberField, newValue, oldValue) {
+    actualizaCantidad: function (newValue) {
         var me = this,
             view = me.getNavigationOrden(),
             valoresForm = view.getActiveItem().getValues(),
@@ -82644,12 +82963,16 @@ Ext.define('APP.controller.phone.Ordenes', {
             totalDeImpuesto = me.getOpcionesOrden().totalDeImpuesto;
 
         if (sujetoImpuesto) {
-            totalDeImpuesto = preciocondescuento * me.tasaImpuesto / 100;            
+            totalDeImpuesto = preciocondescuento * me.tasaImpuesto / 100;
         }
 
         view.getActiveItem().setValues({
             importe: APP.core.FormatCurrency.currency(importe, valoresForm.moneda)
         });
+    },
+
+    actualizaCantidadK: function (numberfield){
+        this.actualizaCantidad(numberfield.getValue());
     },
 
     /**
@@ -82730,7 +83053,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      * @param t Éste navigationview.
      * @param v La vista que ha sido popeada.
      */
-    onPopNavigationOrden: function (t, v) {        
+    onPopNavigationOrden: function (t, v) {
         if(this.getOpcionesOrden() == undefined){
             return;
         }
@@ -82739,7 +83062,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             tabPanel = me.getOpcionesOrden(),
             itemActivo = t.getActiveItem().getActiveItem(),
             idCliente = tabPanel.idCliente,
-            store = Ext.getStore('Ordenes');            
+            store = Ext.getStore('Ordenes');
         if (itemActivo.isXType('clientecontainer') || itemActivo.isXType('editarpedidoform')) {
             t.getNavigationBar().down('#agregarProductos').show();
         }
@@ -82758,7 +83081,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             t.getActiveItem().setActiveItem(0);
             t.getNavigationBar().down('#agregarProductos').show();
             t.getNavigationBar().setTitle(idCliente);
-        }        
+        }
     },
 
     /**
@@ -82833,14 +83156,22 @@ Ext.define('APP.controller.phone.Ordenes', {
             Ext.Array.forEach(array, function (item, index, allItems) {
                 var moneda = item.get('moneda'),
                     precio = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('Precio')),
-                    precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento'));                    
+                    precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')),
+                    importe;
                     //importe = Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad');
 
-/*                if(moneda != codigoMonedaPredeterminada){ // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
+
+/*                if(moneda != codigoMonedaSeleccionada){ // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
                     //precioConDescuento /= tipoCambio;
                     //precio /= tipoCambio;
-                    precio = parseFloat(precio.toFixed(2));                    
-                }*/
+                    precio = parseFloat(precio.toFixed(2));*/
+
+                if(moneda != codigoMonedaSeleccionada) { // Si la moneda del artículo es diferente a la predeterminada hay que hacer una conversión.
+                    //precioConDescuento *= tipoCambio;
+                    precio *= tipoCambio;
+                    moneda = codigoMonedaSeleccionada;
+                    //precio = parseFloat(precio.toFixed(2));
+                }
 
                 importe = precioConDescuento * item.get('cantidad');
                 total += precioConDescuento * item.get('cantidad') + item.get('totalDeImpuesto');
@@ -82866,9 +83197,6 @@ Ext.define('APP.controller.phone.Ordenes', {
                 url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_OrdenVenta/ActualizarOrdenVentaiMobile";
                 msg = "Se acualizo la orden correctamente con folio: ";
             }
-
-            console.log(params);
-            
 
             Ext.data.JsonP.request({
                 url: url,
@@ -82900,7 +83228,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                     Ext.Msg.alert('Problemas de conexión', 'El servidor está tardando demasiado en responder. Intente más tarde.',function(){
                         me.getMainCard().getActiveItem().setMasked(false);
                         me.getOpcionesOrden().setActiveItem(0);
-                    });                
+                    });
                 }
             });
         } else {
@@ -82938,8 +83266,8 @@ Ext.define('APP.controller.phone.Ordenes', {
             callbackKey: 'callback',
             success: function (response) {
                 var response = response.Data[0],
-                    partidas = response.Partidas;                    
-                
+                    partidas = response.Partidas;
+
                 me.getOpcionesOrden().codigoMonedaSeleccionada = response.CodigoMoneda + ' ';
                 codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
                 me.getOpcionesOrden().NumeroDocumento = record.get('NumeroDocumento');
@@ -82950,7 +83278,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                     me.getPartidaContainer().down('list').emptyTextCmp.hide();
                 }
 
-                partidas.forEach(function (item, index) {                    
+                partidas.forEach(function (item, index) {
 
                     var moneda = item.Moneda + ' ',
                         precio = item.Precio,
@@ -82963,7 +83291,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                     }
 
                     if(codigoMonedaSeleccionada != codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ // Si orden viene en USD y producto en USD
-                        //importe /= tipoCambio;
+                        importe /= tipoCambio;
                     }
 
                     //importe = precioConDescuento * item.Cantidad,
@@ -82979,16 +83307,16 @@ Ext.define('APP.controller.phone.Ordenes', {
                     //partidas[index].CodigoAlmacen = partidas[index].CodigoAlmacen;
                     partidas[index].PorcentajeDescuento = partidas[index].PorcentajeDescuento + '%';
                     partidas[index].esOrdenRecuperada = true;
-                    
+
                 });
 
 //                if(codigoMonedaSeleccionada != codigoMonedaPredeterminada){
                     var monedas = Ext.getStore('Monedas'),
-                        indMoneda = monedas.find('CodigoMoneda', codigoMonedaSeleccionada.trim());                        
+                        indMoneda = monedas.find('CodigoMoneda', codigoMonedaSeleccionada.trim());
 
                     me.estableceMonedaPredeterminada(monedas.getAt(indMoneda));
 //                }
-                                
+
                 store.setData(partidas);
 
                 store.each(function (item, index, length) {
@@ -83014,22 +83342,19 @@ Ext.define('APP.controller.phone.Ordenes', {
                 me.actualizarTotales();
                 barraTitulo.title = view.down('toolbar').getTitle();
                 me.getMainCard().getActiveItem().add(barraTitulo);
-                                
+
             }
         });
 
     },
 
-    onBuscarTransaccion: function (button){        
+    onBuscarTransaccion: function (button){
         var me = this,
             store = Ext.getStore('Transacciones'),
             idCliente = me.getMenuNav().getNavigationBar().getTitle(),
             value = button.up('toolbar').down('#buscarTransacciones').getValue();
 
-        //
-
         store.resetCurrentPage();
-
         store.setParams({
             Criterio: value,
             CardCode: idCliente,
@@ -83043,7 +83368,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         var me = this,
             store = me.getTransaccionList().getStore(),
             idCliente = me.getMenuNav().getNavigationBar().getTitle();
-        
+
 
         store.resetCurrentPage();
 
@@ -83078,14 +83403,14 @@ Ext.define('APP.controller.phone.Ordenes', {
 
     onSeleccionarAlmacen: function (t, index, target, record, e, eOpts) {
         var me = this,
-            view = me.getMainCard().getActiveItem(),            
+            view = me.getMainCard().getActiveItem(),
             almacenes = me.getMenuNav().almacenes;//localStorage.getItem('Almacenes');
-            
+
         Ext.Array.forEach(almacenes, function (item, index) {
             item.Predeterminado = false;
         });
 
-        almacenes[index].Predeterminado = true;        
+        almacenes[index].Predeterminado = true;
         //me.CodigoAlmacen = me.almacenes[index].CodigoAlmacen; //record.get('CodigoAlmacen');
 
         Ext.data.JsonP.request({
@@ -83103,13 +83428,13 @@ Ext.define('APP.controller.phone.Ordenes', {
 
                 var procesada = response.Procesada,
                 valor = {
-                    Disponible: 'Disponible', 
+                    Disponible: 'Disponible',
                     NombreAlmacen: record.get('NombreAlmacen'),
                     CodigoAlmacen: record.get('CodigoAlmacen')
                 };
 
                 if(procesada){
-                    valor.Disponible = parseFloat(response.Data[0]).toFixed(2);                    
+                    valor.Disponible = parseFloat(response.Data[0]).toFixed(2);
                 } else {
                     valor.Disponible = 'Error al obtener disponible';
                 }
@@ -83121,8 +83446,14 @@ Ext.define('APP.controller.phone.Ordenes', {
     },
 
     launch: function (){
-        var me = this;        
+        var me = this;
         Ext.getStore('Productos').on('load', me.estableceCantidadAProductos);
+    },
+
+    onKeyupActualizaCantidad: function (t){
+        var me = this;
+
+        me.actualizaCantidad(null, t.getValue(), null);
     }
 });
 
@@ -83599,7 +83930,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             entradaMostrada = APP.core.FormatCurrency.currency(entrada, moneda),
             ind = form.ind,
             store = Ext.getStore('Totales');
-
+console.log(numeroTarjeta, 'Número de la Tarjeta');
             store.add({
                 tipo: forma,
                 monto: entradaMostrada,
@@ -83672,7 +84003,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             totales = view.down('totalapagarlist').getStore(),// Ext.getStore('Totales'),
             array = store.getData().items,
             fecha = new Date(Ext.Date.now()),
-            hora = me.daFormatoAHora(fecha.getHours(), fecha.getMinutes(), fecha.getSeconds());
+            hora = me.daFormatoAHora(fecha.getHours(), fecha.getMinutes(), fecha.getSeconds()),
             fecha = Ext.Date.format(fecha, "d-m-Y"),            
             url,
             msg = 'Se realizó el cobro exitosamente con folio ';            
@@ -83745,7 +84076,7 @@ console.log(params);
 
             url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
 
-/*            Ext.data.JsonP.request({
+            Ext.data.JsonP.request({
                 url: url,
                 params: params,
                 callbackKey: 'callback',
@@ -83762,18 +84093,26 @@ console.log(params);
                         Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);
                     }
                 }
-            });*/
+            });
 
         } else {            
             Ext.Msg.alert("Sin pago", "Agrega por lo menos un pago.");
         }
     },
 
-    daFormatoAHora: function(horas, minutos, segundos){        
-        var m = hoy.getMonth() + 1;
-        var mes = (m < 10) ? '0' + m : m;
+    daFormatoAHora: function(horas, minutos, segundos){
+        var me = this,
+            hr = me.agregaCero(horas),
+            min = me.agregaCero(minutos),
+            seg = me.agregaCero(segundos);        
 
-        return 0;//horas + ':' + minutos + ':' + segundos,
+        return hr + ':' + min + ':' + seg;
+    },
+
+    agregaCero: function (n){
+        var m = (n < 10) ? '0' + n : n;
+
+        return m;
     },
 
     cancelaPago: function (btn) {
@@ -84097,6 +84436,28 @@ Ext.define('APP.view.phone.ordenes.PartidaContainer', {
 });
 
 /**
+ * @class Imobile.view.ventas.DireccionesList
+ * @extends Ext.dataview.List
+ * Esta es la lista de las opciones que tiene un cliente
+ */
+Ext.define('APP.view.phone.ordenes.DireccionesList', {
+    extend: 'Ext.dataview.List',
+    xtype: 'direccioneslist',
+    config: {
+        striped: true,
+        onItemDisclosure: function (record, listItem, index, e) {
+            this.fireEvent("tap", record, listItem, index, e);            
+        },        
+        itemTpl: '{title}',
+        //scrollable: null,
+        data:[
+            {title: 'Dirección de entrega', action: 'entrega'},
+            {title: 'Dirección fiscal', action: 'fiscal'}
+        ]
+    }
+});
+
+/**
  * Created with JetBrains PhpStorm.
  * User: Waldix
  * Date: 16/04/14
@@ -84111,19 +84472,24 @@ Ext.define('APP.form.phone.clientes.ClienteForm', {
                          
                           
       
-    config: {        
+    config: {
         //padding:'0 0 15 0',
         items: [
             {
                 xtype: 'fieldset',
                 itemId: 'datosCliente',
-                title: 'Datos de Cliente',                
+                instructions: 'Datos del Cliente',
                 defaults: {
                     disabled: true,
                     clearIcon: true,
                     autoCapitalize: true,
                     labelWidth: '45%'
                 },
+                layout : {
+                    type  : 'vbox',
+                    align : 'stretch'
+                },
+                flex: 1,
                 items: [
                     {
                         xtype: 'textfield',
@@ -84153,60 +84519,25 @@ Ext.define('APP.form.phone.clientes.ClienteForm', {
                     {
                         xtype: 'textfield',
                         name: 'NombreListaPrecio',
-                        label: 'Lista de Precios'                        
+                        label: 'Lista de Precios'
                     },
                     {
                         xtype: 'textfield',
                         name: 'LimiteCredito',
-                        label: 'Crédito'                        
+                        label: 'Crédito'
                     },
                     {
                         xtype: 'textfield',
                         name: 'Saldo',
                         label: 'Saldo'
-                    }                    
+                    },
+                    {
+                        xtype: 'direccioneslist',
+                        height: 80
+                    }
                 ]
             }
         ]
-    }
-});
-
-/**
- * @class Imobile.view.ventas.DireccionesList
- * @extends Ext.dataview.List
- * Esta es la lista de las opciones que tiene un cliente
- */
-Ext.define('APP.view.phone.ordenes.DireccionesList', {
-    extend: 'Ext.dataview.List',
-    xtype: 'direccioneslist',
-    config: {
-        onItemDisclosure: function (record, listItem, index, e) {
-            this.fireEvent("tap", record, listItem, index, e);            
-        },        
-        itemTpl: '{title}',
-        //scrollable: null,
-        data:[
-            {title: 'Dirección de entrega', action: 'entrega'},
-            {title: 'Dirección fiscal', action: 'fiscal'}
-        ]
-    }
-});
-
-/**
- * @class Imobile.view.ventas.DireccionesContainer
- * @extends extendsClass
- * Description
- */
-Ext.define('APP.view.phone.ordenes.DireccionesContainer', {
-    extend: 'Ext.Container',
-    requires: [],
-    xtype: 'direccionescontainer',
-    config: {
-    	//scrollable: false,
-        layout: 'fit',        
-        items: [{
-            xtype: 'direccioneslist'
-        }]
     }
 });
 
@@ -84220,40 +84551,11 @@ Ext.define('APP.view.phone.ordenes.ClienteContainer', {
     requires: [],
     xtype: 'clientecontainer',
     config: {
-        /*scrollable: {
-            direction: 'vertical',
-            directionLock: true
-        },*/
-        layout: 'vbox',
-        items: [/*{
-            xtype: 'container',
-            flex: 1,
-            padding: '0 0 0 200',
-                defaults: {
-                    xtype: 'button',                    
-                    flex: 1
-                },
-                layout: {
-                    type: 'hbox'
-                },
-                items: [
-                    {
-                        xtype: 'spacer',
-                        docked: 'top',
-                        padding: 5
-                    },
-                    {
-                        itemId: 'guardar',
-                        text: 'Guardar',
-                        ui: 'confirm'
-                    }
-                ]
-            },*/{
+        layout: 'fit',
+        items: [{
+            padding: 7,
             xtype: 'clienteform',
-            flex: 6            
-        },{
-            xtype: 'direccionescontainer',
-            flex: 1.5
+            flex: 1
         }]
     }
 });
@@ -84823,6 +85125,24 @@ Ext.define('APP.view.phone.ordenes.DireccionEntregaContainer', {
 });
 
 /**
+ * @class Imobile.view.ventas.DireccionesContainer
+ * @extends extendsClass
+ * Description
+ */
+Ext.define('APP.view.phone.ordenes.DireccionesContainer', {
+    extend: 'Ext.Container',
+    requires: [],
+    xtype: 'direccionescontainer',
+    config: {
+    	//scrollable: false,
+        layout: 'fit',        
+        items: [{
+            xtype: 'direccioneslist'
+        }]
+    }
+});
+
+/**
  * @class Imobile.view.ventas.DireccionFiscalList
  * @extends Ext.dataview.List
  * Description Lista de las direcciones fiscales de los clientes
@@ -85323,26 +85643,6 @@ Ext.define('APP.view.phone.rutas.OpcionRutasList', {
 });
 
 /**
- * @class Imobile.store.Clientes
- * @extends Ext.data.Store
- * Este es el store para los clientes
- */
-Ext.define('APP.store.phone.RutasCalendario', {
-    //extend: 'APP.core.data.Store',
-    extend: 'Ext.data.Store',
-
-    config: {
-        model: 'APP.model.phone.RutaCalendario',
-        data: [{
-            event: 'Sencha Con',
-            location: 'Austin, Texas',
-            start: new Date(2014, 6, 23,11,33,30,0),
-            end: new Date(2014, 6, 27,12,33,30,0)
-        }]
-    }
-});
-
-/**
  * @class Imobile.view.rutas.Calentario
  * @extends Ext.dataview.List
  * Esta es la lista de las opciones que tiene un cliente
@@ -85424,10 +85724,10 @@ Ext.define('APP.form.phone.productos.AgregarProductosForm', {
                         name:'cantidad',
                         label:'Cantidad',
                         disabled: false,
-                        minValue: 0,
-                        itemId: 'cantidad'
+                        minValue: 0.1,
+                        itemId: 'cantidad',
                         //maxValue: 100,
-                        //stepValue: .1,
+                        stepValue: .1
                         //ui: 'spinner'
                     },{
                         xtype:'textfield',
@@ -85799,7 +86099,7 @@ Ext.define('APP.store.phone.Clientes', {
     config: {
         model: 'APP.model.phone.Cliente',
         proxy: {
-            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",
+            url: "/iMobile/COK1_CL_Socio/ObtenerListaSociosiMobile",
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {
@@ -85824,7 +86124,7 @@ Ext.define('APP.store.phone.Productos', {
     config: {
         model:'APP.model.phone.Producto',
         proxy: {            
-            url: 'http://'+ localStorage.getItem('dirIP') +'/iMobile/COK1_CL_Articulo/ObtenerListaArticulosiMobile',
+            url: '/iMobile/COK1_CL_Articulo/ObtenerListaArticulosiMobile',
             //url: 'http://25.15.241.121:88/iMobile/COK1_CL_Articulo/ObtenerListaArticulosiMobile',
                  
             type: 'jsonp',
@@ -85871,7 +86171,7 @@ Ext.define('APP.store.phone.Monedas', {
     config: {
         model: 'APP.model.phone.Moneda',
         proxy: {
-            url: 'http://'+ localStorage.getItem('dirIP') +'/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasiMobile',
+            url: '/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasiMobile',
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {
@@ -85906,7 +86206,7 @@ Ext.define('APP.store.phone.Facturas', {
         model: 'APP.model.phone.Factura',        
         proxy: {
             //url: 'http://ferman.ddns.net:88/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile',
-            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile",
+            url: "/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile",
             //url: 'http://25.15.241.121:88/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile',
             type: 'jsonp',
             callbackKey: 'callback',
@@ -85939,7 +86239,7 @@ Ext.define('APP.store.phone.Anticipos', {
         model: 'APP.model.phone.Factura',
         proxy: {
             //url: 'http://ferman.ddns.net:88/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile',
-            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile",
+            url: "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile",
             //url: 'http://25.15.241.121:88/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile',
             type: 'jsonp',
             callbackKey: 'callback',
@@ -85995,11 +86295,10 @@ Ext.define('APP.store.phone.FormasDePago', {
 
     config: {
         model: 'APP.model.phone.FormaDePago',
-        autoLoad: true,
         proxy: {
             //url: 'http://25.15.241.121:88/iMobile/COK1_CL_Catalogos/ObtenerFormasPagoiMobile',
             //url: 'http://ferman.ddns.net:88/iMobile/COK1_CL_Catalogos/ObtenerFormasPagoiMobile',
-            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Catalogos/ObtenerFormasPagoiMobile",
+            url: "/iMobile/COK1_CL_Catalogos/ObtenerFormasPagoiMobile",
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {
@@ -86055,7 +86354,7 @@ Ext.define('APP.store.phone.Transacciones', {
     config: {
         model:'APP.model.phone.Transaccion',
         proxy: {            
-            url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile",
+            url: "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile",
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {
@@ -86204,6 +86503,8 @@ Ext.application({
                             
                                
                            
+                  
+                                          
 
                         
 
@@ -86262,5 +86563,5 @@ Ext.application({
 });
 
 // @tag full-page
-// @require C:\Users\Alí\Documents\GitHub\Imobile\app.js
+// @require /Applications/XAMPP/xamppfiles/htdocs/Imobiler/app.js
 

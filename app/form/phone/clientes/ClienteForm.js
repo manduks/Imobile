@@ -13,19 +13,24 @@ Ext.define('APP.form.phone.clientes.ClienteForm', {
         'Ext.field.Text',
         'Ext.field.Number'
     ],
-    config: {        
+    config: {
         //padding:'0 0 15 0',
         items: [
             {
                 xtype: 'fieldset',
                 itemId: 'datosCliente',
-                title: 'Datos de Cliente',                
+                instructions: 'Datos del Cliente',
                 defaults: {
                     disabled: true,
                     clearIcon: true,
                     autoCapitalize: true,
                     labelWidth: '45%'
                 },
+                layout : {
+                    type  : 'vbox',
+                    align : 'stretch'
+                },
+                flex: 1,
                 items: [
                     {
                         xtype: 'textfield',
@@ -55,18 +60,22 @@ Ext.define('APP.form.phone.clientes.ClienteForm', {
                     {
                         xtype: 'textfield',
                         name: 'NombreListaPrecio',
-                        label: 'Lista de Precios'                        
+                        label: 'Lista de Precios'
                     },
                     {
                         xtype: 'textfield',
                         name: 'LimiteCredito',
-                        label: 'Crédito'                        
+                        label: 'Crédito'
                     },
                     {
                         xtype: 'textfield',
                         name: 'Saldo',
                         label: 'Saldo'
-                    }                    
+                    },
+                    {
+                        xtype: 'direccioneslist',
+                        height: 80
+                    }
                 ]
             }
         ]

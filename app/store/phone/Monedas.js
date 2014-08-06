@@ -9,7 +9,7 @@ Ext.define('APP.store.phone.Monedas', {
     config: {
         model: 'APP.model.phone.Moneda',
         proxy: {
-            url: 'http://'+ localStorage.getItem('dirIP') +'/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasiMobile',
+            url: '/iMobile/COK1_CL_Catalogos/ObtenerListaMonedasiMobile',
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {

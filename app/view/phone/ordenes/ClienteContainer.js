@@ -8,40 +8,11 @@ Ext.define('APP.view.phone.ordenes.ClienteContainer', {
     requires: [],
     xtype: 'clientecontainer',
     config: {
-        /*scrollable: {
-            direction: 'vertical',
-            directionLock: true
-        },*/
-        layout: 'vbox',
-        items: [/*{
-            xtype: 'container',
-            flex: 1,
-            padding: '0 0 0 200',
-                defaults: {
-                    xtype: 'button',                    
-                    flex: 1
-                },
-                layout: {
-                    type: 'hbox'
-                },
-                items: [
-                    {
-                        xtype: 'spacer',
-                        docked: 'top',
-                        padding: 5
-                    },
-                    {
-                        itemId: 'guardar',
-                        text: 'Guardar',
-                        ui: 'confirm'
-                    }
-                ]
-            },*/{
+        layout: 'fit',
+        items: [{
+            padding: 7,
             xtype: 'clienteform',
-            flex: 6            
-        },{
-            xtype: 'direccionescontainer',
-            flex: 1.5
+            flex: 1
         }]
     }
 });

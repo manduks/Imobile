@@ -61,6 +61,8 @@ Ext.define('APP.controller.phone.Login', {
                     Ext.Viewport.add(Ext.create('APP.view.phone.MainCard'));
                     Ext.Viewport.getActiveItem().getAt(0).almacenes = almacenes;
 
+                    APP.core.data.Store.ProxyUrlClient = localStorage.getItem("dirIP");
+
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }

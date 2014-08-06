@@ -21,7 +21,8 @@ Ext.define('APP.view.phone.configuracion.ConfiguracionPanel', {
                 flex: 1
             },
             items: [{
-                xtype: 'component'
+                xtype: 'component',
+                id:'imagencmp'
             }]
         },{
             itemId: 'fileLoadBtn',

@@ -12,15 +12,20 @@ Ext.define('APP.view.phone.ordenes.PartidaContainer', {
             directionLock: true
         },
         layout: 'fit',
-        items: [{
-            style:{
-                background: 'gray'
+        items: [
+            {
+                xtype: 'panel',
+                flex: 7,
+                items: {
+                    xtype: 'ordenlist',
+                    flex: 1,
+                    layout: 'fit'
+                }
             },
-            xtype: 'ordenlist',
-            flex: 7
-        },{
-            xtype: 'ordencontainer',
-            flex: 1
-        }]
+            {
+                xtype: 'ordencontainer',
+                flex: 1
+            }
+        ]
     }
 });

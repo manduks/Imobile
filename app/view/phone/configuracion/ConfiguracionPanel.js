@@ -65,9 +65,7 @@ Ext.define('APP.view.phone.configuracion.ConfiguracionPanel', {
             },{
                     xtype: 'togglefield',
                     label: 'Opcion 1'
-            },{
-                    xtype: 'togglefield',
-                    label: 'Opcion 2'
+
             }]
         },{
             xtype: 'fieldset',

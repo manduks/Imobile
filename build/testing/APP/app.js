@@ -83733,7 +83733,8 @@ Ext.define('APP.controller.phone.Ordenes', {
      */
     alSelecionarCliente: function (list, index, target, record) {
 
-        var name = record.get('NombreSocio'),
+        var me = this,
+            name = record.get('NombreSocio'),
             idCliente = record.get('CodigoSocio'),
             titulo = name,
             barraTitulo = ({
@@ -83759,14 +83760,32 @@ Ext.define('APP.controller.phone.Ordenes', {
             },
             callbackKey: 'callback',
             success: function (response) {
-                var procesada = response.Procesada;
-
-                var clienteSeleccionado = response.Data[0];
+                var procesada = response.Procesada,
+                    clienteSeleccionado = response.Data[0],
+                    codigoMonedaCliente = clienteSeleccionado.CodigoMoneda;
 
                 this.getOpcionesOrden().clienteSeleccionado = clienteSeleccionado;
 
                 if (procesada) {
-                    this.estableceDirecciones(this.getMenuNav(), barraTitulo, clienteSeleccionado);
+                    this.estableceDirecciones(this.getMenuNav(),barraTitulo,clienteSeleccionado);
+
+                    if(codigoMonedaCliente == '##'){
+                        this.dameMonedaPredeterminada();
+                    } else {
+                        var storeMonedas = Ext.getStore('Monedas');
+                        storeMonedas.load({
+                            callback: function (records, operation) {
+                                var monedas = Ext.getStore('Monedas'),
+                                indMoneda = monedas.find('CodigoMoneda', codigoMonedaCliente);
+
+                                me.getOpcionesOrden().codigoMonedaPredeterminada = codigoMonedaCliente + ' ';
+                                me.getOpcionesOrden().codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaPredeterminada;
+                                me.estableceMonedaPredeterminada(monedas.getAt(indMoneda));
+
+                                me.actualizarTotales();
+                            }
+                        });                    
+                    }                    
                 } else {
                     Ext.Msg.alert('Datos Incorrectos', response.Descripcion, Ext.emptyFn);
                 }
@@ -83878,7 +83897,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                     '</div>' +
                     '</div>');*/
 
-                this.dameMonedaPredeterminada();
+//                this.dameMonedaPredeterminada();
                 this.getOpcionesOrden().idCliente = idCliente;
                 this.getNavigationOrden().add(barraTitulo);                
 
@@ -83908,7 +83927,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                     title: idCliente
                 });
 
-                me.dameMonedaPredeterminada();
+//                me.dameMonedaPredeterminada();
                 me.getOpcionesOrden().down('#editarPedido').setDisabled(true);
 
                 break;
@@ -83956,8 +83975,12 @@ Ext.define('APP.controller.phone.Ordenes', {
 
             clienteSeleccionado.LimiteCredito = parseFloat(clienteSeleccionado.LimiteCredito).toFixed(2);
             clienteSeleccionado.Saldo = parseFloat(clienteSeleccionado.Saldo).toFixed(2);
-            clienteSeleccionado.CodigoMoneda = codigoMonedaSeleccionada;
+           //clienteSeleccionado.CodigoMoneda = codigoMonedaSeleccionada;
             value.setValues(clienteSeleccionado);
+            value.setValues({
+                CodigoMoneda: codigoMonedaSeleccionada
+            });
+
             boton.setText('Back').show();
             boton.setUi('back');            
         }
@@ -83980,7 +84003,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 Ext.Array.each(records, function (item, index, ItSelf) {
                     var predeterminada = item.get('Predeterminada');
                     if (predeterminada) {
-                        me.getOpcionesOrden().codigoMonedaPredeterminada = codigoMonedaPredeterminada = item.get('CodigoMoneda') + ' ';
+                        me.getOpcionesOrden().codigoMonedaPredeterminada = item.get('CodigoMoneda') + ' ';
                         me.getOpcionesOrden().codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaPredeterminada;
                     }
                 });
@@ -84116,34 +84139,40 @@ Ext.define('APP.controller.phone.Ordenes', {
             opcionesOrden = me.getOpcionesOrden(),
             codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada,
             codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
-            form = opcionesOrden.down('editarpedidoform');
+            clienteSeleccionado = opcionesOrden.clienteSeleccionado,
+            form = opcionesOrden.down('editarpedidoform');            
+console.log(clienteSeleccionado, 'El cliente');
+        if(clienteSeleccionado.CodigoMoneda == '##'){
 
-        if ((codigoMonedaSeleccionada != moneda) && (codigoMonedaSeleccionada == codigoMonedaPredeterminada)) {
-            if (me.dameProductoConMonedaPredeterminada(codigoMonedaPredeterminada) != 'No hay') {
-                me.mandaMensaje('Error', 'No es posible cambiar la configuración debido a que la moneda del producto con código ' + me.dameProductoConMonedaPredeterminada() + ' es ' + codigoMonedaPredeterminada + '. Elimínelo primero de la orden.');
+            if ((codigoMonedaSeleccionada != moneda) && (codigoMonedaSeleccionada == codigoMonedaPredeterminada)) {
+                if (me.dameProductoConMonedaPredeterminada(codigoMonedaPredeterminada) != 'No hay') {
+                    me.mandaMensaje('Error', 'No es posible cambiar la configuración debido a que la moneda del producto con código ' + me.dameProductoConMonedaPredeterminada() + ' es ' + codigoMonedaPredeterminada + '. Elimínelo primero de la orden.');
+                } else {
+                    me.obtenerTipoCambio(moneda, record);
+    //                me.estableceMonedaPredeterminada(record);
+    //                me.actualizaOrden(moneda);
+                }
             } else {
-                me.obtenerTipoCambio(moneda, record);
-//                me.estableceMonedaPredeterminada(record);
-//                me.actualizaOrden(moneda);
+
+                if (moneda != codigoMonedaSeleccionada) {
+                    if(opcionesOrden.tipoCambio == 1){ // Cuando el documento de la orden recuperada viene en USD y se agrega un producto con USD, al realizar cambio de divisa por MPX se precisa el tipo de cambio para actualizar los valores de la orden.
+                        me.obtenerTipoCambio(codigoMonedaSeleccionada, record);                    
+                    } else {
+                        me.getOpcionesOrden().codigoMonedaSeleccionada = codigoMonedaPredeterminada;
+                        codigoMonedaSeleccionada = codigoMonedaPredeterminada;
+                        me.actualizaOrden(moneda);
+                        //me.tipoCambio = 1;
+                        form.setValues({
+                            CodigoMoneda: codigoMonedaSeleccionada,
+                            tipoCambio: parseFloat(1).toFixed(2)
+                        });
+                        me.estableceMonedaPredeterminada(record); // Para pintar la palomita.
+                    }
+                }
+                //me.actualizarTotales();
             }
         } else {
-
-            if (moneda != codigoMonedaSeleccionada) {
-                if(opcionesOrden.tipoCambio == 1){ // Cuando el documento de la orden recuperada viene en USD y se agrega un producto con USD, al realizar cambio de divisa por MPX se precisa el tipo de cambio para actualizar los valores de la orden.
-                    me.obtenerTipoCambio(codigoMonedaSeleccionada, record);                    
-                } else {
-                    me.getOpcionesOrden().codigoMonedaSeleccionada = codigoMonedaPredeterminada;
-                    codigoMonedaSeleccionada = codigoMonedaPredeterminada;
-                    me.actualizaOrden(moneda);
-                    //me.tipoCambio = 1;
-                    form.setValues({
-                        CodigoMoneda: codigoMonedaSeleccionada,
-                        tipoCambio: parseFloat(1).toFixed(2)
-                    });
-                    me.estableceMonedaPredeterminada(record); // Para pintar la palomita.
-                }
-            }
-            //me.actualizarTotales();
+            me.mandaMensaje('No es Multimoneda', 'El cliente ' + clienteSeleccionado.CodigoSocio + ' sólo puede operar con ' + clienteSeleccionado.CodigoMoneda + '.');
         }
 
         view.pop();
@@ -84416,9 +84445,9 @@ Ext.define('APP.controller.phone.Ordenes', {
             cantidad = values.cantidad,
             moneda = values.moneda,
             importe = values.importe,
-            modo = me.getOpcionesOrden().modoForm;
-        codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
-
+            modo = me.getOpcionesOrden().modoForm,
+            codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
+            codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
 
         Ext.getStore('Productos').resetCurrentPage();
 //        if (Ext.isEmpty(descripcion) || Ext.isEmpty(cantidad)) {
@@ -84859,20 +84888,18 @@ Ext.define('APP.controller.phone.Ordenes', {
                 //precio = precio * 100 / (100 - descuento);
                 //precio = precio / values.TipoCambio;
                 //precio = parseFloat(precio.toFixed(2));
-                importe = APP.core.FormatCurrency.formatCurrencytoNumber(values.importe) / values.TipoCambio;
-                precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento) / values.TipoCambio;
 
-                newObject.totalDeImpuesto = newObject.totalDeImpuesto / values.TipoCambio;
-
+                importe = APP.core.FormatCurrency.formatCurrencytoNumber(values.importe) / tipoCambio;//values.TipoCambio;
+                precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento) /tipoCambio; // values.TipoCambio;
+                
+                newObject.totalDeImpuesto = newObject.totalDeImpuesto / tipoCambio; //values.TipoCambio;
                 //
             }
         } else {
             precio = APP.core.FormatCurrency.formatCurrencytoNumber(values.Precio);
-            precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento) / values.TipoCambio;
-            importe = APP.core.FormatCurrency.formatCurrencytoNumber(values.importe) / values.TipoCambio; //precioConDescuento * values.cantidad; 
-
-
-            //
+            precioConDescuento = APP.core.FormatCurrency.formatCurrencytoNumber(values.precioConDescuento) / tipoCambio; //values.TipoCambio;
+            importe = APP.core.FormatCurrency.formatCurrencytoNumber(values.importe) / tipoCambio; //values.TipoCambio; //precioConDescuento * values.cantidad; 
+                        
             //newObject.importe = APP.core.FormatCurrency.currency(importe, moneda);
             newObject.precioConDescuento = APP.core.FormatCurrency.currency(precioConDescuento, moneda);
         }
@@ -86004,6 +86031,7 @@ console.log(numeroTarjeta, 'Número de la Tarjeta');
 
             if(me.getMenuNav().getActiveItem().opcion == 'anticipo'){
                 params["Cobranza.Tipo"] = 'A';
+                params["Cobranza.NumeroPedido"] = 'A';
                 msg = 'Se realizó el anticipo exitosamente con folio ';
             }
 
@@ -86014,16 +86042,24 @@ console.log(numeroTarjeta, 'Número de la Tarjeta');
                 //console.log(item, 'terminar cobranza');
                 //total += (Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad')) + item.get('totalDeImpuesto');
 
-                params["Cobranza.CobranzaFacturas[" + index + "].NumeroFactura"] = item.data.NumeroDocumento;//get('NumeroDocumento');
+                params["Cobranza.CobranzaFacturas[" + index + "].NumeroFactura"] = item.data.Folio;//get('NumeroDocumento');
                 params["Cobranza.CobranzaFacturas[" + index + "].Monto"] = item.get('TotalDocumento');//item.get('Saldo');
                 params["Cobranza.CobranzaFacturas[" + index + "].NumeroLinea"] = index;
             });
 
-            totales.each(function (item, index) {                
+            totales.each(function (item, index) {
+                //Limpiamos los valores que no aparecen en todas las formas de pago.
                 params["Cobranza.CobranzaDetalles[" + index + "].NumeroLinea"] = index;
                 params["Cobranza.CobranzaDetalles[" + index + "].CodigoFormaPago"] = item.data.codigoFormaPago;
                 params["Cobranza.CobranzaDetalles[" + index + "].MontoNeto"] = APP.core.FormatCurrency.formatCurrencytoNumber(item.data.monto);
                 //params["oCobranzaCobranzaDetalles[" + index + "].NoFacturaAplicada"] = 'Sin número'
+
+                //Limpiamos los valores que no aparecen en todas las formas de pago.
+/*                params["Cobranza.CobranzaDetalles[" + index + "].NumeroCheque"] = '';
+                params["Cobranza.CobranzaDetalles[" + index + "].Banco"] = '';
+                params["Cobranza.CobranzaDetalles[" + index + "].Fecha"] = '';
+                params["Cobranza.CobranzaDetalles[" + index + "].NumeroAutorizacion"] = '';
+                params["Cobranza.CobranzaDetalles[" + index + "].NumeroTarjeta"] = '';*/
 
                 switch (item.data.tipoFormaPago) {
                     case "0": //Cheque
@@ -86040,6 +86076,8 @@ console.log(numeroTarjeta, 'Número de la Tarjeta');
                         params["Cobranza.CobranzaDetalles[" + index + "].NumeroTarjeta"] = item.data.NumeroTarjeta; 
                         break;
                 }
+
+                console.log(params["Cobranza.CobranzaDetalles[" + index + "].Banco"]);
             });
 console.log(params);
             //params["Orden.TotalDocumento"] = parseFloat(total).toFixed(2);

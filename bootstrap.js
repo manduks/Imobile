@@ -47,9 +47,14 @@ Ext.Loader.addClassPathMappings({
   "Ext.device.sqlite.SQLResultSetRowList": "touch/src/device/sqlite/Sencha.js",
   "Ext.device.sqlite.SQLTransaction": "touch/src/device/sqlite/Sencha.js",
   "Ext.draw.engine.SvgContext.Gradient": "touch/src/draw/engine/SvgContext.js",
-  "Ext.ux.Fileup": "src/ux/Fileup.js",
-  "Ext.ux.TouchCalendar": "src/ux/TouchCalendar.js",
-  "Ext.ux.calendar": "src/ux/calendar",
+  "Ext.ux": "src/ux",
+  "Ext.ux.ActionOverFlowMenuButton": "touch/src/ux/ActionOverFlowMenuButton.js",
+  "Ext.ux.ApplicationMenu": "touch/src/ux/ApplicationMenu.js",
+  "Ext.ux.ContextMenu": "touch/src/ux/ContextMenu.js",
+  "Ext.ux.MenuButton": "touch/src/ux/MenuButton.js",
+  "Ext.ux.TabMenuButton": "touch/src/ux/TabMenuButton.js",
+  "Ext.ux.device": "touch/src/ux/device",
+  "Ext.ux.parse": "touch/src/ux/parse",
   "Imobile": "app",
   "TouchCalendarViewModel": "src/ux/calendar/TouchCalendarView.js"
 });
@@ -71,6 +76,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "APP.form.phone.pedidos.EditarPedidoForm": [],
   "APP.form.phone.productos.AgregarProductosForm": [],
   "APP.form.phone.prospectos.ProspectosForm": [],
+  "APP.form.phone.rutas.RutasForm": [],
   "APP.model.phone.Cliente": [],
   "APP.model.phone.Direccion": [],
   "APP.model.phone.Factura": [],
@@ -138,6 +144,9 @@ Ext.ClassManager.addNameAlternateMappings({
   "APP.view.phone.prospectos.ProspectosList": [],
   "APP.view.phone.rutas.OpcionRutasList": [],
   "APP.view.phone.rutas.RutasCalendario": [],
+  "APP.view.phone.rutas.RutasCalendarioCont": [],
+  "APP.view.phone.rutas.RutasCalendarioDia": [],
+  "APP.view.phone.rutas.RutasMapa": [],
   "APP.view.tablet.Main": [],
   "Ext.AbstractComponent": [],
   "Ext.AbstractManager": [],
@@ -860,6 +869,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.parse.Store": [],
   "Ext.ux.parse.association.Pointer": [],
   "Ext.ux.parse.association.Relation": [],
+  "Ext.ux.timepicker.Time": [],
+  "Ext.ux.timepicker.TimePicker": [],
   "Ext.viewport.Android": [],
   "Ext.viewport.Default": [],
   "Ext.viewport.Ios": [],
@@ -908,6 +919,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "APP.form.phone.prospectos.ProspectosForm": [
     "widget.prospectosform"
+  ],
+  "APP.form.phone.rutas.RutasForm": [
+    "widget.rutasform"
   ],
   "APP.model.phone.Cliente": [],
   "APP.model.phone.Direccion": [],
@@ -1055,6 +1069,15 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "APP.view.phone.rutas.RutasCalendario": [
     "widget.rutascalendario"
+  ],
+  "APP.view.phone.rutas.RutasCalendarioCont": [
+    "widget.rutascalendariocont"
+  ],
+  "APP.view.phone.rutas.RutasCalendarioDia": [
+    "widget.rutascalendariodia"
+  ],
+  "APP.view.phone.rutas.RutasMapa": [
+    "widget.rutasmapa"
   ],
   "APP.view.tablet.Main": [],
   "Ext.AbstractComponent": [],
@@ -2003,6 +2026,12 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.ux.parse.association.Relation": [
     "association.relation"
+  ],
+  "Ext.ux.timepicker.Time": [
+    "widget.timepicker"
+  ],
+  "Ext.ux.timepicker.TimePicker": [
+    "widget.timepickerfield"
   ],
   "Ext.viewport.Android": [],
   "Ext.viewport.Default": [

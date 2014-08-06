@@ -90,6 +90,8 @@
     -->
     <access origin="*" />
     <access origin="https://ferman.ddns.net:88/"/> <!-- allow local pages -->
+    <access origin="*.google.com"/> <!-- allow local pages -->
+    <access origin="*.googleapis.com"/> <!-- allow local pages -->
     <!--
         <access origin="http://phonegap.com" />                    - allow any secure requests to http://phonegap.com/
         <access origin="http://phonegap.com" subdomains="true" />  - same as above, but including subdomains, such as http://build.phonegap.com/

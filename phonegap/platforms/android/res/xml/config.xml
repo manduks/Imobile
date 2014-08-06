@@ -53,4 +53,6 @@
     <gap:splash gap:platform="winphone" src="res/screen/windows-phone/screen-portrait.jpg" />
     <access origin="*" />
     <access origin="https://ferman.ddns.net:88/" />
+    <access origin="*.google.com" />
+    <access origin="*.googleapis.com" />
 </widget>

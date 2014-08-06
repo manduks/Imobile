@@ -493,6 +493,7 @@ console.log(numeroTarjeta, 'Número de la Tarjeta');
 
             if(me.getMenuNav().getActiveItem().opcion == 'anticipo'){
                 params["Cobranza.Tipo"] = 'A';
+                params["Cobranza.NumeroPedido"] = 'A';
                 msg = 'Se realizó el anticipo exitosamente con folio ';
             }
 
@@ -503,16 +504,24 @@ console.log(numeroTarjeta, 'Número de la Tarjeta');
                 //console.log(item, 'terminar cobranza');
                 //total += (Imobile.core.FormatCurrency.formatCurrencytoNumber(item.get('precioConDescuento')) * item.get('cantidad')) + item.get('totalDeImpuesto');
 
-                params["Cobranza.CobranzaFacturas[" + index + "].NumeroFactura"] = item.data.NumeroDocumento;//get('NumeroDocumento');
+                params["Cobranza.CobranzaFacturas[" + index + "].NumeroFactura"] = item.data.Folio;//get('NumeroDocumento');
                 params["Cobranza.CobranzaFacturas[" + index + "].Monto"] = item.get('TotalDocumento');//item.get('Saldo');
                 params["Cobranza.CobranzaFacturas[" + index + "].NumeroLinea"] = index;
             });
 
-            totales.each(function (item, index) {                
+            totales.each(function (item, index) {
+                //Limpiamos los valores que no aparecen en todas las formas de pago.
                 params["Cobranza.CobranzaDetalles[" + index + "].NumeroLinea"] = index;
                 params["Cobranza.CobranzaDetalles[" + index + "].CodigoFormaPago"] = item.data.codigoFormaPago;
                 params["Cobranza.CobranzaDetalles[" + index + "].MontoNeto"] = APP.core.FormatCurrency.formatCurrencytoNumber(item.data.monto);
                 //params["oCobranzaCobranzaDetalles[" + index + "].NoFacturaAplicada"] = 'Sin número'
+
+                //Limpiamos los valores que no aparecen en todas las formas de pago.
+/*                params["Cobranza.CobranzaDetalles[" + index + "].NumeroCheque"] = '';
+                params["Cobranza.CobranzaDetalles[" + index + "].Banco"] = '';
+                params["Cobranza.CobranzaDetalles[" + index + "].Fecha"] = '';
+                params["Cobranza.CobranzaDetalles[" + index + "].NumeroAutorizacion"] = '';
+                params["Cobranza.CobranzaDetalles[" + index + "].NumeroTarjeta"] = '';*/
 
                 switch (item.data.tipoFormaPago) {
                     case "0": //Cheque
@@ -529,6 +538,8 @@ console.log(numeroTarjeta, 'Número de la Tarjeta');
                         params["Cobranza.CobranzaDetalles[" + index + "].NumeroTarjeta"] = item.data.NumeroTarjeta; 
                         break;
                 }
+
+                console.log(params["Cobranza.CobranzaDetalles[" + index + "].Banco"]);
             });
 console.log(params);
             //params["Orden.TotalDocumento"] = parseFloat(total).toFixed(2);

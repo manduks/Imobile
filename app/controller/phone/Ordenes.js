@@ -244,13 +244,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 var editarPedido = me.getOpcionesOrden().down('#editarPedido'),
                     establecerCampo = opcionesOrden.down('#datos');
 
-                editarPedido.setDisabled(false);  // Se habilita el botón editar del tabpanel, el detalle es que habilita también todos los campos del form.
-
-                for(i = 0; i < establecerCampo.getItems().length; i++){
-                    establecerCampo.getAt(i).setDisabled(true); // Desabilitamos todos los campos del formulario.
-                }
-
-                establecerCampo.down('#moneda').setDisabled(false); // Habilitamos sólo el campo moneda.
+                me.getOpcionesOrden().down('#moneda').setDisabled(false);
 
                 opcionesOrden.actionOrden = 'crear';
                 this.getMainCard().getAt(1).setMasked(false);
@@ -308,7 +302,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 });
 
 //                me.dameMonedaPredeterminada();
-                me.getOpcionesOrden().down('#editarPedido').setDisabled(true);
+                me.getOpcionesOrden().down('#moneda').setDisabled(true);
 
                 break;
         }

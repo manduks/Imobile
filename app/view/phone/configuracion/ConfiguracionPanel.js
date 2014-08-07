@@ -26,21 +26,9 @@ Ext.define('APP.view.phone.configuracion.ConfiguracionPanel', {
             }]
         },{
             itemId: 'fileLoadBtn',
-            xtype: 'fileupload',
-            autoUpload: true,
-            loadAsDataUrl: true,
-            states: {
-                browse: {
-                    text: 'Browse and load'
-                },
-                ready: {
-                    text: 'Load'
-                },
-                uploading: {
-                    text: 'Loading',
-                    loading: true
-                }
-            }
+            xtype: 'button',
+            text:'Seleccionar imagen',
+            action:'subirimagen'
         },{
             xtype: 'formpanel',
             height: 132,
@@ -65,7 +53,9 @@ Ext.define('APP.view.phone.configuracion.ConfiguracionPanel', {
             },{
                     xtype: 'togglefield',
                     label: 'Opcion 1'
-
+            },{
+                xtype: 'togglefield',
+                label: 'Opcion x'
             }]
         },{
             xtype: 'fieldset',

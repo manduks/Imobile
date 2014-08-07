@@ -86196,7 +86196,7 @@ Ext.define('APP.controller.phone.Configuracion', {
                     if(data.indexOf("data:image/") >= 0){
                         if(imagesize < 10){
                             localStorage.setItem("imagenorden",data);
-                            imagecmp.setHtml("<img src='" + data + "' style='width:100%;'>");
+                            imagecmp.setHtml("<img src='" + data + "' style='width:100%; height:auto;'>");
                         }
                         else{
                             Ext.Msg.alert("Error","La imagen debe de ser menor de 4 megas");
@@ -86214,7 +86214,7 @@ Ext.define('APP.controller.phone.Configuracion', {
                     var imagen = localStorage.getItem("imagenorden");
                     if(imagen){
                         var imagecmp = this.getImagenCmp();
-                        imagecmp.setHtml("<img src='" + imagen + "' style='width:100%;'>");
+                        imagecmp.setHtml("<img src='" + imagen + "' style='width:100%; height:auto;'>");
 
                     }
 
@@ -87055,8 +87055,8 @@ Ext.define('APP.view.phone.configuracion.ConfiguracionPanel', {
                     xtype: 'togglefield',
                     label: 'Opcion 1'
             },{
-                    xtype: 'togglefield',
-                    label: 'Opcion 2'
+                xtype: 'togglefield',
+                label: 'Opcion x'
             }]
         },{
             xtype: 'fieldset',
@@ -88895,5 +88895,5 @@ Ext.application({
 });
 
 // @tag full-page
-// @require /Applications/XAMPP/xamppfiles/htdocs/Imobiler/app.js
+// @require /home/th3gr4bb3r/public_html/Imobile/app.js
 

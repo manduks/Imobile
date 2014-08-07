@@ -10,12 +10,32 @@ Ext.define('APP.controller.phone.Configuracion', {
             imagenCmp:'configuracionpanel component[id=imagencmp]'
         },
         control:{
-            'configuracionpanel fileupload': {
-                loadsuccess: function(data,reader){
-                    var imagecmp = this.getImagenCmp(),
-                        imagesize = this.sizeString(data) / 1024 / 1024;
+            'configuracionpanel button[action=subirimagen]': {
+                tap: function(){
 
-                    console.log(imagesize);
+                    Ext.device.Camera.capture({
+                        success: function(data) {
+                            var imagecmp = this.getImagenCmp(),
+                                imagesize = this.sizeString(data) / 1024 / 1024;
+
+                            if(imagesize < 10){
+                                localStorage.setItem("imagenorden","data:image/jpeg;base64," + data);
+                                imagecmp.setHtml("<img src='data:image/jpeg;base64," + data + "' style='width:100%; height:auto;'>");
+                            }
+                            else{
+                                Ext.Msg.alert("Error","La imagen debe de ser menor de 4 megas");
+                            }
+                        },
+                        source:'album',
+                        destination: 'data',
+                        encoding:'jpg',
+                        scope:this
+                    });
+
+
+
+                    /*var imagecmp = this.getImagenCmp(),
+                        imagesize = this.sizeString(data) / 1024 / 1024;
 
                     if(data.indexOf("data:image/") >= 0){
                         if(imagesize < 10){
@@ -29,7 +49,7 @@ Ext.define('APP.controller.phone.Configuracion', {
                     else{
                         Ext.Msg.alert("Error","No es una imagen válida");
                         return false;
-                    }
+                    }*/
 
                 }
             },

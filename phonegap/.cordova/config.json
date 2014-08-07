@@ -2,8 +2,11 @@
     "lib": {
         "www": {
             "id": "com.codetlan.Imobile",
-            "version": "3.5.0",
-            "uri": "https://github.com/phonegap/phonegap-app-hello-world/archive/3.5.0.tar.gz"
+            "version": "3.4.0",
+            "uri": "https://github.com/phonegap/phonegap-app-hello-world/archive/3.4.0.tar.gz"
         }
+    },
+    "phonegap": {
+        "id": 1037972
     }
 }

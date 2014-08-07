@@ -17,6 +17,12 @@ Ext.define('APP.controller.phone.Rutas', {
             rutasMapa:'rutasmapa'
         },
         control:{
+            'opcionrutasactividades': {
+                itemtap:'onRutasActividadesTap'
+            },
+
+
+
             'container[id=rutascont] clienteslist': {
                 itemtap:'onSeleccionarCliente'
             },
@@ -32,6 +38,21 @@ Ext.define('APP.controller.phone.Rutas', {
             }
         }
     },
+
+    onRutasActividadesTap:function(list, index, target, record){
+        var opcion = record.get('action');
+
+        switch(opcion){
+            case 'actividades':
+                this.getMenuNav().push({
+                    xtype:'actividadescalendario'
+                });
+                break;
+            case 'rutas':
+                break;
+        }
+    },
+
     /**
      * Establece el título y el id del cliente cada uno en una variable.
      * Muestra la vista de ventas.

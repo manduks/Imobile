@@ -42,13 +42,11 @@ Ext.define('APP.controller.phone.Menu', {
                 this.getMenuNav().push({
                     xtype: 'container',
                     layout: 'fit',
-                    id: 'rutascont',
-                    items: [
-                        {
-                            xtype: 'clienteslist',
-                            title: 'Rutas'
-                        }
-                    ]
+                    id: 'rutasactividadescont',
+                    items: [{
+                        xtype: 'opcionrutasactividades',
+                        title: 'Rutas y Actividades'
+                    }]
                 });
                 break;
             case 'cobranza':

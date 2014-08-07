@@ -244,13 +244,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 var editarPedido = me.getOpcionesOrden().down('#editarPedido'),
                     establecerCampo = opcionesOrden.down('#datos');
 
-                editarPedido.setDisabled(false);  // Se habilita el botón editar del tabpanel, el detalle es que habilita también todos los campos del form.
-
-                for(i = 0; i < establecerCampo.getItems().length; i++){
-                    establecerCampo.getAt(i).setDisabled(true); // Desabilitamos todos los campos del formulario.
-                }
-
-                establecerCampo.down('#moneda').setDisabled(false); // Habilitamos sólo el campo moneda.
+                me.getOpcionesOrden().down('#moneda').setDisabled(false);
 
                 opcionesOrden.actionOrden = 'crear';
                 this.getMainCard().getAt(1).setMasked(false);
@@ -308,7 +302,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 });
 
 //                me.dameMonedaPredeterminada();
-                me.getOpcionesOrden().down('#editarPedido').setDisabled(true);
+                me.getOpcionesOrden().down('#moneda').setDisabled(true);
 
                 break;
         }
@@ -1339,8 +1333,24 @@ console.log(clienteSeleccionado, 'El cliente');
         });
     },
 
+    /**
+    * Manda llamar al método actualizaCantidad previa validación del valor que se le ingresa al numberfield.
+    * Si el valor empieza con un punto (.) se le agrega un cero (0) al principio, si es cero, se limpia el campo.
+    */
     actualizaCantidadK: function (numberfield) {
-        this.actualizaCantidad(numberfield.getValue());
+        var me = this,
+            valor = numberfield.getValue();
+
+        if(valor < 1){
+
+            if(valor == 0){                
+                numberfield.setValue('');
+            } else {
+                numberfield.setValue(valor);
+            }            
+        }
+
+        this.actualizaCantidad(valor);
     },
 
     /**

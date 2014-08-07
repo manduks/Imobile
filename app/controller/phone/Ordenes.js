@@ -1339,8 +1339,24 @@ console.log(clienteSeleccionado, 'El cliente');
         });
     },
 
+    /**
+    * Manda llamar al método actualizaCantidad previa validación del valor que se le ingresa al numberfield.
+    * Si el valor empieza con un punto (.) se le agrega un cero (0) al principio, si es cero, se limpia el campo.
+    */
     actualizaCantidadK: function (numberfield) {
-        this.actualizaCantidad(numberfield.getValue());
+        var me = this,
+            valor = numberfield.getValue();
+
+        if(valor < 1){
+
+            if(valor == 0){                
+                numberfield.setValue('');
+            } else {
+                numberfield.setValue(valor);
+            }            
+        }
+
+        this.actualizaCantidad(valor);
     },
 
     /**

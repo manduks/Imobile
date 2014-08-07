@@ -64,7 +64,7 @@ Ext.define('APP.form.phone.productos.AgregarProductosForm', {
                         minValue: 0.1,
                         itemId: 'cantidad',
                         //maxValue: 100,
-                        stepValue: .1
+                        //stepValue: .1
                         //ui: 'spinner'
                     },{
                         xtype:'textfield',

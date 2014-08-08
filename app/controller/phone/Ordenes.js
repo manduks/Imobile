@@ -532,7 +532,7 @@ Ext.define('APP.controller.phone.Ordenes', {
             codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
             clienteSeleccionado = opcionesOrden.clienteSeleccionado,
             form = opcionesOrden.down('editarpedidoform');            
-console.log(clienteSeleccionado, 'El cliente');
+
         if(clienteSeleccionado.CodigoMoneda == '##'){
 
             if ((codigoMonedaSeleccionada != moneda) && (codigoMonedaSeleccionada == codigoMonedaPredeterminada)) {
@@ -1679,8 +1679,7 @@ console.log(clienteSeleccionado, 'El cliente');
                         tipoCambio = item.TipoCambio;
 
 
-                    if(codigoMonedaSeleccionada == codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ //Si Orden viene en MXP y producto en USD. El importe siempre venía en MXP
-                        console.log('Orden en MXP y producto en USD');
+                    if(codigoMonedaSeleccionada == codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ //Si Orden viene en MXP y producto en USD. El importe siempre venía en MXP                        
                     }
 
 /*                    if(codigoMonedaSeleccionada != codigoMonedaPredeterminada && moneda != codigoMonedaPredeterminada){ // Si orden viene en USD y producto en USD

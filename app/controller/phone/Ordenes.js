@@ -1336,7 +1336,8 @@ Ext.define('APP.controller.phone.Ordenes', {
     actualizaCantidadK: function (numberfield) {
         var me = this,
             valor = numberfield.getValue();
-console.log(valor);
+
+/*console.log(valor);
         if(valor < 1){
 
             if(valor == null){                
@@ -1344,9 +1345,9 @@ console.log(valor);
             } else {
                 numberfield.setValue(valor);
             }            
-        }
+        }*/
 
-        this.actualizaCantidad(valor);
+        me.actualizaCantidad(valor);
     },
 
     /**

@@ -77,6 +77,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "APP.form.phone.productos.AgregarProductosForm": [],
   "APP.form.phone.prospectos.ProspectosForm": [],
   "APP.form.phone.rutas.RutasForm": [],
+  "APP.model.phone.ActividadCalendario": [],
   "APP.model.phone.Cliente": [],
   "APP.model.phone.Direccion": [],
   "APP.model.phone.Factura": [],
@@ -91,6 +92,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "APP.model.phone.Transaccion": [],
   "APP.profile.Phone": [],
   "APP.profile.Tablet": [],
+  "APP.store.phone.ActividadesCalendario": [],
   "APP.store.phone.Anticipos": [],
   "APP.store.phone.Clientes": [],
   "APP.store.phone.Direcciones": [],
@@ -147,6 +149,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "APP.view.phone.rutas.RutasCalendarioCont": [],
   "APP.view.phone.rutas.RutasCalendarioDia": [],
   "APP.view.phone.rutas.RutasMapa": [],
+  "APP.view.phone.rutas.actividades.ActividadesCalendario": [],
+  "APP.view.phone.rutas.actividades.OpcionRutasActividades": [],
   "APP.view.tablet.Main": [],
   "Ext.AbstractComponent": [],
   "Ext.AbstractManager": [],
@@ -923,6 +927,7 @@ Ext.ClassManager.addNameAliasMappings({
   "APP.form.phone.rutas.RutasForm": [
     "widget.rutasform"
   ],
+  "APP.model.phone.ActividadCalendario": [],
   "APP.model.phone.Cliente": [],
   "APP.model.phone.Direccion": [],
   "APP.model.phone.Factura": [],
@@ -937,6 +942,7 @@ Ext.ClassManager.addNameAliasMappings({
   "APP.model.phone.Transaccion": [],
   "APP.profile.Phone": [],
   "APP.profile.Tablet": [],
+  "APP.store.phone.ActividadesCalendario": [],
   "APP.store.phone.Anticipos": [],
   "APP.store.phone.Clientes": [],
   "APP.store.phone.Direcciones": [],
@@ -1078,6 +1084,12 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "APP.view.phone.rutas.RutasMapa": [
     "widget.rutasmapa"
+  ],
+  "APP.view.phone.rutas.actividades.ActividadesCalendario": [
+    "widget.actividadescalendario"
+  ],
+  "APP.view.phone.rutas.actividades.OpcionRutasActividades": [
+    "widget.opcionrutasactividades"
   ],
   "APP.view.tablet.Main": [],
   "Ext.AbstractComponent": [],

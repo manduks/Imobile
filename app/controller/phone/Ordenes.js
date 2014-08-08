@@ -884,8 +884,9 @@ console.log(clienteSeleccionado, 'El cliente');
             cantidad = values.cantidad,
             moneda = values.moneda,
             importe = values.importe,
-            codigo = values.CodigoArticulo,
-            indPro = productos.find('CodigoArticulo', codigo);
+            codigo = values.CodigoArticulo;
+            console.log(codigo);
+            var indPro = productos.find('CodigoArticulo', codigo);
 
         var productoAgregado = productos.getAt(indPro);
 
@@ -921,6 +922,7 @@ console.log(clienteSeleccionado, 'El cliente');
                 break;
 
             case 'edicion':
+            console.log('edicion');
                 var ind = me.getOpcionesOrden().ind,
                     datosProducto = ordenes.getAt(ind),
                     totaldeimpuesto,
@@ -950,6 +952,7 @@ console.log(clienteSeleccionado, 'El cliente');
                 break;
 
             case 'cantidad':
+            console.log('cantidad');
                 var codigo = values.CodigoArticulo,
                     indPro = productos.find('CodigoArticulo', codigo),
                     productoAgregado = productos.getAt(indPro),
@@ -1162,9 +1165,9 @@ console.log(clienteSeleccionado, 'El cliente');
                     //Se valida si el producto es sujeto de impuesto
                     if (sujetoImpuesto) {
                         //Se calcula total de impuesto
-                        totalDeImpuesto = preciocondescuento * tasaImpuesto / 100;
+                        me.getOpcionesOrden().totalDeImpuesto = preciocondescuento * tasaImpuesto / 100;                        
                     } else {
-                        totalDeImpuesto = 0;
+                        me.getOpcionesOrden().totalDeImpuesto = 0;
                     }
 
                     //Se calcula importe

@@ -191,7 +191,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         if (direcciones.getCount() > 0) {
             view.add(barraTitulo);
 
-            me.getOpcionesOrden().direccionFiscal = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion fiscal y se lo asignamos a una propiedad del componente opcionesOrden
+            me.getOpcionesOrden().direccionEntrega = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion de entrga y se lo asignamos a una propiedad del componente opcionesOrden
             me.getOpcionesOrden().codigoImpuesto = direcciones.getAt(0).data.CodigoImpuesto;
             me.getOpcionesOrden().tasaImpuesto = direcciones.getAt(0).data.Tasa;
             me.getOpcionesOrden().tipoCambio = 1;
@@ -202,12 +202,12 @@ Ext.define('APP.controller.phone.Ordenes', {
             direcciones.filter('TipoDireccion', 'B');
 
             if (direcciones.getCount() > 0) {
-                me.getOpcionesOrden().direccionEntrega = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion de entrega y se lo asignamos a una propiedad del componente opcionesOrden
+                me.getOpcionesOrden().direccionFiscal = direcciones.getAt(0).data.CodigoDireccion; // Se obtiene el codigo de la direccion de fiscal y se lo asignamos a una propiedad del componente opcionesOrden
                 direcciones.getAt(0).set('Predeterminado', true);
             }
 
         } else {
-            this.mandaMensaje('Sin dirección fiscal', 'Este cliente no cuenta con dirección fiscal, contacte a su administrador de SAP B1');
+           this.mandaMensaje('Sin dirección de entrega', 'Este cliente no tiene direcciones de entrega definidas.');
             view.pop();
             direcciones.removeAll();
         }
@@ -493,11 +493,11 @@ Ext.define('APP.controller.phone.Ordenes', {
         direcciones.getAt(index).set('Predeterminado', true);
 
         if (entrega) {
-            direccionEntrega = record.data.CodigoDireccion;
-        } else {
-            direccionFiscal = record.data.CodigoDireccion;
+            me.getOpcionesOrden().direccionEntrega = record.data.CodigoDireccion;
             codigoImpuesto = record.data.CodigoImpuesto;
             tasaImpuesto = record.data.Tasa;
+        } else {
+            me.getOpcionesOrden().direccionFiscal = record.data.CodigoDireccion;
         }
         view.pop();
     },

@@ -862,8 +862,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                     me.ayudaAAgregar(form, 'cantidad');
                     me.ayudaAAgregar(form, 'monedaIgual');
                 }
-            } else {
-                me.ayudaAAgregar(form, 'cantidad');
+            } else {                
                 me.ayudaAAgregar(form, 'edicion');
             }
         }
@@ -874,7 +873,7 @@ Ext.define('APP.controller.phone.Ordenes', {
      */
 
     ayudaAAgregar: function (form, caso) {
-        var values, descripcion, cantidad, ordenes, codigo, indPro, productoAgregado, cantidadActual, precio,
+        var values, descripcion, cantidad, ordenes, indPro, productoAgregado, cantidadActual, precio,
             me = this,
             ordenes = Ext.getStore('Ordenes'),
             productos = Ext.getStore('Productos'),
@@ -883,14 +882,10 @@ Ext.define('APP.controller.phone.Ordenes', {
             descripcion = values.NombreArticulo,
             cantidad = values.cantidad,
             moneda = values.moneda,
+            codigo = values.CodigoArticulo,
             importe = values.importe,
-            codigo = values.CodigoArticulo;
-            console.log(codigo);
-            var indPro = productos.find('CodigoArticulo', codigo);
-
-        var productoAgregado = productos.getAt(indPro);
-
-        var cantidadActual = productoAgregado.get('cantidad'),
+            indPro = productos.find('CodigoArticulo', codigo),
+            productoAgregado = productos.getAt(indPro),
             totalDeImpuesto = me.getOpcionesOrden().totalDeImpuesto,
             tipoCambio = me.getOpcionesOrden().tipoCambio,
             codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada;
@@ -921,8 +916,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 me.actualizarTotales();
                 break;
 
-            case 'edicion':
-            console.log('edicion');
+            case 'edicion':            
                 var ind = me.getOpcionesOrden().ind,
                     datosProducto = ordenes.getAt(ind),
                     totaldeimpuesto,
@@ -952,8 +946,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                 break;
 
             case 'cantidad':
-            console.log('cantidad');
-                var codigo = values.CodigoArticulo,
+                var codigo = values.CodigoArticulo;
                     indPro = productos.find('CodigoArticulo', codigo),
                     productoAgregado = productos.getAt(indPro),
                     cantidadActual = productoAgregado.get('cantidad');
@@ -1585,6 +1578,8 @@ Ext.define('APP.controller.phone.Ordenes', {
                 url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_OrdenVenta/ActualizarOrdenVentaiMobile";
                 msg = "Se acualizo la orden correctamente con folio: ";
             }
+
+            console.log(params);
 
             Ext.data.JsonP.request({
                 url: url,

@@ -763,10 +763,10 @@ Ext.define('APP.controller.phone.Ordenes', {
         direcciones.clearFilter();
 
         if (record.data.action == 'entrega') {
-            direcciones.filter('TipoDireccion', 'B');
+            direcciones.filter('TipoDireccion', 'S');
             me.getOpcionesOrden().entrega = true;
         } else {
-            direcciones.filter('TipoDireccion', 'S');
+            direcciones.filter('TipoDireccion', 'B');
             me.getOpcionesOrden().entrega = false;
         }
 

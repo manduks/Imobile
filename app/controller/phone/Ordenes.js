@@ -18,7 +18,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         },
         control: {
             'container[id=ordenescont] clienteslist': {
-                itemtap: 'alSelecionarCliente'
+                itemsingletap: 'alSelecionarCliente'
             },
             'opcionordeneslist': {
                 itemtap: 'onOpcionOrdenes'
@@ -1336,11 +1336,11 @@ Ext.define('APP.controller.phone.Ordenes', {
     actualizaCantidadK: function (numberfield) {
         var me = this,
             valor = numberfield.getValue();
-
+console.log(valor);
         if(valor < 1){
 
-            if(valor == 0){                
-                numberfield.setValue('');
+            if(valor == null){                
+                numberfield.setValue(0.);                
             } else {
                 numberfield.setValue(valor);
             }            

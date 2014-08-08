@@ -120,7 +120,9 @@ Ext.define('APP.controller.phone.Cobranza', {
 
             case 'anticipo':
                 var store = Ext.getStore('Anticipos'),
-                    anticiposlist;                    
+                    anticiposlist;
+
+                me.getNavigationCobranza().opcion = 'anticipo';
 
                 view.push({
                     xtype: 'facturascontainer',
@@ -133,6 +135,7 @@ Ext.define('APP.controller.phone.Cobranza', {
                 anticiposlist = view.getActiveItem().down('facturaslist');
 
                 anticiposlist.setStore(store);
+                anticiposlist.setEmptyText('<div style="margin-top: 20px; text-align: center">No hay anticipos pendientes</div>');
                 anticiposlist.setMode('SINGLE');
 
                 params = {
@@ -196,8 +199,9 @@ Ext.define('APP.controller.phone.Cobranza', {
             facturas.clearFilter();
             facturas.filter('aPagar', true);
 
-            aPagar = total;            
+            aPagar = total;
 
+            view.getAt(2).setMasked(false); // Desactivamos la máscara.
             view.setActiveItem(2);            
             navigationCobranza = view.getActiveItem();
 
@@ -475,7 +479,10 @@ Ext.define('APP.controller.phone.Cobranza', {
             hora = me.daFormatoAHora(fecha.getHours(), fecha.getMinutes(), fecha.getSeconds()),
             fecha = Ext.Date.format(fecha, "d-m-Y"),            
             url,
-            msg = 'Se realizó el cobro exitosamente con folio ';            
+            msg = 'Se realizó el cobro exitosamente con folio ';
+
+        me.getMainCard().getActiveItem().getMasked().setMessage('Enviando Cobro...');
+        me.getMainCard().getActiveItem().setMasked(true);
         
         if (totales.getCount() > 0) {
             //var Folio = parseInt(localStorage.getItem("FolioInterno")) + 100;
@@ -493,7 +500,7 @@ Ext.define('APP.controller.phone.Cobranza', {
                 "Cobranza.CodigoCliente": idCliente
             };
 
-            if(me.getMenuNav().getActiveItem().opcion == 'anticipo'){
+            if(me.getNavigationCobranza().opcion == 'anticipo'){
                 params["Cobranza.Tipo"] = 'A';
                 params["Cobranza.NumeroPedido"] = array[0].data.Folio;
                 msg = 'Se realizó el anticipo exitosamente con folio ';
@@ -544,7 +551,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             });
 console.log(params);
 
-/*            url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
+            url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
 
             Ext.data.JsonP.request({
                 url: url,
@@ -556,18 +563,18 @@ console.log(params);
                         Ext.Msg.alert("Cobro procesado", msg + response.CodigoUnicoDocumento + ".");
                         store.removeAll();
                         totales.removeAll();                        
-                        view.remove(view.down('toolbar'), true);
-                        //me.pagado = 0;
+                        view.remove(view.down('toolbar'), true);                        
                         me.getMainCard().getActiveItem().pop();
                     } else {
                         Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);
                     }
                 }
             });
-*/
+
         } else {            
             Ext.Msg.alert("Sin pago", "Agrega por lo menos un pago.");
         }
+        //me.getMainCard().getActiveItem().setMasked(false);
     },
 
     daFormatoAHora: function(horas, minutos, segundos){

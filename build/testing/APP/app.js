@@ -83972,7 +83972,7 @@ Ext.define('APP.controller.phone.Ordenes', {
         },
         control: {
             'container[id=ordenescont] clienteslist': {
-                itemtap: 'alSelecionarCliente'
+                itemsingletap: 'alSelecionarCliente'
             },
             'opcionordeneslist': {
                 itemtap: 'onOpcionOrdenes'
@@ -84717,10 +84717,10 @@ Ext.define('APP.controller.phone.Ordenes', {
         direcciones.clearFilter();
 
         if (record.data.action == 'entrega') {
-            direcciones.filter('TipoDireccion', 'B');
+            direcciones.filter('TipoDireccion', 'S');
             me.getOpcionesOrden().entrega = true;
         } else {
-            direcciones.filter('TipoDireccion', 'S');
+            direcciones.filter('TipoDireccion', 'B');
             me.getOpcionesOrden().entrega = false;
         }
 
@@ -85290,17 +85290,18 @@ Ext.define('APP.controller.phone.Ordenes', {
     actualizaCantidadK: function (numberfield) {
         var me = this,
             valor = numberfield.getValue();
-console.log(valor);
+
+/*console.log(valor);
         if(valor < 1){
 
-            if(valor == 0){                
-                numberfield.setValue('');
+            if(valor == null){                
+                numberfield.setValue(0.);                
             } else {
                 numberfield.setValue(valor);
             }            
-        }
+        }*/
 
-        this.actualizaCantidad(valor);
+        me.actualizaCantidad(valor);
     },
 
     /**
@@ -85996,7 +85997,10 @@ Ext.define('APP.controller.phone.Cobranza', {
                 xtype: 'toolbar',
                 docked: 'top',
                 title: 'titulo'
-            });            
+            });
+
+        me.getNavigationCobranza().idCliente = idCliente;
+        me.getNavigationCobranza().name = name;
                 
         barraTitulo.title = name;
 
@@ -86016,19 +86020,19 @@ Ext.define('APP.controller.phone.Cobranza', {
     onItemTapCobranzaList: function (list, index, target, record) {
         var me = this,
             view = me.getMenuNav(),            
-            idCliente = view.getActiveItem().idCliente;
-            name = view.getActiveItem().name;
+            idCliente = me.getNavigationCobranza().idCliente; //view.getActiveItem().idCliente,
+            //name = view.getActiveItem().name;
 
-
+console.log(idCliente);
         switch(record.data.action){
             case 'cobranzaFacturas':            
                 var store = Ext.getStore('Facturas');
 
                 view.push({
                     xtype: 'facturascontainer',
-                    title: idCliente,
-                    idCliente: idCliente,
-                    name: name
+                    title: idCliente
+                    //idCliente: idCliente,
+                    //name: name
                     //opcion: record.data.action
                 });
 
@@ -86044,19 +86048,22 @@ Ext.define('APP.controller.phone.Cobranza', {
 
             case 'anticipo':
                 var store = Ext.getStore('Anticipos'),
-                    anticiposlist;                    
+                    anticiposlist;
+
+                me.getNavigationCobranza().opcion = 'anticipo';
 
                 view.push({
                     xtype: 'facturascontainer',
-                    title: idCliente,
-                    idCliente: idCliente,
-                    name: name
+                    title: idCliente
+                    //idCliente: idCliente,
+                    //name: name
                     //opcion: record.data.action
                 });
 
                 anticiposlist = view.getActiveItem().down('facturaslist');
 
                 anticiposlist.setStore(store);
+                anticiposlist.setEmptyText('<div style="margin-top: 20px; text-align: center">No hay anticipos pendientes</div>');
                 anticiposlist.setMode('SINGLE');
 
                 params = {
@@ -86077,8 +86084,8 @@ Ext.define('APP.controller.phone.Cobranza', {
 
                 view.push({
                     xtype: 'visualizacioncobranzalist',
-                    title: idCliente,
-                    name: name
+                    title: idCliente
+                    //name: name
                     //opcion: record.data.action
                 });
         }
@@ -86092,9 +86099,9 @@ Ext.define('APP.controller.phone.Cobranza', {
             view = me.getMainCard(),
             facturasContainer = view.getActiveItem().getActiveItem(),
             facturaslist = facturasContainer.down('facturaslist'),
-            idCliente = facturasContainer.idCliente,
-            name = facturasContainer.name,
-            navigationCobranza,
+            navigationCobranza = me.getNavigationCobranza(),
+            idCliente = navigationCobranza.idCliente, //facturasContainer.idCliente,
+            name = navigationCobranza.name,//facturasContainer.name,
             i,
             total = 0,
             seleccion = facturaslist.getSelection(),            
@@ -86120,10 +86127,11 @@ Ext.define('APP.controller.phone.Cobranza', {
             facturas.clearFilter();
             facturas.filter('aPagar', true);
 
-            aPagar = total;            
+            aPagar = total;
 
+            view.getAt(2).setMasked(false); // Desactivamos la máscara.
             view.setActiveItem(2);            
-            navigationCobranza = view.getActiveItem();
+            //navigationCobranza = view.getActiveItem();
 
             navigationCobranza.getNavigationBar().setTitle(idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
             navigationCobranza.add(barraTitulo);
@@ -86148,8 +86156,8 @@ Ext.define('APP.controller.phone.Cobranza', {
     
         view.push({
             xtype: 'formasdepagolist',
-            title: idCliente,
-            idCliente: idCliente
+            title: idCliente
+            //idCliente: idCliente
             //opcion: me.getMenu().getActiveItem().opcion
         });
 
@@ -86168,13 +86176,13 @@ Ext.define('APP.controller.phone.Cobranza', {
     agregaPago: function (list, index, target, record) {
         var me = this,
             view = list.up('navigationcobranza'), //NavigationCobranza
-            idCliente = view.getActiveItem().idCliente;
+            idCliente = view.getNavigationBar().getTitle();
 
         view.push({
             xtype: 'montoapagarform',
             //xtype: 'montoapagarformcontainer',
-            title: idCliente,
-            idCliente: idCliente
+            title: idCliente
+            //idCliente: idCliente
             //datos: record.data,
             //opcion: list.opcion
         });
@@ -86377,11 +86385,15 @@ Ext.define('APP.controller.phone.Cobranza', {
 
             view = navigationview.getActiveItem();
 
+        if (barra.down('#agregarPago') == null) {
+            return;
+        } // Para que no se crasheé al dar en botón salir.
+
         if (view.isXType('totalapagarcontainer')) {
             barra.down('#agregarPago').show();
         }
 
-        barra.setTitle(old.idCliente);        
+        barra.setTitle(me.getNavigationCobranza().idCliente);
     },
 
     /**
@@ -86399,7 +86411,10 @@ Ext.define('APP.controller.phone.Cobranza', {
             hora = me.daFormatoAHora(fecha.getHours(), fecha.getMinutes(), fecha.getSeconds()),
             fecha = Ext.Date.format(fecha, "d-m-Y"),            
             url,
-            msg = 'Se realizó el cobro exitosamente con folio ';            
+            msg = 'Se realizó el cobro exitosamente con folio ';
+
+        me.getMainCard().getActiveItem().getMasked().setMessage('Enviando Cobro...');
+        me.getMainCard().getActiveItem().setMasked(true);
         
         if (totales.getCount() > 0) {
             //var Folio = parseInt(localStorage.getItem("FolioInterno")) + 100;
@@ -86417,7 +86432,7 @@ Ext.define('APP.controller.phone.Cobranza', {
                 "Cobranza.CodigoCliente": idCliente
             };
 
-            if(me.getMenuNav().getActiveItem().opcion == 'anticipo'){
+            if(me.getNavigationCobranza().opcion == 'anticipo'){
                 params["Cobranza.Tipo"] = 'A';
                 params["Cobranza.NumeroPedido"] = array[0].data.Folio;
                 msg = 'Se realizó el anticipo exitosamente con folio ';
@@ -86468,7 +86483,7 @@ Ext.define('APP.controller.phone.Cobranza', {
             });
 console.log(params);
 
-/*            url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
+            url = "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Cobranza/AgregarCobranza";
 
             Ext.data.JsonP.request({
                 url: url,
@@ -86480,18 +86495,20 @@ console.log(params);
                         Ext.Msg.alert("Cobro procesado", msg + response.CodigoUnicoDocumento + ".");
                         store.removeAll();
                         totales.removeAll();                        
-                        view.remove(view.down('toolbar'), true);
-                        //me.pagado = 0;
+                        view.remove(view.down('toolbar'), true);                        
                         me.getMainCard().getActiveItem().pop();
                     } else {
+                        me.getMainCard().getActiveItem().setMasked(false);
                         Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);
                     }
                 }
             });
-*/
-        } else {            
+
+        } else {
+            me.getMainCard().getActiveItem().setMasked(false);
             Ext.Msg.alert("Sin pago", "Agrega por lo menos un pago.");
         }
+        //me.getMainCard().getActiveItem().setMasked(false);
     },
 
     daFormatoAHora: function(horas, minutos, segundos){
@@ -87354,6 +87371,13 @@ Ext.define('APP.view.phone.cobranza.NavigationCobranza', {
                     itemId: 'agregarPago'
                 }
             ]
+        },
+
+        masked:{
+            xtype: 'loadmask',
+            message: 'Trabajando...',
+            fullscreen: true,
+            indicator: true
         },
 
         items: [{

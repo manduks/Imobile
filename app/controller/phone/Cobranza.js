@@ -72,7 +72,10 @@ Ext.define('APP.controller.phone.Cobranza', {
                 xtype: 'toolbar',
                 docked: 'top',
                 title: 'titulo'
-            });            
+            });
+
+        me.getNavigationCobranza().idCliente = idCliente;
+        me.getNavigationCobranza().name = name;
                 
         barraTitulo.title = name;
 
@@ -92,19 +95,19 @@ Ext.define('APP.controller.phone.Cobranza', {
     onItemTapCobranzaList: function (list, index, target, record) {
         var me = this,
             view = me.getMenuNav(),            
-            idCliente = view.getActiveItem().idCliente;
-            name = view.getActiveItem().name;
+            idCliente = me.getNavigationCobranza().idCliente; //view.getActiveItem().idCliente,
+            //name = view.getActiveItem().name;
 
-
+console.log(idCliente);
         switch(record.data.action){
             case 'cobranzaFacturas':            
                 var store = Ext.getStore('Facturas');
 
                 view.push({
                     xtype: 'facturascontainer',
-                    title: idCliente,
-                    idCliente: idCliente,
-                    name: name
+                    title: idCliente
+                    //idCliente: idCliente,
+                    //name: name
                     //opcion: record.data.action
                 });
 
@@ -126,9 +129,9 @@ Ext.define('APP.controller.phone.Cobranza', {
 
                 view.push({
                     xtype: 'facturascontainer',
-                    title: idCliente,
-                    idCliente: idCliente,
-                    name: name
+                    title: idCliente
+                    //idCliente: idCliente,
+                    //name: name
                     //opcion: record.data.action
                 });
 
@@ -156,8 +159,8 @@ Ext.define('APP.controller.phone.Cobranza', {
 
                 view.push({
                     xtype: 'visualizacioncobranzalist',
-                    title: idCliente,
-                    name: name
+                    title: idCliente
+                    //name: name
                     //opcion: record.data.action
                 });
         }
@@ -171,9 +174,9 @@ Ext.define('APP.controller.phone.Cobranza', {
             view = me.getMainCard(),
             facturasContainer = view.getActiveItem().getActiveItem(),
             facturaslist = facturasContainer.down('facturaslist'),
-            idCliente = facturasContainer.idCliente,
-            name = facturasContainer.name,
-            navigationCobranza,
+            navigationCobranza = me.getNavigationCobranza(),
+            idCliente = navigationCobranza.idCliente, //facturasContainer.idCliente,
+            name = navigationCobranza.name,//facturasContainer.name,
             i,
             total = 0,
             seleccion = facturaslist.getSelection(),            
@@ -203,7 +206,7 @@ Ext.define('APP.controller.phone.Cobranza', {
 
             view.getAt(2).setMasked(false); // Desactivamos la máscara.
             view.setActiveItem(2);            
-            navigationCobranza = view.getActiveItem();
+            //navigationCobranza = view.getActiveItem();
 
             navigationCobranza.getNavigationBar().setTitle(idCliente); //Establecemos el title del menu principal como el mismo del menu de opciones
             navigationCobranza.add(barraTitulo);
@@ -228,8 +231,8 @@ Ext.define('APP.controller.phone.Cobranza', {
     
         view.push({
             xtype: 'formasdepagolist',
-            title: idCliente,
-            idCliente: idCliente
+            title: idCliente
+            //idCliente: idCliente
             //opcion: me.getMenu().getActiveItem().opcion
         });
 
@@ -248,13 +251,13 @@ Ext.define('APP.controller.phone.Cobranza', {
     agregaPago: function (list, index, target, record) {
         var me = this,
             view = list.up('navigationcobranza'), //NavigationCobranza
-            idCliente = view.getActiveItem().idCliente;
+            idCliente = view.getNavigationBar().getTitle();
 
         view.push({
             xtype: 'montoapagarform',
             //xtype: 'montoapagarformcontainer',
-            title: idCliente,
-            idCliente: idCliente
+            title: idCliente
+            //idCliente: idCliente
             //datos: record.data,
             //opcion: list.opcion
         });
@@ -457,11 +460,15 @@ Ext.define('APP.controller.phone.Cobranza', {
 
             view = navigationview.getActiveItem();
 
+        if (barra.down('#agregarPago') == null) {
+            return;
+        } // Para que no se crasheé al dar en botón salir.
+
         if (view.isXType('totalapagarcontainer')) {
             barra.down('#agregarPago').show();
         }
 
-        barra.setTitle(old.idCliente);        
+        barra.setTitle(me.getNavigationCobranza().idCliente);
     },
 
     /**
@@ -566,12 +573,14 @@ console.log(params);
                         view.remove(view.down('toolbar'), true);                        
                         me.getMainCard().getActiveItem().pop();
                     } else {
+                        me.getMainCard().getActiveItem().setMasked(false);
                         Ext.Msg.alert("Cobro no procesado", "No se proceso el cobro correctamente: " + response.Descripcion);
                     }
                 }
             });
 
-        } else {            
+        } else {
+            me.getMainCard().getActiveItem().setMasked(false);
             Ext.Msg.alert("Sin pago", "Agrega por lo menos un pago.");
         }
         //me.getMainCard().getActiveItem().setMasked(false);

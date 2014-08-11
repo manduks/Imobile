@@ -7,7 +7,8 @@ Ext.define('APP.controller.phone.Menu', {
         refs: {
             loginForm: 'menunav menulist',
             menuNav: 'menunav',
-            clientesList: 'clienteslist'
+            clientesList: 'clienteslist',
+            mainCard: 'maincard'
         },
         control: {
             'menunav': {
@@ -97,10 +98,21 @@ Ext.define('APP.controller.phone.Menu', {
         }
     },
 
+    onShowMenu: function () {
+        var me = this;
+        me.getMainCard().setActiveItem(0);
+        //back button logic
+        document.addEventListener("backbutton", function () {
+            me.getMainCard().setActiveItem(0);
+            alert(me.getMainCard().getActiveItem());
+        }, true);
+        console.log(document, 'entra document');
+    },
+
     onBackMenu: function (navigationview) {
 
         var me = this,
-            store = this.getClientesList().getStore(),
+            store,
             view = this.getMenuNav(),
             titulo,
 
@@ -115,6 +127,7 @@ Ext.define('APP.controller.phone.Menu', {
             navigationview.getActiveItem().getId() == 'cobranzacont' ||
             navigationview.getActiveItem().getId() == 'rutascont'
             ) {
+            store = this.getClientesList().getStore()
             titulo = view.down('toolbar');
 
             view.remove(titulo, true);

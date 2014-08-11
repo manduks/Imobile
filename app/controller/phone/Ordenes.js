@@ -1078,7 +1078,8 @@ Ext.define('APP.controller.phone.Ordenes', {
             tasaImpuesto = me.getOpcionesOrden().tasaImpuesto,
             moneda = valores.ListaPrecios[0].CodigoMoneda + ' ';
 
-        valores.Disponible = Ext.Number.toFixed(valores.Disponible, 2);
+        //valores.Disponible = Ext.Number.toFixed(valores.Disponible, 2);
+        valores.Disponible = APP.core.FormatCurrency.formatValue(valores.Disponible);
 
         if (view.getActiveItem().xtype == 'agregarproductosform') {
             return;
@@ -1778,14 +1779,13 @@ Ext.define('APP.controller.phone.Ordenes', {
     onSeleccionarAlmacen: function (t, index, target, record, e, eOpts) {
         var me = this,
             view = me.getMainCard().getActiveItem(),
-            almacenes = me.getMenuNav().almacenes;//localStorage.getItem('Almacenes');
+            almacenes = me.getMenuNav().almacenes;
 
         Ext.Array.forEach(almacenes, function (item, index) {
             item.Predeterminado = false;
         });
 
-        almacenes[index].Predeterminado = true;
-        //me.CodigoAlmacen = me.almacenes[index].CodigoAlmacen; //record.get('CodigoAlmacen');
+        almacenes[index].Predeterminado = true;        
 
         Ext.data.JsonP.request({
             url: "http://" + localStorage.getItem("dirIP") + "/iMobile/COK1_CL_Consultas/ObtenerDisponibleiMobile",
@@ -1808,7 +1808,7 @@ Ext.define('APP.controller.phone.Ordenes', {
                     };
 
                 if (procesada) {
-                    valor.Disponible = parseFloat(response.Data[0]).toFixed(2);
+                    valor.Disponible = APP.core.FormatCurrency.formatValue(response.Data[0]);
                 } else {
                     valor.Disponible = 'Error al obtener disponible';
                 }

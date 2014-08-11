@@ -119,6 +119,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "APP.view.phone.cobranza.TotalesContainer": [],
   "APP.view.phone.cobranza.VisualizacionCobranzaList": [],
   "APP.view.phone.configuracion.ConfiguracionPanel": [],
+  "APP.view.phone.login.ConfiguracionForm": [],
   "APP.view.phone.login.LoginForm": [],
   "APP.view.phone.login.LoginPanel": [],
   "APP.view.phone.menu.MenuList": [],
@@ -751,17 +752,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.layout.wrapper.BoxDock": [],
   "Ext.layout.wrapper.Dock": [],
   "Ext.layout.wrapper.Inner": [],
-  "Ext.log.Base": [],
-  "Ext.log.Logger": [],
-  "Ext.log.filter.Filter": [],
-  "Ext.log.filter.Priority": [],
-  "Ext.log.formatter.Default": [],
-  "Ext.log.formatter.Formatter": [],
-  "Ext.log.formatter.Identity": [],
-  "Ext.log.writer.Console": [],
-  "Ext.log.writer.DocumentTitle": [],
-  "Ext.log.writer.Remote": [],
-  "Ext.log.writer.Writer": [],
   "Ext.mixin.Bindable": [],
   "Ext.mixin.Filterable": [],
   "Ext.mixin.Mixin": [],
@@ -1005,6 +995,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "APP.view.phone.configuracion.ConfiguracionPanel": [
     "widget.configuracionpanel"
+  ],
+  "APP.view.phone.login.ConfiguracionForm": [
+    "widget.configuracionform"
   ],
   "APP.view.phone.login.LoginForm": [
     "widget.loginform"
@@ -1904,17 +1897,6 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.layout.wrapper.BoxDock": [],
   "Ext.layout.wrapper.Dock": [],
   "Ext.layout.wrapper.Inner": [],
-  "Ext.log.Base": [],
-  "Ext.log.Logger": [],
-  "Ext.log.filter.Filter": [],
-  "Ext.log.filter.Priority": [],
-  "Ext.log.formatter.Default": [],
-  "Ext.log.formatter.Formatter": [],
-  "Ext.log.formatter.Identity": [],
-  "Ext.log.writer.Console": [],
-  "Ext.log.writer.DocumentTitle": [],
-  "Ext.log.writer.Remote": [],
-  "Ext.log.writer.Writer": [],
   "Ext.mixin.Bindable": [],
   "Ext.mixin.Filterable": [],
   "Ext.mixin.Mixin": [],

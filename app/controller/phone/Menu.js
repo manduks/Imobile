@@ -7,7 +7,8 @@ Ext.define('APP.controller.phone.Menu', {
         refs: {
             loginForm: 'menunav menulist',
             menuNav: 'menunav',
-            clientesList: 'clienteslist'
+            clientesList: 'clienteslist',
+            mainCard: 'maincard'
         },
         control: {
             'menunav': {
@@ -97,19 +98,23 @@ Ext.define('APP.controller.phone.Menu', {
         }
     },
 
+    onShowMenu: function () {
+        var me = this;
+        me.getMainCard().setActiveItem(0);
+        //back button logic
+        document.addEventListener("backbutton", function () {
+            me.getMainCard().setActiveItem(0);
+            alert(me.getMainCard().getActiveItem());
+        }, true);
+        console.log(document, 'entra document');
+    },
+
     onBackMenu: function (navigationview) {
 
-
-
-        if (navigationview.getActiveItem().getId() == 'ordenescont' ||
-            navigationview.getActiveItem().getId() == 'cobranzacont' ||
-            navigationview.getActiveItem().getId() == 'rutascont'
-            ) {
-
-            var me = this,
-                store = this.getClientesList().getStore(),
-                view = this.getMenuNav(),
-                titulo,
+        var me = this,
+            store,
+            view = this.getMenuNav(),
+            titulo,
 
             params = {
                 CodigoUsuario: localStorage.getItem("CodigoUsuario"),
@@ -118,6 +123,11 @@ Ext.define('APP.controller.phone.Menu', {
                 Token: localStorage.getItem("Token")
             };
 
+        if (navigationview.getActiveItem().getId() == 'ordenescont' ||
+            navigationview.getActiveItem().getId() == 'cobranzacont' ||
+            navigationview.getActiveItem().getId() == 'rutascont'
+            ) {
+            store = this.getClientesList().getStore()
             titulo = view.down('toolbar');
 
             view.remove(titulo, true);

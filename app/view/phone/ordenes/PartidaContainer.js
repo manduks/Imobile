@@ -16,6 +16,9 @@ Ext.define('APP.view.phone.ordenes.PartidaContainer', {
             {
                 xtype: 'panel',
                 flex: 7,
+                style: {
+                    backgroundColor: 'gray'
+                },
                 items: {
                     xtype: 'ordenlist',
                     flex: 1,

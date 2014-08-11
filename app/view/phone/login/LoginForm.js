@@ -22,23 +22,6 @@ Ext.define('APP.view.phone.login.LoginForm', {
             placeHolder: 'Contraseña',
             value: '12345'
         },{
-            xtype: 'textfield',
-            name:'servidor',
-            hidden:true,
-            margin:'5 0',
-            value: '25.15.241.121:89'
-        },{
-            xtype: 'selectfield',
-            name:'idioma',
-            hidden:true,
-            options: [{
-                text: 'Español',
-                value: 'es'
-            },{
-                text: 'Inglés',
-                value: 'en'
-            }]
-        },{
             xtype: 'button',
             action:'login',
             text: 'Login',

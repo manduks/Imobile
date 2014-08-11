@@ -82,7 +82,7 @@
 	 *  - Android
 	 *  - AndroidEmulator
 	 */
-	"platform":"iOSSimulator",
+	"platform":"Android",
 
 	/**
 	 * @cfg  deviceType
@@ -116,7 +116,7 @@
 	 *
 	 * When using a certificatePath on Windows, you do not need to specify this.
 	 */
-	"certificateAlias":"",
+	"certificateAlias":"iPhone Developer",
 	/**
 	 * @cfg  certificatePassword
 	 * The password which was specified during certificate export
@@ -136,7 +136,7 @@
 	 * @cfg  sdkPath
 	 * This is the path to the Android SDK, if you are developing an Android application.
 	 */
-	"sdkPath":"/home/th3gr4bb3r/bin/sdk",
+	"sdkPath":"/Users/Waldix/Documents/android/Proyectos/adt-bundle-mac-x86_64-20140321/sdk",
 
 	/**
 	 * @cfg  androidAPILevel
@@ -166,9 +166,9 @@
 	 * This is orientations that this application can run.
 	 */
 	"orientations": [
-		"portrait",
-		"landscapeLeft",
+		"portrait"
+		/*"landscapeLeft",
 		"landscapeRight",
-		"portraitUpsideDown"
+		"portraitUpsideDown"*/
 	]
 }

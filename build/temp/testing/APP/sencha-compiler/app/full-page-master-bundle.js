@@ -1,2 +1,2 @@
 // @tag full-page
-// @require /home/th3gr4bb3r/public_html/Imobile/app.js
+// @require C:\Users\Alí\Documents\GitHub\Imobile\app.js

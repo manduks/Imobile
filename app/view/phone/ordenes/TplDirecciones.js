@@ -19,11 +19,6 @@ Ext.define('APP.view.phone.ordenes.TplDirecciones', {
         /*onItemDisclosure: function (record, listItem, index, e) {
             this.fireEvent("tap", record, listItem, index, e);
         },*/
-        selectedCls: 'direc-selected',
-        
-        plugins: [{
-            xclass: 'Ext.plugin.ListPaging',
-            autoPaging: true
-        }]
+        selectedCls: 'direc-selected'
     }
 });

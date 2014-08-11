@@ -37,7 +37,7 @@ Ext.define('APP.view.phone.login.ConfiguracionForm', {
                         xtype: 'textfield',
                         name: 'servidor',
                         label: 'Servidor'
-                    },
+                    }/*,
                     {
                         xtype: 'selectfield',
                         name: 'idioma',
@@ -52,7 +52,7 @@ Ext.define('APP.view.phone.login.ConfiguracionForm', {
                                 value: 'en'
                             }
                         ]
-                    }
+                    }*/
                 ]
             },
             {

@@ -13,14 +13,14 @@ Ext.define('APP.view.phone.login.LoginForm', {
         items: [{
             xtype: 'textfield',
             name: 'usuario',
-            placeHolder: 'Codigo de Usuario',
-            value: '1'
+            placeHolder: 'Codigo de Usuario'
+            //value: '1'
         },{
             xtype: 'passwordfield',
             name: 'password',
             margin:'5 0',
-            placeHolder: 'Contraseña',
-            value: '12345'
+            placeHolder: 'Contraseña'
+            //value: '12345'
         },{
             xtype: 'button',
             action:'login',

@@ -99,10 +99,17 @@ Ext.define('APP.controller.phone.Menu', {
 
     onBackMenu: function (navigationview) {
 
-        var me = this,
-            store = this.getClientesList().getStore(),
-            view = this.getMenuNav(),
-            titulo,
+
+
+        if (navigationview.getActiveItem().getId() == 'ordenescont' ||
+            navigationview.getActiveItem().getId() == 'cobranzacont' ||
+            navigationview.getActiveItem().getId() == 'rutascont'
+            ) {
+
+            var me = this,
+                store = this.getClientesList().getStore(),
+                view = this.getMenuNav(),
+                titulo,
 
             params = {
                 CodigoUsuario: localStorage.getItem("CodigoUsuario"),
@@ -111,10 +118,6 @@ Ext.define('APP.controller.phone.Menu', {
                 Token: localStorage.getItem("Token")
             };
 
-        if (navigationview.getActiveItem().getId() == 'ordenescont' ||
-            navigationview.getActiveItem().getId() == 'cobranzacont' ||
-            navigationview.getActiveItem().getId() == 'rutascont'
-            ) {
             titulo = view.down('toolbar');
 
             view.remove(titulo, true);

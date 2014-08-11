@@ -26,7 +26,7 @@ Ext.define('APP.view.phone.login.LoginForm', {
             name:'servidor',
             hidden:true,
             margin:'5 0',
-            value: 'ferman.ddns.net:88'
+            value: '25.15.241.121:89'
         },{
             xtype: 'selectfield',
             name:'idioma',

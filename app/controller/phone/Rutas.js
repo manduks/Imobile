@@ -14,9 +14,25 @@ Ext.define('APP.controller.phone.Rutas', {
             rutasCalendario:'rutascalendario',
             rutasCalendarioCont:'rutascalendariocont',
             rutasCalendarioDia:'rutascalendariodia',
-            rutasMapa:'rutasmapa'
+            rutasMapa:'rutasmapa',
+
+
+            actividadesCalendario:'actividadescalendario'
         },
         control:{
+            'opcionrutasactividades': {
+                itemtap:'onRutasActividadesTap'
+            },
+            'actividadescalendario':{
+                periodchange:function(calendar,mindate,maxdate,direction){
+                    console.log(calendar);
+                    console.log(mindate);
+                    console.log(maxdate);
+                    console.log(direction);
+                }
+            },
+
+
             'container[id=rutascont] clienteslist': {
                 itemtap:'onSeleccionarCliente'
             },
@@ -32,6 +48,50 @@ Ext.define('APP.controller.phone.Rutas', {
             }
         }
     },
+
+    onRutasActividadesTap:function(list, index, target, record){
+        var opcion = record.get('action');
+
+        switch(opcion){
+            case 'actividades':
+                this.getMenuNav().push({
+                    xtype:'actividadescalendario'
+                });
+
+                var ac = this.getActividadesCalendario(),
+                    store = ac.view.eventStore;
+
+                var date = new Date();
+
+                var firstDay = Ext.util.Format.date(Ext.Date.getFirstDateOfMonth(date),"Y-m-d");
+                var lastDay = Ext.util.Format.date(Ext.Date.getLastDateOfMonth(date),"Y-m-d");
+
+                var params = {
+                    CodigoUsuario: localStorage.getItem("CodigoUsuario"),
+                    CodigoSociedad: localStorage.getItem("CodigoSociedad"),
+                    CodigoDispositivo: localStorage.getItem("CodigoDispositivo"),
+                    Token: localStorage.getItem("Token"),
+                    Usuario: localStorage.getItem("CodigoUsuario"),
+                    FechaInicio: firstDay,
+                    FechaFin: lastDay
+                };
+
+                //Ext.Viewport.setMasked({xtype:'loadmask',message:'Cargando...'});
+
+                store.clearFilter();
+                store.setParams(params);
+                /*store.load({
+                    callback:function(){
+                        //Ext.Viewport.setMasked(false);
+                    },
+                    scope:this
+                });*/
+                break;
+            case 'rutas':
+                break;
+        }
+    },
+
     /**
      * Establece el título y el id del cliente cada uno en una variable.
      * Muestra la vista de ventas.

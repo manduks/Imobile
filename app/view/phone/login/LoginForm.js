@@ -13,31 +13,14 @@ Ext.define('APP.view.phone.login.LoginForm', {
         items: [{
             xtype: 'textfield',
             name: 'usuario',
-            placeHolder: 'Codigo de Usuario',
-            value: '1'
+            placeHolder: 'Codigo de Usuario'
+            //value: '1'
         },{
             xtype: 'passwordfield',
             name: 'password',
             margin:'5 0',
-            placeHolder: 'Contraseña',
-            value: '12345'
-        },{
-            xtype: 'textfield',
-            name:'servidor',
-            hidden:true,
-            margin:'5 0',
-            value: 'ferman.ddns.net:88'
-        },{
-            xtype: 'selectfield',
-            name:'idioma',
-            hidden:true,
-            options: [{
-                text: 'Español',
-                value: 'es'
-            },{
-                text: 'Inglés',
-                value: 'en'
-            }]
+            placeHolder: 'Contraseña'
+            //value: '12345'
         },{
             xtype: 'button',
             action:'login',

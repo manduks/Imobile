@@ -7,7 +7,8 @@ Ext.define('APP.controller.phone.Configuracion', {
     config: {
         refs:{
             fileUpload:'configuracionpanel fileupload',
-            imagenCmp:'configuracionpanel component[id=imagencmp]'
+            imagenCmp:'configuracionpanel component[id=imagencmp]',
+            opcionesOrden: 'opcionesorden'
         },
         control:{
             'configuracionpanel button[action=subirimagen]': {
@@ -21,6 +22,10 @@ Ext.define('APP.controller.phone.Configuracion', {
                             if(imagesize < 10){
                                 localStorage.setItem("imagenorden","data:image/jpeg;base64," + data);
                                 imagecmp.setHtml("<img src='data:image/jpeg;base64," + data + "' style='width:100%; height:auto;'>");
+
+                                var list = this.getOpcionesOrden().down('partidacontainer').down('panel').bodyElement;
+
+                                list.down('#datos_orden img').dom.setAttribute("src", localStorage.getItem('imagenorden'))
                             }
                             else{
                                 Ext.Msg.alert("Error","La imagen debe de ser menor de 4 megas");

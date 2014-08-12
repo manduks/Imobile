@@ -11,13 +11,13 @@ Ext.define('Imobile.form.login.LoginForm', {
         items: [{
             xtype: 'textfield',
             name: 'usuario',
-            placeHolder: 'Codigo de Usuario',
-            value: '1'
+            placeHolder: 'Codigo de Usuario'
+            //value: '1'
         }, {
             xtype: 'passwordfield',
             name: 'password',
-            placeHolder: 'Contraseña',
-            value: '12345'
+            placeHolder: 'Contraseña'
+            //value: '12345'
         },  {
             xtype:'component',
             height:10

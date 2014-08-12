@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0d036afa-3f35-4824-a877-e538a94ccdc1" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/store/phone/ActividadesCalendario.js" afterPath="$PROJECT_DIR$/app/store/phone/ActividadesCalendario.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controller/phone/Rutas.js" afterPath="$PROJECT_DIR$/app/controller/phone/Rutas.js" />
+    </list>
+    <ignored path="Imobile.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="Imobile" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="ActividadesCalendario.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/store/phone/ActividadesCalendario.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="12" column="54" selection-start="367" selection-end="367" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="738">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Clientes.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/store/phone/Clientes.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="22" column="9" selection-start="290" selection-end="615" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Anticipos.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/store/phone/Anticipos.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="666">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Facturas.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/store/phone/Facturas.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="666">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FormasDePago.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/store/phone/FormasDePago.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="522">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Monedas.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/store/phone/Monedas.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="666">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ActividadCalendario.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/model/phone/ActividadCalendario.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="37" selection-start="130" selection-end="130" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ActividadesCalendario.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/view/phone/rutas/actividades/ActividadesCalendario.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="6" column="45" selection-start="181" selection-end="181" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="432">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Phone.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/profile/Phone.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="51" column="30" selection-start="1142" selection-end="1142" vertical-scroll-proportion="0.0" vertical-offset="648" max-vertical-offset="2268">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Rutas.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/controller/phone/Rutas.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="26" column="41" selection-start="852" selection-end="958" vertical-scroll-proportion="0.0" vertical-offset="216" max-vertical-offset="2484">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/app/view/phone/Main.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/MainCard.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/ordenes/NavigationOrden.js" />
+        <option value="$PROJECT_DIR$/app/store/phone/Ordenes.js" />
+        <option value="$PROJECT_DIR$/app/model/phone/Orden.js" />
+        <option value="$PROJECT_DIR$/app/form/phone/pedidos/EditarPedidoForm.js" />
+        <option value="$PROJECT_DIR$/app/form/phone/clientes/ClienteForm.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/ordenes/PartidaContainer.js" />
+        <option value="$PROJECT_DIR$/app/model/phone/Moneda.js" />
+        <option value="$PROJECT_DIR$/app/store/phone/Monedas.js" />
+        <option value="$PROJECT_DIR$/app/core/FormatCurrency.js" />
+        <option value="$PROJECT_DIR$/app/controller/phone/Cobranza.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/rutas/OpcionRutasList.js" />
+        <option value="$PROJECT_DIR$/app/model/phone/RutasCalendario.js" />
+        <option value="$PROJECT_DIR$/src/ux/calendar/TouchCalendarView.js" />
+        <option value="$PROJECT_DIR$/app/controller/phone/Prospectos.js" />
+        <option value="$PROJECT_DIR$/resources/css/app.css" />
+        <option value="$PROJECT_DIR$/app/view/phone/rutas/Calendario.js" />
+        <option value="$PROJECT_DIR$/src/ux/calendar/TouchCalendar.js" />
+        <option value="$PROJECT_DIR$/src/ux/calendar/TouchCalendarSimpleEvents.js" />
+        <option value="$PROJECT_DIR$/resources/sass/custom/Ext.ux.TouchCalendarView.scss" />
+        <option value="$PROJECT_DIR$/app/controller/phone/Ordenes.js" />
+        <option value="$PROJECT_DIR$/build/testing/APP/app.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/login/LoginForm.js" />
+        <option value="$PROJECT_DIR$/app/controller/phone/Login.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/login/LoginPanel.js" />
+        <option value="$PROJECT_DIR$/src/ux/timepicker/Time.js" />
+        <option value="$PROJECT_DIR$/src/ux/timepicker/TimePicker.js" />
+        <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/app/form/phone/rutas/RutasForm.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/rutas/RutasMapa.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/rutas/RutasCalendario.js" />
+        <option value="$PROJECT_DIR$/app/model/phone/RutaCalendario.js" />
+        <option value="$PROJECT_DIR$/app/store/phone/RutasCalendario.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/rutas/RutasCalendarioDia.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/rutas/RutasCalendarioCont.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/configuracion/ConfiguracionPanel.js" />
+        <option value="$PROJECT_DIR$/phonegap.local.properties" />
+        <option value="$PROJECT_DIR$/config.xml" />
+        <option value="$PROJECT_DIR$/app/controller/phone/Configuracion.js" />
+        <option value="$PROJECT_DIR$/packager.json" />
+        <option value="$PROJECT_DIR$/app/view/phone/rutas/OpcionRutasActividades.js" />
+        <option value="$PROJECT_DIR$/app/controller/phone/Menu.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/rutas/ActividadesCalendario.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/rutas/actividades/OpcionRutasActividades.js" />
+        <option value="$PROJECT_DIR$/app/model/phone/ActividadCalendario.js" />
+        <option value="$PROJECT_DIR$/app/profile/Phone.js" />
+        <option value="$PROJECT_DIR$/app/view/phone/rutas/actividades/ActividadesCalendario.js" />
+        <option value="$PROJECT_DIR$/app/controller/phone/Rutas.js" />
+        <option value="$PROJECT_DIR$/app/store/phone/ActividadesCalendario.js" />
+      </list>
+    </option>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-1" />
+    <option name="y" value="27" />
+    <option name="width" value="1368" />
+    <option name="height" value="742" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Imobile" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Imobile" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Imobile" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Imobile" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Imobile" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Imobile" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Imobile" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="store" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Imobile" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Imobile" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="store" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="phone" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../quetantosabesde" />
+    <property name="FullScreen" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/model/phone" />
+      <recent name="$PROJECT_DIR$/app/store/phone" />
+      <recent name="$PROJECT_DIR$/app/view/phone/rutas" />
+      <recent name="$PROJECT_DIR$/app/form/phone/rutas" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/view/phone/rutas/actividades" />
+      <recent name="$PROJECT_DIR$/app/store/phone" />
+      <recent name="$PROJECT_DIR$/app/model/phone" />
+      <recent name="$PROJECT_DIR$/app/form/phone" />
+      <recent name="$PROJECT_DIR$/app/view/phone/ordenes" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
+    <list size="0" />
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false" SSL_PROTOCOLS="all">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="mySSHConnectionTimeout" value="30000" />
+    <option name="mySSHReadTimeout" value="30000" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
+    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
+    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+    <option name="FORCE_UPDATE" value="false" />
+    <option name="IGNORE_EXTERNALS" value="false" />
+    <configuration useDefault="true">$USER_HOME$/.subversion</configuration>
+    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0d036afa-3f35-4824-a877-e538a94ccdc1" name="Default" comment="" />
+      <created>1404325865399</created>
+      <updated>1404325865399</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Se agrega la seleccion del servidor en el login">
+      <created>1405449310405</created>
+      <updated>1405449310405</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Se agrega la ip del servidor seleccionado al localstorage">
+      <created>1406067697367</created>
+      <updated>1406067697367</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Se agrega la ip del servidor seleccionado al localstorage">
+      <created>1406068064176</created>
+      <updated>1406068064176</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Se integra el modulo de configuracion y se carga el ux de fileupload y los cores de store y moneda :)">
+      <created>1406071660038</created>
+      <updated>1406071660038</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Se integra el modulo de configuracion y se carga el ux de fileupload y los cores de store y moneda :)">
+      <created>1406137052557</created>
+      <updated>1406137052557</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Se separa el controller de clientes y este se encarga de manejar todos los eventos relacionados a los clientes">
+      <created>1406139089118</created>
+      <updated>1406139089118</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Se agregan los eventos en el controller de clientes y se elimina la duplicidad de listeners de cobranza">
+      <created>1406139899404</created>
+      <updated>1406139899404</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Se agrega un contenedor a la lista de clientes con un id especifico para saber si se trata de cobranza o de ordenes">
+      <created>1406140537320</created>
+      <updated>1406140537320</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Se modifica el controller de ordenes para que cargue la siguiente vista (opciontclienteslist)">
+      <created>1406141440296</created>
+      <updated>1406141440296</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Se agrega la bara de titulo para la lista de los clientes y se agrega al controller del menu la funcionalidad de remover la barra de titulo">
+      <created>1406144358706</created>
+      <updated>1406144358706</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Se agrega la lista de clientes a la parte de rutas">
+      <created>1406145022305</created>
+      <updated>1406145022305</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Se elimina la barra de titulo en la parte de rutas">
+      <created>1406145120827</created>
+      <updated>1406145120827</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Se agrega el cardlayout">
+      <created>1406147821196</created>
+      <updated>1406147821196</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Se agrega el cardlayout :)">
+      <created>1406148073868</created>
+      <updated>1406148073868</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Se agrega la funcionalidad basica de la primer ventana al modulo de ordenes de venta">
+      <created>1406149894149</created>
+      <updated>1406149894149</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Se agrega funcionalidad a los botones de la barra inferior de ordenes de venta">
+      <created>1406224757269</created>
+      <updated>1406224757269</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Se agrega funcionalidad a los botones de la barra inferior de ordenes de venta">
+      <created>1406252460043</created>
+      <updated>1406252460043</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Se integra el ux del calendario">
+      <created>1406316025793</created>
+      <updated>1406316025793</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Se integra el ux del calendario">
+      <created>1406316138675</created>
+      <updated>1406316138675</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Se integra el ux del calendario con los eventos mostrados por un punto en el calendario">
+      <created>1406318349308</created>
+      <updated>1406318349308</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Se diferencia el evento al selecciona calendario y registrar visita">
+      <created>1406318580804</created>
+      <updated>1406318580804</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Se agrega el modo viewday">
+      <created>1406320542622</created>
+      <updated>1406320542622</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Se agregan los estilos del calendario">
+      <created>1406328294032</created>
+      <updated>1406328294032</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Se agregan los estilos del calendario">
+      <created>1406755786614</created>
+      <updated>1406755786614</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Se oculta los textfields de configuracion del login">
+      <created>1406948002019</created>
+      <updated>1406948002019</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Se alinea del lado derecho el boton de opciones en la parte del logueo">
+      <created>1407009073030</created>
+      <updated>1407009073030</updated>
+    </task>
+    <task id="LOCAL-00027" summary="El icono de configuracion">
+      <created>1407174055962</created>
+      <updated>1407174055962</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Se agrega la primera funcionalidad de rutas y actividades,">
+      <created>1407188794488</created>
+      <updated>1407188794488</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Se agrega la parte de imagenes en el modulo de configuraciones">
+      <created>1407285227036</created>
+      <updated>1407285227036</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Se separan actividades y rutas">
+      <created>1407440369860</created>
+      <updated>1407440369860</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-1" y="27" width="1368" height="742" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32840723" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.065108515" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32930514" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30015197" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.065108515" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32053423" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32840723" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3087028" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32840723" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32840723" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32569557" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32840723" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.326284" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+    </layout-to-restore>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
+    <MESSAGE value="Se agrega el control del navigation" />
+    <MESSAGE value="Se agrega la ip del servidor seleccionado al localstorage" />
+    <MESSAGE value="Se integra el modulo de configuracion y se carga el ux de fileupload y los cores de store y moneda :)" />
+    <MESSAGE value="Se separa el controller de clientes y este se encarga de manejar todos los eventos relacionados a los clientes" />
+    <MESSAGE value="Se agregan los eventos en el controller de clientes y se elimina la duplicidad de listeners de cobranza" />
+    <MESSAGE value="Se agrega un contenedor a la lista de clientes con un id especifico para saber si se trata de cobranza o de ordenes" />
+    <MESSAGE value="Se modifica el controller de ordenes para que cargue la siguiente vista (opciontclienteslist)" />
+    <MESSAGE value="Se agrega la bara de titulo para la lista de los clientes y se agrega al controller del menu la funcionalidad de remover la barra de titulo" />
+    <MESSAGE value="Se agrega la lista de clientes a la parte de rutas" />
+    <MESSAGE value="Se elimina la barra de titulo en la parte de rutas" />
+    <MESSAGE value="Se agrega el cardlayout" />
+    <MESSAGE value="Se agrega el cardlayout :)" />
+    <MESSAGE value="Se agrega la funcionalidad basica de la primer ventana al modulo de ordenes de venta" />
+    <MESSAGE value="Se agrega funcionalidad a los botones de la barra inferior de ordenes de venta" />
+    <MESSAGE value="Se integra el ux del calendario" />
+    <MESSAGE value="Se integra el ux del calendario con los eventos mostrados por un punto en el calendario" />
+    <MESSAGE value="Se diferencia el evento al selecciona calendario y registrar visita" />
+    <MESSAGE value="Se agrega el modo viewday" />
+    <MESSAGE value="Se agregan los estilos del calendario" />
+    <MESSAGE value="Se oculta los textfields de configuracion del login" />
+    <MESSAGE value="Se alinea del lado derecho el boton de opciones en la parte del logueo" />
+    <MESSAGE value="El icono de configuracion" />
+    <MESSAGE value="Se agrega la primera funcionalidad de rutas y actividades," />
+    <MESSAGE value="Se agrega la parte de imagenes en el modulo de configuraciones" />
+    <MESSAGE value="Se separan actividades y rutas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Se separan actividades y rutas" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/packager.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="154" column="23" selection-start="4980" selection-end="4980" vertical-scroll-proportion="0.0" vertical-offset="2574" max-vertical-offset="3240">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ux/Fileup.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="101" column="40" selection-start="2732" selection-end="2732" vertical-scroll-proportion="0.0" vertical-offset="1818" max-vertical-offset="10566">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="74" column="35" selection-start="3686" selection-end="3686" vertical-scroll-proportion="-4.259259" vertical-offset="1217" max-vertical-offset="2538" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/sass/custom/_client-list.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="358" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/sass/custom/_menu-list.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="522" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/sass/custom/_product-list.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1314" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/css/app.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="10281" selection-start="10276" selection-end="10281" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="318" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/touch/src/locale/ext-lang-en.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="89" column="14" selection-start="1727" selection-end="1727" vertical-scroll-proportion="-7.5" vertical-offset="1392" max-vertical-offset="1782" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/sass/app.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="0" selection-start="86" selection-end="86" vertical-scroll-proportion="20.76923" vertical-offset="1098" max-vertical-offset="26856" />
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/EcmaScript.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="195" column="9" selection-start="3205" selection-end="3205" vertical-scroll-proportion="0.33246073" vertical-offset="3383" max-vertical-offset="16866" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/core/data/Store.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="8" selection-start="209" selection-end="209" vertical-scroll-proportion="-1.4031414" vertical-offset="698" max-vertical-offset="1080" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="53" column="86" selection-start="1696" selection-end="1696" vertical-scroll-proportion="0.0" vertical-offset="594" max-vertical-offset="1260" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="64" column="6" selection-start="1865" selection-end="1918" vertical-scroll-proportion="2.6341465" vertical-offset="0" max-vertical-offset="1512" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packager.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="154" column="23" selection-start="4980" selection-end="4980" vertical-scroll-proportion="0.7122302" vertical-offset="2574" max-vertical-offset="3240">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ux/Fileup.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="101" column="40" selection-start="2732" selection-end="2732" vertical-scroll-proportion="-3.9056604" vertical-offset="1818" max-vertical-offset="9324">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/phone/rutas/OpcionRutasList.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="29" selection-start="260" selection-end="260" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="378">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/phone/menu/MenuList.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="548">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controller/phone/Menu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="51" selection-start="1354" selection-end="1354" vertical-scroll-proportion="1.7848102" vertical-offset="0" max-vertical-offset="2376">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/phone/menu/MenuNav.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="520">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/phone/rutas/RutasCalendario.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="548">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/phone/rutas/actividades/OpcionRutasActividades.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="45" selection-start="190" selection-end="190" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="378">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/profile/Phone.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="51" column="30" selection-start="1142" selection-end="1142" vertical-scroll-proportion="0.0" vertical-offset="648" max-vertical-offset="2268">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/phone/rutas/actividades/ActividadesCalendario.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="45" selection-start="181" selection-end="181" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="432">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/model/phone/ActividadCalendario.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="37" selection-start="130" selection-end="130" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controller/phone/Rutas.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="41" selection-start="852" selection-end="958" vertical-scroll-proportion="0.0" vertical-offset="216" max-vertical-offset="2484">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/store/phone/ActividadesCalendario.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="54" selection-start="367" selection-end="367" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="738">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/store/phone/Clientes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="9" selection-start="290" selection-end="615" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/store/phone/Anticipos.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="666">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/store/phone/Facturas.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="666">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/store/phone/FormasDePago.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="522">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/store/phone/Monedas.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="666">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
+

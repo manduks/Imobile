@@ -9,10 +9,8 @@ Ext.define('APP.store.phone.Anticipos', {
 
     config: {
         model: 'APP.model.phone.Factura',
-        proxy: {
-            //url: 'http://ferman.ddns.net:88/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile',
-            url: "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile",
-            //url: 'http://25.15.241.121:88/iMobile/COK1_CL_Consultas/ObtenerFacturasAbiertasiMobile',
+        proxy: {            
+            url: "/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile",            
             type: 'jsonp',
             callbackKey: 'callback',
             reader: {

@@ -269,9 +269,12 @@ Ext.define('APP.controller.phone.Ordenes', {
                 opcionesOrden.actionOrden = 'actualizar';
                 this.getOpcionesOrden().idCliente = idCliente;
 
-                var store = Ext.getStore('Transacciones');
+                var store = Ext.getStore('Transacciones'),
+                    url = '/iMobile/COK1_CL_Consultas/RegresarOrdenVentaAbiertaiMobile';
 
                 Ext.getStore('Transacciones').resetCurrentPage();
+
+                store.getProxy().setUrl(url);
 
                 store.setParams({
                     CardCode: idCliente,
@@ -308,6 +311,11 @@ Ext.define('APP.controller.phone.Ordenes', {
             codigoMonedaSeleccionada = me.getOpcionesOrden().codigoMonedaSeleccionada,
             codigoMonedaPredeterminada = me.getOpcionesOrden().codigoMonedaPredeterminada,
             tipoCambio = me.getOpcionesOrden().tipoCambio;
+
+            if(me.getOpcionesOrden().clienteSeleccionado == undefined){
+                return;
+            }
+
             clienteSeleccionado = new Object({ // Se crea nuevo objeto con los datos numéricos para representarlos en formato de miles.
                 LimiteCredito: me.getOpcionesOrden().clienteSeleccionado.LimiteCredito,
                 Saldo: me.getOpcionesOrden().clienteSeleccionado.Saldo

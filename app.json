@@ -1,12 +1,12 @@
 {
     "builds": {
-        "web": {"default": true},
+        //"web": {"default": true},
         "native": {
             "packager": "phonegap",
             "phonegap" : {
                 "config": {
                     // Uncomment the line below and add the platform you wish to build for
-                    "platform": "ios",
+                    "platform": "android",
 
                     // Uncomment and Set this line to true to enable PhoneGap Remote Building.
                     // To properly use this you must set the following properties in your local.properties file (if this file does not exist create it in your app root)
@@ -62,10 +62,6 @@
      *      }
      */
     "js": [
-		{
-			"path": "phonegap.js",
-			"remote": true
-		},
         {
             "path": "touch/sencha-touch.js",
             "x-bootstrap": true
@@ -130,7 +126,6 @@
      * Extra resources to be copied along when build
      */
     "resources": [
-		"config.xml",
         "resources/images",
         "resources/icons",
         "resources/startup"
